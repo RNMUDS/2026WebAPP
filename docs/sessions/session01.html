@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>第1回: Webアプリケーションの全体構造 | Webプログラミング演習</title>
+<title>第1回: Webアプリケーション全体構造の整理 | Webプログラミング演習</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -360,8 +360,8 @@ pre { position: relative; }
 <header class="hero">
   <div class="container">
     <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
-    <h1>第1回: Webアプリケーションの全体構造</h1>
-    <p>HTTPの仕組みと Node.js + Express.js で最初のWebサーバを起動する</p>
+    <h1>第1回: Webアプリケーション全体構造の整理</h1>
+    <p>Webの仕組みを理解し、A-Frameで3D空間をブラウザに表示する</p>
   </div>
 </header>
 
@@ -369,13 +369,13 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>📋 提出ガイド（この回の提出物: 計8項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース演習</span>表を埋めて記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
         <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>解答を記述</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">コード改造</span>改造内容と理由を記述</div>
         <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag" style="background:#1a2e0a;color:#76B900;border:1px solid #4A7A00">口頭試問</span>グループ記録（氏名・質疑・評価）</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -384,7 +384,7 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 0. GUIDANCE & HOW TO ============ -->
+<!-- ============ 0. GUIDANCE ============ -->
 <section>
   <div class="container">
     <div class="section-header">
@@ -394,33 +394,43 @@ pre { position: relative; }
 
     <!-- 授業概要 -->
     <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <h3>授業概要</h3>
+      <div class="card-header"><h3>授業概要</h3></div>
+      <p>本授業では、Webプログラミングの基礎から応用までを体系的に学び、最終的には<strong>複数の利用者が同時に参加できるインタラクティブなWebアプリケーション</strong>を制作します。</p>
+      <p style="margin-top:0.5rem">サーバサイドプログラミング、クライアント・サーバ通信、リアルタイム通信、3D表現を段階的に学び、最終回では<strong>A-Frame + Node.js + Socket.IO</strong> を組み合わせた<strong>マルチプレイ・チャット付きWebXRアプリ</strong>を発表します。</p>
+    </div>
+
+    <!-- この授業で作るもの -->
+    <div class="card" style="border-left:4px solid #FFB800">
+      <div class="card-header"><h3>この授業のゴール</h3></div>
+      <p>15回の授業を通じて、以下のような<strong>マルチユーザ3D Webアプリケーション</strong>を作れるようになります。</p>
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:12px;padding:1.2rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>A-Frame</strong> でブラウザ上に3D空間を構築</li>
+          <li><strong>Node.js + Express</strong> でサーバを構築</li>
+          <li><strong>Socket.IO</strong> で複数ユーザがリアルタイムに接続</li>
+          <li>3D空間内でアバターが動き、<strong>吹き出しチャット</strong>で会話できる</li>
+          <li>スマートフォンやVRヘッドセットでも体験可能（WebXR）</li>
+        </ul>
       </div>
-      <p>本授業では、<strong>Webアプリケーション</strong>を構成する技術（サーバ・3D表現・リアルタイム通信・データベース）を段階的に学習し、実装します。</p>
-      <p style="margin-top:0.5rem">Webの仕組みは、ショッピングサイト・SNS・オンラインゲーム・地図アプリなど、日常で使うほぼすべてのサービスの土台です。この授業では、<strong>自分でWebサーバを立て、ブラウザで動くアプリケーション</strong>を作れるようになることを目指します。</p>
-      <p style="margin-top:0.5rem">後半では A-Frame による3D表現や Socket.IO によるリアルタイム通信も扱い、<strong>3Dマルチユーザ空間</strong>の構築にも挑戦します。</p>
+      <p style="font-size:0.9rem;color:#999">毎回の演習で学ぶ技術が、最終制作のパーツになります。</p>
     </div>
 
     <!-- 到達目標 -->
     <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <h3>到達目標</h3>
-      </div>
+      <div class="card-header"><h3>到達目標</h3></div>
       <ul class="point-list">
-        <li>HTTP通信の仕組みとクライアント・サーバモデルを説明できる</li>
-        <li>Node.js + Express.js でWebサーバを構築し、ルーティング・API設計ができる</li>
-        <li>A-Frame を使って3D空間をブラウザ上に構築できる</li>
-        <li>Socket.IO でリアルタイム通信を実装し、マルチユーザ体験を作れる</li>
-        <li>企画・設計・実装・発表の一連の開発プロセスを経験する</li>
+        <li>Webアプリケーションの基本構造（クライアント・サーバ）を説明できる</li>
+        <li>サーバサイドプログラムを用いてWebアプリケーションを構築できる</li>
+        <li>クライアントとサーバ間でデータ通信を行うことができる</li>
+        <li>データベースと連携したWebアプリケーションを構築できる</li>
+        <li>リアルタイム性を持つWebアプリケーションの基礎を理解する</li>
+        <li>複数人が利用するインタラクティブなWebアプリケーションを設計・実装できる</li>
       </ul>
     </div>
 
     <!-- 授業スケジュール -->
     <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <h3>授業スケジュール（前期・水曜5限）</h3>
-      </div>
+      <div class="card-header"><h3>授業スケジュール（前期・水曜5限）</h3></div>
       <table>
         <tr><th style="width:40px">回</th><th>テーマ</th><th>内容</th></tr>
         <tr><td>1</td><td>Webアプリケーション全体構造の整理</td><td>Webの仕組み、クライアント・サーバモデル、Node.jsサーバの起動</td></tr>
@@ -443,9 +453,7 @@ pre { position: relative; }
 
     <!-- 成績評価 -->
     <div class="card" style="border-left:4px solid #FFB800">
-      <div class="card-header">
-        <h3>成績評価</h3>
-      </div>
+      <div class="card-header"><h3>成績評価</h3></div>
       <p><strong>定期試験なし。</strong> 毎回の演習課題（提出物）の完成度や取り組み状況で成績評価します。</p>
       <ul class="point-list" style="margin:1rem 0">
         <li>毎回の課題提出 <strong>100%</strong></li>
@@ -457,9 +465,7 @@ pre { position: relative; }
 
     <!-- 毎回の授業の流れ -->
     <div class="card" style="border-left:4px solid #FFB800">
-      <div class="card-header">
-        <h3>毎回の授業の流れ（90分）</h3>
-      </div>
+      <div class="card-header"><h3>毎回の授業の流れ（90分）</h3></div>
       <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0">
         <div style="flex:1;min-width:200px;background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1rem;text-align:center">
           <div style="font-size:2rem;font-weight:900;color:#76B900">0:00 - 0:20</div>
@@ -474,204 +480,96 @@ pre { position: relative; }
       </div>
     </div>
 
-    <!-- 授業中の作業フロー -->
+    <!-- 作業フロー -->
     <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <h3>授業中の作業フロー</h3>
-      </div>
+      <div class="card-header"><h3>授業中の作業フロー</h3></div>
       <div style="background:#1A1A1A;border-radius:10px;padding:1.5rem;margin:0.5rem 0">
         <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;font-size:0.9rem">
           <span style="background:#76B900;color:white;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">1. 説明を聞く</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
           <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">2. コードをコピー</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
-          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">3. VS Codeで実行</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">3. VS Codeに貼り付け</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
-          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">4. ブラウザで確認</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">4. Live Serverで確認</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
           <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">5. 課題に回答</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
           <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">6. グループ口頭試問</span>
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
-          <span style="background:#FFB800;color:#111;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">7. NotionをPDFエクスポート &rarr; Manaba提出</span>
+          <span style="background:#FFB800;color:#111;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">7. Notion → PDF → Manaba提出</span>
         </div>
-      </div>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
-        <strong>ポイント:</strong> このHTMLページで説明を読み、コードの「コピー」ボタンでVS Codeに貼り付けて実行します。回答は自分のNotionノートに記録し、最後にNotionからPDFエクスポートしてManabaに提出してください。
       </div>
     </div>
 
-    <!-- VS Code + Node.js Guide -->
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.2rem">VS Code + Node.js でサーバを起動する</h3>
-
-    <p style="font-size:1.05rem;margin-bottom:1.5rem">
-      この授業では、JavaScriptのコードを<strong>Visual Studio Code（VS Code）</strong>で作成し、<strong>Node.js</strong>でサーバを起動します。
-    </p>
+    <!-- VS Code + Live Server -->
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.2rem">VS Code + Live Server のセットアップ</h3>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
         <span class="tag" style="background:#1a2e0a;color:#76B900">Step 1</span>
-        <h3>プロジェクトフォルダを作成する</h3>
+        <h3>Live Server 拡張機能をインストールする</h3>
       </div>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>デスクトップに <strong>week01</strong> という名前のフォルダを作成する</li>
-        <li>VS Code を起動し、<strong>「ファイル」→「フォルダーを開く」</strong>で <code>week01</code> フォルダを開く</li>
-        <li>VS Code の上部メニューから<strong>「ターミナル」→「新しいターミナル」</strong>を選択</li>
+        <li>VS Code を起動する</li>
+        <li>左サイドバーの<strong>拡張機能アイコン</strong>（四角が4つ並んだマーク）をクリック</li>
+        <li>検索欄に <strong>Live Server</strong> と入力</li>
+        <li>「Live Server」（作者: Ritwick Dey）の<strong>「インストール」</strong>ボタンをクリック</li>
       </ol>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
-        <strong>フォルダ名のルール:</strong> 半角英数字で、日本語やスペースは使わない。
+        <strong>Live Server とは:</strong> HTMLファイルをローカルWebサーバで配信し、ブラウザで即座にプレビューできる拡張機能です。ファイルを保存するたびに自動でブラウザが更新されます。
       </div>
     </div>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
         <span class="tag" style="background:#1a2e0a;color:#76B900">Step 2</span>
-        <h3>ターミナルで初期設定する</h3>
-      </div>
-      <p>VS Code 下部のターミナルで以下の2つのコマンドを順番に実行します。</p>
-      <pre><span class="code-label">Terminal</span>
-npm init -y
-npm install express</pre>
-      <ul class="point-list" style="margin-top:0.5rem">
-        <li><code>npm init -y</code> → プロジェクトの設定ファイル（package.json）を作成</li>
-        <li><code>npm install express</code> → WebフレームワークExpressをインストール</li>
-      </ul>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
-        <strong>この操作は各回の最初に1回だけ。</strong> 以降はファイルを作成・編集するだけでOKです。
-      </div>
-    </div>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3</span>
-        <h3>コードをコピーしてファイルを作成する</h3>
+        <h3>作業フォルダを作成して開く</h3>
       </div>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>VS Code のエクスプローラ（左パネル）で<strong>「新しいファイル」</strong>アイコンをクリック</li>
-        <li>ファイル名を <code>WEB01-1.js</code> などとして作成する</li>
-        <li>このページのコードブロック右上にある <strong>「コピー」ボタン</strong> をクリック</li>
-        <li>VS Code の編集画面に <strong>貼り付ける</strong>（Ctrl+V / Cmd+V）</li>
-        <li>ファイルを <strong>保存する</strong>（Ctrl+S / Cmd+S）</li>
+        <li>デスクトップに <strong>web01</strong> という名前のフォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>web01</code> を開く</li>
       </ol>
     </div>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 4</span>
-        <h3>サーバを起動する</h3>
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3</span>
+        <h3>HTMLファイルを作成してプレビューする</h3>
       </div>
-      <p style="margin-bottom:0.8rem">VS Code のターミナルで以下を実行します。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code のエクスプローラ（左パネル）で<strong>新しいファイル</strong>を作成し、ファイル名を <code>index.html</code> にする</li>
+        <li>このページのコードブロック右上にある<strong>「コピー」ボタン</strong>でコードをコピーし、貼り付ける</li>
+        <li>ファイルを保存する（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong>を選択</li>
+        <li>ブラウザが自動で開き、3D空間が表示される</li>
+      </ol>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>ポイント:</strong> ファイルを保存するだけでブラウザが自動更新されます。コードを変えて保存 → すぐに結果を確認できます。
+      </div>
+    </div>
+
+    <!-- Node.js インストール -->
+    <div class="card" style="border-left:4px solid #616161">
+      <div class="card-header"><h3>Node.js のインストール（第2回以降で使用）</h3></div>
+      <p>第2回からサーバサイドプログラミングに入ります。事前に Node.js をインストールしておいてください。</p>
+      <table>
+        <tr><th style="width:20%">OS</th><th>手順</th></tr>
+        <tr><td><strong>Windows</strong></td><td><a href="https://nodejs.org/" style="color:#76B900">nodejs.org</a> から LTS 版をダウンロードし、インストーラを実行。すべてデフォルトのまま「次へ」でOK。</td></tr>
+        <tr><td><strong>macOS</strong></td><td><a href="https://nodejs.org/" style="color:#76B900">nodejs.org</a> から LTS 版をダウンロードし、インストーラを実行。またはターミナルで <code>brew install node</code>。</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">インストール確認: ターミナル（VS Code下部）で以下を実行し、バージョンが表示されればOK。</p>
       <pre><span class="code-label">Terminal</span>
-node WEB01-1.js</pre>
-      <div style="background:#0A0A0A;border:1px solid #333;border-radius:8px;padding:1rem;margin-top:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#E0E0E0">
-        <span style="color:#888">$</span> <span style="color:#76B900">node</span> WEB01-1.js<br>
-        <span style="color:#76B900">サーバ起動: http://localhost:3000</span>
-      </div>
-      <p style="margin-top:0.8rem">表示されたURL <code>http://localhost:3000</code> を <strong>Webブラウザ</strong>で開くと、ページが表示されます。</p>
-      <div style="background:#2e1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#FFB800">
-        <strong>サーバの止め方:</strong> ターミナルで <kbd>Ctrl+C</kbd> を押すとサーバが停止します。<br>別のファイルを実行するときは、必ず先に今のサーバを停止してください。
-      </div>
+node -v
+npm -v</pre>
     </div>
 
     <!-- 提出方法 -->
     <div class="card" style="border-left:4px solid #FFB800">
-      <div class="card-header">
-        <h3>提出方法（Notion → PDF → Manaba）</h3>
-      </div>
+      <div class="card-header"><h3>提出方法（Notion → PDF → Manaba）</h3></div>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li>各演習の回答を<strong>自分のNotionノート</strong>に記録する</li>
         <li>すべて記録し終えたら、Notionページ右上の <strong>「...」→「エクスポート」→「PDF」</strong></li>
-        <li>ダウンロードされたPDFファイルを <strong>Manabaの課題提出欄</strong> にアップロードする</li>
-      </ol>
-    </div>
-
-    <!-- Notion Guide -->
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.2rem">Notionの使い方</h3>
-
-    <p style="font-size:1.05rem;margin-bottom:1.5rem">
-      この授業では、課題の回答を<strong>Notion</strong>で作成します。<br>
-      NotionはWebブラウザ上で動くノートツールで、アプリのインストールは不要です。
-    </p>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 1</span>
-        <h3>Notionをブラウザで開く</h3>
-      </div>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>Webブラウザ（Chrome推奨）のURLバーに <strong>notion.so</strong> と入力して開く</li>
-        <li>大学のメールアドレスでログインする（初回はアカウント作成が必要）</li>
-        <li>ログイン後、左サイドバーに自分のワークスペースが表示される</li>
-      </ol>
-    </div>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 2</span>
-        <h3>授業ノートのページを作成する</h3>
-      </div>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>左サイドバーの下部にある <strong>「+ 新規ページ」</strong> をクリック</li>
-        <li>タイトルに <strong>「第1回: Webアプリケーションの全体構造」</strong> と入力</li>
-        <li>タイトルの下の空白部分をクリックすると、本文を書き始められる</li>
-      </ol>
-    </div>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3</span>
-        <h3>基本操作を覚える</h3>
-      </div>
-      <table>
-        <tr><th style="width:30%">やりたいこと</th><th>操作方法</th></tr>
-        <tr><td><strong>見出し</strong>を作る</td><td>行の先頭に <code>##</code> + スペースを入力 → 自動で見出しになる</td></tr>
-        <tr><td><strong>箇条書き</strong>を作る</td><td>行の先頭に <code>-</code> + スペースを入力</td></tr>
-        <tr><td><strong>番号付きリスト</strong></td><td>行の先頭に <code>1.</code> + スペースを入力</td></tr>
-        <tr><td><strong>太字</strong>にする</td><td>テキストを選択して <kbd>Ctrl+B</kbd>（Macは<kbd>Cmd+B</kbd>）</td></tr>
-        <tr><td><strong>コードブロック</strong></td><td>行の先頭に <code>```</code> を入力 → Enterを押す</td></tr>
-        <tr><td><strong>表（テーブル）</strong></td><td>行の先頭に <code>/table</code> と入力 → 「テーブル」を選択</td></tr>
-        <tr><td><strong>画像</strong>を貼る</td><td>画像ファイルを直接ドラッグ＆ドロップ</td></tr>
-        <tr><td><strong>音声</strong>を添付</td><td>行の先頭に <code>/audio</code> と入力 → ファイルをアップロード</td></tr>
-      </table>
-    </div>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 4</span>
-        <h3>Notionで課題の回答を作成する</h3>
-      </div>
-      <p>以下の構成でノートを作成してください。</p>
-      <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem 1.2rem;margin:0.75rem 0;font-size:0.9rem;font-family:'JetBrains Mono',monospace;line-height:1.8">
-        <span style="color:#76B900;font-weight:700"># 第1回: Webアプリケーションの全体構造</span><br>
-        <span style="color:#888">名前: ○○ ○○ ｜ 学籍番号: xxxxxxxx</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 1. トレース演習1: ルーティングの動作を追う</span><br>
-        <span style="color:#888">（表を埋める）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 2. トレース演習2: コードの出力を予測する</span><br>
-        <span style="color:#888">（予測と実行結果を記入）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 3. コード体験1: Hello Worldサーバを動かす</span><br>
-        <span style="color:#888">（観察結果を記録）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 4. コード体験2: 複数ルートとJSON API</span><br>
-        <span style="color:#888">（各URLの表示結果を記録）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 5. 標準課題1: サーバの動作を言葉で説明する</span><br>
-        <span style="color:#888">（穴埋め ①〜⑦ を埋める）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 6. 標準課題2: コードを読んでレスポンスを予測する</span><br>
-        <span style="color:#888">（予測・実行結果・理由）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 7. 発展課題: プロフィールサーバを作る</span><br>
-        <span style="color:#888">（コード + 音声添付）</span><br><br>
-        <span style="color:#76B900;font-weight:700">## 8. グループ口頭試問</span><br>
-        <span style="color:#888">（質問の回答者・要点・評価・記録者）</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-left:4px solid #76B900">
-      <div class="card-header">
-        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 5</span>
-        <h3>NotionページをPDFにエクスポートする</h3>
-      </div>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>Notionページの右上 <strong>「...」</strong> メニューをクリック</li>
-        <li><strong>「エクスポート」</strong> を選択</li>
-        <li>フォーマットを <strong>「PDF」</strong> に設定し、エクスポートする</li>
         <li>ダウンロードされたPDFファイルを <strong>Manabaの課題提出欄</strong> にアップロードする</li>
       </ol>
     </div>
@@ -687,148 +585,78 @@ node WEB01-1.js</pre>
       <h2>説明</h2>
     </div>
 
-    <p style="font-size:1.05rem; margin-bottom:1.5rem">
-      普段使っているWebサイトの裏側で何が起きているかを理解します。<br>
-      コードを書くことが目的ではなく、<strong>仕組みを言葉と図で説明できるようになること</strong>がゴールです。
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      普段使っているWebサイトの裏側で何が起きているかを理解し、<br>
+      今日はその第一歩として<strong>ブラウザ上に3D空間を表示する</strong>体験をします。
     </p>
 
     <!-- 1.1 HTTP -->
     <div class="concept-box">
-      <h4>1.1 HTTP通信 ── 手紙のやりとりのイメージ</h4>
+      <h4>1.1 Webの仕組み ── 手紙のやりとり</h4>
       <div class="analogy">
-        あなた（ブラウザ）が郵便局（インターネット）を通じて、お店（サーバ）に<strong>注文書（リクエスト）</strong>を送る。<br>
-        お店は注文を受け取り、<strong>商品（レスポンス）</strong>を送り返す。この「注文と配達」の手順がHTTP通信です。
+        あなた（ブラウザ）が郵便局（インターネット）を通じて、お店（サーバ）に<strong>注文書（リクエスト）</strong>を送る。お店は注文を受け取り、<strong>商品（レスポンス）</strong>を送り返す。
       </div>
-      <p>ブラウザでURLを入力して Enter を押すたびに、この「手紙のやりとり」が起きています。</p>
+      <p>ブラウザでURLを入力してEnterを押すたびに、この「リクエストとレスポンス」が起きています。</p>
 
       <div class="diagram-container">
-        <svg viewBox="0 0 700 220" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
-          <!-- Browser -->
+        <svg viewBox="0 0 700 200" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
           <rect x="30" y="40" width="180" height="60" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
           <text x="120" y="65" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">ブラウザ</text>
           <text x="120" y="82" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="13">クライアント</text>
-
-          <!-- Server -->
           <rect x="490" y="40" width="180" height="60" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="580" y="65" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">Node.js</text>
+          <text x="580" y="65" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">Webサーバ</text>
           <text x="580" y="82" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="13">サーバ</text>
-
-          <!-- Request arrow -->
-          <line x1="210" y1="55" x2="490" y2="55" stroke="#76B900" stroke-width="2.5" marker-end="url(#arr1)"/>
-          <text x="350" y="48" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">① HTTPリクエスト（GET /）</text>
-
-          <!-- Response arrow -->
-          <line x1="490" y1="85" x2="210" y2="85" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#arr2)"/>
-          <text x="350" y="108" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">② HTTPレスポンス（HTML）</text>
-
-          <!-- Browser renders -->
-          <rect x="80" y="140" width="130" height="40" rx="8" fill="#76B900"/>
-          <text x="145" y="165" text-anchor="middle" fill="white" font-weight="700" font-size="12">③ 画面に表示</text>
-
-          <line x1="120" y1="100" x2="120" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#arr1)"/>
-
-          <!-- HTTP methods -->
-          <rect x="370" y="140" width="300" height="60" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
-          <text x="520" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">主なHTTPメソッド</text>
-          <text x="400" y="178" fill="#E0E0E0" font-size="10" font-weight="500">GET=取得</text>
-          <text x="480" y="178" fill="#E0E0E0" font-size="10" font-weight="500">POST=送信</text>
-          <text x="560" y="178" fill="#E0E0E0" font-size="10" font-weight="500">PUT=更新</text>
-          <text x="635" y="178" fill="#E0E0E0" font-size="10" font-weight="500">DELETE=削除</text>
-
+          <line x1="210" y1="55" x2="490" y2="55" stroke="#76B900" stroke-width="2.5" marker-end="url(#ah1)"/>
+          <text x="350" y="48" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">① リクエスト（このページちょうだい）</text>
+          <line x1="490" y1="85" x2="210" y2="85" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <text x="350" y="108" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">② レスポンス（HTML / 画像 / データ）</text>
+          <rect x="80" y="140" width="130" height="36" rx="8" fill="#76B900"/>
+          <text x="145" y="163" text-anchor="middle" fill="white" font-weight="700" font-size="12">③ 画面に表示</text>
+          <line x1="120" y1="100" x2="120" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#ah1)"/>
           <defs>
-            <marker id="arr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-            <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="ah1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
           </defs>
         </svg>
       </div>
+      <p style="margin-top:0.5rem"><strong>今日の Live Server も同じ仕組みです。</strong>VS Code が小さなWebサーバを起動し、ブラウザがそこにリクエストを送ってHTMLを受け取っています。</p>
     </div>
 
     <!-- 1.2 Client-Server -->
     <div class="concept-box">
-      <h4>1.2 クライアントとサーバ ── レストランのイメージ</h4>
+      <h4>1.2 クライアントとサーバ</h4>
       <div class="analogy">
-        レストランでは、<strong>お客さん（クライアント）</strong>がメニューを見て注文し、<strong>厨房（サーバ）</strong>が料理を作って届けます。<br>
-        Webでは、ブラウザがお客さん、Node.js が厨房の役割です。
+        レストランでは、<strong>お客さん（クライアント）</strong>がメニューを見て注文し、<strong>厨房（サーバ）</strong>が料理を作って届けます。Webでは、ブラウザがお客さん、Webサーバが厨房です。
       </div>
-      <p><strong>Node.js</strong> は、JavaScript をブラウザの外（サーバ側）で動かすためのランタイムです。Google Chrome の V8 エンジンがベースで、<strong>npm</strong> というパッケージマネージャで機能を拡張できます。</p>
+      <table>
+        <tr><th>用語</th><th>意味</th><th>この授業での例</th></tr>
+        <tr><td><strong>クライアント</strong></td><td>サービスを要求する側</td><td>ブラウザ（Chrome等）</td></tr>
+        <tr><td><strong>サーバ</strong></td><td>サービスを提供する側</td><td>Live Server（今日）、Node.js（第2回〜）</td></tr>
+        <tr><td><strong>リクエスト</strong></td><td>クライアントからの要求</td><td>URLにアクセスする</td></tr>
+        <tr><td><strong>レスポンス</strong></td><td>サーバからの応答</td><td>HTML・画像・3Dシーンを返す</td></tr>
+      </table>
     </div>
 
-    <!-- 1.3 Express -->
+    <!-- 1.3 A-Frame -->
     <div class="concept-box">
-      <h4>1.3 Express.js ── レストランのウェイター</h4>
+      <h4>1.3 A-Frame ── HTMLタグで3D空間を作る</h4>
       <div class="analogy">
-        レストランに<strong>ウェイター</strong>がいると、注文の受付・料理の配膳がスムーズになります。<br>
-        Express.js は Node.js の「ウェイター」です。URLに応じた処理の振り分け（ルーティング）を簡単に書けます。
+        普通のWebページは <code>&lt;h1&gt;</code> や <code>&lt;p&gt;</code> で文字を表示します。<strong>A-Frame</strong> を使うと、<code>&lt;a-box&gt;</code> や <code>&lt;a-sphere&gt;</code> といったタグで<strong>3Dオブジェクト</strong>を表示できます。HTMLを書くだけで3D空間が作れます。
       </div>
-      <p>Node.js だけでもサーバは作れますが、Express.js を使うと:</p>
+      <table>
+        <tr><th>普通のHTML</th><th>A-Frame</th></tr>
+        <tr><td><code>&lt;h1&gt;</code> → 見出しテキスト</td><td><code>&lt;a-box&gt;</code> → 3Dの箱</td></tr>
+        <tr><td><code>&lt;img&gt;</code> → 画像</td><td><code>&lt;a-sphere&gt;</code> → 3Dの球</td></tr>
+        <tr><td><code>&lt;div&gt;</code> → 領域</td><td><code>&lt;a-scene&gt;</code> → 3D空間全体</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>A-Frameの基本ルール:</strong></p>
       <ul class="point-list">
-        <li><strong>ルーティング</strong>（URLに応じて処理を振り分け）が簡単に書ける</li>
-        <li><strong>静的ファイル配信</strong>（HTML・CSS・画像など）が1行でできる</li>
-        <li><strong>ミドルウェア</strong>で機能を柔軟に追加できる</li>
+        <li>すべての3Dオブジェクトは <code>&lt;a-scene&gt;</code> の中に書く</li>
+        <li><code>position="x y z"</code> で位置を指定する（x: 左右、y: 上下、z: 手前奥）</li>
+        <li><code>color</code> で色、<code>radius</code> で半径など、属性で見た目を制御する</li>
       </ul>
     </div>
 
-    <!-- 1.4 Routing Overview -->
-    <div class="concept-box">
-      <h4>1.4 ルーティングの全体像</h4>
-      <p>Express がリクエストを受け取ってからレスポンスを返すまでの流れです。</p>
-
-      <div class="diagram-container">
-        <svg viewBox="0 0 700 280" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
-          <!-- Step 1: Request -->
-          <rect x="20" y="30" width="160" height="50" rx="10" fill="#76B900"/>
-          <text x="100" y="50" text-anchor="middle" fill="white" font-weight="700" font-size="12">① リクエスト受信</text>
-          <text x="100" y="68" text-anchor="middle" fill="white" font-size="10" opacity="0.8">GET /about</text>
-
-          <line x1="180" y1="55" x2="220" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#arr-r1)"/>
-
-          <!-- Step 2: Express routing -->
-          <rect x="220" y="20" width="160" height="70" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-          <text x="300" y="45" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="12">② ルーティング</text>
-          <text x="300" y="65" text-anchor="middle" fill="#E0E0E0" font-size="10">URLのパスを確認</text>
-          <text x="300" y="80" text-anchor="middle" fill="#E0E0E0" font-size="10">/about にマッチ？</text>
-
-          <!-- YES branch -->
-          <line x1="380" y1="55" x2="420" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#arr-r1)"/>
-          <text x="400" y="45" fill="#76B900" font-weight="700" font-size="10">YES</text>
-
-          <rect x="420" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-          <text x="490" y="50" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="12">③ ルート処理</text>
-          <text x="490" y="68" text-anchor="middle" fill="#888" font-size="10">コールバック関数実行</text>
-
-          <line x1="560" y1="55" x2="600" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#arr-r1)"/>
-
-          <rect x="600" y="30" width="80" height="50" rx="10" fill="#76B900"/>
-          <text x="640" y="50" text-anchor="middle" fill="white" font-weight="700" font-size="11">④ レスポンス</text>
-          <text x="640" y="68" text-anchor="middle" fill="white" font-size="10">HTML/JSON</text>
-
-          <!-- NO branch -->
-          <line x1="300" y1="90" x2="300" y2="130" stroke="#FF5252" stroke-width="2" marker-end="url(#arr-r2)"/>
-          <text x="312" y="115" fill="#FF5252" font-weight="700" font-size="10">NO</text>
-
-          <rect x="230" y="130" width="140" height="40" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="1.5"/>
-          <text x="300" y="155" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="12">404 Not Found</text>
-
-          <!-- Example -->
-          <rect x="20" y="200" width="660" height="60" rx="10" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
-          <text x="350" y="220" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">コードでの対応</text>
-          <text x="40" y="245" fill="#E0E0E0" font-size="11" font-family="JetBrains Mono, monospace">app.get(<tspan fill="#FFB800">'/about'</tspan>, (req, res) =&gt; { res.send(<tspan fill="#FFB800">'About Page'</tspan>); });</text>
-
-          <defs>
-            <marker id="arr-r1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-            <marker id="arr-r2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF5252"/></marker>
-          </defs>
-        </svg>
-      </div>
-
-      <table>
-        <tr><th>用語</th><th>意味</th><th>コード例</th></tr>
-        <tr><td><strong>ルーティング</strong></td><td>URLに応じて処理を振り分けること</td><td><code>app.get('/about', ...)</code></td></tr>
-        <tr><td><strong>リクエスト (req)</strong></td><td>ブラウザからの要求情報</td><td><code>req.query</code>, <code>req.params</code></td></tr>
-        <tr><td><strong>レスポンス (res)</strong></td><td>サーバからの返答</td><td><code>res.send()</code>, <code>res.json()</code></td></tr>
-        <tr><td><strong>静的ファイル配信</strong></td><td>HTML/CSS/画像をそのまま返す</td><td><code>app.use(express.static('public'))</code></td></tr>
-      </table>
-    </div>
   </div>
 </section>
 
@@ -840,36 +668,28 @@ node WEB01-1.js</pre>
       <h2>例題とトレース演習</h2>
     </div>
 
-    <!-- Example 1 -->
+    <!-- Example -->
     <div class="card example">
       <div class="card-header">
         <span class="tag tag-example">例題</span>
-        <h3>ルーティングの動作を追う</h3>
+        <h3>A-Frameのコードと表示の対応を読む</h3>
       </div>
-      <p>以下の Express サーバが動いているとき、ブラウザで各URLにアクセスした結果を追ってみましょう。</p>
-      <pre><span class="code-label">JavaScript</span>
-app.<span class="fn">get</span>(<span class="str">'/'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;トップページ&lt;/h1&gt;'</span>);
-});
-
-app.<span class="fn">get</span>(<span class="str">'/about'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;About&lt;/h1&gt;'</span>);
-});
-
-app.<span class="fn">get</span>(<span class="str">'/api/hello'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">json</span>({ message: <span class="str">'Hello!'</span> });
-});</pre>
+      <p>以下のHTMLコードが3D空間にどう対応するかを確認しましょう。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
       <table>
-        <tr><th>ブラウザのURL</th><th>マッチするルート</th><th>レスポンス種類</th><th>ブラウザの表示</th></tr>
-        <tr><td><code>localhost:3000/</code></td><td><code>app.get('/', ...)</code></td><td>HTML</td><td>「トップページ」(見出し)</td></tr>
-        <tr><td><code>localhost:3000/about</code></td><td><code>app.get('/about', ...)</code></td><td>HTML</td><td>「About」(見出し)</td></tr>
-        <tr><td><code>localhost:3000/api/hello</code></td><td><code>app.get('/api/hello', ...)</code></td><td>JSON</td><td><code>{"message":"Hello!"}</code></td></tr>
-        <tr><td><code>localhost:3000/contact</code></td><td>なし（一致なし）</td><td>エラー</td><td>Cannot GET /contact（404）</td></tr>
+        <tr><th>タグ</th><th>何が表示されるか</th><th>属性の意味</th></tr>
+        <tr><td><code>&lt;a-scene&gt;</code></td><td>3D空間全体の入れ物</td><td>この中に3Dオブジェクトを配置する</td></tr>
+        <tr><td><code>&lt;a-box&gt;</code></td><td>赤い箱</td><td>position: x=0, y=1（少し上）, z=-3（奥）/ color: 赤</td></tr>
+        <tr><td><code>&lt;a-sky&gt;</code></td><td>空（背景）</td><td>color: 水色（#87CEEB）</td></tr>
       </table>
       <ul class="point-list">
-        <li>URLのパスとルートの第1引数が<strong>完全一致</strong>したときだけ処理される</li>
-        <li><code>res.send()</code> はHTML、<code>res.json()</code> はJSONを返す</li>
-        <li>一致するルートがなければ Express が自動で <strong>404エラー</strong> を返す</li>
+        <li><code>position="0 1 -3"</code> の数字は <strong>x（左右）y（上下）z（手前奥）</strong>の順</li>
+        <li>z がマイナスだとカメラから<strong>奥</strong>に離れる（画面に映る）</li>
+        <li><code>&lt;a-sky&gt;</code> は空間全体の背景色を決める</li>
       </ul>
     </div>
 
@@ -877,89 +697,45 @@ app.<span class="fn">get</span>(<span class="str">'/api/hello'</span>, (req, res
     <div class="card trace">
       <div class="card-header">
         <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 1</h3>
+        <h3>トレース演習 1: コードから表示を予測する</h3>
       </div>
-      <p><strong>問題:</strong> 以下のExpressサーバが動いているとき、各URLにアクセスした結果を予測して表を埋めなさい。</p>
-      <pre><span class="code-label">JavaScript</span>
-app.<span class="fn">get</span>(<span class="str">'/'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;ホーム&lt;/h1&gt;'</span>);
-});
-
-app.<span class="fn">get</span>(<span class="str">'/menu'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">json</span>({ items: [<span class="str">'カレー'</span>, <span class="str">'ラーメン'</span>, <span class="str">'寿司'</span>] });
-});
-
-app.<span class="fn">get</span>(<span class="str">'/greeting'</span>, (req, res) <span class="op">=&gt;</span> {
-  <span class="kw">const</span> name = req.query.name || <span class="str">'ゲスト'</span>;
-  res.<span class="fn">send</span>(<span class="str">`こんにちは、</span>${name}<span class="str">さん！`</span>);
-});</pre>
+      <p><strong>問題:</strong> 以下のA-Frameコードを読み、各エンティティの表示内容を予測して表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-box</span> position=<span class="str">"-1 0.5 -3"</span> color=<span class="str">"#4CC3D9"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.25 -5"</span> radius=<span class="str">"1.25"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="kw">&lt;a-cylinder</span> position=<span class="str">"1 0.75 -3"</span> radius=<span class="str">"0.5"</span> height=<span class="str">"1.5"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+  <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"4"</span> height=<span class="str">"4"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#ECECEC"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
       <table>
-        <tr><th>ブラウザのURL</th><th>マッチするルート</th><th>レスポンス種類</th><th>ブラウザの表示</th></tr>
-        <tr><td><code>localhost:3000/</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/menu</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/greeting?name=太郎</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/greeting</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/order</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><th>タグ</th><th>形</th><th>位置 (x, y, z)</th><th>色</th><th>特徴的な属性</th></tr>
+        <tr><td><code>&lt;a-box&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td>—</td></tr>
+        <tr><td><code>&lt;a-sphere&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>&lt;a-cylinder&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>&lt;a-plane&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>&lt;a-sky&gt;</code></td><td class="blank-cell"></td><td>—</td><td class="blank-cell"></td><td>—</td></tr>
       </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 自分のNotionノートに表をコピーし、空欄を埋めて記録してください。</div></div>
-    </div>
-
-    <!-- Example 2 -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>レスポンスの種類を理解する</h3>
-      </div>
-      <p><code>res.send()</code> と <code>res.json()</code> の違いを確認しましょう。</p>
-      <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// HTMLを返す</span>
-app.<span class="fn">get</span>(<span class="str">'/html'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;これはHTMLです&lt;/h1&gt;'</span>);
-});
-
-<span class="cmt">// JSONを返す</span>
-app.<span class="fn">get</span>(<span class="str">'/json'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">json</span>({ type: <span class="str">'json'</span>, count: <span class="num">42</span> });
-});</pre>
-      <table>
-        <tr><th>メソッド</th><th>返すもの</th><th>ブラウザでの見え方</th></tr>
-        <tr><td><code>res.send('HTML文字列')</code></td><td>HTML</td><td>見出しや段落としてレンダリングされる</td></tr>
-        <tr><td><code>res.json({...})</code></td><td>JSON</td><td>データがそのままテキストで表示される</td></tr>
-      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
     </div>
 
     <!-- Trace 2 -->
     <div class="card trace">
       <div class="card-header">
         <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 2</h3>
+        <h3>トレース演習 2: Live Serverで何が起きているか</h3>
       </div>
-      <p><strong>問題:</strong> 以下のコードについて、各URLにアクセスしたときの出力を予測しなさい。</p>
-      <pre><span class="code-label">JavaScript</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app = <span class="fn">express</span>();
-
-app.<span class="fn">get</span>(<span class="str">'/add'</span>, (req, res) <span class="op">=&gt;</span> {
-  <span class="kw">const</span> a = <span class="fn">Number</span>(req.query.a) || <span class="num">0</span>;
-  <span class="kw">const</span> b = <span class="fn">Number</span>(req.query.b) || <span class="num">0</span>;
-  res.<span class="fn">json</span>({ result: a + b });
-});
-
-app.<span class="fn">get</span>(<span class="str">'/hello'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'こんにちは！'</span>);
-});
-
-app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
+      <p><strong>問題:</strong> VS Code で <code>index.html</code> を「Open with Live Server」したとき、裏側で何が起きているかを順番に埋めなさい。</p>
       <table>
-        <tr><th>ブラウザのURL</th><th>表示されるレスポンス（あなたの予測）</th></tr>
-        <tr><td><code>localhost:3000/hello</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/add?a=3&amp;b=5</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/add?a=10</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/add</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>localhost:3000/</code></td><td class="blank-cell"></td></tr>
+        <tr><th style="width:50px">順番</th><th>何が起きるか（空欄を埋める）</th></tr>
+        <tr><td>①</td><td>VS Code が <code>http://127.0.0.1:5500</code> で小さな <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> を起動する</td></tr>
+        <tr><td>②</td><td>ブラウザが自動で開き、サーバに <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> を送る</td></tr>
+        <tr><td>③</td><td>サーバが <code>index.html</code> ファイルを読み、<span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> としてブラウザに返す</td></tr>
+        <tr><td>④</td><td>ブラウザがHTMLを解析し、<code>&lt;script src="aframe..."&gt;</code> を見つけて A-Frame ライブラリを <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> する</td></tr>
+        <tr><td>⑤</td><td>A-Frame が <code>&lt;a-scene&gt;</code> 内のタグを読み、<span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> を描画する</td></tr>
       </table>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>Number(undefined) || 0</code> は <code>0</code> になります。<code>req.query.a</code> はURLの <code>?a=値</code> の部分を取得します。</p>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 自分のNotionノートに表をコピーし、予測を記録してください。</div></div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> セクション1の「Webの仕組み」の図を参考にしてください。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた文章を記入してください。</div></div>
     </div>
 
   </div>
@@ -972,106 +748,89 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
       <div class="section-num" style="background:#93D500">3</div>
       <h2>コード体験</h2>
     </div>
-    <p style="margin-bottom:1.5rem">以下のコードは先生が用意したものです。<strong>自分では1文字も書かなくてOK。</strong>コピーして実行し、結果を<strong>観察</strong>してください。</p>
+    <p style="margin-bottom:1.5rem">以下のコードは先生が用意したものです。<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
 
     <!-- Code Exp 1 -->
     <div class="card code-exp">
       <div class="card-header">
         <span class="tag tag-code-exp">コード体験 1</span>
-        <h3>Hello World サーバ ── <code>WEB01-1.js</code></h3>
+        <h3>最初の3D空間 ── <code>index.html</code></h3>
       </div>
-      <p>VS Codeの <code>week01</code> フォルダに<strong>新規ファイル <code>WEB01-1.js</code></strong> を作成してください。以下のコードを「コピー」ボタンで貼り付けて実行します。</p>
-      <pre><span class="code-label">JavaScript ── WEB01-1.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> PORT = <span class="num">3000</span>;
+      <p><code>web01</code> フォルダに <strong><code>index.html</code></strong> を作成し、以下のコードを貼り付けてください。</p>
+      <pre><span class="code-label">HTML ── index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>My First A-Frame<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.6.0/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- 赤い箱 --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
 
-<span class="cmt">// ルート "/" にアクセスしたとき</span>
-app.<span class="fn">get</span>(<span class="str">'/'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;Hello, Web Programming!&lt;/h1&gt;'</span>);
-});
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 
-<span class="cmt">// ルート "/about" にアクセスしたとき</span>
-app.<span class="fn">get</span>(<span class="str">'/about'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;このサイトについて&lt;/h1&gt;&lt;p&gt;Webプログラミング演習 第1回&lt;/p&gt;'</span>);
-});
-
-<span class="cmt">// サーバ起動</span>
-app.<span class="fn">listen</span>(PORT, () <span class="op">=&gt;</span> {
-  <span class="fn">console.log</span>(<span class="str">`サーバ起動: http://localhost:</span>${PORT}<span class="str">`</span>);
-});</pre>
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ターミナルで <code>node WEB01-1.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
-        <li>ブラウザで <code>http://localhost:3000/about</code> を開く</li>
-        <li>ブラウザで <code>http://localhost:3000/test</code> を開く（存在しないURL）</li>
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
+        <li>ブラウザに3D空間が表示される</li>
+        <li>マウスでドラッグして<strong>視点を動かしてみる</strong></li>
       </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下の項目を自分のNotionノートに記録してください。<br>
-        Q1. <code>/</code> にアクセスしたとき、ブラウザに何が表示されたか？<br>
-        Q2. <code>/about</code> にアクセスしたとき、ブラウザに何が表示されたか？<br>
-        Q3. <code>/test</code>（存在しないURL）にアクセスしたとき、何が表示されたか？</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. ブラウザに何が表示されましたか？（見えたものを3つ挙げる）<br>
+        Q2. マウスでドラッグしたとき、視点はどう動きましたか？</div></div>
     </div>
 
     <!-- Code Exp 2 -->
     <div class="card code-exp">
       <div class="card-header">
         <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>複数ルートとJSON API ── <code>WEB01-2.js</code></h3>
+        <h3>複数のオブジェクトを配置する ── <code>scene.html</code></h3>
       </div>
-      <p>先に <kbd>Ctrl+C</kbd> で WEB01-1.js のサーバを停止してください。次に<strong>新規ファイル <code>WEB01-2.js</code></strong> を作成します。</p>
-      <pre><span class="code-label">JavaScript ── WEB01-2.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> PORT = <span class="num">3000</span>;
+      <p>同じフォルダに <strong><code>scene.html</code></strong> を新規作成し、以下を貼り付けてください。</p>
+      <pre><span class="code-label">HTML ── scene.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>3D Scene<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.6.0/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- 箱 --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"-1 0.5 -3"</span> color=<span class="str">"#4CC3D9"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
 
-<span class="cmt">// トップページ</span>
-app.<span class="fn">get</span>(<span class="str">'/'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">`
-    &lt;h1&gt;Webプログラミング演習&lt;/h1&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href="/api/info"&gt;API Info (JSON)&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href="/greeting?name=太郎"&gt;挨拶（太郎）&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href="/greeting"&gt;挨拶（名前なし）&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  `</span>);
-});
+    <span class="cmt">&lt;!-- 球 --&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.25 -5"</span> radius=<span class="str">"1.25"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
 
-<span class="cmt">// Aboutページ</span>
-app.<span class="fn">get</span>(<span class="str">'/about'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;このサイトについて&lt;/h1&gt;&lt;p&gt;Express.jsで作った最初のサーバです。&lt;/p&gt;&lt;a href="/"&gt;トップに戻る&lt;/a&gt;'</span>);
-});
+    <span class="cmt">&lt;!-- 円柱 --&gt;</span>
+    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"1 0.75 -3"</span> radius=<span class="str">"0.5"</span> height=<span class="str">"1.5"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
 
-<span class="cmt">// JSON API</span>
-app.<span class="fn">get</span>(<span class="str">'/api/info'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">json</span>({
-    course: <span class="str">'Webプログラミング演習'</span>,
-    week: <span class="num">1</span>,
-    topics: [<span class="str">'HTTP'</span>, <span class="str">'Express.js'</span>, <span class="str">'ルーティング'</span>]
-  });
-});
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"4"</span> height=<span class="str">"4"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 
-<span class="cmt">// クエリパラメータを使うルート</span>
-app.<span class="fn">get</span>(<span class="str">'/greeting'</span>, (req, res) <span class="op">=&gt;</span> {
-  <span class="kw">const</span> name = req.query.name || <span class="str">'ゲスト'</span>;
-  res.<span class="fn">send</span>(<span class="str">`&lt;h1&gt;こんにちは、</span>${name}<span class="str">さん！&lt;/h1&gt;&lt;a href="/"&gt;トップに戻る&lt;/a&gt;`</span>);
-});
-
-<span class="cmt">// サーバ起動</span>
-app.<span class="fn">listen</span>(PORT, () <span class="op">=&gt;</span> {
-  <span class="fn">console.log</span>(<span class="str">`サーバ起動: http://localhost:</span>${PORT}<span class="str">`</span>);
-});</pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ターミナルで <code>node WEB01-2.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
-        <li>表示されたリンクをすべてクリックして、各ページを確認する</li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下の項目を自分のNotionノートに記録してください。<br>
-        Q1. <code>/api/info</code> にアクセスしたとき、ブラウザにどんなデータが表示されたか？（HTML表示との違い）<br>
-        Q2. <code>/greeting?name=太郎</code> と <code>/greeting</code> でそれぞれ何が表示されたか？ なぜ違うか？<br>
-        Q3. URLの <code>?name=太郎</code> の部分は何と呼ばれるか？（ヒント: セクション1の用語表を参照）</div></div>
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#ECECEC"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>scene.html</code> を右クリック → 「Open with Live Server」</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
+        Q2. <code>&lt;a-plane&gt;</code> の <code>rotation="-90 0 0"</code> を消して保存するとどうなるか？ 試して記録する<br>
+        Q3. 3Dオブジェクトの位置関係（どれが手前でどれが奥か）を、z の値と見え方から説明する</div></div>
     </div>
 
   </div>
@@ -1092,22 +851,21 @@ app.<span class="fn">listen</span>(PORT, () <span class="op">=&gt;</span> {
         <span class="tag tag-group">Phase 1</span>
         <h3>質問を考える（個人・5分）</h3>
       </div>
-      <p>コード体験で動かした <code>WEB01-1.js</code> と <code>WEB01-2.js</code> のコードを元に、<strong>「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p>コード体験で動かした <code>index.html</code> と <code>scene.html</code> のコードを元に、<strong>「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
       <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
       <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）── コードのここを変えたらどうなる？</p>
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
         <table>
-          <tr><th style="width:20%">対象</th><th style="width:35%">変更内容</th><th>質問例</th></tr>
-          <tr><td><code>WEB01-1.js</code></td><td>PORT を <code>3000</code> → <code>5000</code></td><td>「どのURLでアクセスする？」</td></tr>
-          <tr><td><code>WEB01-1.js</code></td><td><code>app.get</code> → <code>app.post</code></td><td>「ブラウザのURLバーからアクセスできる？ なぜ？」</td></tr>
-          <tr><td><code>WEB01-2.js</code></td><td><code>res.json()</code> → <code>res.send()</code></td><td>「レスポンスはどう変わる？」</td></tr>
-          <tr><td><code>WEB01-2.js</code></td><td><code>req.query.name</code> の <code>|| 'ゲスト'</code> を削除</td><td>「名前なしでアクセスすると何が表示される？」</td></tr>
-          <tr><td><code>WEB01-2.js</code></td><td><code>app.listen()</code> の行を削除</td><td>「何が起こる？ なぜ？」</td></tr>
-          <tr><td><code>WEB01-2.js</code></td><td><code>/about</code> のルートを削除</td><td>「トップページの About リンクをクリックすると？」</td></tr>
+          <tr><th style="width:35%">変更内容</th><th>質問例</th></tr>
+          <tr><td><code>&lt;a-box&gt;</code> の position を <code>"0 5 -3"</code> にする</td><td>「箱はどこに移動する？ なぜ？」</td></tr>
+          <tr><td><code>&lt;a-sky&gt;</code> の color を <code>"black"</code> にする</td><td>「見え方はどう変わる？」</td></tr>
+          <tr><td><code>&lt;a-sphere&gt;</code> の radius を <code>"0.1"</code> にする</td><td>「球はどうなる？」</td></tr>
+          <tr><td><code>&lt;a-scene&gt;</code> タグを削除する</td><td>「3Dは表示される？ なぜ？」</td></tr>
+          <tr><td><code>&lt;script src="aframe..."&gt;</code> の行を削除する</td><td>「何が起こる？ なぜ？」</td></tr>
+          <tr><td><code>&lt;a-box&gt;</code> の position の z を <code>3</code>（プラス）にする</td><td>「箱は見える？ なぜ？」</td></tr>
         </table>
-        <p style="color:#888;font-size:0.85rem;margin-top:0.5rem">上の表はあくまで参考です。自分で別の変更を考えてもOKです。</p>
       </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ、自分のNotionノートに書いてください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
     </div>
 
     <!-- Phase 2 -->
@@ -1121,90 +879,52 @@ app.<span class="fn">listen</span>(PORT, () <span class="op">=&gt;</span> {
         <tr><th style="width:20%">役割</th><th>やること</th></tr>
         <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
         <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を下の表に記録する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
       </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下の内容を自分のNotionノートに記録してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
       <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">記録する内容</p>
         <ul class="point-list">
           <li><strong>グループメンバー全員の氏名</strong></li>
           <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
           <li>回答の要点</li>
-          <li>評価（A / B / C）</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
         </ul>
-        <p style="color:#888;font-size:0.85rem;margin-top:0.5rem">記録例: 「出題: 田中 → 回答: 鈴木 ／ 質問: PORTを5000に変えたら？ ／ 要点: localhost:5000でアクセスする必要がある ／ 評価: A」</p>
-      </div>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
-        <strong>ヒント:</strong> 「コードを変えたらどうなるか」を議論すると、各行の役割が明確になります。この理解は次の「標準課題」でサーバの動作を言葉で説明したり、コードの出力を予測するのに直接役立ちます。
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ============ 5. STANDARD TASKS ============ -->
+<!-- ============ 5. STANDARD TASK (CODE MOD) ============ -->
 <section>
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
-      <h2>標準課題</h2>
+      <h2>標準課題（コード改造）</h2>
     </div>
 
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>サーバの動作を言葉で説明する</h3>
+        <span class="tag tag-standard">コード改造</span>
+        <h3>3Dシーンを改造する</h3>
       </div>
-      <p>コード体験2の WEB01-2.js が「何をしているか」を、以下の空欄を埋めて説明しなさい。</p>
-      <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">
-① ブラウザがURL http://localhost:3000/about に＿＿＿＿リクエストを送る
-② Express がURLのパスを見て＿＿＿＿する
-③ パス "/about" にマッチするルートが見つかると＿＿＿＿が実行される
-④ res.send() は＿＿＿＿形式のレスポンスを返す
-⑤ res.json() は＿＿＿＿形式のレスポンスを返す
-⑥ マッチするルートがないURLにアクセスすると＿＿＿＿エラーが返る
-⑦ ブラウザは受け取ったレスポンスを＿＿＿＿する</pre>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 穴埋めの回答を自分のNotionノートに記入してください。</div></div>
-    </div>
+      <p>コード体験2の <code>scene.html</code> を以下の指示どおりに改造しなさい。</p>
 
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>コードを読んでレスポンスを予測する</h3>
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td><code>&lt;a-box&gt;</code> の色を好きな色に変更する</td></tr>
+          <tr><td>2</td><td><code>&lt;a-sphere&gt;</code> の位置を <code>"3 2 -6"</code> に移動する</td></tr>
+          <tr><td>3</td><td><code>&lt;a-cylinder&gt;</code> の高さ（height）を <code>"3"</code> に変更する</td></tr>
+          <tr><td>4</td><td>新しく <code>&lt;a-torus&gt;</code>（ドーナツ型）を1つ追加する。位置と色は自由。</td></tr>
+          <tr><td>5</td><td><code>&lt;a-sky&gt;</code> の色を夕焼けっぽい色に変更する</td></tr>
+        </table>
       </div>
-      <p>以下のコードを<strong>実行せずに</strong>、各URLにアクセスしたときの表示を予測しなさい。<br>予測を書いた後に、<code>WEB01-3.js</code> として保存・実行して確かめなさい。</p>
-      <pre><span class="code-label">JavaScript ── WEB01-3.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app = <span class="fn">express</span>();
-
-<span class="kw">let</span> count = <span class="num">0</span>;
-
-app.<span class="fn">get</span>(<span class="str">'/'</span>, (req, res) <span class="op">=&gt;</span> {
-  count = count + <span class="num">1</span>;
-  res.<span class="fn">send</span>(<span class="str">`&lt;h1&gt;あなたは</span>${count}<span class="str">人目の訪問者です&lt;/h1&gt;`</span>);
-});
-
-app.<span class="fn">get</span>(<span class="str">'/reset'</span>, (req, res) <span class="op">=&gt;</span> {
-  count = <span class="num">0</span>;
-  res.<span class="fn">send</span>(<span class="str">'カウンターをリセットしました'</span>);
-});
-
-app.<span class="fn">get</span>(<span class="str">'/api/count'</span>, (req, res) <span class="op">=&gt;</span> {
-  res.<span class="fn">json</span>({ count: count });
-});
-
-app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
-      <p style="margin-top:1rem"><strong>問題:</strong> 以下の順番でアクセスしたとき、それぞれ何が表示されるか予測しなさい。</p>
-      <table>
-        <tr><th>順番</th><th>アクセスするURL</th><th>表示の予測</th><th>実行結果</th><th>合っていたか</th></tr>
-        <tr><td>1</td><td><code>/</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>2</td><td><code>/</code>（もう一度）</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>3</td><td><code>/api/count</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>4</td><td><code>/reset</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>5</td><td><code>/</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>let count = 0;</code> はサーバ起動時に一度だけ実行されます。サーバが動いている間、<code>count</code> の値はメモリに保持されます。</p>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 予測・実行結果・合っていたかを自分のNotionノートに記録してください。予測と違った場合は「なぜ違ったか」も書いてください。</div></div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>&lt;a-torus position="0 2 -4" color="purple" radius="1" radius-tubular="0.1"&gt;&lt;/a-torus&gt;</code></p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「なぜその値にしたか」を書く</div></div>
     </div>
   </div>
 </section>
@@ -1220,32 +940,26 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
     <div class="card advanced">
       <div class="card-header">
         <span class="tag tag-advanced">発展課題</span>
-        <h3>「自分のプロフィールサーバ」を作る</h3>
+        <h3>オリジナル3Dシーンを作る</h3>
       </div>
-      <p>Express.js を使って、<strong>3つのページ</strong>を持つサーバを自分で作ってください。</p>
+      <p><code>original.html</code> を新規作成し、A-Frameで<strong>自分だけの3D空間</strong>を作ってください。</p>
 
-      <table style="margin:1rem 0">
-        <tr><th style="width:25%">URL</th><th>内容</th></tr>
-        <tr><td><code>/</code></td><td>自分の名前と、<code>/about</code> と <code>/api/profile</code> へのリンクを含むHTMLページ</td></tr>
-        <tr><td><code>/about</code></td><td>自分の名前と学年を含むHTMLを返す</td></tr>
-        <tr><td><code>/api/profile</code></td><td>自分の情報をJSON形式で返す</td></tr>
-      </table>
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li>5種類以上のエンティティを使う（a-box, a-sphere, a-cylinder, a-plane, a-sky など）</li>
+          <li>各エンティティの position と color を自分で考えて設定する</li>
+          <li>テーマを決める（例: 「自分の部屋」「宇宙空間」「庭」「街角」など）</li>
+        </ul>
+      </div>
 
-      <p><code>/api/profile</code> のレスポンス例:</p>
-      <pre><span class="code-label">JSON</span>
-{
-  <span class="str">"name"</span>: <span class="str">"山田太郎"</span>,
-  <span class="str">"grade"</span>: <span class="num">3</span>,
-  <span class="str">"interests"</span>: [<span class="str">"Web"</span>, <span class="str">"3D"</span>, <span class="str">"ゲーム"</span>]
-}</pre>
-
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1.5rem 0">
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
         <table>
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
           <tr>
             <td><strong style="color:#76B900">1. コード</strong></td>
-            <td><code>WEB01-4.js</code> として作成し、コード全体をNotionノートに貼り付ける</td>
+            <td><code>original.html</code> のコード全体をNotionノートに貼り付ける</td>
           </tr>
           <tr>
             <td><strong style="color:#76B900">2. 音声説明</strong></td>
@@ -1255,36 +969,34 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
         </table>
         <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
         <ul class="point-list" style="margin-top:0.3rem">
-          <li>3つのルートがそれぞれ何をしているか</li>
-          <li><code>res.send()</code> と <code>res.json()</code> をどう使い分けたか</li>
-          <li>ブラウザで動作確認した結果</li>
+          <li>どんなテーマ・シーンを作ったか</li>
+          <li>各オブジェクトの position をどう決めたか（手前/奥、高さなど）</li>
+          <li>工夫した点や難しかった点</li>
         </ul>
       </div>
-      <p style="color:#FFB800;font-weight:600;font-size:0.9rem">※ 解答例は次回の授業で公開されます。まずは自分で作ってみてください。</p>
     </div>
   </div>
 </section>
 
 <!-- ============ 7. ANSWERS ============ -->
-<section style="background:#0A0A0A" id="answers-section" data-release="2026-04-22T14:40">
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-04-22T16:20">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">📝</div>
+      <div class="section-num" style="background:#616161">7</div>
       <h2>解答例</h2>
     </div>
-    <!-- 常に公開: トレース演習・コード体験 -->
+
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
       <div class="answer-content">
         <table>
-          <tr><th>ブラウザのURL</th><th>マッチするルート</th><th>レスポンス種類</th><th>ブラウザの表示</th></tr>
-          <tr><td><code>localhost:3000/</code></td><td><code>app.get('/', ...)</code></td><td>HTML</td><td>「ホーム」（見出し）</td></tr>
-          <tr><td><code>localhost:3000/menu</code></td><td><code>app.get('/menu', ...)</code></td><td>JSON</td><td><code>{"items":["カレー","ラーメン","寿司"]}</code></td></tr>
-          <tr><td><code>localhost:3000/greeting?name=太郎</code></td><td><code>app.get('/greeting', ...)</code></td><td>HTML</td><td>こんにちは、太郎さん！</td></tr>
-          <tr><td><code>localhost:3000/greeting</code></td><td><code>app.get('/greeting', ...)</code></td><td>HTML</td><td>こんにちは、ゲストさん！</td></tr>
-          <tr><td><code>localhost:3000/order</code></td><td>なし（一致なし）</td><td>エラー</td><td>Cannot GET /order（404）</td></tr>
+          <tr><th>タグ</th><th>形</th><th>位置 (x, y, z)</th><th>色</th><th>特徴的な属性</th></tr>
+          <tr><td><code>&lt;a-box&gt;</code></td><td>箱（立方体）</td><td>(-1, 0.5, -3)</td><td>水色 (#4CC3D9)</td><td>—</td></tr>
+          <tr><td><code>&lt;a-sphere&gt;</code></td><td>球</td><td>(0, 1.25, -5)</td><td>ピンク (#EF2D5E)</td><td>radius="1.25"（半径1.25）</td></tr>
+          <tr><td><code>&lt;a-cylinder&gt;</code></td><td>円柱</td><td>(1, 0.75, -3)</td><td>黄色 (#FFC65D)</td><td>radius="0.5", height="1.5"</td></tr>
+          <tr><td><code>&lt;a-plane&gt;</code></td><td>平面（床）</td><td>(0, 0, -4)</td><td>緑 (#7BC8A4)</td><td>rotation="-90 0 0"（水平に倒す）, width/height="4"</td></tr>
+          <tr><td><code>&lt;a-sky&gt;</code></td><td>空（背景）</td><td>—</td><td>薄灰色 (#ECECEC)</td><td>—</td></tr>
         </table>
-        <p style="margin-top:0.5rem"><strong>ポイント:</strong> <code>/greeting</code> はクエリパラメータ <code>?name=太郎</code> があれば「太郎」、なければデフォルト値「ゲスト」が使われる。</p>
       </div>
     </details>
 
@@ -1292,12 +1004,12 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
       <div class="answer-content">
         <table>
-          <tr><th>ブラウザのURL</th><th>表示されるレスポンス</th></tr>
-          <tr><td><code>localhost:3000/hello</code></td><td>こんにちは！</td></tr>
-          <tr><td><code>localhost:3000/add?a=3&amp;b=5</code></td><td><code>{"result":8}</code></td></tr>
-          <tr><td><code>localhost:3000/add?a=10</code></td><td><code>{"result":10}</code>（b が未指定なので 0 になる）</td></tr>
-          <tr><td><code>localhost:3000/add</code></td><td><code>{"result":0}</code>（a, b 両方未指定なので 0 + 0）</td></tr>
-          <tr><td><code>localhost:3000/</code></td><td>Cannot GET /（404エラー。<code>/</code> のルートは定義されていない）</td></tr>
+          <tr><th style="width:50px">順番</th><th>何が起きるか</th></tr>
+          <tr><td>①</td><td>VS Code が <code>http://127.0.0.1:5500</code> で小さな <strong>Webサーバ</strong> を起動する</td></tr>
+          <tr><td>②</td><td>ブラウザが自動で開き、サーバに <strong>HTTPリクエスト</strong> を送る</td></tr>
+          <tr><td>③</td><td>サーバが <code>index.html</code> ファイルを読み、<strong>レスポンス</strong> としてブラウザに返す</td></tr>
+          <tr><td>④</td><td>ブラウザがHTMLを解析し、<code>&lt;script&gt;</code> を見つけて A-Frame ライブラリを <strong>ダウンロード（読み込み）</strong> する</td></tr>
+          <tr><td>⑤</td><td>A-Frame が <code>&lt;a-scene&gt;</code> 内のタグを読み、<strong>3D空間</strong> を描画する</td></tr>
         </table>
       </div>
     </details>
@@ -1306,9 +1018,8 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
-          <li><strong>Q1. <code>/</code> の表示:</strong> 「Hello, Web Programming!」が大きな見出しとして表示された</li>
-          <li><strong>Q2. <code>/about</code> の表示:</strong> 「このサイトについて」という見出しと「Webプログラミング演習 第1回」という段落が表示された</li>
-          <li><strong>Q3. <code>/test</code> の表示:</strong> 「Cannot GET /test」というエラーメッセージが表示された。このURLに対応するルートが定義されていないため。</li>
+          <li><strong>Q1:</strong> 赤い箱、緑色の床、水色の空が表示された</li>
+          <li><strong>Q2:</strong> マウスでドラッグすると視点が回転し、箱を別の角度から見ることができた。WASDキーでカメラの位置を移動できた。</li>
         </ul>
       </div>
     </details>
@@ -1317,102 +1028,38 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
-          <li><strong>Q1. <code>/api/info</code> の表示:</strong> <code>{"course":"Webプログラミング演習","week":1,"topics":["HTTP","Express.js","ルーティング"]}</code> がJSONデータとしてそのまま表示された。HTMLのようにレンダリングされず、テキストデータがそのまま見える。</li>
-          <li><strong>Q2. <code>/greeting</code> の違い:</strong> <code>/greeting?name=太郎</code> は「こんにちは、太郎さん！」、<code>/greeting</code> は「こんにちは、ゲストさん！」と表示された。URLのクエリパラメータ <code>?name=太郎</code> で名前を渡しており、渡さない場合はデフォルト値「ゲスト」が使われるため。</li>
-          <li><strong>Q3.</strong> URLの <code>?name=太郎</code> の部分は<strong>クエリパラメータ</strong>（またはクエリ文字列）と呼ばれる。サーバ側では <code>req.query.name</code> で取得できる。</li>
+          <li><strong>Q1:</strong> トレース演習1の予測とほぼ合っていた。球が想像より大きく見えた（radius="1.25" は直径2.5で、箱より大きい）。</li>
+          <li><strong>Q2:</strong> <code>rotation="-90 0 0"</code> を消すと、平面が垂直に立ち上がって「壁」のように見えた。rotation で X軸方向に -90度回転させることで水平な「床」にしていたことがわかった。</li>
+          <li><strong>Q3:</strong> z=-3 の箱と円柱が手前に、z=-5 の球が奥に見えた。z の値がマイナスで大きいほど奥に配置される。</li>
         </ul>
       </div>
     </details>
 
-    <!-- 日時制御: 標準課題・発展課題の解答 -->
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題・発展課題の解答</h3>
-    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem">
-      🔒 標準課題・発展課題の解答は次回の授業（<span id="release-date-display"></span>〜）に公開されます
-    </p>
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-content">
 
     <details>
-      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答</summary>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 解答例</summary>
       <div class="answer-content">
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">
-① ブラウザがURL http://localhost:3000/about に GET リクエストを送る
-② Express がURLのパスを見て ルーティング（振り分け） する
-③ パス "/about" にマッチするルートが見つかると コールバック関数 が実行される
-④ res.send() は HTML 形式のレスポンスを返す
-⑤ res.json() は JSON 形式のレスポンスを返す
-⑥ マッチするルートがないURLにアクセスすると 404 エラーが返る
-⑦ ブラウザは受け取ったレスポンスを 画面に表示（レンダリング） する</pre>
-      </div>
-    </details>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-scene&gt;
+  &lt;!-- 改造1: 箱の色を青に変更 --&gt;
+  &lt;a-box position="-1 0.5 -3" color="blue"&gt;&lt;/a-box&gt;
 
-    <details>
-      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 2 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th>順番</th><th>URL</th><th>表示</th><th>理由</th></tr>
-          <tr><td>1</td><td><code>/</code></td><td>あなたは1人目の訪問者です</td><td>count が 0→1 に増える</td></tr>
-          <tr><td>2</td><td><code>/</code></td><td>あなたは2人目の訪問者です</td><td>count が 1→2 に増える</td></tr>
-          <tr><td>3</td><td><code>/api/count</code></td><td><code>{"count":2}</code></td><td>現在の count の値を返す</td></tr>
-          <tr><td>4</td><td><code>/reset</code></td><td>カウンターをリセットしました</td><td>count が 0 に戻る</td></tr>
-          <tr><td>5</td><td><code>/</code></td><td>あなたは1人目の訪問者です</td><td>リセット後なので count は 0→1</td></tr>
-        </table>
-        <p style="margin-top:0.5rem"><strong>ポイント:</strong> <code>let count = 0;</code> はサーバ起動時に一度だけ実行される。サーバが動き続けている間、変数 <code>count</code> はメモリ上に残り、リクエストごとに値が保持される。サーバを再起動（Ctrl+C → node WEB01-3.js）すると count は 0 に戻る。</p>
-      </div>
-    </details>
+  &lt;!-- 改造2: 球の位置を移動 --&gt;
+  &lt;a-sphere position="3 2 -6" radius="1.25" color="#EF2D5E"&gt;&lt;/a-sphere&gt;
 
-    <details>
-      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例</summary>
-      <div class="answer-content">
-        <p><strong>模範コード（WEB01-4.js）:</strong></p>
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
-const app = express();
-const PORT = 3000;
+  &lt;!-- 改造3: 円柱の高さを3に --&gt;
+  &lt;a-cylinder position="1 0.75 -3" radius="0.5" height="3" color="#FFC65D"&gt;&lt;/a-cylinder&gt;
 
-// トップページ
-app.get('/', (req, res) =&gt; {
-  res.send(`
-    &lt;!DOCTYPE html&gt;
-    &lt;html lang="ja"&gt;
-    &lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;title&gt;My Profile&lt;/title&gt;&lt;/head&gt;
-    &lt;body&gt;
-      &lt;h1&gt;山田太郎のプロフィール&lt;/h1&gt;
-      &lt;p&gt;Webプログラミングの授業ページです。&lt;/p&gt;
-      &lt;a href="/about"&gt;自己紹介ページ&lt;/a&gt;&lt;br&gt;
-      &lt;a href="/api/profile"&gt;プロフィール API (JSON)&lt;/a&gt;
-    &lt;/body&gt;
-    &lt;/html&gt;
-  `);
-});
+  &lt;!-- 改造4: ドーナツを追加 --&gt;
+  &lt;a-torus position="0 2 -4" color="purple" radius="1" radius-tubular="0.1"&gt;&lt;/a-torus&gt;
 
-// 自己紹介ページ
-app.get('/about', (req, res) =&gt; {
-  res.send(`
-    &lt;h1&gt;自己紹介&lt;/h1&gt;
-    &lt;p&gt;名前: 山田太郎&lt;/p&gt;
-    &lt;p&gt;学年: 3年&lt;/p&gt;
-    &lt;a href="/"&gt;トップに戻る&lt;/a&gt;
-  `);
-});
+  &lt;!-- 改造5: 空を夕焼け色に --&gt;
+  &lt;a-sky color="#FF6B35"&gt;&lt;/a-sky&gt;
 
-// プロフィール API
-app.get('/api/profile', (req, res) =&gt; {
-  res.json({
-    name: '山田太郎',
-    grade: 3,
-    interests: ['Web', '3D', 'ゲーム']
-  });
-});
-
-app.listen(PORT, () =&gt; {
-  console.log(`サーバ起動: http://localhost:${PORT}`);
-});</pre>
-        <p style="margin-top:1rem"><strong>評価ポイント（これが説明できていればOK）:</strong></p>
-        <ul class="point-list">
-          <li><code>/</code> のルートでHTMLを返し、他ページへのリンクが含まれている</li>
-          <li><code>/about</code> のルートで自分の名前・学年がHTMLで返される</li>
-          <li><code>/api/profile</code> のルートで <code>res.json()</code> を使いJSON形式で返している</li>
-          <li>3つのURLすべてがブラウザで正しく動作する</li>
-        </ul>
+  &lt;a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"&gt;&lt;/a-plane&gt;
+&lt;/a-scene&gt;</pre>
       </div>
     </details>
 
@@ -1428,7 +1075,6 @@ app.listen(PORT, () =&gt; {
 
 <script src="answer-gate.js"></script>
 <script>
-// コピーボタンを全 <pre> に追加
 document.querySelectorAll('pre').forEach(function(pre) {
   var btn = document.createElement('button');
   btn.className = 'copy-btn';
