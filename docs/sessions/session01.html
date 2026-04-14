@@ -369,11 +369,11 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計7項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
       <div class="submission-items">
         <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
         <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">コード改造</span>改造内容と理由を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>Web基礎 + コード改造</div>
         <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
         <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
       </div>
@@ -997,18 +997,55 @@ npm -v</pre>
   </div>
 </section>
 
-<!-- ============ 5. STANDARD TASK (CODE MOD) ============ -->
+<!-- ============ 5. STANDARD TASK ============ -->
 <section>
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
-      <h2>標準課題（コード改造）</h2>
+      <h2>標準課題</h2>
     </div>
 
+    <!-- 標準課題 1: サーバ・クライアントの理解 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">コード改造</span>
-        <h3>3Dシーンを改造する</h3>
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>Webの仕組みを説明する</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。</p>
+      <table>
+        <tr><th>用語</th><th>役割（空欄を埋める）</th><th>具体例（空欄を埋める）</th></tr>
+        <tr><td><strong>クライアント</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>サーバ</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>リクエスト</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>レスポンス</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> あなたがブラウザで <code>https://www.google.com</code> にアクセスしたとき、クライアントとサーバの間で何が起きているかを、以下の語句をすべて使って3〜5文で説明しなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        使う語句: <strong>ブラウザ</strong>、<strong>HTTPリクエスト</strong>、<strong>サーバ</strong>、<strong>レスポンス</strong>、<strong>HTML</strong>
+      </div>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> HTTP と HTTPS の違いを1〜2文で説明しなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> 以下のうち「Webアプリケーション」に該当するものをすべて選び、その理由を書きなさい。</p>
+      <table>
+        <tr><th style="width:30px"></th><th>サービス</th><th>該当する？</th><th>理由（空欄を埋める）</th></tr>
+        <tr><td>A</td><td>大学の公式Webサイト（お知らせ・アクセスマップ）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td>YouTube</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td>Google Maps</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>D</td><td>個人のポートフォリオサイト（自己紹介+作品写真）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>3Dシーンを改造する（コード改造）</h3>
       </div>
       <p>コード体験2の <code>scene.html</code> を以下の指示どおりに改造しなさい。</p>
 
@@ -1142,7 +1179,33 @@ npm -v</pre>
     <div id="answers-content">
 
     <details>
-      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 解答例</summary>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（Webの仕組み）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>用語</th><th>役割</th><th>具体例</th></tr>
+          <tr><td><strong>クライアント</strong></td><td>サービスを要求する側。ユーザが直接操作する。</td><td>Webブラウザ（Chrome, Safari など）、スマートフォンアプリ</td></tr>
+          <tr><td><strong>サーバ</strong></td><td>サービスを提供する側。要求を受け取り処理して返す。</td><td>Webサーバ、Node.js、Apache など</td></tr>
+          <tr><td><strong>リクエスト</strong></td><td>クライアントからサーバへの要求。</td><td>URLにアクセスする、フォームを送信する</td></tr>
+          <tr><td><strong>レスポンス</strong></td><td>サーバからクライアントへの返答。</td><td>HTML、画像、JSONデータを返す</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問2. 解答例:</strong></p>
+        <p style="font-size:0.9rem">ブラウザ（クライアント）が <code>https://www.google.com</code> に対してHTTPリクエストを送る。リクエストはインターネットを通じてGoogleのサーバに届く。サーバはリクエストを処理し、検索ページのHTMLを含むレスポンスを返す。ブラウザはそのHTMLを受け取り、画面にGoogleのページを表示する。</p>
+        <p style="margin-top:1rem"><strong>問3. 解答例:</strong></p>
+        <p style="font-size:0.9rem">HTTPは通信内容が暗号化されていないが、HTTPSはTLSによる暗号化が加わるため、通信内容を第三者に盗み見られる心配がない。パスワードや個人情報を扱うサイトではHTTPSが必須である。</p>
+        <p style="margin-top:1rem"><strong>問4.</strong></p>
+        <table>
+          <tr><th style="width:30px"></th><th>サービス</th><th>該当？</th><th>理由</th></tr>
+          <tr><td>A</td><td>大学の公式Webサイト</td><td>いいえ</td><td>あらかじめ用意されたHTMLをそのまま返す静的サイト。ユーザの操作に応じた動的な処理がない。</td></tr>
+          <tr><td>B</td><td>YouTube</td><td>はい</td><td>ログイン、動画検索、おすすめ表示、コメント投稿など、サーバ側でユーザごとに異なる処理を行っている。</td></tr>
+          <tr><td>C</td><td>Google Maps</td><td>はい</td><td>地図の移動・拡大に応じてサーバからデータを取得し、経路検索やストリートビューなど動的に処理している。</td></tr>
+          <tr><td>D</td><td>個人のポートフォリオサイト</td><td>いいえ</td><td>固定の自己紹介と作品写真を表示するだけの静的サイト。サーバ側で動的な処理は行わない。</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
       <div class="answer-content">
         <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-scene&gt;
   &lt;!-- 改造1: 箱の色を青に変更 --&gt;
