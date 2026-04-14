@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自己紹介カードジェネレータ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>自己紹介カードジェネレータ</h1>
+
+  <form action="/generate" method="POST">
+    <label>名前
+      <input type="text" name="name" required placeholder="例: 山田太郎">
+    </label>
+
+    <label>学年
+      <input type="number" name="grade" min="1" max="6" required placeholder="3">
+    </label>
+
+    <label>好きなもの 1
+      <input type="text" name="likes1" required placeholder="例: プログラミング">
+    </label>
+
+    <label>好きなもの 2
+      <input type="text" name="likes2" required placeholder="例: ゲーム">
+    </label>
+
+    <label>好きなもの 3
+      <input type="text" name="likes3" required placeholder="例: 音楽">
+    </label>
+
+    <label>一言コメント
+      <textarea name="comment" required placeholder="自由にひとこと書いてください"></textarea>
+    </label>
+
+    <label>テーマカラー
+      <select name="color">
+        <option value="blue">青</option>
+        <option value="red">赤</option>
+        <option value="green">緑</option>
+      </select>
+    </label>
+
+    <button type="submit">カードを生成</button>
+  </form>
+</body>
+</html>

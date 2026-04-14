@@ -1,0 +1,13 @@
+{
+  "name": "week11-interaction-sync",
+  "version": "1.0.0",
+  "description": "第11回: リアルタイムWebプログラミング(3)（解答例）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "socket.io": "^4.8.0"
+  }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>第12回: ��続化付き共有3D空間</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <style>
+    .info { position: fixed; top: 10px; left: 10px; z-index: 999;
+            background: rgba(0,0,0,0.6); color: #fff; padding: 8px 16px;
+            border-radius: 4px; font-family: sans-serif; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="info">オブジェクトの状態はサーバ再起動後も保持されます</div>
+
+  <a-scene>
+    <a-light type="ambient" color="#BBB" intensity="0.4"></a-light>
+    <a-light type="directional" position="-1 3 1" intensity="0.6"></a-light>
+
+    <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#555"></a-plane>
+    <a-sky color="#1a1a2e"></a-sky>
+
+    <a-entity position="0 0 5">
+      <a-camera look-controls wasd-controls="acceleration: 20">
+        <a-cursor color="#FF0" fuse="false"></a-cursor>
+      </a-camera>
+    </a-entity>
+
+    <!-- オブジェクト（色はDBから復元される） -->
+    <a-box id="obj-1" position="-4 1 -4" color="#E74C3C" click-handler></a-box>
+    <a-sphere id="obj-2" position="-2 1 -4" radius="0.5" color="#3498DB" click-handler></a-sphere>
+    <a-cylinder id="obj-3" position="0 0.75 -4" radius="0.5" height="1.5" color="#2ECC71" click-handler></a-cylinder>
+    <a-cone id="obj-4" position="2 0.75 -4" radius-bottom="0.5" height="1.5" color="#F39C12" click-handler></a-cone>
+    <a-torus id="obj-5" position="4 1.2 -4" radius="0.4" radius-tubular="0.1" color="#9B59B6" click-handler></a-torus>
+
+  </a-scene>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="interaction.js"></script>
+</body>
+</html>

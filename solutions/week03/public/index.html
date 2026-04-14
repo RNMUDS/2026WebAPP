@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ひとこと掲示板</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+    h1 { text-align: center; color: #333; }
+    .post-form { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .post-form input, .post-form textarea { width: 100%; padding: 8px; margin: 4px 0 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .post-form button { padding: 10px 24px; background: #0066cc; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    .post-form button:hover { background: #0055aa; }
+    #message-list { display: flex; flex-direction: column; gap: 8px; }
+    .message { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .message .name { font-weight: bold; color: #0066cc; }
+    .message .time { font-size: 12px; color: #999; }
+  </style>
+</head>
+<body>
+  <h1>ひとこと掲示板</h1>
+
+  <div class="post-form">
+    <input type="text" id="name-input" placeholder="名前">
+    <textarea id="text-input" placeholder="メッセージを入力..." rows="3"></textarea>
+    <button id="post-btn">投稿</button>
+  </div>
+
+  <div id="message-list"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

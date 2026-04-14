@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>第6回: ライティング・カメラ</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <style>
+    .controls {
+      position: fixed; top: 10px; left: 10px; z-index: 999;
+      display: flex; gap: 8px;
+    }
+    .controls button {
+      padding: 8px 20px; border: none; border-radius: 4px;
+      font-size: 16px; cursor: pointer;
+    }
+    .btn-day { background: #F1C40F; color: #333; }
+    .btn-night { background: #2c3e50; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button class="btn-day" onclick="setDaytime()">昼</button>
+    <button class="btn-night" onclick="setNighttime()">夜</button>
+  </div>
+
+  <a-scene shadow="type: pcfsoft">
+
+    <!-- TODO: 環境光を追加（id="ambient-light"） -->
+
+    <!-- TODO: 平行光を追加（id="sun-light", castShadow="true"） -->
+
+    <!-- TODO: 点光源を追加（id="room-light", 室内照明用） -->
+
+    <!-- 床 -->
+    <a-plane position="0 0 0" rotation="-90 0 0" width="8" height="8"
+             color="#DEB887" shadow="receive: true"></a-plane>
+
+    <!-- オブジェクト例（影を落とす） -->
+    <a-box position="0 0.5 -3" color="red"
+           shadow="cast: true; receive: true"></a-box>
+
+    <!-- 空 -->
+    <a-sky id="sky" color="#87CEEB"></a-sky>
+
+  </a-scene>
+
+  <script>
+    // TODO: setDaytime() 関数を実装
+    // - ambient-light: intensity 0.6
+    // - sun-light: color #FFF, intensity 1
+    // - room-light: intensity 0
+    // - sky: color #87CEEB
+
+    // TODO: setNighttime() 関数を実装
+    // - ambient-light: intensity 0.1
+    // - sun-light: intensity 0
+    // - room-light: color #FFD700, intensity 0.8
+    // - sky: color #0d1b2a
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "week01-web-structure",
+  "version": "1.0.0",
+  "description": "第1回: Webアプリケーション全体構造の整理",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

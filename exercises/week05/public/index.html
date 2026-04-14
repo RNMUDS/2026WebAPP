@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>第5回: 居心地の良い部屋</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene>
+
+    <!-- TODO: a-assets でテクスチャ画像を読み込む -->
+    <!-- <a-assets>
+      <img id="floor-tex" src="textures/wood.jpg">
+      <img id="wall-tex" src="textures/wall.jpg">
+    </a-assets> -->
+
+    <!-- 床 — TODO: テクスチャを適用（src="#floor-tex"） -->
+    <a-plane position="0 0 0" rotation="-90 0 0"
+             width="8" height="8" color="#DEB887"></a-plane>
+
+    <!-- 壁（奥） — TODO: テクスチャまたは色を適用 -->
+    <a-plane position="0 2 -4" width="8" height="4" color="#FAEBD7"></a-plane>
+
+    <!-- 壁（左） -->
+    <a-plane position="-4 2 0" rotation="0 90 0"
+             width="8" height="4" color="#FAF0E6"></a-plane>
+
+    <!-- 背景 -->
+    <a-sky color="#87CEEB"></a-sky>
+
+    <!-- 机 — TODO: 木目の色やテクスチャを適用 -->
+    <a-entity position="-1 0 -3">
+      <a-box position="0 0.75 0" width="1.2" height="0.05" depth="0.6"
+             color="#8B4513"></a-box>
+      <a-cylinder position="-0.5 0.375 -0.25" radius="0.03" height="0.75"
+                  color="#A0522D"></a-cylinder>
+      <a-cylinder position="0.5 0.375 -0.25" radius="0.03" height="0.75"
+                  color="#A0522D"></a-cylinder>
+      <a-cylinder position="-0.5 0.375 0.25" radius="0.03" height="0.75"
+                  color="#A0522D"></a-cylinder>
+      <a-cylinder position="0.5 0.375 0.25" radius="0.03" height="0.75"
+                  color="#A0522D"></a-cylinder>
+    </a-entity>
+
+    <!-- TODO: materialプロパティを使ったオブジェクトを追加 -->
+    <!-- 例: 半透明のガラス窓、金属のランプなど -->
+
+
+  </a-scene>
+</body>
+</html>

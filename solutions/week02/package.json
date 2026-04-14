@@ -1,0 +1,12 @@
+{
+  "name": "week02-server-basics",
+  "version": "1.0.0",
+  "description": "第2回: サーバサイドWebプログラミング基礎（解答例）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
