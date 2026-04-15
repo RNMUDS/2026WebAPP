@@ -1340,6 +1340,71 @@ npm -v</pre>
       </div>
     </details>
 
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（オリジナル3Dシーン）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「夕暮れの公園」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;夕暮れの公園&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;!-- 地面（芝生） --&gt;
+    &lt;a-plane position="0 0 -4" rotation="-90 0 0"
+            width="20" height="20" color="#4A7A00"&gt;&lt;/a-plane&gt;
+
+    &lt;!-- ベンチ（箱の組み合わせ） --&gt;
+    &lt;a-box position="-1 0.3 -4" width="2" height="0.1" depth="0.5" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="-1.8 0.15 -4" width="0.1" height="0.3" depth="0.5" color="#5C3317"&gt;&lt;/a-box&gt;
+    &lt;a-box position="-0.2 0.15 -4" width="0.1" height="0.3" depth="0.5" color="#5C3317"&gt;&lt;/a-box&gt;
+
+    &lt;!-- 木（幹 + 葉） --&gt;
+    &lt;a-cylinder position="3 0.75 -6" radius="0.15" height="1.5" color="#5C3317"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere position="3 1.8 -6" radius="0.8" color="#2E7D32"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- 街灯（柱 + ライト部分） --&gt;
+    &lt;a-cylinder position="-3 1 -5" radius="0.05" height="2" color="#666"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere position="-3 2.1 -5" radius="0.15" color="#FFE082"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- ボール --&gt;
+    &lt;a-sphere position="1 0.2 -3" radius="0.2" color="#FF5252"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- 遠くの建物 --&gt;
+    &lt;a-box position="-5 1.5 -12" width="3" height="3" depth="2" color="#455A64"&gt;&lt;/a-box&gt;
+    &lt;a-box position="6 2 -14" width="2" height="4" depth="2" color="#37474F"&gt;&lt;/a-box&gt;
+
+    &lt;!-- 夕焼けの空 --&gt;
+    &lt;a-sky color="#FF6F00"&gt;&lt;/a-sky&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>5種類以上のエンティティ</strong></td><td>a-box, a-sphere, a-cylinder, a-plane, a-sky などから5種類以上を使っている</td></tr>
+          <tr><td>2</td><td><strong>positionの指定</strong></td><td>各オブジェクトの位置が意図的に設定されている（全部 0 0 -3 のようにならない）</td></tr>
+          <tr><td>3</td><td><strong>colorの指定</strong></td><td>色が設定されており、シーン全体の雰囲気を意識している</td></tr>
+          <tr><td>4</td><td><strong>テーマの明確さ</strong></td><td>何を表現したシーンか、見てわかる or 音声で説明されている</td></tr>
+          <tr><td>5</td><td><strong>Live Serverで正常表示</strong></td><td>ブラウザで開いて3D空間が表示される（エラーがない）</td></tr>
+          <tr><td>6</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、テーマ・配置の意図・工夫した点を説明している</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>上記の解答例のポイント:</strong></p>
+        <ul class="point-list">
+          <li>テーマ「夕暮れの公園」に合わせ、<code>&lt;a-sky color="#FF6F00"&gt;</code> で夕焼け空を表現</li>
+          <li>ベンチを箱3つ（座面+脚2本）で構成 ── 複数のエンティティを組み合わせて1つのモノを表現する工夫</li>
+          <li>木を円柱（幹）+ 球（葉）の組み合わせで表現</li>
+          <li>遠くの建物は z の値を大きくして奥に配置し、奥行き感を出している</li>
+          <li>9種類のエンティティ使用（a-plane, a-box, a-cylinder, a-sphere, a-sky）、合計12個のオブジェクト</li>
+        </ul>
+      </div>
+    </details>
+
     </div>
   </div>
 </section>
