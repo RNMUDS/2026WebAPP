@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第3回: クライアント–サーバ通信 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第3回: クライアント–サーバ通信</h1>
+    <p>JSONデータ設計と送受信</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計7項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>Web基礎 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      第2回ではサーバを作り、ブラウザにHTMLやJSONを返しました。<br>
+      今回は<strong>クライアント（ブラウザ）のJavaScriptからサーバにデータを送受信する方法</strong>を学びます。これにより、ページを再読み込みせずにデータを取得・送信できるようになります。
+    </p>
+
+    <!-- 1.1 JSON とは -->
+    <div class="concept-box">
+      <h4>1.1 JSON とは <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        友達と連絡先を交換するとき、「名前: 田中、電話: 090-xxxx、趣味: 読書」のように<strong>項目名と値のペア</strong>で書きます。<strong>JSON</strong> はコンピュータ同士がデータを交換するときの「共通フォーマット」で、同じように<strong>キーと値のペア</strong>で構造化されたデータです。
+      </div>
+      <p><strong>JSON</strong>（JavaScript Object Notation）は、データを構造化して表現するテキスト形式です。Webアプリケーションでのデータ通信で最も広く使われています。</p>
+      <pre><span class="code-label">JSON</span>
+{
+  <span class="str">"name"</span>: <span class="str">"田中太郎"</span>,
+  <span class="str">"age"</span>: <span class="num">20</span>,
+  <span class="str">"hobbies"</span>: [<span class="str">"読書"</span>, <span class="str">"プログラミング"</span>, <span class="str">"カフェ巡り"</span>],
+  <span class="str">"university"</span>: {
+    <span class="str">"name"</span>: <span class="str">"○○大学"</span>,
+    <span class="str">"year"</span>: <span class="num">2</span>
+  }
+}</pre>
+      <table>
+        <tr><th>JSONの要素</th><th>説明</th><th>例</th></tr>
+        <tr><td><strong>キー</strong></td><td>データの項目名。必ずダブルクォートで囲む</td><td><code>"name"</code>, <code>"age"</code></td></tr>
+        <tr><td><strong>文字列</strong></td><td>テキストデータ。ダブルクォートで囲む</td><td><code>"田中太郎"</code></td></tr>
+        <tr><td><strong>数値</strong></td><td>数字。クォートは不要</td><td><code>20</code></td></tr>
+        <tr><td><strong>配列</strong></td><td>複数の値をまとめる。角括弧 <code>[]</code> で囲む</td><td><code>["読書", "プログラミング"]</code></td></tr>
+        <tr><td><strong>オブジェクト</strong></td><td>入れ子のキー・値ペア。波括弧 <code>{}</code> で囲む</td><td><code>{"name": "○○大学"}</code></td></tr>
+        <tr><td><strong>真偽値</strong></td><td><code>true</code> または <code>false</code></td><td><code>true</code></td></tr>
+        <tr><td><strong>null</strong></td><td>値がないことを明示する</td><td><code>null</code></td></tr>
+      </table>
+    </div>
+
+    <!-- 1.2 Fetch API -->
+    <div class="concept-box">
+      <h4>1.2 Fetch API ── ブラウザからサーバにリクエストを送る <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        普段ブラウザでURLを入力してページを見るとき、ブラウザが裏で自動的にリクエストを送っています。<strong>Fetch API</strong> を使うと、<strong>JavaScriptのコードから手動でリクエストを送れる</strong>ようになります。電話（URLバー）ではなく、プログラムでメールを送るようなものです。
+      </div>
+      <p><strong>Fetch API</strong> はブラウザに標準搭載されている機能で、JavaScriptからHTTPリクエストを送信し、サーバからのレスポンスを受け取ることができます。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// サーバの /api/data にGETリクエストを送る</span>
+<span class="fn">fetch</span>(<span class="str">'/api/data'</span>)
+  .<span class="fn">then</span>(<span class="kw">function</span>(response) {
+    <span class="kw">return</span> response.<span class="fn">json</span>();  <span class="cmt">// レスポンスをJSONとして解析</span>
+  })
+  .<span class="fn">then</span>(<span class="kw">function</span>(data) {
+    <span class="fn">console.log</span>(data);      <span class="cmt">// 受け取ったデータを使う</span>
+  });</pre>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 220" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <rect x="30" y="30" width="200" height="70" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="130" y="55" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">ブラウザ（クライアント）</text>
+          <text x="130" y="75" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="12">fetch('/api/data')</text>
+          <text x="130" y="90" text-anchor="middle" fill="#888" font-size="9">JavaScript が実行</text>
+          <rect x="470" y="30" width="200" height="70" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="570" y="55" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">Express サーバ</text>
+          <text x="570" y="75" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="12">app.get('/api/data')</text>
+          <text x="570" y="90" text-anchor="middle" fill="#888" font-size="9">res.json() で返す</text>
+          <line x1="230" y1="50" x2="470" y2="50" stroke="#76B900" stroke-width="2.5" marker-end="url(#ah1)"/>
+          <text x="350" y="42" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">① GET /api/data</text>
+          <line x1="470" y1="80" x2="230" y2="80" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <text x="350" y="100" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">② JSON レスポンス</text>
+          <rect x="55" y="130" width="150" height="40" rx="8" fill="#76B900"/>
+          <text x="130" y="155" text-anchor="middle" fill="white" font-weight="700" font-size="11">③ DOMに反映</text>
+          <line x1="130" y1="100" x2="130" y2="130" stroke="#76B900" stroke-width="2" marker-end="url(#ah1)"/>
+          <rect x="350" y="130" width="320" height="55" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <text x="510" y="148" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">ポイント</text>
+          <text x="510" y="165" text-anchor="middle" fill="#E0E0E0" font-size="10">ページ全体を再読み込みせずにデータだけ取得できる</text>
+          <text x="510" y="178" text-anchor="middle" fill="#888" font-size="9">→ ユーザ体験が滑らかになる</text>
+          <defs>
+            <marker id="ah1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1.3 async/await 基礎 -->
+    <div class="concept-box">
+      <h4>1.3 async/await 基礎 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        レストランで料理を注文すると、料理ができるまで<strong>待つ</strong>必要があります。<code>await</code> はまさにこの「待つ」を表すキーワードです。サーバからデータが届くまで待ち、届いたら次の処理を進めます。
+      </div>
+      <p><code>fetch()</code> はサーバとの通信を行うため、結果がすぐには返ってきません（<strong>非同期処理</strong>）。<code>async/await</code> を使うと、非同期処理を同期的（上から順番に実行されるよう）に書けます。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// async 関数の中でのみ await が使える</span>
+<span class="kw">async function</span> <span class="fn">loadData</span>() {
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/data'</span>);   <span class="cmt">// サーバにリクエスト → 返答を待つ</span>
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();          <span class="cmt">// JSONを解析 → 完了を待つ</span>
+  <span class="fn">console.log</span>(data);                            <span class="cmt">// データを使う</span>
+}</pre>
+      <table>
+        <tr><th>キーワード</th><th>意味</th></tr>
+        <tr><td><code>async</code></td><td>関数を非同期関数として宣言する。この関数の中で <code>await</code> が使えるようになる</td></tr>
+        <tr><td><code>await</code></td><td>非同期処理の完了を待つ。結果が返ってくるまで次の行に進まない</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><code>await</code> を使わないと、サーバの返答が届く前に次の処理が進んでしまい、<code>data</code> が <code>undefined</code>（未定義）になります。</p>
+    </div>
+
+    <!-- 1.4 GET vs POST -->
+    <div class="concept-box">
+      <h4>1.4 GET と POST の使い分け <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        <strong>GET</strong> は図書館で「この本を見せてください」と頼むこと（情報を<strong>取得</strong>する）。<strong>POST</strong> は窓口に「この申込書を提出します」と書類を渡すこと（情報を<strong>送信</strong>する）。
+      </div>
+      <table>
+        <tr><th></th><th>GET</th><th>POST</th></tr>
+        <tr><td><strong>目的</strong></td><td>データを<strong>取得</strong>する</td><td>データを<strong>送信・作成</strong>する</td></tr>
+        <tr><td><strong>データの場所</strong></td><td>URLに含まれる（クエリ文字列）</td><td>リクエストの本文（body）に含まれる</td></tr>
+        <tr><td><strong>ブラウザ操作</strong></td><td>URLバーにアドレスを入力する = GET</td><td>フォームの送信ボタン、JavaScript の fetch</td></tr>
+        <tr><td><strong>例</strong></td><td>記事一覧の取得、プロフィール表示</td><td>コメント投稿、ログインフォーム送信</td></tr>
+        <tr><td><strong>Express</strong></td><td><code>app.get()</code></td><td><code>app.post()</code></td></tr>
+      </table>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// サーバ側: POST リクエストを受け取るルート</span>
+app.<span class="fn">post</span>(<span class="str">'/api/messages'</span>, <span class="kw">function</span>(req, res) {
+  <span class="kw">const</span> body <span class="op">=</span> req.body;  <span class="cmt">// 送信されたデータを受け取る</span>
+  res.<span class="fn">json</span>({ status: <span class="str">'received'</span>, data: body });
+});</pre>
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">POST で送られたデータを受け取るには <span class="exam-alert">課題に出ます</span></p>
+        <p style="font-size:0.9rem">Express でPOSTリクエストのbodyを受け取るには、<strong>ミドルウェア</strong>を追加する必要があります:
+        <code>app.use(express.json())</code> ── これにより <code>req.body</code> でJSONデータにアクセスできるようになります。</p>
+      </div>
+    </div>
+
+    <!-- 1.5 REST API の考え方 -->
+    <div class="concept-box">
+      <h4>1.5 REST API の考え方</h4>
+      <div class="analogy">
+        図書館の本は「ジャンル → 著者名 → タイトル」のように整理されています。REST API も同じで、データを<strong>リソース（資源）</strong>として整理し、URLで「どのデータにアクセスするか」を表現します。
+      </div>
+      <p><strong>REST</strong>（Representational State Transfer）は、WebAPIの設計思想です。URLでリソースを表し、HTTPメソッドで操作を表します。</p>
+      <table>
+        <tr><th>HTTPメソッド</th><th>URL</th><th>意味</th></tr>
+        <tr><td><strong>GET</strong></td><td><code>/api/users</code></td><td>ユーザ一覧を取得</td></tr>
+        <tr><td><strong>GET</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを取得</td></tr>
+        <tr><td><strong>POST</strong></td><td><code>/api/users</code></td><td>新しいユーザを作成</td></tr>
+        <tr><td><strong>PUT</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを更新</td></tr>
+        <tr><td><strong>DELETE</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを削除</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">この授業では GET と POST を主に使います。URLは「何のデータか」を表し、メソッドは「何をするか」を表すのがポイントです。</p>
+    </div>
+
+    <!-- 1.6 DOM操作でデータを表示 -->
+    <div class="concept-box">
+      <h4>1.6 DOM操作でデータを表示する <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        ホワイトボードに書かれた内容を消して新しく書き直すように、JavaScriptで<strong>HTMLの中身を動的に書き換える</strong>ことができます。これが<strong>DOM操作</strong>です。
+      </div>
+      <p>サーバから取得したデータをページに表示するには、<strong>DOM</strong>（Document Object Model）を操作してHTMLの内容を更新します。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// HTML: &lt;div id="result"&gt;&lt;/div&gt;</span>
+
+<span class="cmt">// JavaScriptでこの要素を取得し、中身を書き換える</span>
+<span class="kw">const</span> resultDiv <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'result'</span>);
+resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サーバから取得したデータです&lt;/p&gt;'</span>;</pre>
+      <table>
+        <tr><th>メソッド / プロパティ</th><th>説明</th></tr>
+        <tr><td><code>document.getElementById('id')</code></td><td>指定したIDを持つHTML要素を取得する</td></tr>
+        <tr><td><code>要素.innerHTML</code></td><td>要素の中身のHTMLを読み書きする</td></tr>
+        <tr><td><code>要素.textContent</code></td><td>要素のテキスト内容を読み書きする（HTMLタグは反映しない）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">Fetch API でデータを取得 → DOM操作で表示。この2つを組み合わせることで、<strong>ページを再読み込みせずにサーバのデータを画面に反映</strong>できます。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>Fetch API の処理の流れを読む</h3>
+      </div>
+      <p>以下のコードがどの順番で実行されるかを確認しましょう。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="fn">console.log</span>(<span class="str">'A: fetch開始前'</span>);
+
+<span class="kw">async function</span> <span class="fn">getData</span>() {
+  <span class="fn">console.log</span>(<span class="str">'B: fetch実行'</span>);
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/items'</span>);
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+  <span class="fn">console.log</span>(<span class="str">'C: データ受信'</span>, data);
+}
+
+<span class="fn">getData</span>();
+<span class="fn">console.log</span>(<span class="str">'D: fetch呼び出し後'</span>);</pre>
+      <table>
+        <tr><th>順番</th><th>出力</th><th>理由</th></tr>
+        <tr><td>1</td><td>A: fetch開始前</td><td>同期処理なのでそのまま実行される</td></tr>
+        <tr><td>2</td><td>B: fetch実行</td><td>getData() が呼ばれ、await の前まで実行される</td></tr>
+        <tr><td>3</td><td>D: fetch呼び出し後</td><td>await でサーバ応答を待つ間、次の行が先に実行される</td></tr>
+        <tr><td>4</td><td>C: データ受信 ...</td><td>サーバから応答が届いた後に実行される</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>ポイント:</strong> <code>await</code> で「待つ」のは関数の中だけで、関数の外の処理は先に進みます。</p>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習: データの流れを追う</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のサーバコードとクライアントコードを読み、空欄を埋めなさい。</p>
+      <pre><span class="code-label">JavaScript ── サーバ側</span>
+app.<span class="fn">get</span>(<span class="str">'/api/user'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({ name: <span class="str">'Suzuki'</span>, score: <span class="num">85</span> });
+});</pre>
+      <pre><span class="code-label">JavaScript ── クライアント側（ブラウザ）</span>
+<span class="kw">async function</span> <span class="fn">showUser</span>() {
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/user'</span>);
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+  document.<span class="fn">getElementById</span>(<span class="str">'output'</span>).innerHTML <span class="op">=</span>
+    <span class="str">'名前: '</span> <span class="op">+</span> data.name <span class="op">+</span> <span class="str">' / スコア: '</span> <span class="op">+</span> data.score;
+}</pre>
+      <table>
+        <tr><th style="width:50px">順番</th><th>何が起きるか（空欄を埋める）</th></tr>
+        <tr><td>①</td><td><code>showUser()</code> が呼ばれ、<code>fetch()</code> がサーバの <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> に GETリクエストを送る</td></tr>
+        <tr><td>②</td><td>サーバの <code>app.get('/api/user')</code> が実行され、<span class="blank-cell" style="display:inline-block;min-width:120px;padding:0.2rem 0.5rem"></span> というJSONデータを返す</td></tr>
+        <tr><td>③</td><td><code>response.json()</code> がレスポンスをJavaScriptの <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> に変換する</td></tr>
+        <tr><td>④</td><td><code>data.name</code> は <span class="blank-cell" style="display:inline-block;min-width:60px;padding:0.2rem 0.5rem"></span>、<code>data.score</code> は <span class="blank-cell" style="display:inline-block;min-width:40px;padding:0.2rem 0.5rem"></span></td></tr>
+        <tr><td>⑤</td><td><code>id="output"</code> の要素の中身が「<span class="blank-cell" style="display:inline-block;min-width:150px;padding:0.2rem 0.5rem"></span>」に書き換わる</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた文章を記入してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1rem">今回はサーバとクライアントの<strong>両方</strong>のコードを書きます。サーバがAPIを提供し、ブラウザのJavaScriptがそのAPIからデータを取得して表示します。</p>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダとNode.jsプロジェクトの準備</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web03</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web03</code> を開く</li>
+        <li>VS Code のターミナルを開き、以下のコマンドを実行する:</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+npm init -y
+npm install express</pre>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>復習:</strong> サーバの起動は <code>node ファイル名.js</code>、停止は <kbd>Ctrl+C</kbd> です。コードを修正したら、<kbd>Ctrl+C</kbd> で停止 → <code>node ファイル名.js</code> で再起動してください。
+      </div>
+    </div>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>JSON APIとクライアント表示 ── サーバ + HTMLクライアント</h3>
+      </div>
+      <p>サーバがJSON APIを提供し、クライアントHTMLがfetchでデータを取得して画面に表示します。</p>
+
+      <p style="margin-top:1rem"><strong>Step 1: publicフォルダとHTMLファイルを作成する</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいフォルダ」アイコン</strong> → <strong><code>public</code></strong> フォルダを作成</li>
+        <li><code>public</code> フォルダの中で <strong>「新しいファイル」アイコン</strong> → <strong><code>index.html</code></strong> を作成</li>
+        <li>以下のHTMLコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Fetch Demo<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; text-align: center; padding: <span class="num">40</span>px; background: <span class="str">#f0f0f0</span>; }
+    h1 { color: <span class="str">#76B900</span>; }
+    .card { background: white; padding: <span class="num">20</span>px; border-radius: <span class="num">10</span>px;
+            margin: <span class="num">20</span>px auto; max-width: <span class="num">400</span>px; box-shadow: <span class="num">0</span> <span class="num">2</span>px <span class="num">8</span>px rgba(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.1</span>); }
+    button { background: <span class="str">#76B900</span>; color: white; border: none; padding: <span class="num">10</span>px <span class="num">24</span>px;
+             border-radius: <span class="num">6</span>px; font-size: <span class="num">16</span>px; cursor: pointer; }
+    button:hover { background: <span class="str">#5a9000</span>; }
+    #result { margin-top: <span class="num">20</span>px; text-align: left; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>Fetch API Demo<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;button</span> onclick=<span class="str">"loadMembers()"</span><span class="kw">&gt;</span>メンバーを読み込む<span class="kw">&lt;/button&gt;</span>
+
+  <span class="kw">&lt;div</span> id=<span class="str">"result"</span> class=<span class="str">"card"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;p&gt;</span>ボタンを押すとサーバからデータを取得します<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">async function</span> <span class="fn">loadMembers</span>() {
+      <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/members'</span>);
+      <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+
+      <span class="kw">var</span> html <span class="op">=</span> <span class="str">'&lt;h2&gt;'</span> <span class="op">+</span> data.team <span class="op">+</span> <span class="str">'&lt;/h2&gt;&lt;ul&gt;'</span>;
+      <span class="kw">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> data.members.<span class="fn">length</span>; i<span class="op">++</span>) {
+        html <span class="op">+=</span> <span class="str">'&lt;li&gt;'</span> <span class="op">+</span> data.members[i].name <span class="op">+</span> <span class="str">' ('</span> <span class="op">+</span> data.members[i].role <span class="op">+</span> <span class="str">')&lt;/li&gt;'</span>;
+      }
+      html <span class="op">+=</span> <span class="str">'&lt;/ul&gt;'</span>;
+
+      document.<span class="fn">getElementById</span>(<span class="str">'result'</span>).innerHTML <span class="op">=</span> html;
+    }
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>Step 2: サーバファイルを作成する</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラ（<code>Web03</code> フォルダ直下）で <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>server.js</code></strong> と入力して Enter</li>
+        <li>以下のコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+<span class="cmt">// 静的ファイル配信（publicフォルダ）</span>
+app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// メンバー一覧API</span>
+app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({
+    team: <span class="str">'Webプログラミングチーム'</span>,
+    members: [
+      { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
+      { name: <span class="str">'佐藤'</span>, role: <span class="str">'デザイン'</span> },
+      { name: <span class="str">'鈴木'</span>, role: <span class="str">'サーバ担当'</span> },
+      { name: <span class="str">'高橋'</span>, role: <span class="str">'フロント担当'</span> }
+    ]
+  });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ターミナルで <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li><strong>「メンバーを読み込む」ボタン</strong>をクリック</li>
+        <li>メンバー一覧がページに表示される</li>
+        <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. ボタンを押す前と押した後で、画面の表示はどう変わりましたか？<br>
+        Q2. ブラウザで <code>http://localhost:3000/api/members</code> に直接アクセスすると何が表示されますか？<br>
+        Q3. ページ全体が再読み込みされましたか？ それとも一部だけ変わりましたか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>POSTリクエストでデータを送信する</h3>
+      </div>
+      <p>フォームに入力したメッセージをサーバに送信し、サーバが受け取って応答するコードです。</p>
+
+      <p style="margin-top:1rem"><strong>Step 1: クライアントHTMLを作成する</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li><code>public</code> フォルダの中で <strong>「新しいファイル」アイコン</strong> → <strong><code>post.html</code></strong> を作成</li>
+        <li>以下のHTMLコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">HTML ── public/post.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>POST Demo<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; padding: <span class="num">40</span>px; max-width: <span class="num">500</span>px; margin: <span class="num">0</span> auto; background: <span class="str">#f0f0f0</span>; }
+    h1 { color: <span class="str">#76B900</span>; }
+    input { width: <span class="num">100</span>%; padding: <span class="num">10</span>px; font-size: <span class="num">16</span>px; border: <span class="num">2</span>px solid <span class="str">#ccc</span>;
+            border-radius: <span class="num">6</span>px; margin-bottom: <span class="num">10</span>px; box-sizing: border-box; }
+    button { background: <span class="str">#76B900</span>; color: white; border: none; padding: <span class="num">10</span>px <span class="num">24</span>px;
+             border-radius: <span class="num">6</span>px; font-size: <span class="num">16</span>px; cursor: pointer; }
+    button:hover { background: <span class="str">#5a9000</span>; }
+    #response { margin-top: <span class="num">20</span>px; background: white; padding: <span class="num">15</span>px; border-radius: <span class="num">8</span>px;
+                box-shadow: <span class="num">0</span> <span class="num">2</span>px <span class="num">8</span>px rgba(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.1</span>); }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>POST Demo<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;input</span> type=<span class="str">"text"</span> id=<span class="str">"nameInput"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;input</span> type=<span class="str">"text"</span> id=<span class="str">"msgInput"</span> placeholder=<span class="str">"メッセージを入力"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;button</span> onclick=<span class="str">"sendMessage()"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
+
+  <span class="kw">&lt;div</span> id=<span class="str">"response"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;p&gt;</span>まだ送信されていません<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">async function</span> <span class="fn">sendMessage</span>() {
+      <span class="kw">const</span> name <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'nameInput'</span>).value;
+      <span class="kw">const</span> msg  <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'msgInput'</span>).value;
+
+      <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/message'</span>, {
+        method: <span class="str">'POST'</span>,
+        headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+        body: <span class="fn">JSON.stringify</span>({ name: name, message: msg })
+      });
+
+      <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+      document.<span class="fn">getElementById</span>(<span class="str">'response'</span>).innerHTML <span class="op">=</span>
+        <span class="str">'&lt;p&gt;サーバ応答: '</span> <span class="op">+</span> data.reply <span class="op">+</span> <span class="str">'&lt;/p&gt;'</span> <span class="op">+</span>
+        <span class="str">'&lt;p&gt;受信時刻: '</span> <span class="op">+</span> data.receivedAt <span class="op">+</span> <span class="str">'&lt;/p&gt;'</span>;
+    }
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>Step 2: サーバにPOSTルートを追加する</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラ（<code>Web03</code> フォルダ直下）で <strong>「新しいファイル」アイコン</strong> → <strong><code>server2.js</code></strong> を作成</li>
+        <li>以下のコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── server2.js</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+<span class="cmt">// JSONのPOSTデータを受け取るためのミドルウェア</span>
+app.<span class="fn">use</span>(<span class="fn">express.json</span>());
+
+<span class="cmt">// 静的ファイル配信</span>
+app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// GET: メンバー一覧API（コード体験1と同じ）</span>
+app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({
+    team: <span class="str">'Webプログラミングチーム'</span>,
+    members: [
+      { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
+      { name: <span class="str">'佐藤'</span>, role: <span class="str">'デザイン'</span> },
+      { name: <span class="str">'鈴木'</span>, role: <span class="str">'サーバ担当'</span> },
+      { name: <span class="str">'高橋'</span>, role: <span class="str">'フロント担当'</span> }
+    ]
+  });
+});
+
+<span class="cmt">// POST: メッセージ受信API</span>
+app.<span class="fn">post</span>(<span class="str">'/api/message'</span>, <span class="kw">function</span>(req, res) {
+  <span class="fn">console.log</span>(<span class="str">'受信:'</span>, req.body);
+  res.<span class="fn">json</span>({
+    reply: req.body.name <span class="op">+</span> <span class="str">'さん、メッセージ「'</span> <span class="op">+</span> req.body.message <span class="op">+</span> <span class="str">'」を受け取りました！'</span>,
+    receivedAt: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>(<span class="str">'ja-JP'</span>)
+  });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>前のサーバが動いていたら <kbd>Ctrl+C</kbd> で停止</li>
+        <li>ターミナルで <code>node server2.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000/post.html</code> を開く</li>
+        <li>名前とメッセージを入力して<strong>「送信」ボタン</strong>をクリック</li>
+        <li>サーバからの応答がページに表示される</li>
+        <li>VS Code のターミナルにも <code>受信: { name: ..., message: ... }</code> と表示される</li>
+        <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 送信ボタンを押した後、画面にどんな応答が表示されましたか？<br>
+        Q2. VS Code のターミナルに何が表示されましたか？（<code>console.log</code> の出力）<br>
+        Q3. コード体験1（GETでデータ取得）とコード体験2（POSTでデータ送信）の違いを説明してください</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>コード体験で動かしたコードを元に、<strong>「この仕組みはなぜ必要？」「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
+          <tr><td><code>fetch('/api/members')</code> のURLを <code>'/api/xxx'</code> にする</td><td>「何が起こる？ なぜ？」</td></tr>
+          <tr><td><code>app.use(express.json())</code> の行を削除する</td><td>「POSTでデータを送るとどうなる？」</td></tr>
+          <tr><td><code>response.json()</code> の代わりに <code>response.text()</code> にする</td><td>「data にはどんな値が入る？」</td></tr>
+          <tr><td><code>method: 'POST'</code> を <code>'GET'</code> にする</td><td>「サーバは受け取れる？ なぜ？」</td></tr>
+          <tr><td>GETリクエストでデータを取得する場合とPOSTの違い</td><td>「どちらを使うべき？ その判断基準は？」</td></tr>
+          <tr><td><code>JSON.stringify()</code> を削除する</td><td>「サーバは正しくデータを受け取れる？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識問題 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>クライアント–サーバ通信の仕組みを説明する</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下のJSONデータの中から指定された値を答えなさい。</p>
+      <pre><span class="code-label">JSON</span>
+{
+  <span class="str">"student"</span>: {
+    <span class="str">"name"</span>: <span class="str">"佐藤花子"</span>,
+    <span class="str">"grade"</span>: <span class="num">2</span>,
+    <span class="str">"courses"</span>: [<span class="str">"Web演習"</span>, <span class="str">"データベース"</span>, <span class="str">"AI入門"</span>]
+  },
+  <span class="str">"active"</span>: <span class="kw">true</span>
+}</pre>
+      <table>
+        <tr><th>アクセス方法</th><th>値（空欄を埋める）</th></tr>
+        <tr><td><code>data.student.name</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>data.student.grade</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>data.student.courses[0]</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>data.student.courses[2]</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>data.active</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>data.student.courses.length</code></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> 以下の表の空欄を埋め、GET と POST の違いを整理しなさい。</p>
+      <table>
+        <tr><th></th><th>GET</th><th>POST</th></tr>
+        <tr><td><strong>目的</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>データの場所</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>Express</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>使用例</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> ブラウザの JavaScript で <code>fetch('/api/data')</code> を実行してからデータが画面に表示されるまでの流れを、以下の語句をすべて使って3〜5文で説明しなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        使う語句: <strong>fetch</strong>、<strong>GETリクエスト</strong>、<strong>res.json()</strong>、<strong>await</strong>、<strong>innerHTML</strong>
+      </div>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> <code>app.use(express.json())</code> は何のために必要ですか？ この行がないとどうなるか1〜2文で説明しなさい。</p>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>APIとクライアント表示を拡張する（コード改造）</h3>
+      </div>
+      <p>コード体験1の <code>server.js</code> と <code>public/index.html</code> を以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td>サーバに <code>/api/schedule</code> ルートを追加し、今日の予定3件をJSON配列で返す（例: <code>[{time: "10:00", title: "数学"}, ...]</code>）</td></tr>
+          <tr><td>2</td><td><code>/api/members</code> のデータにメンバーを2人追加する</td></tr>
+          <tr><td>3</td><td><code>index.html</code> に新しいボタン「予定を表示」を追加し、<code>/api/schedule</code> からデータを取得して表示する関数を書く</td></tr>
+          <tr><td>4</td><td>メンバー表示の形式を変更: 各メンバーの役割を<strong>太字</strong>（<code>&lt;strong&gt;</code>）で表示する</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>確認:</strong> ブラウザで両方のボタンが正しく動作することを確認してください。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後の <code>server.js</code> と <code>public/index.html</code> のコード全体を貼り付ける<br>
+        ② 各改造について「追加・変更した箇所」と「変更理由」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>ミニ掲示板を作る</h3>
+      </div>
+      <p>VS Code の <code>Web03</code> フォルダに以下のファイルを新規作成し、<strong>メッセージの投稿と一覧表示ができるミニ掲示板</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>サーバ</strong>（<code>board-server.js</code>）: メッセージをメモリ上の配列に保存。GET で一覧取得、POST で新規投稿のAPIを提供</li>
+          <li><strong>クライアント</strong>（<code>public/board.html</code>）: 名前とメッセージを入力して送信できるフォーム。投稿一覧をfetchで取得して表示</li>
+          <li>投稿には<strong>名前</strong>・<strong>メッセージ</strong>・<strong>投稿時刻</strong>を含める</li>
+          <li>投稿後に一覧を自動的に再読み込みする</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>board-server.js</code> と <code>public/board.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>掲示板のデータの流れ（POST で送信 → サーバ保存 → GET で取得 → 表示）</li>
+          <li>GET と POST をどう使い分けたか</li>
+          <li>工夫した点や難しかった点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-05-13T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th style="width:50px">順番</th><th>何が起きるか</th></tr>
+          <tr><td>①</td><td><code>showUser()</code> が呼ばれ、<code>fetch()</code> がサーバの <strong>/api/user</strong> に GETリクエストを送る</td></tr>
+          <tr><td>②</td><td>サーバの <code>app.get('/api/user')</code> が実行され、<strong>{ name: 'Suzuki', score: 85 }</strong> というJSONデータを返す</td></tr>
+          <tr><td>③</td><td><code>response.json()</code> がレスポンスをJavaScriptの <strong>オブジェクト</strong> に変換する</td></tr>
+          <tr><td>④</td><td><code>data.name</code> は <strong>"Suzuki"</strong>、<code>data.score</code> は <strong>85</strong></td></tr>
+          <tr><td>⑤</td><td><code>id="output"</code> の要素の中身が「<strong>名前: Suzuki / スコア: 85</strong>」に書き換わる</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> ボタンを押す前は「ボタンを押すとサーバからデータを取得します」と表示されていた。ボタンを押した後、「Webプログラミングチーム」という見出しと、4人のメンバーのリスト（名前と役割）が表示された。</li>
+          <li><strong>Q2:</strong> <code>/api/members</code> に直接アクセスすると、JSONデータがそのまま表示された（<code>{"team":"Webプログラミングチーム","members":[...]}</code>）。</li>
+          <li><strong>Q3:</strong> ページ全体は再読み込みされなかった。ボタンの下の部分だけが変わった。fetch API を使うとページ全体を再読み込みせずにデータだけ取得して表示を更新できる。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 送信ボタンを押すと、「サーバ応答: ○○さん、メッセージ「xxx」を受け取りました！」と受信時刻が表示された。</li>
+          <li><strong>Q2:</strong> ターミナルに <code>受信: { name: '入力した名前', message: '入力したメッセージ' }</code> が表示された。console.log でサーバ側でもデータを確認できる。</li>
+          <li><strong>Q3:</strong> コード体験1（GET）はサーバからデータを取得するだけだったが、コード体験2（POST）はクライアントからサーバにデータを送信し、サーバがそのデータを処理して応答を返した。GETは「もらう」、POSTは「送る」。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（クライアント–サーバ通信）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>アクセス方法</th><th>値</th></tr>
+          <tr><td><code>data.student.name</code></td><td>"佐藤花子"</td></tr>
+          <tr><td><code>data.student.grade</code></td><td>2</td></tr>
+          <tr><td><code>data.student.courses[0]</code></td><td>"Web演習"</td></tr>
+          <tr><td><code>data.student.courses[2]</code></td><td>"AI入門"</td></tr>
+          <tr><td><code>data.active</code></td><td>true</td></tr>
+          <tr><td><code>data.student.courses.length</code></td><td>3</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問2.</strong></p>
+        <table>
+          <tr><th></th><th>GET</th><th>POST</th></tr>
+          <tr><td><strong>目的</strong></td><td>データを取得する</td><td>データを送信・作成する</td></tr>
+          <tr><td><strong>データの場所</strong></td><td>URLに含まれる（クエリ文字列）</td><td>リクエストの本文（body）に含まれる</td></tr>
+          <tr><td><strong>Express</strong></td><td><code>app.get()</code></td><td><code>app.post()</code></td></tr>
+          <tr><td><strong>使用例</strong></td><td>記事一覧の取得、プロフィール表示</td><td>コメント投稿、ログインフォーム送信</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問3. 解答例:</strong></p>
+        <p style="font-size:0.9rem">ブラウザの JavaScript が fetch を使ってサーバの <code>/api/data</code> に GETリクエストを送る。サーバは該当するルートの処理を実行し、res.json() でJSONデータをレスポンスとして返す。クライアント側では await でサーバの応答を待ち、受け取ったJSONをJavaScriptオブジェクトに変換する。最後に innerHTML を使ってHTMLの要素の中身を書き換え、取得したデータを画面に表示する。</p>
+        <p style="margin-top:1rem"><strong>問4. 解答例:</strong></p>
+        <p style="font-size:0.9rem"><code>app.use(express.json())</code> は、POSTリクエストで送られたJSON形式のデータを自動的に解析し、<code>req.body</code> でアクセスできるようにするミドルウェアである。この行がないと、<code>req.body</code> が <code>undefined</code> になり、クライアントから送信されたデータをサーバ側で読み取れない。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <p><strong>server.js（改造後）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const app = express();
+
+app.use(express.static('public'));
+
+// メンバー一覧API（改造2: 2人追加）
+app.get('/api/members', function(req, res) {
+  res.json({
+    team: 'Webプログラミングチーム',
+    members: [
+      { name: '田中', role: 'リーダー' },
+      { name: '佐藤', role: 'デザイン' },
+      { name: '鈴木', role: 'サーバ担当' },
+      { name: '高橋', role: 'フロント担当' },
+      { name: '山田', role: 'テスト担当' },
+      { name: '中村', role: 'ドキュメント' }
+    ]
+  });
+});
+
+// 改造1: 予定API
+app.get('/api/schedule', function(req, res) {
+  res.json([
+    { time: '10:00', title: '数学' },
+    { time: '13:00', title: 'Web演習' },
+    { time: '15:00', title: 'ゼミ' }
+  ]);
+});
+
+app.listen(3000, function() {
+  console.log('サーバ起動: http://localhost:3000');
+});</pre>
+        <p style="margin-top:1rem"><strong>public/index.html（改造後）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Fetch Demo&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f0f0f0; }
+    h1 { color: #76B900; }
+    .card { background: white; padding: 20px; border-radius: 10px;
+            margin: 20px auto; max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    button { background: #76B900; color: white; border: none; padding: 10px 24px;
+             border-radius: 6px; font-size: 16px; cursor: pointer; margin: 5px; }
+    button:hover { background: #5a9000; }
+    #result, #schedule { margin-top: 20px; text-align: left; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Fetch API Demo&lt;/h1&gt;
+  &lt;button onclick="loadMembers()"&gt;メンバーを読み込む&lt;/button&gt;
+  &lt;!-- 改造3: 予定表示ボタン --&gt;
+  &lt;button onclick="loadSchedule()"&gt;予定を表示&lt;/button&gt;
+
+  &lt;div id="result" class="card"&gt;
+    &lt;p&gt;ボタンを押すとサーバからデータを取得します&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div id="schedule" class="card"&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+    async function loadMembers() {
+      const response = await fetch('/api/members');
+      const data = await response.json();
+      // 改造4: 役割を太字に
+      var html = '&lt;h2&gt;' + data.team + '&lt;/h2&gt;&lt;ul&gt;';
+      for (var i = 0; i &lt; data.members.length; i++) {
+        html += '&lt;li&gt;' + data.members[i].name +
+                ' (&lt;strong&gt;' + data.members[i].role + '&lt;/strong&gt;)&lt;/li&gt;';
+      }
+      html += '&lt;/ul&gt;';
+      document.getElementById('result').innerHTML = html;
+    }
+
+    // 改造3: 予定表示関数
+    async function loadSchedule() {
+      const response = await fetch('/api/schedule');
+      const data = await response.json();
+      var html = '&lt;h2&gt;今日の予定&lt;/h2&gt;&lt;ul&gt;';
+      for (var i = 0; i &lt; data.length; i++) {
+        html += '&lt;li&gt;' + data[i].time + ' - ' + data[i].title + '&lt;/li&gt;';
+      }
+      html += '&lt;/ul&gt;';
+      document.getElementById('schedule').innerHTML = html;
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（ミニ掲示板）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「シンプル掲示板」</strong></p>
+        <p><strong>board-server.js:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const app = express();
+
+app.use(express.json());
+app.use(express.static('public'));
+
+// メッセージをメモリ上の配列に保存
+var messages = [];
+
+// GET: メッセージ一覧を取得
+app.get('/api/messages', function(req, res) {
+  res.json(messages);
+});
+
+// POST: 新しいメッセージを投稿
+app.post('/api/messages', function(req, res) {
+  var newMessage = {
+    id: messages.length + 1,
+    name: req.body.name,
+    text: req.body.text,
+    postedAt: new Date().toLocaleString('ja-JP')
+  };
+  messages.push(newMessage);
+  console.log('新規投稿:', newMessage);
+  res.json({ status: 'ok', message: newMessage });
+});
+
+app.listen(3000, function() {
+  console.log('掲示板サーバ起動: http://localhost:3000/board.html');
+});</pre>
+        <p style="margin-top:1rem"><strong>public/board.html:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;ミニ掲示板&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;
+           background: #f0f0f0; }
+    h1 { color: #76B900; text-align: center; }
+    .form-area { background: white; padding: 20px; border-radius: 10px;
+                 box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    input, textarea { width: 100%; padding: 10px; font-size: 14px; border: 2px solid #ccc;
+                      border-radius: 6px; margin-bottom: 10px; box-sizing: border-box; }
+    textarea { height: 80px; resize: vertical; }
+    button { background: #76B900; color: white; border: none; padding: 10px 24px;
+             border-radius: 6px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #5a9000; }
+    .message { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px;
+               border-left: 4px solid #76B900; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .message .meta { color: #888; font-size: 12px; }
+    .message .name { font-weight: bold; color: #76B900; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;ミニ掲示板&lt;/h1&gt;
+
+  &lt;div class="form-area"&gt;
+    &lt;input type="text" id="nameInput" placeholder="名前"&gt;
+    &lt;textarea id="textInput" placeholder="メッセージを入力"&gt;&lt;/textarea&gt;
+    &lt;button onclick="postMessage()"&gt;投稿する&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div id="messages"&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+    // ページ読み込み時にメッセージ一覧を取得
+    loadMessages();
+
+    async function loadMessages() {
+      var response = await fetch('/api/messages');
+      var data = await response.json();
+      var html = '';
+      for (var i = data.length - 1; i &gt;= 0; i--) {
+        html += '&lt;div class="message"&gt;' +
+                '&lt;span class="name"&gt;' + data[i].name + '&lt;/span&gt;' +
+                '&lt;span class="meta"&gt; - ' + data[i].postedAt + '&lt;/span&gt;' +
+                '&lt;p&gt;' + data[i].text + '&lt;/p&gt;' +
+                '&lt;/div&gt;';
+      }
+      if (data.length === 0) {
+        html = '&lt;p style="text-align:center;color:#888"&gt;まだ投稿がありません&lt;/p&gt;';
+      }
+      document.getElementById('messages').innerHTML = html;
+    }
+
+    async function postMessage() {
+      var name = document.getElementById('nameInput').value;
+      var text = document.getElementById('textInput').value;
+      if (!name || !text) { alert('名前とメッセージを入力してください'); return; }
+
+      await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, text: text })
+      });
+
+      document.getElementById('textInput').value = '';
+      loadMessages();  // 投稿後に一覧を再取得
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>GET API</strong></td><td>メッセージ一覧を取得する GET エンドポイントがある</td></tr>
+          <tr><td>2</td><td><strong>POST API</strong></td><td>メッセージを投稿する POST エンドポイントがある</td></tr>
+          <tr><td>3</td><td><strong>データ保存</strong></td><td>サーバ側の配列にメッセージが保存される</td></tr>
+          <tr><td>4</td><td><strong>投稿時刻</strong></td><td>各メッセージに投稿時刻が含まれている</td></tr>
+          <tr><td>5</td><td><strong>自動再読み込み</strong></td><td>投稿後に一覧が自動的に更新される</td></tr>
+          <tr><td>6</td><td><strong>正常動作</strong></td><td>サーバが起動し、投稿と一覧表示が正しく動く</td></tr>
+          <tr><td>7</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、データの流れ・GET/POSTの使い分け・工夫した点を説明している</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>上記の解答例のポイント:</strong></p>
+        <ul class="point-list">
+          <li>サーバ側で <code>messages</code> 配列にデータを蓄積し、GET で取得・POST で追加する RESTful な設計</li>
+          <li><code>express.json()</code> ミドルウェアで POST データを解析</li>
+          <li>クライアント側で <code>loadMessages()</code> をページ読み込み時と投稿後の両方で呼ぶことで、常に最新の一覧を表示</li>
+          <li>新しい投稿が上に来るように逆順（<code>data.length - 1</code> から <code>0</code>）でループ</li>
+          <li>入力値が空の場合に <code>alert()</code> で警告する簡易バリデーション</li>
+        </ul>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第3回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

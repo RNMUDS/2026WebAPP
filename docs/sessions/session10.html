@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第10回: リアルタイムWebプログラミング② アバター同期 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第10回: リアルタイムWebプログラミング②</h1>
+    <p>アバタの位置・回転情報の同期 ── A-Frame + Socket.IO でマルチユーザ3D空間を実現する</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      第9回では Socket.IO でテキストチャットを実装しました。<br>
+      今回は<strong>A-Frame の3D空間</strong>と <strong>Socket.IO のリアルタイム通信</strong>を組み合わせ、<strong>複数ユーザが同じ3D空間を共有し、互いのアバターが見える</strong>仕組みを作ります。
+    </p>
+
+    <!-- 1.1 A-Frame + Socket.IO の組み合わせ -->
+    <div class="concept-box">
+      <h4>1.1 A-Frame + Socket.IO の組み合わせ <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        オンラインゲームでは、自分のキャラクターを動かすと、他のプレイヤーの画面でもそのキャラクターが動きます。<br>
+        今回作るのは、まさにその仕組みの<strong>Web版</strong>です。ブラウザで3D空間に入り、他の人のアバターがリアルタイムに動くのが見えます。
+      </div>
+      <p>第4〜8回で学んだ <strong>A-Frame</strong>（3D表示）と、第9回で学んだ <strong>Socket.IO</strong>（リアルタイム通信）を組み合わせます。</p>
+      <table>
+        <tr><th>技術</th><th>役割</th><th>この回での使い方</th></tr>
+        <tr><td><strong>Node.js + Express</strong></td><td>サーバ</td><td>A-FrameのHTMLファイルを配信し、Socket.IO で接続を管理する</td></tr>
+        <tr><td><strong>Socket.IO</strong></td><td>リアルタイム通信</td><td>各ユーザのカメラ位置・回転データを他の全ユーザに送る</td></tr>
+        <tr><td><strong>A-Frame</strong></td><td>3D表示</td><td>受信したデータをもとに、他ユーザのアバターを3D空間に表示・移動する</td></tr>
+      </table>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 320" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- Server -->
+          <rect x="260" y="20" width="200" height="60" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="360" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">Node.js + Express + Socket.IO</text>
+          <text x="360" y="62" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="13">サーバ</text>
+          <!-- Client A -->
+          <rect x="30" y="160" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="120" y="185" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">ブラウザ A</text>
+          <text x="120" y="205" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
+          <text x="120" y="220" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
+          <!-- Client B -->
+          <rect x="270" y="220" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="360" y="245" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">ブラウザ B</text>
+          <text x="360" y="265" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
+          <text x="360" y="280" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
+          <!-- Client C -->
+          <rect x="510" y="160" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
+          <text x="600" y="185" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">ブラウザ C</text>
+          <text x="600" y="205" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
+          <text x="600" y="220" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
+          <!-- Arrows -->
+          <line x1="120" y1="160" x2="280" y2="80" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arw1)"/>
+          <line x1="360" y1="220" x2="360" y2="80" stroke="#FFB800" stroke-width="2" marker-end="url(#arw2)"/>
+          <line x1="600" y1="160" x2="440" y2="80" stroke="#93D500" stroke-width="2" marker-end="url(#arw3)"/>
+          <line x1="280" y1="80" x2="120" y2="160" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
+          <line x1="440" y1="80" x2="600" y2="160" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
+          <line x1="360" y1="80" x2="360" y2="220" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
+          <!-- Labels -->
+          <text x="170" y="115" fill="#4FC3F7" font-size="9" font-weight="700">position送信</text>
+          <text x="530" y="115" fill="#93D500" font-size="9" font-weight="700">position送信</text>
+          <text x="200" y="135" fill="#76B900" font-size="9">他ユーザの位置を配信</text>
+          <text x="440" y="135" fill="#76B900" font-size="9">他ユーザの位置を配信</text>
+          <defs>
+            <marker id="arw1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="arw2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="arw3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
+            <marker id="arw4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1.2 アバターの概念 -->
+    <div class="concept-box">
+      <h4>1.2 アバターの概念 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        ビデオ会議ではカメラの映像で相手の存在がわかります。3D空間では映像の代わりに<strong>アバター</strong>（箱や人型の3Dモデル）で「そこに誰かがいる」ことを表現します。
+      </div>
+      <p><strong>アバター</strong>とは、3D空間内で各ユーザを表すエンティティです。今回は<strong>色付きの箱（a-box）</strong>をアバターとして使います。</p>
+      <ul class="point-list">
+        <li>サーバに接続したユーザ1人につき、<strong>1つのアバター（a-box）</strong>が3D空間に生成される</li>
+        <li>自分のアバターは表示しない（自分のカメラ視点で見ているため）</li>
+        <li>他のユーザが移動すると、そのアバターの位置・回転がリアルタイムに更新される</li>
+        <li>ユーザが切断すると、そのアバターは3D空間から削除される</li>
+      </ul>
+    </div>
+
+    <!-- 1.3 position/rotation データの送信 -->
+    <div class="concept-box">
+      <h4>1.3 位置・回転データの送信 <span class="exam-alert">課題に出ます</span></h4>
+      <p>A-Frame のカメラ（ユーザの視点）の <strong>position</strong>（位置: x, y, z）と <strong>rotation</strong>（回転: x, y, z）を定期的にサーバに送信します。</p>
+      <table>
+        <tr><th>データ</th><th>内容</th><th>例</th></tr>
+        <tr><td><strong>position</strong></td><td>3D空間内のカメラ座標</td><td><code>{x: 0, y: 1.6, z: 3}</code></td></tr>
+        <tr><td><strong>rotation</strong></td><td>カメラの向き（度数）</td><td><code>{x: 0, y: -45, z: 0}</code></td></tr>
+      </table>
+      <p style="margin-top:0.5rem">これらのデータを <strong>一定間隔（例: 100ms ごと）</strong>で <code>socket.emit('move', data)</code> してサーバに送り、サーバが全クライアントに配信します。</p>
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ定期送信なのか？ <span class="exam-alert">課題に出ます</span></p>
+        <p style="font-size:0.9rem">マウスやキーボードの入力イベントは<strong>非常に高頻度</strong>で発生します。すべてのイベントで送信すると、通信量が膨大になりサーバに負荷がかかります。<strong>setInterval</strong> で一定間隔に間引くことで、滑らかさと通信効率のバランスを取ります。</p>
+      </div>
+    </div>
+
+    <!-- 1.4 他ユーザのアバター生成 -->
+    <div class="concept-box">
+      <h4>1.4 他ユーザのアバター生成と更新</h4>
+      <p>他のユーザから位置データを受信したとき、そのユーザのアバターがまだ存在しなければ<strong>新規生成</strong>し、存在すれば<strong>位置を更新</strong>します。</p>
+      <pre><span class="code-label">JavaScript（概念コード）</span>
+<span class="cmt">// 他ユーザの位置データを受信したとき</span>
+socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class="kw">function</span>(data) {
+  <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(<span class="str">'avatar-'</span> + data.id);
+  <span class="kw">if</span> (!avatar) {
+    <span class="cmt">// アバターがなければ新規作成</span>
+    avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+    avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, <span class="str">'avatar-'</span> + data.id);
+    avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
+    scene.<span class="fn">appendChild</span>(avatar);
+  }
+  <span class="cmt">// 位置と回転を更新</span>
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, data.rotation);
+});</pre>
+    </div>
+
+    <!-- 1.5 ユーザID管理 -->
+    <div class="concept-box">
+      <h4>1.5 ユーザID管理 ── socket.id <span class="exam-alert">課題に出ます</span></h4>
+      <p>Socket.IO では、接続するたびに各クライアントに<strong>一意の ID（socket.id）</strong>が自動で割り当てられます。</p>
+      <ul class="point-list">
+        <li><code>socket.id</code> は <code>"xK7-2abc..."</code> のようなランダム文字列</li>
+        <li>この ID を使って「誰の位置データか」「誰のアバターか」を識別する</li>
+        <li>サーバ側でユーザ一覧を管理し、新規接続・切断を追跡する</li>
+      </ul>
+    </div>
+
+    <!-- 1.6 ユーザ離脱時のクリーンアップ -->
+    <div class="concept-box">
+      <h4>1.6 ユーザ離脱時のクリーンアップ <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        ビデオ会議で誰かが退室すると、その人の映像枠が消えます。3D空間でも同じように、ユーザが切断したら<strong>そのアバターを削除</strong>しないと、動かない幽霊アバターが残り続けます。
+      </div>
+      <p>サーバの <code>'disconnect'</code> イベントで、離脱したユーザの ID を全クライアントに通知し、各クライアントが該当のアバターを DOM から削除します。</p>
+      <table>
+        <tr><th>イベント</th><th>サーバの処理</th><th>クライアントの処理</th></tr>
+        <tr><td><strong>connection</strong></td><td>ユーザを一覧に追加、色を割り当て</td><td>（接続完了）</td></tr>
+        <tr><td><strong>move</strong></td><td>受信した位置データを他の全員に転送</td><td>受信したデータでアバターを生成/更新</td></tr>
+        <tr><td><strong>disconnect</strong></td><td>ユーザを一覧から削除、全員に通知</td><td>該当アバターをシーンから削除</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>アバター同期のデータフロー</h3>
+      </div>
+      <p>ユーザAが3D空間内で移動したとき、ユーザBの画面でアバターが動くまでの流れを追います。</p>
+      <table>
+        <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容</th></tr>
+        <tr><td>1</td><td>ユーザA（ブラウザ）</td><td>WASDキーで移動 → カメラの position/rotation が変わる</td></tr>
+        <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で100msごとにカメラ位置を取得し、<code>socket.emit('move', data)</code> で送信</td></tr>
+        <tr><td>3</td><td>サーバ（Node.js）</td><td><code>socket.on('move')</code> で受信 → <code>socket.broadcast.emit('moved', data)</code> で他全員に転送</td></tr>
+        <tr><td>4</td><td>ユーザB（JavaScript）</td><td><code>socket.on('moved')</code> で受信 → ユーザAのアバターを生成/位置更新</td></tr>
+        <tr><td>5</td><td>ユーザB（A-Frame）</td><td>ユーザAのアバター（a-box）が3D空間内で移動して見える</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1rem">以下のコードをコピーしてファイルを作成し、Node.js で実行します。</p>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダの準備</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web10</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web10</code> を開く</li>
+        <li>VS Code のターミナル（<strong>表示 → ターミナル</strong> または <kbd>Ctrl+`</kbd>）で以下を実行する</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+npm init -y
+npm install express socket.io</pre>
+    </div>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>A-Frameページを配信し、位置データをログに表示する</h3>
+      </div>
+      <p>まずはシンプルな構成で、クライアントのカメラ位置をサーバのコンソールに表示します。</p>
+
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong></p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">var</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">var</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">var</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">var</span> app = <span class="fn">express</span>();
+<span class="kw">var</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">var</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
+
+  socket.<span class="fn">on</span>(<span class="str">'move'</span>, <span class="kw">function</span>(data) {
+    console.<span class="fn">log</span>(socket.id, <span class="str">'位置:'</span>, data.position);
+  });
+
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+  });
+});
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});</pre>
+
+      <p style="margin-top:1rem"><strong>ファイル2:</strong> <code>public</code> フォルダを作成し、その中に <code>index.html</code> を作成</p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Avatar Sync - Step 1<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- 目印の箱 --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 0.5 -5"</span> color=<span class="str">"#4CC3D9"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"3 0.5 -3"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"-3 0.5 -3"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">var</span> socket = <span class="fn">io</span>();
+    <span class="kw">var</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
+
+    <span class="cmt">// 100msごとにカメラ位置を送信</span>
+    <span class="fn">setInterval</span>(<span class="kw">function</span>() {
+      <span class="kw">if</span> (!camera) <span class="kw">return</span>;
+      <span class="kw">var</span> pos = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
+      <span class="kw">var</span> rot = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
+      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+        position: { x: pos.x, y: pos.y, z: pos.z },
+        rotation: { x: rot.x, y: rot.y, z: rot.z }
+      });
+    }, <span class="num">100</span>);
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code のターミナルで <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li>WASDキーで移動してみる</li>
+        <li>ターミナルに位置データが流れるのを確認する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. ターミナルに表示された位置データの形式を書き写す（1行分）<br>
+        Q2. WASDキーで移動すると、x, y, z のどの値が変化するか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>フルアバター同期 ── 他ユーザが箱として見える</h3>
+      </div>
+      <p>サーバとクライアントを改修し、<strong>他のユーザが色付きの箱として3D空間に表示される</strong>ようにします。</p>
+
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code> を以下で上書き</strong></p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">var</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">var</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">var</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">var</span> app = <span class="fn">express</span>();
+<span class="kw">var</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">var</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// ユーザ管理用オブジェクト</span>
+<span class="kw">var</span> users = {};
+<span class="kw">var</span> colors = [<span class="str">'#FF5252'</span>, <span class="str">'#FFB800'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#76B900'</span>, <span class="str">'#E040FB'</span>, <span class="str">'#FF6E40'</span>];
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  <span class="cmt">// 新しいユーザに色を割り当てる</span>
+  <span class="kw">var</span> color = colors[Object.<span class="fn">keys</span>(users).length % colors.length];
+  users[socket.id] = { color: color };
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id, <span class="str">'色:'</span>, color);
+
+  <span class="cmt">// 接続したユーザに自分の色を通知</span>
+  socket.<span class="fn">emit</span>(<span class="str">'myColor'</span>, { color: color });
+
+  <span class="cmt">// 位置データを受信して他の全員に転送</span>
+  socket.<span class="fn">on</span>(<span class="str">'move'</span>, <span class="kw">function</span>(data) {
+    socket.broadcast.<span class="fn">emit</span>(<span class="str">'moved'</span>, {
+      id: socket.id,
+      position: data.position,
+      rotation: data.rotation,
+      color: users[socket.id].color
+    });
+  });
+
+  <span class="cmt">// 切断時: 全員に通知してアバター削除を依頼</span>
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+    <span class="kw">delete</span> users[socket.id];
+    io.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, { id: socket.id });
+  });
+});
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});</pre>
+
+      <p style="margin-top:1rem"><strong>ファイル2: <code>public/index.html</code> を以下で上書き</strong></p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Avatar Sync<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"30"</span> height=<span class="str">"30"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- 目印のオブジェクト --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 0.5 -8"</span> color=<span class="str">"#4CC3D9"</span> width=<span class="str">"2"</span> height=<span class="str">"2"</span> depth=<span class="str">"2"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"5 1.5 -5"</span> radius=<span class="str">"0.3"</span> height=<span class="str">"3"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-5 1 -5"</span> radius=<span class="str">"1"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+  <span class="cmt">&lt;!-- 接続中ユーザ数の表示 --&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="str">"user-count"</span> style=<span class="str">"position:fixed;top:10px;left:10px;color:white;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:8px;font-family:sans-serif;font-size:14px;z-index:999"</span><span class="kw">&gt;</span>
+    接続中: 1人
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">var</span> socket = <span class="fn">io</span>();
+    <span class="kw">var</span> scene = document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
+    <span class="kw">var</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
+    <span class="kw">var</span> userCount = <span class="num">1</span>;
+
+    <span class="cmt">// 100msごとにカメラ位置を送信</span>
+    <span class="fn">setInterval</span>(<span class="kw">function</span>() {
+      <span class="kw">if</span> (!camera) <span class="kw">return</span>;
+      <span class="kw">var</span> pos = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
+      <span class="kw">var</span> rot = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
+      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+        position: { x: pos.x, y: pos.y, z: pos.z },
+        rotation: { x: rot.x, y: rot.y, z: rot.z }
+      });
+    }, <span class="num">100</span>);
+
+    <span class="cmt">// 他ユーザの位置データを受信 → アバター生成/更新</span>
+    socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class="kw">function</span>(data) {
+      <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + data.id;
+      <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(avatarId);
+
+      <span class="kw">if</span> (!avatar) {
+        <span class="cmt">// 新しいアバターを生成</span>
+        avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, avatarId);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'width'</span>, <span class="str">'0.5'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'height'</span>, <span class="str">'0.5'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'depth'</span>, <span class="str">'0.5'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
+        scene.<span class="fn">appendChild</span>(avatar);
+        userCount++;
+        document.<span class="fn">getElementById</span>(<span class="str">'user-count'</span>).textContent = <span class="str">'接続中: '</span> + userCount + <span class="str">'人'</span>;
+      }
+
+      <span class="cmt">// 位置と回転を更新</span>
+      avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
+      avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, {
+        x: <span class="num">0</span>,
+        y: data.rotation.y,
+        z: <span class="num">0</span>
+      });
+    });
+
+    <span class="cmt">// ユーザ離脱 → アバター削除</span>
+    socket.<span class="fn">on</span>(<span class="str">'userLeft'</span>, <span class="kw">function</span>(data) {
+      <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(<span class="str">'avatar-'</span> + data.id);
+      <span class="kw">if</span> (avatar) {
+        avatar.<span class="fn">parentNode</span>.<span class="fn">removeChild</span>(avatar);
+        userCount--;
+        document.<span class="fn">getElementById</span>(<span class="str">'user-count'</span>).textContent = <span class="str">'接続中: '</span> + userCount + <span class="str">'人'</span>;
+      }
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ターミナルで <kbd>Ctrl+C</kbd> でサーバを停止し、再度 <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く（タブ1）</li>
+        <li>もう1つタブを開いて <code>http://localhost:3000</code> を開く（タブ2）</li>
+        <li>タブ1でWASDキーで移動する → タブ2で色付きの箱が動くのを確認する</li>
+        <li>タブ2でも移動して、タブ1に箱が表示されるのを確認する</li>
+        <li>タブのどちらかを閉じて、アバターが消えるのを確認する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 2つ目のタブを開いたとき、3D空間に何が現れたか？<br>
+        Q2. 片方のタブで移動すると、もう片方のタブではどう見えたか？<br>
+        Q3. タブを閉じたとき、残ったタブで何が起きたか？<br>
+        Q4. サーバの <code>socket.broadcast.emit</code> を <code>io.emit</code> に変えたらどうなると思うか？理由も書く</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回のコード体験で動かしたアバター同期のコードを元に、<strong>「ここを変えたらどうなる？」「この仕組みはなぜ必要？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:40%">変更・質問内容</th><th>質問例</th></tr>
+          <tr><td>setInterval の間隔を <code>1000</code> に変える</td><td>「アバターの動きはどう変わる？ なぜ？」</td></tr>
+          <tr><td><code>broadcast.emit</code> を <code>io.emit</code> に変える</td><td>「自分自身にも送信される。何が起こる？」</td></tr>
+          <tr><td><code>disconnect</code> イベントのハンドラを削除する</td><td>「ユーザが離脱したらどうなる？」</td></tr>
+          <tr><td><code>socket.id</code> の代わりに固定文字列を使う</td><td>「複数ユーザのアバターは区別できる？」</td></tr>
+          <tr><td>アバターの <code>height</code> を <code>1.6</code> にする</td><td>「見え方はどう変わる？ 人っぽくなる？」</td></tr>
+          <tr><td>position だけ送って rotation を送らない</td><td>「アバターは何が表現できなくなる？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>アバター同期の仕組みを説明する</h3>
+      </div>
+      <p>セクション1の内容とコード体験の経験をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下のアバター同期のデータフロー図の空欄を埋めなさい。</p>
+      <table>
+        <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容（空欄を埋める）</th></tr>
+        <tr><td>1</td><td>ユーザA（ブラウザ）</td><td class="blank-cell"></td></tr>
+        <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で <span class="blank-cell" style="display:inline-block;min-width:50px;padding:0.2rem 0.5rem"></span> msごとにカメラの <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> を取得して送信</td></tr>
+        <tr><td>3</td><td>サーバ</td><td>受信した位置データを <code>socket.<span class="blank-cell" style="display:inline-block;min-width:100px;padding:0.2rem 0.5rem"></span></code> で <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> に転送</td></tr>
+        <tr><td>4</td><td>ユーザB（JavaScript）</td><td>受信したデータでアバターの <span class="blank-cell" style="display:inline-block;min-width:100px;padding:0.2rem 0.5rem"></span> を更新</td></tr>
+        <tr><td>5</td><td>ユーザB（A-Frame）</td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> Socket.IO の以下のイベントについて、それぞれの役割を説明しなさい。</p>
+      <table>
+        <tr><th>イベント名</th><th>役割（空欄を埋める）</th></tr>
+        <tr><td><code>connection</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>move</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>moved</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>userLeft</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>disconnect</code></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> <code>socket.broadcast.emit</code> と <code>io.emit</code> の違いを、アバター同期の文脈で説明しなさい。なぜ <code>broadcast.emit</code> を使うのか、理由も書きなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> ユーザが切断したとき、クリーンアップ処理をしないとどうなるか説明しなさい。</p>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>アバターを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験2のアバター同期プログラムを以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th><th>ヒント</th></tr>
+          <tr><td>1</td><td>アバターの形を <code>a-box</code> から <code>a-sphere</code>（球）に変更する</td><td>クライアント側の <code>createElement</code> を変更し、<code>radius</code> を設定する</td></tr>
+          <tr><td>2</td><td>送信間隔を <code>200</code> msに変更する</td><td><code>setInterval</code> の第2引数を変える</td></tr>
+          <tr><td>3</td><td>3D空間に目印となるオブジェクトを2つ以上追加する</td><td><code>&lt;a-scene&gt;</code> 内にタグを追加する（位置や色は自由）</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後の <code>public/index.html</code> のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「なぜその値にしたか」を書く<br>
+        ③ 送信間隔を <code>200</code> msにしたとき、<code>100</code> msのときと比べてアバターの動きはどう変わったか</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>アバターに名前ラベルと個別カラーを付ける</h3>
+      </div>
+      <p>アバター同期プログラムを拡張し、各アバターの<strong>頭上にユーザ名が表示</strong>されるようにしてください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li>接続時にユーザ名（ニックネーム）を入力できるようにする（<code>prompt</code> でOK）</li>
+          <li>アバターの上にユーザ名がテキストで表示される（<code>a-text</code> を使う）</li>
+          <li>アバターの色がユーザごとに異なる</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>server.js</code> と <code>public/index.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>ユーザ名の入力からアバター上への表示までのデータの流れ</li>
+          <li>サーバ側で追加・変更した処理</li>
+          <li>工夫した点や難しかった点</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>&lt;a-text value="名前" position="0 0.8 0" align="center" color="white" width="3"&gt;</code> をアバターのエンティティの子要素として追加すると、アバターの上に名前が表示されます。アバターを <code>a-entity</code> でラップし、その中に <code>a-box</code> と <code>a-text</code> を配置する構成が簡単です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-07-01T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> ターミナルに <code>xK7-2abc... 位置: { x: 0.12, y: 1.6, z: 2.85 }</code> のような行が100msごとに表示された。</li>
+          <li><strong>Q2:</strong> Wキー（前進）で z が減少、Sキー（後退）で z が増加した。Aキー（左移動）で x が減少、Dキー（右移動）で x が増加した。y はほぼ 1.6 のまま変わらなかった（y はジャンプしない限り変化しない）。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 2つ目のタブを開くと、最初のタブの3D空間に色付きの小さな箱（アバター）が出現した。</li>
+          <li><strong>Q2:</strong> 片方のタブでWASDキーで移動すると、もう片方のタブでは対応する色の箱がリアルタイムに動いた。向きを変えると箱も回転した。</li>
+          <li><strong>Q3:</strong> タブを閉じると、残ったタブから対応する色のアバター（箱）が消えた。接続中の人数表示も減った。</li>
+          <li><strong>Q4:</strong> <code>io.emit</code> にすると自分自身にも位置データが送られるため、自分のアバターが自分の視点の位置に生成されてしまう。自分の箱が常に目の前にちらつくか、カメラに重なって見えなくなる。<code>broadcast.emit</code> なら送信者自身を除外するのでこの問題が起きない。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（アバター同期の仕組み）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容</th></tr>
+          <tr><td>1</td><td>ユーザA（ブラウザ）</td><td>WASDキーで3D空間を移動する → カメラの position/rotation が変わる</td></tr>
+          <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で <strong>100</strong> msごとにカメラの <strong>position と rotation</strong> を取得して送信</td></tr>
+          <tr><td>3</td><td>サーバ</td><td>受信した位置データを <code>socket.<strong>broadcast.emit</strong></code> で <strong>送信者以外の全員</strong> に転送</td></tr>
+          <tr><td>4</td><td>ユーザB（JavaScript）</td><td>受信したデータでアバターの <strong>position と rotation（setAttribute）</strong> を更新</td></tr>
+          <tr><td>5</td><td>ユーザB（A-Frame）</td><td>ユーザAのアバター（a-box）が3D空間内でリアルタイムに移動して見える</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問2.</strong></p>
+        <table>
+          <tr><th>イベント名</th><th>役割</th></tr>
+          <tr><td><code>connection</code></td><td>新しいユーザがサーバに接続したときに発生する。ユーザ管理の初期化や色の割り当てを行う。</td></tr>
+          <tr><td><code>move</code></td><td>クライアントが自分のカメラの位置・回転データをサーバに送信するために使うイベント。</td></tr>
+          <tr><td><code>moved</code></td><td>サーバが他のクライアントに位置データを転送するために使うイベント。受信側はこのデータでアバターを更新する。</td></tr>
+          <tr><td><code>userLeft</code></td><td>ユーザが切断したことを全クライアントに通知するイベント。各クライアントは該当のアバターを削除する。</td></tr>
+          <tr><td><code>disconnect</code></td><td>クライアントがサーバとの接続を切断したときにサーバ側で発生するイベント。ユーザ管理から削除し、userLeftを送信する。</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問3. 解答例:</strong></p>
+        <p style="font-size:0.9rem"><code>socket.broadcast.emit</code> は送信者自身を除く全クライアントにデータを送る。<code>io.emit</code> は送信者自身を含む全クライアントに送る。アバター同期では <code>broadcast.emit</code> を使う理由は、自分の位置データを自分に送ると、自分のアバターが自分のカメラ位置に生成されてしまい、常に目の前に箱が見えてしまうため。自分の視点は自分のカメラで表現されており、アバターは不要。</p>
+
+        <p style="margin-top:1rem"><strong>問4. 解答例:</strong></p>
+        <p style="font-size:0.9rem">切断時にアバターを削除しないと、動かなくなったアバター（箱）が3D空間にずっと残り続ける。他のユーザから見ると「誰もいないのに箱がある」状態になり、実際の参加者と区別できなくなる。またサーバ側でもユーザ一覧から削除しないと、存在しないユーザにデータを送り続けるため無駄な処理が発生する。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <p><strong>改造後の <code>public/index.html</code>（該当部分）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">// 改造2: 送信間隔を200msに変更</span>
+setInterval(function() {
+  if (!camera) return;
+  var pos = camera.getAttribute('position');
+  var rot = camera.getAttribute('rotation');
+  socket.emit('move', {
+    position: { x: pos.x, y: pos.y, z: pos.z },
+    rotation: { x: rot.x, y: rot.y, z: rot.z }
+  });
+}, 200);  // ← 100 → 200 に変更
+
+<span class="cmt">// 改造1: アバターの形を球に変更</span>
+socket.on('moved', function(data) {
+  var avatarId = 'avatar-' + data.id;
+  var avatar = document.getElementById(avatarId);
+
+  if (!avatar) {
+    avatar = document.createElement('a-sphere');  // ← a-box → a-sphere
+    avatar.setAttribute('id', avatarId);
+    avatar.setAttribute('radius', '0.3');          // ← width/height/depth → radius
+    avatar.setAttribute('color', data.color);
+    scene.appendChild(avatar);
+    userCount++;
+    document.getElementById('user-count').textContent = '接続中: ' + userCount + '人';
+  }
+
+  avatar.setAttribute('position', data.position);
+  avatar.setAttribute('rotation', { x: 0, y: data.rotation.y, z: 0 });
+});</pre>
+
+        <p style="margin-top:1rem"><strong>改造3: 目印オブジェクトの追加例（a-scene内に追加）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!-- 改造3: 目印を追加 --&gt;
+&lt;a-torus position="0 1 -10" color="#E040FB" radius="1.5" radius-tubular="0.1"&gt;&lt;/a-torus&gt;
+&lt;a-cone position="-4 1 -7" color="#FF6E40" radius-bottom="0.8" height="2"&gt;&lt;/a-cone&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>送信間隔の違い:</strong></p>
+        <p style="font-size:0.9rem">200msにすると、アバターの動きがやや「カクカク」して見える。100msのときはより滑らかだった。これは更新頻度が下がったため、アバターの位置が前回の位置から次の位置へ「ジャンプ」するように見えるため。ただし通信量は半分になる。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（名前ラベル付きアバター）</summary>
+      <div class="answer-content">
+        <p><strong>server.js（主要な変更部分）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">io.on('connection', function(socket) {
+  var color = colors[Object.keys(users).length % colors.length];
+
+  socket.on('join', function(data) {
+    users[socket.id] = { color: color, name: data.name };
+    console.log('参加:', data.name, '色:', color);
+    socket.emit('myInfo', { color: color, name: data.name });
+  });
+
+  socket.on('move', function(data) {
+    if (!users[socket.id]) return;
+    socket.broadcast.emit('moved', {
+      id: socket.id,
+      position: data.position,
+      rotation: data.rotation,
+      color: users[socket.id].color,
+      name: users[socket.id].name
+    });
+  });
+
+  socket.on('disconnect', function() {
+    if (users[socket.id]) {
+      console.log('離脱:', users[socket.id].name);
+    }
+    delete users[socket.id];
+    io.emit('userLeft', { id: socket.id });
+  });
+});</pre>
+
+        <p style="margin-top:1rem"><strong>public/index.html（アバター生成部分）:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">// 接続時にユーザ名を入力
+var userName = prompt('あなたの名前を入力してください:') || 'Guest';
+socket.emit('join', { name: userName });
+
+// アバター生成（a-entity でラップ）
+socket.on('moved', function(data) {
+  var avatarId = 'avatar-' + data.id;
+  var avatar = document.getElementById(avatarId);
+
+  if (!avatar) {
+    // コンテナ（a-entity）を作成
+    avatar = document.createElement('a-entity');
+    avatar.setAttribute('id', avatarId);
+
+    // 体（箱）
+    var body = document.createElement('a-box');
+    body.setAttribute('width', '0.5');
+    body.setAttribute('height', '0.8');
+    body.setAttribute('depth', '0.3');
+    body.setAttribute('color', data.color);
+    body.setAttribute('position', '0 0 0');
+    avatar.appendChild(body);
+
+    // 名前ラベル
+    var label = document.createElement('a-text');
+    label.setAttribute('value', data.name);
+    label.setAttribute('position', '0 0.8 0');
+    label.setAttribute('align', 'center');
+    label.setAttribute('color', 'white');
+    label.setAttribute('width', '3');
+    avatar.appendChild(label);
+
+    scene.appendChild(avatar);
+  }
+
+  avatar.setAttribute('position', data.position);
+  avatar.setAttribute('rotation', { x: 0, y: data.rotation.y, z: 0 });
+});</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th></tr>
+          <tr><td>1</td><td>接続時にユーザ名を入力する仕組みがある</td></tr>
+          <tr><td>2</td><td>アバターの頭上にユーザ名がテキストで表示される</td></tr>
+          <tr><td>3</td><td>ユーザごとに異なる色が割り当てられている</td></tr>
+          <tr><td>4</td><td>サーバ側でユーザ名を管理し、位置データと一緒に配信している</td></tr>
+          <tr><td>5</td><td>音声で実装内容を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第10回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

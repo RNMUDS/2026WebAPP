@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第14回: 総合制作② 実装 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ CHECKLIST ============ */
+.checklist {
+  list-style: none;
+  padding: 0;
+}
+.checklist li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.2rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #222;
+}
+.checklist li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.7rem;
+  width: 18px; height: 18px;
+  border: 2px solid #76B900;
+  border-radius: 4px;
+  background: #0A0A0A;
+}
+.checklist li.done::before {
+  background: #76B900;
+  content: '\2713';
+  color: white;
+  font-size: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+}
+
+/* ============ STEP CARDS ============ */
+.step-card {
+  display: flex; align-items: flex-start; gap: 1rem;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+.step-num {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+  background: #76B900;
+}
+.step-card .step-body { flex: 1; }
+.step-card .step-body h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第14回: 総合制作② 実装</h1>
+    <p>機能実装・調整・デバッグ</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計2項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">実装進捗</span>進捗レポート</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">ピアレビュー</span>レビュー記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. IMPLEMENTATION CHECKLIST ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>実装チェックリスト</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      最終制作で必須となる機能を確認します。<br>
+      以下のチェックリストを使って、現在の実装状況を把握してください。
+    </p>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header"><h3>必須機能チェックリスト</h3></div>
+      <p>以下の項目がすべて動作することが最終提出の条件です。現在の状況をチェックしてください。</p>
+
+      <h4 style="color:#76B900;margin:1.2rem 0 0.8rem;font-size:0.95rem">サーバ構成</h4>
+      <ul class="checklist">
+        <li>Node.js + Express でサーバが起動する</li>
+        <li>静的ファイル（HTML/CSS/JS）が正しく配信される</li>
+        <li>Socket.IO がサーバ側で初期化されている</li>
+        <li><code>node server.js</code> でエラーなく起動できる</li>
+      </ul>
+
+      <h4 style="color:#76B900;margin:1.2rem 0 0.8rem;font-size:0.95rem">3Dシーン（A-Frame）</h4>
+      <ul class="checklist">
+        <li>A-Frame 1.7.1 が読み込まれている</li>
+        <li>3Dシーンがブラウザに表示される</li>
+        <li>地面・空・照明が設定されている</li>
+        <li>glTFモデルまたはプリミティブで空間が構成されている</li>
+        <li>カメラ操作（WASD/マウス）が動作する</li>
+      </ul>
+
+      <h4 style="color:#76B900;margin:1.2rem 0 0.8rem;font-size:0.95rem">マルチユーザ機能</h4>
+      <ul class="checklist">
+        <li>クライアントがSocket.IOでサーバに接続できる</li>
+        <li>複数ブラウザタブで同時接続できる</li>
+        <li>アバターの位置・回転が他のユーザに同期される</li>
+        <li>ユーザの入室・退室が正しく処理される</li>
+      </ul>
+
+      <h4 style="color:#76B900;margin:1.2rem 0 0.8rem;font-size:0.95rem">チャット機能</h4>
+      <ul class="checklist">
+        <li>テキスト入力欄と送信ボタンがある</li>
+        <li>メッセージがSocket.IO経由で他のユーザに送信される</li>
+        <li>3D空間内にチャット吹き出しが表示される</li>
+        <li>吹き出しが一定時間後に消える</li>
+      </ul>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 上記のチェックリストをコピーし、各項目について「済」「未実装」「作業中」のステータスを記入してください。</div></div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #FFB800">
+      <div class="card-header"><h3>オプション機能（加点対象）</h3></div>
+      <p>以下の機能は必須ではありませんが、実装すると評価が上がります。</p>
+      <table>
+        <tr><th style="width:30%">機能</th><th>説明</th><th style="width:60px">難度</th></tr>
+        <tr><td><strong>アバター名前表示</strong></td><td>各アバターの上にユーザ名を表示する</td><td style="text-align:center">低</td></tr>
+        <tr><td><strong>入室通知</strong></td><td>新しいユーザが入室したとき、全員に通知を表示する</td><td style="text-align:center">低</td></tr>
+        <tr><td><strong>アニメーション</strong></td><td>3Dオブジェクトにアニメーション（回転・浮遊など）を付ける</td><td style="text-align:center">中</td></tr>
+        <tr><td><strong>サウンド</strong></td><td>BGMや効果音を追加する</td><td style="text-align:center">中</td></tr>
+        <tr><td><strong>オブジェクト操作</strong></td><td>クリックやインタラクションでオブジェクトの状態を変える</td><td style="text-align:center">高</td></tr>
+        <tr><td><strong>データ永続化</strong></td><td>チャット履歴やオブジェクト状態をデータベースに保存する</td><td style="text-align:center">高</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. DEBUG GUIDE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FF5252">2</div>
+      <h2>デバッグガイド</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      実装中によく遭遇するエラーとその解決方法をまとめました。<br>
+      エラーが出たら、まず<strong>ブラウザのコンソール（F12）</strong>と<strong>ターミナル（サーバ側）</strong>を確認してください。
+    </p>
+
+    <div class="card" style="border-left:4px solid #FF5252">
+      <div class="card-header"><h3>エラー1: CORS エラー</h3></div>
+      <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem">
+        <strong style="color:#FF5252">エラーメッセージ:</strong><br>
+        <code style="color:#E0E0E0">Access to XMLHttpRequest at 'http://localhost:3000' from origin 'http://127.0.0.1:5500' has been blocked by CORS policy</code>
+      </div>
+      <p><strong>原因:</strong> Live Server（ポート5500）からNode.jsサーバ（ポート3000）にアクセスしている。異なるオリジン間の通信はブラウザがブロックする。</p>
+      <p style="margin-top:0.5rem"><strong>解決方法:</strong></p>
+      <ul class="point-list">
+        <li>Live Serverを使わず、Node.jsサーバから直接HTMLを配信する</li>
+        <li><code>express.static()</code> で <code>public</code> フォルダを公開し、<code>http://localhost:3000</code> でアクセスする</li>
+      </ul>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app = <span class="fn">express</span>();
+
+<span class="cmt">// publicフォルダの中身を静的ファイルとして配信</span>
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// http://localhost:3000 でindex.htmlが表示される</span></pre>
+    </div>
+
+    <div class="card" style="border-left:4px solid #FF5252">
+      <div class="card-header"><h3>エラー2: Socket.IO 接続失敗</h3></div>
+      <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem">
+        <strong style="color:#FF5252">エラーメッセージ:</strong><br>
+        <code style="color:#E0E0E0">GET http://localhost:3000/socket.io/?... 404 (Not Found)</code>
+      </div>
+      <p><strong>原因:</strong> Socket.IOがサーバ側で正しく設定されていない。Expressだけ起動してSocket.IOを紐づけていない。</p>
+      <p style="margin-top:0.5rem"><strong>解決方法:</strong> <code>http.createServer</code> でHTTPサーバを作り、Socket.IOをそこに紐づける。</p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// app.listen() ではなく server.listen() を使う</span>
+server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'Server running on http://localhost:3000'</span>);
+});</pre>
+    </div>
+
+    <div class="card" style="border-left:4px solid #FF5252">
+      <div class="card-header"><h3>エラー3: 3Dモデルが表示されない</h3></div>
+      <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem">
+        <strong style="color:#FF5252">症状:</strong> glTFモデルの読み込みを指定しているが、3D空間に何も表示されない。
+      </div>
+      <p><strong>よくある原因と解決方法:</strong></p>
+      <table>
+        <tr><th style="width:30%">原因</th><th>解決方法</th></tr>
+        <tr><td>ファイルパスが間違っている</td><td>相対パスを確認。<code>public/models/scene.glb</code> なら <code>src="models/scene.glb"</code></td></tr>
+        <tr><td>モデルのスケールが極端</td><td><code>scale="0.01 0.01 0.01"</code> のように調整する</td></tr>
+        <tr><td>モデルの位置がカメラから遠い</td><td><code>position="0 0 -5"</code> のように手前に配置する</td></tr>
+        <tr><td>MIME typeエラー</td><td><code>.glb</code> ファイルが <code>application/octet-stream</code> で配信されているか確認</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>デバッグのコツ:</strong> まず<code>&lt;a-box&gt;</code>で同じ位置にテスト表示し、位置が正しいか確認してからモデルに置き換える。</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid #FF5252">
+      <div class="card-header"><h3>エラー4: アバターが同期されない</h3></div>
+      <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.85rem">
+        <strong style="color:#FF5252">症状:</strong> 他のユーザのアバターが表示されない、または動かない。
+      </div>
+      <p><strong>確認ポイント:</strong></p>
+      <ul class="point-list">
+        <li><code>console.log</code> でSocket.IOのイベントが発火しているか確認する</li>
+        <li>サーバ側で <code>socket.broadcast.emit</code> を使っているか（<code>io.emit</code> だと自分にも送信される）</li>
+        <li>クライアント側で受信したデータを正しくA-Frameエンティティに反映しているか</li>
+        <li>位置データのフォーマットが送信側と受信側で一致しているか</li>
+      </ul>
+      <pre><span class="code-label">JavaScript ── デバッグ用console.log</span>
+<span class="cmt">// クライアント側: 送信時に確認</span>
+socket.<span class="fn">emit</span>(<span class="str">'move'</span>, posData);
+console.<span class="fn">log</span>(<span class="str">'送信:'</span>, posData);
+
+<span class="cmt">// クライアント側: 受信時に確認</span>
+socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) => {
+  console.<span class="fn">log</span>(<span class="str">'受信:'</span>, data);
+  <span class="cmt">// ここでA-Frameエンティティを更新</span>
+});</pre>
+    </div>
+
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header"><h3>デバッグの基本手順</h3></div>
+      <div style="background:#1A1A1A;border-radius:10px;padding:1.5rem;margin:0.5rem 0">
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;font-size:0.9rem">
+          <span style="background:#FF5252;color:white;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">1. エラーを読む</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">2. console.logを入れる</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">3. 範囲を絞る</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">4. 修正して検証</span>
+        </div>
+      </div>
+      <table>
+        <tr><th>確認場所</th><th>見るべきもの</th><th>開き方</th></tr>
+        <tr><td><strong>ブラウザコンソール</strong></td><td>クライアント側のエラー、console.log出力</td><td>F12 → Console タブ</td></tr>
+        <tr><td><strong>ブラウザNetwork</strong></td><td>HTTPリクエストの成功/失敗、Socket.IO接続</td><td>F12 → Network タブ</td></tr>
+        <tr><td><strong>ターミナル</strong></td><td>サーバ側のエラー、console.log出力</td><td>VS Code下部のターミナル</td></tr>
+        <tr><td><strong>A-Frame Inspector</strong></td><td>3Dオブジェクトの位置・属性の確認</td><td>Ctrl+Alt+I（シーン表示中）</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. IMPLEMENTATION ORDER ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">3</div>
+      <h2>実装の進め方</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      まだ実装が完了していない人は、以下の順番で進めてください。<br>
+      <strong>1つの段階が動いてから次に進む</strong>のがポイントです。一度に全部作ろうとしないでください。
+    </p>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>サーバの起動確認</h4>
+        <p>Node.js + Express + Socket.IO のサーバが起動し、ブラウザから <code>http://localhost:3000</code> でアクセスできることを確認する。</p>
+        <pre><span class="code-label">Terminal</span>
+<span class="cmt"># フォルダ構成</span>
+S:\Web_Prog\Web14\
+  server.js
+  package.json
+  public\
+    index.html
+    style.css
+    app.js
+
+<span class="cmt"># サーバ起動</span>
+cd S:\Web_Prog\Web14
+npm install
+node server.js</pre>
+        <p style="margin-top:0.5rem;color:#93D500;font-size:0.85rem"><strong>確認:</strong> ブラウザで <code>http://localhost:3000</code> を開いてHTMLが表示されればOK。</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>静的な3Dシーンの構築</h4>
+        <p>Socket.IOやマルチユーザ機能は後回しにして、まずA-Frameで<strong>見た目だけ</strong>の3Dシーンを完成させる。</p>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>地面（<code>&lt;a-plane&gt;</code>）と空（<code>&lt;a-sky&gt;</code>）を配置</li>
+          <li>照明（<code>&lt;a-light&gt;</code>）を設定</li>
+          <li>3Dモデルやプリミティブでシーンを構成</li>
+          <li>カメラの初期位置を調整</li>
+        </ul>
+        <p style="margin-top:0.5rem;color:#93D500;font-size:0.85rem"><strong>確認:</strong> ブラウザで3D空間が表示され、WASD/マウスで移動できればOK。</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Socket.IO接続の確認</h4>
+        <p>クライアントとサーバがSocket.IOで接続できることを確認する。</p>
+        <pre><span class="code-label">JavaScript ── public/app.js（クライアント側）</span>
+<span class="kw">const</span> socket = <span class="fn">io</span>();
+socket.<span class="fn">on</span>(<span class="str">'connect'</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'接続成功: '</span> + socket.id);
+});</pre>
+        <pre><span class="code-label">JavaScript ── server.js（サーバ側）</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  console.<span class="fn">log</span>(<span class="str">'ユーザ接続: '</span> + socket.id);
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () => {
+    console.<span class="fn">log</span>(<span class="str">'ユーザ切断: '</span> + socket.id);
+  });
+});</pre>
+        <p style="margin-top:0.5rem;color:#93D500;font-size:0.85rem"><strong>確認:</strong> ブラウザのコンソールとターミナルの両方にログが出ればOK。</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>アバター同期の実装</h4>
+        <p>自分のカメラ位置・回転をサーバに送信し、他のユーザのアバターを3D空間に表示する。</p>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>一定間隔（100ms程度）でカメラの位置・回転を取得してサーバに送信</li>
+          <li>サーバで <code>broadcast.emit</code> して他のユーザに転送</li>
+          <li>受信側で <code>&lt;a-entity&gt;</code> を動的に生成し、位置・回転を更新</li>
+          <li>切断時にアバターを削除</li>
+        </ul>
+        <p style="margin-top:0.5rem;color:#93D500;font-size:0.85rem"><strong>確認:</strong> 2つのブラウザタブを開き、片方で動くともう片方にアバターが動くのが見えればOK。</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>チャット機能の実装</h4>
+        <p>テキスト入力欄を追加し、メッセージをSocket.IO経由で送受信する。3D空間に吹き出しとして表示する。</p>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>HTML/CSSで入力欄と送信ボタンを作成</li>
+          <li>送信時に <code>socket.emit('chat', message)</code> でサーバに送信</li>
+          <li>受信時にアバターの上に <code>&lt;a-text&gt;</code> で吹き出しを表示</li>
+          <li><code>setTimeout</code> で数秒後に吹き出しを消す</li>
+        </ul>
+        <p style="margin-top:0.5rem;color:#93D500;font-size:0.85rem"><strong>確認:</strong> 2つのタブ間でチャットメッセージが送受信でき、3D空間に吹き出しが表示されればOK。</p>
+      </div>
+    </div>
+
+    <div class="step-card" style="border: 1px solid #FFB800;">
+      <div class="step-num" style="background:#FFB800">6</div>
+      <div class="step-body">
+        <h4>仕上げ・調整</h4>
+        <p>基本機能が動いたら、見た目や使い勝手を改善する。</p>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>CSSでUIの見た目を整える</li>
+          <li>アバターの見た目を改善する（色分け、名前表示など）</li>
+          <li>不要な <code>console.log</code> を削除する</li>
+          <li>READMEファイルを作成する</li>
+          <li>発表のデモを想定して動作を最終確認する</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. CODE REVIEW ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4FC3F7">4</div>
+      <h2>コードレビュー（グループ）</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      グループ内でお互いのコードを見せ合い、レビューを行います。<br>
+      他の人のコードを読むことも大切なスキルです。
+    </p>
+
+    <div class="card group">
+      <div class="card-header">
+        <span class="tag tag-group">グループ</span>
+        <h3>ピアレビューの進め方</h3>
+      </div>
+      <p>グループ内で2人1組になり、お互いのコードをレビューします。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;margin-bottom:0.8rem">レビューの手順（1人あたり約10分）</p>
+        <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+          <li>作成者がアプリケーションをデモする（サーバ起動 → ブラウザで見せる）</li>
+          <li>レビュアーがコードを読み、以下のチェックリストで確認する</li>
+          <li>気づいた点・改善案をフィードバックする</li>
+          <li>役割を交代する</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card group">
+      <div class="card-header">
+        <span class="tag tag-group">チェックリスト</span>
+        <h3>レビュー観点</h3>
+      </div>
+      <table>
+        <tr><th style="width:30px">#</th><th>レビュー観点</th><th style="width:60px">結果</th></tr>
+        <tr><td>1</td><td><strong>動作確認:</strong> <code>node server.js</code> でサーバが起動し、ブラウザで3Dシーンが表示されるか</td><td class="blank-cell" style="text-align:center"></td></tr>
+        <tr><td>2</td><td><strong>マルチユーザ:</strong> 2つのブラウザタブで接続し、アバターが同期されるか</td><td class="blank-cell" style="text-align:center"></td></tr>
+        <tr><td>3</td><td><strong>チャット:</strong> メッセージを送信し、相手のブラウザに吹き出しが表示されるか</td><td class="blank-cell" style="text-align:center"></td></tr>
+        <tr><td>4</td><td><strong>コードの可読性:</strong> 変数名は意味がわかるか、コメントは適切か</td><td class="blank-cell" style="text-align:center"></td></tr>
+        <tr><td>5</td><td><strong>ファイル構成:</strong> サーバ/クライアントのファイルが整理されているか</td><td class="blank-cell" style="text-align:center"></td></tr>
+        <tr><td>6</td><td><strong>エラー処理:</strong> 接続エラーや入力チェックが考慮されているか</td><td class="blank-cell" style="text-align:center"></td></tr>
+      </table>
+
+      <div style="margin-top:1rem">
+        <p style="font-weight:700;margin-bottom:0.5rem">フィードバック記入欄</p>
+        <table>
+          <tr><th style="width:40%">項目</th><th>記入内容</th></tr>
+          <tr><td><strong>良かった点</strong>（最低1つ）</td><td class="blank-cell"></td></tr>
+          <tr><td><strong>改善提案</strong>（最低1つ）</td><td class="blank-cell"></td></tr>
+          <tr><td><strong>学びになった点</strong></td><td class="blank-cell"></td></tr>
+        </table>
+      </div>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> レビュー結果（誰のコードをレビューしたか、チェックリスト結果、フィードバック）を記入してください。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. SUBMISSION PREPARATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">5</div>
+      <h2>提出準備</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      次回（第15回）が成果発表です。最終提出に必要なものを確認し、準備してください。
+    </p>
+
+    <div class="card" style="border-left:4px solid #FFB800">
+      <div class="card-header"><h3>最終提出物一覧</h3></div>
+      <p>以下のすべてのファイルを <code>S:\Web_Prog\Web14</code> フォルダにまとめてください。</p>
+
+      <table>
+        <tr><th style="width:30%">提出物</th><th>内容</th><th style="width:80px">必須</th></tr>
+        <tr><td><strong>ソースコード一式</strong></td><td><code>server.js</code>, <code>public/</code> フォルダ内の全ファイル（HTML, CSS, JS）</td><td style="text-align:center;color:#76B900;font-weight:700">必須</td></tr>
+        <tr><td><strong>package.json</strong></td><td>使用パッケージの一覧（<code>npm init</code> で生成済みのもの）</td><td style="text-align:center;color:#76B900;font-weight:700">必須</td></tr>
+        <tr><td><strong>README.md</strong></td><td>アプリの概要、起動方法、使い方の説明</td><td style="text-align:center;color:#76B900;font-weight:700">必須</td></tr>
+        <tr><td><strong>スクリーンショット</strong></td><td>3Dシーンが表示されている画面のキャプチャ（1〜2枚）</td><td style="text-align:center;color:#76B900;font-weight:700">必須</td></tr>
+        <tr><td><strong>3Dモデルファイル</strong></td><td>使用した <code>.glb</code> / <code>.gltf</code> ファイル</td><td style="text-align:center;color:#999">使用時のみ</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header"><h3>README.md の書き方</h3></div>
+      <p>以下の内容を <code>README.md</code> に記述してください。</p>
+      <pre><span class="code-label">Markdown ── README.md</span>
+# アプリケーション名
+
+## 概要
+このアプリケーションは〇〇をテーマにした
+マルチユーザ3D Webアプリケーションです。
+
+## 機能
+- 3D空間の表示（A-Frame）
+- 複数ユーザのアバター同期（Socket.IO）
+- チャット吹き出し機能
+- （その他の機能を追記）
+
+## 起動方法
+1. `npm install` を実行
+2. `node server.js` を実行
+3. ブラウザで `http://localhost:3000` を開く
+
+## 使用技術
+- A-Frame 1.7.1
+- Node.js + Express
+- Socket.IO
+
+## 作成者
+氏名: ○○ ○○
+学籍番号: xxxxxxxx</pre>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header"><h3>最終チェック</h3></div>
+      <p>提出前に以下を必ず確認してください。</p>
+      <ul class="checklist">
+        <li><code>node_modules</code> フォルダは提出しない（<code>package.json</code> があればOK）</li>
+        <li><code>node server.js</code> でサーバが起動できる</li>
+        <li>ブラウザで3Dシーンが正常に表示される</li>
+        <li>2つのブラウザタブで同時接続してアバター同期を確認した</li>
+        <li>チャット機能が動作する</li>
+        <li>README.md に起動方法が書いてある</li>
+        <li>スクリーンショットを撮影した</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-left:4px solid #FFB800">
+      <div class="card-header"><h3>発表準備（次回予告）</h3></div>
+      <p>第15回では、1人（またはグループ）あたり <strong>3〜5分</strong> で成果を発表します。以下の内容を説明できるように準備してください。</p>
+      <ul class="point-list">
+        <li><strong>テーマ:</strong> どんな3D空間を作ったか</li>
+        <li><strong>デモ:</strong> 実際にサーバを起動して動作を見せる</li>
+        <li><strong>技術的な工夫:</strong> 苦労した点、工夫した点</li>
+        <li><strong>学んだこと:</strong> この授業を通じて何を学んだか</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ ANSWERS (GATED) ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-07-29T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">6</div>
+      <h2>参考情報</h2>
+    </div>
+
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">参考</span> よくある実装パターン: アバター同期</summary>
+      <div class="answer-content">
+        <p><strong>サーバ側（server.js）</strong></p>
+        <pre><span class="code-label">JavaScript ── server.js（アバター同期部分）</span>
+<span class="kw">const</span> users = {};
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  console.<span class="fn">log</span>(<span class="str">'接続: '</span> + socket.id);
+
+  <span class="cmt">// 既存ユーザ情報を新規ユーザに送信</span>
+  socket.<span class="fn">emit</span>(<span class="str">'currentUsers'</span>, users);
+
+  <span class="cmt">// 位置更新</span>
+  socket.<span class="fn">on</span>(<span class="str">'move'</span>, (data) => {
+    users[socket.id] = data;
+    socket.broadcast.<span class="fn">emit</span>(<span class="str">'userMoved'</span>, {
+      id: socket.id,
+      ...data
+    });
+  });
+
+  <span class="cmt">// 切断</span>
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () => {
+    <span class="kw">delete</span> users[socket.id];
+    io.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, socket.id);
+    console.<span class="fn">log</span>(<span class="str">'切断: '</span> + socket.id);
+  });
+});</pre>
+
+        <p style="margin-top:1rem"><strong>クライアント側（app.js）</strong></p>
+        <pre><span class="code-label">JavaScript ── public/app.js（アバター同期部分）</span>
+<span class="kw">const</span> socket = <span class="fn">io</span>();
+<span class="kw">const</span> avatars = {};
+
+<span class="cmt">// 自分の位置を定期送信</span>
+<span class="fn">setInterval</span>(() => {
+  <span class="kw">const</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
+  <span class="kw">const</span> pos = camera.getAttribute(<span class="str">'position'</span>);
+  <span class="kw">const</span> rot = camera.getAttribute(<span class="str">'rotation'</span>);
+  socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+    position: { x: pos.x, y: pos.y, z: pos.z },
+    rotation: { x: rot.x, y: rot.y, z: rot.z }
+  });
+}, <span class="num">100</span>);
+
+<span class="cmt">// 他のユーザのアバターを表示・更新</span>
+socket.<span class="fn">on</span>(<span class="str">'userMoved'</span>, (data) => {
+  <span class="kw">if</span> (!avatars[data.id]) {
+    <span class="kw">const</span> el = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+    el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, <span class="str">'#4FC3F7'</span>);
+    el.<span class="fn">setAttribute</span>(<span class="str">'scale'</span>, <span class="str">'0.5 1 0.3'</span>);
+    document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>).<span class="fn">appendChild</span>(el);
+    avatars[data.id] = el;
+  }
+  avatars[data.id].<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
+  avatars[data.id].<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, data.rotation);
+});
+
+<span class="cmt">// ユーザ退出時にアバター削除</span>
+socket.<span class="fn">on</span>(<span class="str">'userLeft'</span>, (id) => {
+  <span class="kw">if</span> (avatars[id]) {
+    avatars[id].<span class="fn">remove</span>();
+    <span class="kw">delete</span> avatars[id];
+  }
+});</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">参考</span> よくある実装パターン: チャット吹き出し</summary>
+      <div class="answer-content">
+        <pre><span class="code-label">JavaScript ── public/app.js（チャット吹き出し部分）</span>
+<span class="cmt">// チャット送信</span>
+document.<span class="fn">getElementById</span>(<span class="str">'send-btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
+  <span class="kw">const</span> input = document.<span class="fn">getElementById</span>(<span class="str">'chat-input'</span>);
+  <span class="kw">const</span> msg = input.value.<span class="fn">trim</span>();
+  <span class="kw">if</span> (!msg) <span class="kw">return</span>;
+  socket.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+  input.value = <span class="str">''</span>;
+});
+
+<span class="cmt">// チャット受信 → 3D吹き出し表示</span>
+socket.<span class="fn">on</span>(<span class="str">'chatMessage'</span>, (data) => {
+  <span class="kw">const</span> avatar = avatars[data.id];
+  <span class="kw">if</span> (!avatar) <span class="kw">return</span>;
+
+  <span class="cmt">// 既存の吹き出しを削除</span>
+  <span class="kw">const</span> old = avatar.<span class="fn">querySelector</span>(<span class="str">'.bubble'</span>);
+  <span class="kw">if</span> (old) old.<span class="fn">remove</span>();
+
+  <span class="cmt">// 新しい吹き出しを作成</span>
+  <span class="kw">const</span> bubble = document.<span class="fn">createElement</span>(<span class="str">'a-text'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'value'</span>, data.message);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">'0 1.5 0'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'align'</span>, <span class="str">'center'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, <span class="str">'white'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'scale'</span>, <span class="str">'2 2 2'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'class'</span>, <span class="str">'bubble'</span>);
+  bubble.<span class="fn">setAttribute</span>(<span class="str">'look-at'</span>, <span class="str">'[camera]'</span>);
+  avatar.<span class="fn">appendChild</span>(bubble);
+
+  <span class="cmt">// 5秒後に消す</span>
+  <span class="fn">setTimeout</span>(() => bubble.<span class="fn">remove</span>(), <span class="num">5000</span>);
+});</pre>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第14回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Markdown)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

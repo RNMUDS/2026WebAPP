@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第2回: サーバサイドWebプログラミング基礎 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第2回: サーバサイドWebプログラミング基礎</h1>
+    <p>Node.jsによるHTTPルーティングとリクエスト処理</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計7項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>Web基礎 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      第1回ではブラウザ側（クライアント）でHTMLを表示しました。<br>
+      今回はいよいよ<strong>サーバ側</strong>のプログラムを書き、ブラウザからのリクエストに応じて異なるレスポンスを返す仕組みを学びます。
+    </p>
+
+    <!-- 1.1 Node.js とは -->
+    <div class="concept-box">
+      <h4>1.1 Node.js とは <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        JavaScriptは本来ブラウザの中でしか動かない言語でした。Node.js は「ブラウザの外でもJavaScriptを動かせる実行環境」です。つまり、<strong>料理人（JavaScript）が厨房（ブラウザ）の外に出て、出張料理もできるようになった</strong>ようなものです。
+      </div>
+      <p><strong>Node.js</strong> は、Google Chrome に搭載されている JavaScript エンジン「<strong>V8</strong>」を取り出して、サーバやPC上でJavaScriptを実行できるようにしたランタイム環境です。</p>
+      <table>
+        <tr><th>特徴</th><th>説明</th></tr>
+        <tr><td><strong>V8エンジン</strong></td><td>Google Chrome と同じ高速なJavaScriptエンジンで動く</td></tr>
+        <tr><td><strong>サーバ構築</strong></td><td>Webサーバを自分のプログラムで作れる。第1回で使ったLive Serverの代わりに自分でサーバを書く</td></tr>
+        <tr><td><strong>同一言語</strong></td><td>ブラウザ側もサーバ側も JavaScript で書けるため、1つの言語でWebアプリ全体を構築できる</td></tr>
+        <tr><td><strong>npm</strong></td><td>世界最大のパッケージ（ライブラリ）管理システムが付属。必要な機能を簡単に追加できる</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">Node.js をインストールすると、ターミナルで <code>node ファイル名.js</code> と打つだけでJavaScriptプログラムを実行できます。</p>
+    </div>
+
+    <!-- 1.2 npm とパッケージ管理 -->
+    <div class="concept-box">
+      <h4>1.2 npm とパッケージ管理 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        料理をするとき、すべての調味料を自分で作る人はいません。醤油や味噌は買ってきます。プログラミングでも同じで、よく使う機能は<strong>パッケージ（ライブラリ）</strong>として公開されており、<strong>npm</strong> というツールで簡単にインストールできます。
+      </div>
+      <p><strong>npm</strong>（Node Package Manager）は Node.js に標準で付属するパッケージ管理ツールです。</p>
+      <table>
+        <tr><th>コマンド</th><th>何をするか</th></tr>
+        <tr><td><code>npm init -y</code></td><td>プロジェクトを初期化し、<code>package.json</code>（設定ファイル）を自動生成する <span class="exam-alert">課題に出ます</span></td></tr>
+        <tr><td><code>npm install express</code></td><td>Express というパッケージをインストールする。<code>node_modules/</code> フォルダに保存される</td></tr>
+        <tr><td><code>package.json</code></td><td>プロジェクトの名前、バージョン、使用パッケージの一覧が記録されるファイル</td></tr>
+        <tr><td><code>node_modules/</code></td><td>インストールしたパッケージの実体が入るフォルダ。手動で編集しない</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.3 Express.js フレームワーク -->
+    <div class="concept-box">
+      <h4>1.3 Express.js フレームワーク <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        Node.js だけでもWebサーバは作れますが、一から全部書くのは大変です。<strong>Express.js</strong> は「Webサーバを簡単に作るための骨組み（フレームワーク）」です。家を建てるとき、柱や壁の骨組みがあれば作業が楽になるのと同じです。
+      </div>
+      <p><strong>Express.js</strong>（通称 Express）は Node.js で最も広く使われるWebフレームワークです。HTTPリクエストの受信、ルーティング、レスポンスの送信を簡潔なコードで実現できます。</p>
+      <table>
+        <tr><th>概念</th><th>説明</th></tr>
+        <tr><td><strong>app</strong></td><td>Expressアプリケーション本体。<code>express()</code> で生成する</td></tr>
+        <tr><td><strong>ルーティング</strong></td><td>「どのURLに」「どのHTTPメソッドで」アクセスされたら「何を返すか」を定義すること <span class="exam-alert">課題に出ます</span></td></tr>
+        <tr><td><strong>ミドルウェア</strong></td><td>リクエストとレスポンスの間で実行される処理。ログ出力や静的ファイル配信などに使う</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.4 ルーティングの仕組み -->
+    <div class="concept-box">
+      <h4>1.4 ルーティングの仕組み <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        ホテルのフロントで「301号室に行きたい」と言うと案内されます。Webサーバも同じで、ブラウザが「/about にアクセスしたい」とリクエストすると、サーバが対応するルートを探して処理を実行します。
+      </div>
+      <p><strong>ルーティング</strong>とは、URLパスとHTTPメソッドの組み合わせに応じて、実行する処理を振り分ける仕組みです。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// GET メソッドで「/」にアクセスされたとき</span>
+app.<span class="fn">get</span>(<span class="str">'/'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'トップページです'</span>);
+});</pre>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 200" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <rect x="30" y="40" width="160" height="55" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="110" y="62" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">ブラウザ</text>
+          <text x="110" y="80" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="12">GET /about</text>
+          <rect x="260" y="25" width="180" height="85" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="350" y="45" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">Express ルーター</text>
+          <text x="350" y="65" text-anchor="middle" fill="#E0E0E0" font-size="10">app.get('/')  → ...</text>
+          <text x="350" y="82" text-anchor="middle" fill="#93D500" font-size="10" font-weight="700">app.get('/about') → HIT!</text>
+          <text x="350" y="99" text-anchor="middle" fill="#E0E0E0" font-size="10">app.get('/api') → ...</text>
+          <rect x="510" y="40" width="160" height="55" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="590" y="62" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">レスポンス</text>
+          <text x="590" y="80" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="12">"About Page"</text>
+          <line x1="190" y1="67" x2="260" y2="67" stroke="#76B900" stroke-width="2" marker-end="url(#ah1)"/>
+          <line x1="440" y1="67" x2="510" y2="67" stroke="#4FC3F7" stroke-width="2" marker-end="url(#ah2)"/>
+          <text x="350" y="145" text-anchor="middle" fill="#888" font-size="11">URLパスが一致するルートを上から順に探し、最初にマッチした処理を実行</text>
+          <text x="350" y="170" text-anchor="middle" fill="#888" font-size="11">req = リクエスト情報 ／ res = レスポンスを返すオブジェクト</text>
+          <defs>
+            <marker id="ah1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <table>
+        <tr><th>要素</th><th>説明</th></tr>
+        <tr><td><code>app.get(パス, 関数)</code></td><td>GETリクエストに対するルートを定義する</td></tr>
+        <tr><td><code>req</code></td><td>リクエストオブジェクト。ブラウザから送られた情報（URL、ヘッダなど）が入っている</td></tr>
+        <tr><td><code>res</code></td><td>レスポンスオブジェクト。ブラウザに返す内容を操作するメソッドを持つ</td></tr>
+        <tr><td><strong>パスマッチング</strong></td><td><code>'/'</code> はトップ、<code>'/about'</code> は /about、<code>'/api/hello'</code> は /api/hello に対応</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.5 res.send() vs res.json() -->
+    <div class="concept-box">
+      <h4>1.5 res.send() と res.json() の違い <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        手紙を送るとき、「普通の文章」と「決まった書式の書類」は別物です。<code>res.send()</code> は自由な文章を返し、<code>res.json()</code> は JSON という決まったデータ形式で返します。
+      </div>
+      <table>
+        <tr><th>メソッド</th><th>返すもの</th><th>用途</th><th>コード例</th></tr>
+        <tr><td><code>res.send()</code></td><td>文字列やHTMLをそのまま返す</td><td>Webページ、テキストメッセージ</td><td><code>res.send('&lt;h1&gt;Hello&lt;/h1&gt;')</code></td></tr>
+        <tr><td><code>res.json()</code></td><td>JavaScriptオブジェクトをJSON形式に変換して返す</td><td>APIレスポンス、データ通信</td><td><code>res.json({ name: 'Taro' })</code></td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><code>res.json()</code> は自動的に <code>Content-Type: application/json</code> ヘッダを付けるため、クライアント側でデータとして処理しやすくなります。第3回のFetch APIで重要になります。</p>
+    </div>
+
+    <!-- 1.6 静的ファイル配信 -->
+    <div class="concept-box">
+      <h4>1.6 静的ファイル配信（express.static） <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        レストランで「メニュー表」を見せるのに、毎回シェフが料理を作る必要はありません。あらかじめ印刷したメニューをそのまま渡すだけです。<strong>静的ファイル配信</strong>も同じで、HTML・CSS・画像などのファイルをそのままブラウザに返します。
+      </div>
+      <p>Express では <code>express.static()</code> ミドルウェアを使うと、指定したフォルダ内のファイルを自動的にブラウザに配信できます。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// publicフォルダの中身をそのまま配信する</span>
+app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));</pre>
+      <p style="margin-top:0.5rem">この1行で、<code>public/index.html</code> は <code>http://localhost:3000/index.html</code> でアクセスできるようになります。第1回の Live Server がやっていたこととほぼ同じ仕組みです。</p>
+      <table>
+        <tr><th>ファイルパス（サーバ側）</th><th>ブラウザでのURL</th></tr>
+        <tr><td><code>public/index.html</code></td><td><code>http://localhost:3000/index.html</code></td></tr>
+        <tr><td><code>public/style.css</code></td><td><code>http://localhost:3000/style.css</code></td></tr>
+        <tr><td><code>public/images/logo.png</code></td><td><code>http://localhost:3000/images/logo.png</code></td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>Expressルーティングの読み方</h3>
+      </div>
+      <p>以下のExpressサーバコードを読み、各ルートがどんなレスポンスを返すか確認しましょう。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+app.<span class="fn">get</span>(<span class="str">'/'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'Welcome to my server!'</span>);
+});
+
+app.<span class="fn">get</span>(<span class="str">'/hello'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'Hello, World!'</span>);
+});
+
+app.<span class="fn">get</span>(<span class="str">'/api/time'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({ time: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>() });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
+      <table>
+        <tr><th>ブラウザでアクセスするURL</th><th>サーバが返す内容</th><th>使用メソッド</th></tr>
+        <tr><td><code>http://localhost:3000/</code></td><td>「Welcome to my server!」という文字列</td><td>res.send()</td></tr>
+        <tr><td><code>http://localhost:3000/hello</code></td><td>「Hello, World!」という文字列</td><td>res.send()</td></tr>
+        <tr><td><code>http://localhost:3000/api/time</code></td><td>現在時刻のJSONデータ</td><td>res.json()</td></tr>
+      </table>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習: URLとレスポンスを予測する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のExpressサーバコードを読み、各URLにアクセスしたときに何が返されるかを予測して表を埋めなさい。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+app.<span class="fn">get</span>(<span class="str">'/'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;My Portfolio&lt;/h1&gt;'</span>);
+});
+
+app.<span class="fn">get</span>(<span class="str">'/profile'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({ name: <span class="str">'Tanaka'</span>, age: <span class="num">20</span>, hobby: <span class="str">'programming'</span> });
+});
+
+app.<span class="fn">get</span>(<span class="str">'/greeting'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'こんにちは！'</span>);
+});
+
+app.<span class="fn">get</span>(<span class="str">'/api/status'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({ server: <span class="str">'running'</span>, version: <span class="num">1</span> });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
+      <table>
+        <tr><th>ブラウザでアクセスするURL</th><th>返される内容（空欄を埋める）</th><th>形式（send / json）</th></tr>
+        <tr><td><code>http://localhost:3000/</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/profile</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/greeting</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/api/status</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/contact</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> 定義されていないURLにアクセスしたらどうなるか考えてみましょう。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験で実際に確認します。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1rem">今回はLive Serverではなく、<strong>自分でサーバプログラムを書いて起動します。</strong></p>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダとNode.jsプロジェクトの準備</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web02</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web02</code> を開く</li>
+        <li>VS Code の<strong>ターミナル</strong>を開く（メニュー「ターミナル」→「新しいターミナル」、または <kbd>Ctrl+`</kbd>）</li>
+        <li>以下のコマンドを順番に実行する:</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+npm init -y
+npm install express</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express</code> で Express がインストールされます。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>サーバの起動と停止:</strong> サーバは <code>node ファイル名.js</code> で起動します。<strong>停止するときは <kbd>Ctrl+C</kbd></strong> をターミナルで押してください。コードを修正したら、一度 <kbd>Ctrl+C</kbd> で停止してから再度 <code>node ファイル名.js</code> で起動し直します。
+      </div>
+    </div>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>基本のExpressサーバ ── <code>server.js</code></h3>
+      </div>
+      <p>3つのルートを持つサーバを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong>（紙に＋マーク）をクリック</li>
+        <li>ファイル名を <strong><code>server.js</code></strong> と入力して Enter</li>
+        <li>下のコードブロック右上の<strong>「コピー」ボタン</strong>をクリックし、開いたファイルに <strong>貼り付け</strong>（Ctrl+V / Cmd+V）</li>
+        <li><strong>保存</strong>（Ctrl+S / Cmd+S）</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+<span class="cmt">// ルート1: トップページ</span>
+app.<span class="fn">get</span>(<span class="str">'/'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;Hello Express!&lt;/h1&gt;&lt;p&gt;サーバが動いています&lt;/p&gt;'</span>);
+});
+
+<span class="cmt">// ルート2: 自己紹介ページ</span>
+app.<span class="fn">get</span>(<span class="str">'/about'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">send</span>(<span class="str">'&lt;h1&gt;About&lt;/h1&gt;&lt;p&gt;これはWebプログラミング演習のサーバです&lt;/p&gt;'</span>);
+});
+
+<span class="cmt">// ルート3: APIエンドポイント（JSON）</span>
+app.<span class="fn">get</span>(<span class="str">'/api/hello'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({ message: <span class="str">'Hello from API!'</span>, timestamp: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>() });
+});
+
+<span class="cmt">// サーバ起動（ポート3000で待ち受け）</span>
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code のターミナルで以下を実行:
+          <pre><span class="code-label">Terminal</span>
+node server.js</pre>
+        </li>
+        <li>「サーバ起動: http://localhost:3000」と表示されたら成功</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li>次に <code>http://localhost:3000/about</code> を開く</li>
+        <li>次に <code>http://localhost:3000/api/hello</code> を開く</li>
+        <li>確認が終わったらターミナルで <kbd>Ctrl+C</kbd> を押してサーバを停止</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. 3つのURL（<code>/</code>、<code>/about</code>、<code>/api/hello</code>）それぞれで何が表示されましたか？<br>
+        Q2. <code>/api/hello</code> の表示と <code>/</code> の表示の違いは何ですか？（見た目、データ形式の違い）<br>
+        Q3. 存在しないURL（例: <code>/contact</code>）にアクセスするとどうなりましたか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>静的ファイル配信 ── <code>server2.js</code> + <code>public/index.html</code></h3>
+      </div>
+      <p>Express の <code>express.static</code> を使って、HTMLファイルをサーバから配信します。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいフォルダ」アイコン</strong> をクリックし、<strong><code>public</code></strong> フォルダを作成</li>
+        <li><code>public</code> フォルダの中に <strong>「新しいファイル」アイコン</strong> → <strong><code>index.html</code></strong> を作成</li>
+        <li>以下のHTMLコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Static Page<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; text-align: center; padding: <span class="num">40</span>px; background: <span class="str">#f0f0f0</span>; }
+    h1 { color: <span class="str">#76B900</span>; }
+    .info { background: white; padding: <span class="num">20</span>px; border-radius: <span class="num">10</span>px; margin: <span class="num">20</span>px auto; max-width: <span class="num">400</span>px; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>Express Static Server<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;div</span> class=<span class="str">"info"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;p&gt;</span>このページは <span class="kw">&lt;code&gt;</span>express.static<span class="kw">&lt;/code&gt;</span> で配信されています。<span class="kw">&lt;/p&gt;</span>
+    <span class="kw">&lt;p&gt;</span>サーバが自動的にpublicフォルダ内のファイルを返します。<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p>次に、サーバファイルを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラ（<code>Web02</code> フォルダ直下）で <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>server2.js</code></strong> と入力して Enter</li>
+        <li>下のコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── server2.js</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+
+<span class="cmt">// publicフォルダの中身を静的ファイルとして配信</span>
+app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// APIルート（静的ファイルとは別に動的レスポンスも返せる）</span>
+app.<span class="fn">get</span>(<span class="str">'/api/info'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({
+    server: <span class="str">'Express'</span>,
+    staticDir: <span class="str">'public'</span>,
+    message: <span class="str">'静的ファイルとAPIを同時に提供しています'</span>
+  });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>もし前のサーバがまだ動いていたら <kbd>Ctrl+C</kbd> で停止する</li>
+        <li>ターミナルで以下を実行:
+          <pre><span class="code-label">Terminal</span>
+node server2.js</pre>
+        </li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く → HTMLページが表示される</li>
+        <li>次に <code>http://localhost:3000/api/info</code> を開く → JSONデータが表示される</li>
+        <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. <code>http://localhost:3000</code> で何が表示されましたか？（server.js のときと違いを比べる）<br>
+        Q2. <code>/api/info</code> にアクセスしたときは何が表示されましたか？<br>
+        Q3. <code>express.static('public')</code> の役割を自分の言葉で説明してください</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>コード体験で動かした <code>server.js</code> と <code>server2.js</code> のコードを元に、<strong>「ここを変えたらどうなる？」「この仕組みはなぜ必要？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
+          <tr><td><code>app.listen(3000)</code> を <code>app.listen(8080)</code> にする</td><td>「サーバはどうなる？ブラウザでどうアクセスする？」</td></tr>
+          <tr><td><code>res.send()</code> を <code>res.json()</code> に変える</td><td>「ブラウザの表示はどう変わる？」</td></tr>
+          <tr><td>2つのルートに同じパス <code>'/'</code> を設定する</td><td>「どちらが実行される？ なぜ？」</td></tr>
+          <tr><td><code>express.static('public')</code> の <code>'public'</code> を <code>'dist'</code> に変える</td><td>「何が起こる？ なぜ？」</td></tr>
+          <tr><td><code>app.get</code> を <code>app.post</code> に変える</td><td>「ブラウザのURLバーからアクセスできる？ なぜ？」</td></tr>
+          <tr><td><code>require('express')</code> の行を削除する</td><td>「何が起こる？ なぜ？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識問題 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>サーバサイドの仕組みを説明する</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。</p>
+      <table>
+        <tr><th>用語</th><th>説明（空欄を埋める）</th></tr>
+        <tr><td><strong>Node.js</strong></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>npm</strong></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>Express</strong></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>ルーティング</strong></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>package.json</strong></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> ブラウザで <code>http://localhost:3000/about</code> にアクセスしたとき、サーバ内部で何が起きているかを以下の語句をすべて使って3〜5文で説明しなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        使う語句: <strong>GETリクエスト</strong>、<strong>Express</strong>、<strong>ルーティング</strong>、<strong>パスマッチング</strong>、<strong>res.send()</strong>
+      </div>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> 以下のコードが与えられたとき、各URLにアクセスした結果を予測しなさい。</p>
+      <pre><span class="code-label">JavaScript</span>
+app.<span class="fn">get</span>(<span class="str">'/'</span>, <span class="kw">function</span>(req, res) { res.<span class="fn">send</span>(<span class="str">'Home'</span>); });
+app.<span class="fn">get</span>(<span class="str">'/users'</span>, <span class="kw">function</span>(req, res) { res.<span class="fn">json</span>([{ id: <span class="num">1</span>, name: <span class="str">'Sato'</span> }]); });
+app.<span class="fn">get</span>(<span class="str">'/help'</span>, <span class="kw">function</span>(req, res) { res.<span class="fn">send</span>(<span class="str">'&lt;p&gt;Help page&lt;/p&gt;'</span>); });</pre>
+      <table>
+        <tr><th>URL</th><th>結果（空欄を埋める）</th></tr>
+        <tr><td><code>http://localhost:3000/</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/users</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/help</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http://localhost:3000/login</code></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> <code>res.send()</code> と <code>res.json()</code> の違いを1〜2文で説明しなさい。</p>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>サーバにルートを追加する（コード改造）</h3>
+      </div>
+      <p>コード体験1の <code>server.js</code> を以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td><code>/</code> のレスポンスに自分の名前を含むHTML（例: <code>&lt;h1&gt;○○のサーバ&lt;/h1&gt;</code>）を返すようにする</td></tr>
+          <tr><td>2</td><td><code>/menu</code> ルートを新しく追加し、好きなメニュー3品をHTML（<code>&lt;ul&gt;&lt;li&gt;</code>）で返す</td></tr>
+          <tr><td>3</td><td><code>/api/profile</code> ルートを新しく追加し、自分の名前・趣味・好きな食べ物をJSONで返す</td></tr>
+          <tr><td>4</td><td><code>/api/hello</code> のレスポンスに <code>author</code>（自分の名前）を追加する</td></tr>
+          <tr><td>5</td><td>ポート番号を <code>3000</code> から <code>8080</code> に変更し、起動メッセージも更新する</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>確認:</strong> ブラウザで各URLにアクセスして動作を確認してください。ポート番号が変わっているので <code>http://localhost:8080</code> でアクセスします。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後のコード全体を貼り付ける<br>
+        ② 各改造について「追加・変更した行」と「変更理由」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>プロフィールサーバを作る</h3>
+      </div>
+      <p>VS Code で <code>Web02</code> フォルダに <strong><code>profile-server.js</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、自分のプロフィールを紹介する<strong>Expressサーバ</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li>4つ以上のルートを作る（少なくとも1つは <code>res.json()</code> を使うAPIルート）</li>
+          <li>ルートの例: <code>/</code>（トップ）、<code>/hobby</code>（趣味紹介）、<code>/works</code>（作品紹介）、<code>/api/skills</code>（スキル一覧JSON）など</li>
+          <li>HTMLを返すルートでは <code>&lt;h1&gt;</code>、<code>&lt;p&gt;</code>、<code>&lt;ul&gt;</code> などの複数タグを組み合わせる</li>
+          <li>自分で考えたオリジナルのルート構成にする</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>profile-server.js</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どんなルート構成にしたか（URLとレスポンスの対応）</li>
+          <li><code>res.send()</code> と <code>res.json()</code> をどう使い分けたか</li>
+          <li>工夫した点や難しかった点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-04-29T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>ブラウザでアクセスするURL</th><th>返される内容</th><th>形式</th></tr>
+          <tr><td><code>http://localhost:3000/</code></td><td>「My Portfolio」という見出しがHTML形式で表示される</td><td>send（HTML）</td></tr>
+          <tr><td><code>http://localhost:3000/profile</code></td><td><code>{"name":"Tanaka","age":20,"hobby":"programming"}</code> というJSONデータ</td><td>json</td></tr>
+          <tr><td><code>http://localhost:3000/greeting</code></td><td>「こんにちは！」という文字列</td><td>send（テキスト）</td></tr>
+          <tr><td><code>http://localhost:3000/api/status</code></td><td><code>{"server":"running","version":1}</code> というJSONデータ</td><td>json</td></tr>
+          <tr><td><code>http://localhost:3000/contact</code></td><td><strong>Cannot GET /contact</strong>（404エラー）。定義されていないルートなので、Expressがエラーを返す</td><td>—</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> <code>/</code> → 「Hello Express!」の見出しと「サーバが動いています」の文。<code>/about</code> → 「About」の見出しと説明文。<code>/api/hello</code> → JSONデータ（message と timestamp）が表示された。</li>
+          <li><strong>Q2:</strong> <code>/</code> はHTMLとして整形表示されたが、<code>/api/hello</code> はJSON形式のテキスト（波括弧で囲まれたデータ）がそのまま表示された。res.send() はHTMLを、res.json() はJSON形式のデータを返している。</li>
+          <li><strong>Q3:</strong> 「Cannot GET /contact」というエラーメッセージが表示された。定義されていないURLにはExpressがデフォルトの404エラーを返す。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> server.js のときは res.send() で返したHTML文字列が表示されたが、server2.js では public/index.html のスタイル付きHTMLページが表示された。express.static を使うと、HTMLファイルをそのまま配信できる。</li>
+          <li><strong>Q2:</strong> <code>{"server":"Express","staticDir":"public","message":"静的ファイルとAPIを同時に提供しています"}</code> というJSONデータが表示された。</li>
+          <li><strong>Q3:</strong> express.static('public') は、public フォルダ内のファイル（HTML, CSS, 画像など）をURLでアクセスできるように自動的に配信する仕組み。Live Server と同じように、ファイルをそのままブラウザに返す。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（サーバサイドの仕組み）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>用語</th><th>説明</th></tr>
+          <tr><td><strong>Node.js</strong></td><td>Google ChromeのV8エンジンを使い、ブラウザの外でJavaScriptを実行できるランタイム環境。サーバサイドプログラミングを可能にする。</td></tr>
+          <tr><td><strong>npm</strong></td><td>Node Package Manager。Node.jsに標準付属するパッケージ管理ツール。ライブラリのインストールやプロジェクト管理を行う。</td></tr>
+          <tr><td><strong>Express</strong></td><td>Node.jsで最も広く使われるWebフレームワーク。ルーティングやレスポンス送信を簡潔に書ける。</td></tr>
+          <tr><td><strong>ルーティング</strong></td><td>URLパスとHTTPメソッドの組み合わせに応じて、実行する処理を振り分ける仕組み。</td></tr>
+          <tr><td><strong>package.json</strong></td><td>プロジェクトの名前、バージョン、使用パッケージなどの設定情報を記録するファイル。npm init で生成される。</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問2. 解答例:</strong></p>
+        <p style="font-size:0.9rem">ブラウザが <code>http://localhost:3000/about</code> に対してGETリクエストを送る。Express がそのリクエストを受け取り、ルーティング機能で定義済みのルートを上から順に確認する。パスマッチングにより <code>/about</code> に一致するルートが見つかると、そのルートに紐づけられた処理関数が実行される。関数内で res.send() が呼ばれ、HTMLや文字列がレスポンスとしてブラウザに返される。</p>
+        <p style="margin-top:1rem"><strong>問3.</strong></p>
+        <table>
+          <tr><th>URL</th><th>結果</th></tr>
+          <tr><td><code>http://localhost:3000/</code></td><td>「Home」という文字列が表示される</td></tr>
+          <tr><td><code>http://localhost:3000/users</code></td><td><code>[{"id":1,"name":"Sato"}]</code> というJSON配列が表示される</td></tr>
+          <tr><td><code>http://localhost:3000/help</code></td><td>「Help page」という段落がHTML形式で表示される</td></tr>
+          <tr><td><code>http://localhost:3000/login</code></td><td>「Cannot GET /login」エラー（該当するルートが定義されていないため）</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問4. 解答例:</strong></p>
+        <p style="font-size:0.9rem"><code>res.send()</code> は文字列やHTMLをそのまま返すメソッドで、Webページの表示に適している。<code>res.json()</code> はJavaScriptオブジェクトをJSON形式に変換して返すメソッドで、Content-Type ヘッダに application/json が自動で設定されるため、APIとしてデータを提供する場合に適している。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const app = express();
+
+// 改造1: トップページに自分の名前を含める
+app.get('/', function(req, res) {
+  res.send('&lt;h1&gt;田中のサーバ&lt;/h1&gt;&lt;p&gt;サーバが動いています&lt;/p&gt;');
+});
+
+app.get('/about', function(req, res) {
+  res.send('&lt;h1&gt;About&lt;/h1&gt;&lt;p&gt;これはWebプログラミング演習のサーバです&lt;/p&gt;');
+});
+
+// 改造2: メニューページを追加
+app.get('/menu', function(req, res) {
+  res.send('&lt;h1&gt;Menu&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;カレー&lt;/li&gt;&lt;li&gt;ラーメン&lt;/li&gt;&lt;li&gt;オムライス&lt;/li&gt;&lt;/ul&gt;');
+});
+
+// 改造4: authorを追加
+app.get('/api/hello', function(req, res) {
+  res.json({ message: 'Hello from API!', timestamp: new Date().toISOString(), author: '田中' });
+});
+
+// 改造3: プロフィールAPIを追加
+app.get('/api/profile', function(req, res) {
+  res.json({ name: '田中', hobby: 'プログラミング', food: 'カレー' });
+});
+
+// 改造5: ポートを8080に変更
+app.listen(8080, function() {
+  console.log('サーバ起動: http://localhost:8080');
+});</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（プロフィールサーバ）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「自分のプロフィール紹介サーバ」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const app = express();
+
+// トップページ
+app.get('/', function(req, res) {
+  res.send(
+    '&lt;h1&gt;田中太郎のポートフォリオ&lt;/h1&gt;' +
+    '&lt;p&gt;Webプログラミング演習の発展課題です&lt;/p&gt;' +
+    '&lt;nav&gt;' +
+    '&lt;a href="/hobby"&gt;趣味&lt;/a&gt; | ' +
+    '&lt;a href="/works"&gt;作品&lt;/a&gt; | ' +
+    '&lt;a href="/goals"&gt;目標&lt;/a&gt; | ' +
+    '&lt;a href="/api/skills"&gt;スキルAPI&lt;/a&gt;' +
+    '&lt;/nav&gt;'
+  );
+});
+
+// 趣味紹介ページ
+app.get('/hobby', function(req, res) {
+  res.send(
+    '&lt;h1&gt;趣味&lt;/h1&gt;' +
+    '&lt;ul&gt;' +
+    '&lt;li&gt;プログラミング - Webアプリを作るのが好き&lt;/li&gt;' +
+    '&lt;li&gt;読書 - 技術書やSF小説&lt;/li&gt;' +
+    '&lt;li&gt;カフェ巡り - 新しいお店を探すのが楽しい&lt;/li&gt;' +
+    '&lt;/ul&gt;' +
+    '&lt;a href="/"&gt;トップに戻る&lt;/a&gt;'
+  );
+});
+
+// 作品紹介ページ
+app.get('/works', function(req, res) {
+  res.send(
+    '&lt;h1&gt;作品紹介&lt;/h1&gt;' +
+    '&lt;h2&gt;1. ToDoアプリ&lt;/h2&gt;' +
+    '&lt;p&gt;HTML/CSS/JavaScriptで作ったタスク管理アプリ&lt;/p&gt;' +
+    '&lt;h2&gt;2. 3Dシーン（第1回課題）&lt;/h2&gt;' +
+    '&lt;p&gt;A-Frameで作った夕暮れの公園&lt;/p&gt;' +
+    '&lt;a href="/"&gt;トップに戻る&lt;/a&gt;'
+  );
+});
+
+// 目標ページ
+app.get('/goals', function(req, res) {
+  res.send(
+    '&lt;h1&gt;今学期の目標&lt;/h1&gt;' +
+    '&lt;ol&gt;' +
+    '&lt;li&gt;Webアプリの基本構造を理解する&lt;/li&gt;' +
+    '&lt;li&gt;サーバサイドプログラミングに慣れる&lt;/li&gt;' +
+    '&lt;li&gt;マルチユーザアプリを完成させる&lt;/li&gt;' +
+    '&lt;/ol&gt;' +
+    '&lt;a href="/"&gt;トップに戻る&lt;/a&gt;'
+  );
+});
+
+// スキルAPI（JSONで返す）
+app.get('/api/skills', function(req, res) {
+  res.json({
+    name: '田中太郎',
+    skills: [
+      { name: 'HTML/CSS', level: 'intermediate' },
+      { name: 'JavaScript', level: 'beginner' },
+      { name: 'Node.js', level: 'beginner' },
+      { name: 'A-Frame', level: 'beginner' }
+    ],
+    totalSkills: 4
+  });
+});
+
+app.listen(3000, function() {
+  console.log('プロフィールサーバ起動: http://localhost:3000');
+});</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>4つ以上のルート</strong></td><td>異なるパスのルートが4つ以上定義されている</td></tr>
+          <tr><td>2</td><td><strong>res.json() の使用</strong></td><td>少なくとも1つのルートで res.json() を使ってJSON形式のデータを返している</td></tr>
+          <tr><td>3</td><td><strong>HTMLタグの活用</strong></td><td>res.send() で返すHTMLに h1, p, ul/li などの複数タグが含まれている</td></tr>
+          <tr><td>4</td><td><strong>オリジナル構成</strong></td><td>自分で考えたルート構成で、コピーではなく自分なりの内容になっている</td></tr>
+          <tr><td>5</td><td><strong>正常動作</strong></td><td>node コマンドでサーバが起動し、各URLにアクセスして正しくレスポンスが返る</td></tr>
+          <tr><td>6</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、ルート構成・send/jsonの使い分け・工夫した点を説明している</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>上記の解答例のポイント:</strong></p>
+        <ul class="point-list">
+          <li>5つのルート（<code>/</code>, <code>/hobby</code>, <code>/works</code>, <code>/goals</code>, <code>/api/skills</code>）を定義</li>
+          <li>トップページにナビゲーションリンクを設置し、各ページからトップに戻れる構成</li>
+          <li><code>/api/skills</code> では <code>res.json()</code> でスキルデータを構造化して返している</li>
+          <li>HTMLルートでは <code>&lt;h1&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;a&gt;</code> など複数タグを活用</li>
+        </ul>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第2回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

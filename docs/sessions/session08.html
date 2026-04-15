@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第8回: 3Dアセットの活用 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第8回: 3Dアセットの活用</h1>
+    <p>glTFファイルの読み込みと3Dモデルの配置</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      これまでの演習では <code>&lt;a-box&gt;</code> や <code>&lt;a-sphere&gt;</code> などのプリミティブ（基本図形）で3D空間を構築してきました。<br>
+      今回は、外部の<strong>3Dモデルファイル</strong>を読み込んで、よりリアルなシーンを作る方法を学びます。
+    </p>
+
+    <!-- 1.1 3Dモデルのファイル形式 -->
+    <div class="concept-box">
+      <h4>1.1 3Dモデルのファイル形式 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        画像に JPEG, PNG, GIF などの形式があるように、3Dモデルにも複数のファイル形式があります。Web向けには <strong>glTF</strong> が標準です。
+      </div>
+      <table>
+        <tr><th>形式</th><th>拡張子</th><th>特徴</th><th>Web向き</th></tr>
+        <tr><td><strong>glTF / GLB</strong></td><td>.gltf / .glb</td><td>Webの標準3D形式。軽量で高速に読み込める。テクスチャ・アニメーション対応。</td><td style="color:#76B900;font-weight:700">最適</td></tr>
+        <tr><td><strong>OBJ</strong></td><td>.obj + .mtl</td><td>古くからある形式。シンプルだがアニメーション非対応。</td><td>可</td></tr>
+        <tr><td><strong>FBX</strong></td><td>.fbx</td><td>ゲーム開発で広く使われる。ファイルサイズが大きい。</td><td style="color:#FF5252">不向き</td></tr>
+        <tr><td><strong>USDZ</strong></td><td>.usdz</td><td>Apple AR 向け。ブラウザでの直接利用は限定的。</td><td style="color:#FF5252">不向き</td></tr>
+      </table>
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ glTF を使うのか？</p>
+        <p style="font-size:0.9rem"><strong>glTF（Graphics Language Transmission Format）</strong>は、Khronos Group が策定したWeb向け3Dの標準フォーマットです。「3DのJPEG」とも呼ばれ、ブラウザで高速に読み込めるよう設計されています。A-Frame、Three.js、Babylon.js など主要なWebGL フレームワークすべてが対応しています。</p>
+      </div>
+    </div>
+
+    <!-- 1.2 glTF形式の構造 -->
+    <div class="concept-box">
+      <h4>1.2 glTF形式の構造 <span class="exam-alert">課題に出ます</span></h4>
+      <p>glTF には2つのバリエーションがあります。</p>
+      <table>
+        <tr><th>形式</th><th>構成</th><th>特徴</th></tr>
+        <tr><td><strong>.gltf（テキスト版）</strong></td><td><code>.gltf</code>（JSON）+ <code>.bin</code>（バイナリ）+ テクスチャ画像</td><td>複数ファイルに分かれる。中身を読んで編集しやすい。</td></tr>
+        <tr><td><strong>.glb（バイナリ版）</strong></td><td>すべてを1つのファイルにまとめたもの</td><td>ファイルが1つだけで管理が簡単。転送も速い。</td></tr>
+      </table>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 200" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- gltf side -->
+          <text x="170" y="25" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">.gltf 形式（複数ファイル）</text>
+          <rect x="30" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="80" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">scene.gltf</text>
+          <text x="80" y="78" text-anchor="middle" fill="#999" font-size="9">JSON構造</text>
+          <rect x="145" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="195" y="60" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">scene.bin</text>
+          <text x="195" y="78" text-anchor="middle" fill="#999" font-size="9">頂点データ</text>
+          <rect x="260" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="310" y="60" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">texture.png</text>
+          <text x="310" y="78" text-anchor="middle" fill="#999" font-size="9">テクスチャ</text>
+          <rect x="20" y="100" width="350" height="40" rx="8" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+          <text x="195" y="125" text-anchor="middle" fill="#666" font-size="10">同じフォルダに配置する必要がある</text>
+          <!-- arrow -->
+          <text x="420" y="70" text-anchor="middle" fill="#999" font-size="20">vs</text>
+          <!-- glb side -->
+          <text x="570" y="25" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">.glb 形式（単一ファイル）</text>
+          <rect x="470" y="40" width="200" height="50" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="570" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">model.glb</text>
+          <text x="570" y="78" text-anchor="middle" fill="#999" font-size="9">すべてが1ファイルにまとまる</text>
+          <rect x="490" y="100" width="50" height="25" rx="4" fill="#76B900" opacity="0.3"/>
+          <text x="515" y="117" text-anchor="middle" fill="#76B900" font-size="8" font-weight="600">JSON</text>
+          <rect x="545" y="100" width="50" height="25" rx="4" fill="#FFB800" opacity="0.3"/>
+          <text x="570" y="117" text-anchor="middle" fill="#FFB800" font-size="8" font-weight="600">BIN</text>
+          <rect x="600" y="100" width="50" height="25" rx="4" fill="#4FC3F7" opacity="0.3"/>
+          <text x="625" y="117" text-anchor="middle" fill="#4FC3F7" font-size="8" font-weight="600">TEX</text>
+          <text x="570" y="150" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">管理・転送が簡単</text>
+        </svg>
+      </div>
+
+      <p style="margin-top:0.5rem">この授業では、管理が簡単な <strong>.glb 形式</strong> を主に使います。 <span class="exam-alert">課題に出ます</span></p>
+    </div>
+
+    <!-- 1.3 A-Frameでのモデル読み込み -->
+    <div class="concept-box">
+      <h4>1.3 A-Frameでのモデル読み込み <span class="exam-alert">コード体験に直結</span></h4>
+      <div class="analogy">
+        HTML で画像を <code>&lt;img src="photo.jpg"&gt;</code> で表示するのと同じように、A-Frame では <code>gltf-model</code> 属性で3Dモデルを読み込めます。
+      </div>
+      <p>A-Frame で glTF モデルを読み込むには2つの方法があります。</p>
+
+      <p style="margin-top:0.8rem"><strong>方法1: 直接指定（シンプル）</strong></p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(model.glb)"</span>
+          position=<span class="str">"0 0 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>方法2: a-assets でプリロード（推奨）</strong> <span class="exam-alert">課題に出ます</span></p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- アセットを事前に読み込む --&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"myModel"</span> src=<span class="str">"model.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+
+  <span class="cmt">&lt;!-- idで参照する --&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#myModel"</span>
+            position=<span class="str">"0 0 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <table>
+        <tr><th>方法</th><th>メリット</th><th>デメリット</th></tr>
+        <tr><td><strong>直接指定</strong></td><td>コードが短い</td><td>表示中にモデルが「ポンッ」と出現する</td></tr>
+        <tr><td><strong>a-assets プリロード</strong></td><td>すべてのアセットを先に読み込んでから表示。スムーズ。</td><td>コードが少し長くなる</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><code>&lt;a-assets&gt;</code> は画像、音声、動画、3Dモデルなどのメディアファイルを<strong>事前にまとめて読み込む</strong>ための仕組みです。複数のモデルを使うシーンではプリロードを推奨します。</p>
+    </div>
+
+    <!-- 1.4 モデルの位置・回転・スケール -->
+    <div class="concept-box">
+      <h4>1.4 モデルの位置・回転・スケール調整 <span class="exam-alert">コード体験に直結</span></h4>
+      <p>3Dモデルは読み込んだだけでは期待通りの大きさ・向きにならないことが多いです。以下の3つの属性で調整します。</p>
+      <table>
+        <tr><th>属性</th><th>書き方</th><th>説明</th></tr>
+        <tr><td><strong>position</strong></td><td><code>position="x y z"</code></td><td>モデルの位置（x: 左右、y: 上下、z: 手前奥）</td></tr>
+        <tr><td><strong>rotation</strong></td><td><code>rotation="x y z"</code></td><td>モデルの回転角度（度数法）。例: y=180 で反対向き</td></tr>
+        <tr><td><strong>scale</strong></td><td><code>scale="x y z"</code></td><td>モデルの拡大縮小。<code>"1 1 1"</code> が原寸。<code>"2 2 2"</code> で2倍。</td></tr>
+      </table>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- モデルを少し上に移動し、2倍に拡大し、180度回転 --&gt;</span>
+<span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#myModel"</span>
+          position=<span class="str">"0 1 -5"</span>
+          rotation=<span class="str">"0 180 0"</span>
+          scale=<span class="str">"2 2 2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>よくある問題:</strong> モデルが巨大すぎる → <code>scale="0.01 0.01 0.01"</code> で小さくする。モデルが地面に埋まる → <code>position</code> の y を上げる。モデルが後ろ向き → <code>rotation</code> の y を調整する。</p>
+    </div>
+
+    <!-- 1.5 無料3Dモデルの入手先 -->
+    <div class="concept-box">
+      <h4>1.5 無料3Dモデルの入手先</h4>
+      <p>インターネット上には、無料で使える3Dモデルが多数公開されています。glTF / GLB 形式でダウンロードできるサイトを紹介します。</p>
+      <table>
+        <tr><th>サイト名</th><th>URL</th><th>特徴</th></tr>
+        <tr><td><strong>Sketchfab</strong></td><td><a href="https://sketchfab.com" style="color:#76B900">sketchfab.com</a></td><td>最大手の3Dモデル共有サイト。glTF ダウンロード可。フィルタで「Downloadable」を選択。</td></tr>
+        <tr><td><strong>poly.pizza</strong></td><td><a href="https://poly.pizza" style="color:#76B900">poly.pizza</a></td><td>軽量なローポリモデルが豊富。GLB 形式で即ダウンロード。</td></tr>
+        <tr><td><strong>Kenney.nl</strong></td><td><a href="https://kenney.nl/assets" style="color:#76B900">kenney.nl/assets</a></td><td>ゲーム向けのシンプルなアセットパック。CC0 ライセンス（自由利用可）。</td></tr>
+      </table>
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">ライセンスに注意</p>
+        <p style="font-size:0.9rem">ダウンロードする際は、そのモデルの<strong>ライセンス</strong>を確認してください。「CC BY」（クレジット表記が必要）、「CC0」（自由利用可）などがあります。授業の課題として使う場合は、ダウンロード元のURLをNotionに記録してください。</p>
+      </div>
+    </div>
+
+    <!-- 1.6 パフォーマンス考慮 -->
+    <div class="concept-box">
+      <h4>1.6 パフォーマンス考慮 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        解像度の高すぎる写真を何十枚もWebページに並べると読み込みが遅くなるように、ポリゴン数の多い3Dモデルを大量に配置するとブラウザの動作が重くなります。
+      </div>
+      <table>
+        <tr><th>項目</th><th>推奨</th><th>注意点</th></tr>
+        <tr><td><strong>ポリゴン数</strong></td><td>1モデルあたり 10,000 以下</td><td>ポリゴン数が多いほどリアルだが重い。「ローポリ」モデルがWeb向き。</td></tr>
+        <tr><td><strong>ファイルサイズ</strong></td><td>1モデルあたり 5MB 以下</td><td>テクスチャ画像が大きいとファイルサイズが膨らむ。</td></tr>
+        <tr><td><strong>シーン全体</strong></td><td>合計 50,000 ポリゴン以下</td><td>モバイルデバイスではさらに少なく抑える。</td></tr>
+        <tr><td><strong>テクスチャ</strong></td><td>1024x1024 px 以下</td><td>大きなテクスチャはGPUメモリを消費する。</td></tr>
+      </table>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>確認方法:</strong> A-Frameのシーンで <kbd>Ctrl+Alt+I</kbd>（またはアドレスバーの末尾に <code>?stats</code> を追加）で統計情報を表示できます。draw calls や triangles の数値を確認しましょう。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>glTFモデルの読み込みコードを読む</h3>
+      </div>
+      <p>以下のHTMLコードがどのようにモデルを読み込んで表示するか確認しましょう。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span> src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span> position=<span class="str">"0 0 -5"</span> scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>コード</th><th>役割</th></tr>
+        <tr><td><code>&lt;a-assets&gt;</code></td><td>メディアファイルを事前にまとめて読み込む領域</td></tr>
+        <tr><td><code>&lt;a-asset-item id="dino" src="..."&gt;</code></td><td>glTFモデルを <code>dino</code> という名前で読み込む</td></tr>
+        <tr><td><code>gltf-model="#dino"</code></td><td>読み込んだモデルを <code>#dino</code> で参照して表示する</td></tr>
+        <tr><td><code>scale="0.5 0.5 0.5"</code></td><td>モデルを半分のサイズに縮小する</td></tr>
+      </table>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: モデル読み込みコードを読む</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のコードを読み、各エンティティの表示内容を予測して表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"tree"</span> src=<span class="str">"tree.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"bench"</span> src=<span class="str">"bench.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"-3 0 -5"</span> scale=<span class="str">"2 2 2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"3 0 -5"</span> scale=<span class="str">"1.5 1.5 1.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#bench"</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"0 90 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>エンティティ</th><th>何が表示されるか</th><th>位置 (x, y, z)</th><th>拡大率</th><th>回転</th></tr>
+        <tr><td>1つ目の <code>#tree</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td>なし</td></tr>
+        <tr><td>2つ目の <code>#tree</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td>なし</td></tr>
+        <tr><td><code>#bench</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td>1倍（デフォルト）</td><td class="blank-cell"></td></tr>
+        <tr><td><code>&lt;a-plane&gt;</code></td><td class="blank-cell"></td><td>原点</td><td>—</td><td class="blank-cell"></td></tr>
+        <tr><td><code>&lt;a-sky&gt;</code></td><td class="blank-cell"></td><td>—</td><td>—</td><td>—</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>追加問題:</strong> 同じモデル <code>#tree</code> を2回使っていますが、見た目は同じになりますか？ 違うとしたらどこが違いますか？</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加問題にも回答してください。</div></div>
+    </div>
+
+    <!-- Trace 2 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 2: a-assets を使う理由を考える</h3>
+      </div>
+      <p><strong>問題:</strong> 以下の2つのコードを比べて、空欄を埋めなさい。</p>
+      <p style="margin-top:0.5rem"><strong>コードA: a-assets なし</strong></p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(tree.glb)"</span> position=<span class="str">"-3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(tree.glb)"</span> position=<span class="str">"3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <p style="margin-top:0.5rem"><strong>コードB: a-assets あり</strong></p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"tree"</span> src=<span class="str">"tree.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"-3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th style="width:30%">質問</th><th>回答（空欄を埋める）</th></tr>
+        <tr><td>コードAでは tree.glb を何回ダウンロードする？</td><td class="blank-cell"></td></tr>
+        <tr><td>コードBでは tree.glb を何回ダウンロードする？</td><td class="blank-cell"></td></tr>
+        <tr><td>a-assets を使うメリットは？</td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた表を記入してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1rem">以下のコードをコピーして実行し、結果を<strong>観察</strong>してください。</p>
+
+    <div class="card" style="border-left:4px solid #76B900;margin-bottom:1.5rem">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダの準備</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web08</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web08</code> を開く</li>
+      </ol>
+    </div>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>GLBモデルを読み込んで配置する ── <code>index.html</code></h3>
+      </div>
+      <p><code>Web08</code> フォルダに <strong><code>index.html</code></strong> を作成し、以下のコードを貼り付けてください。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>index.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>3Dモデルを読み込む<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- アセットのプリロード --&gt;</span>
+    <span class="kw">&lt;a-assets&gt;</span>
+      <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span>
+        src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+    <span class="kw">&lt;/a-assets&gt;</span>
+
+    <span class="cmt">&lt;!-- 3Dモデルの配置 --&gt;</span>
+    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
+              position=<span class="str">"0 0 -5"</span>
+              scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+
+    <span class="cmt">&lt;!-- 光源 --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"1 4 2"</span> intensity=<span class="str">"1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.5"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
+        <li>ブラウザに3Dモデル（恐竜）が表示される（読み込みに数秒かかる場合があります）</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. ブラウザに何が表示されましたか？ モデルの見た目を説明してください。<br>
+        Q2. <code>scale="0.5 0.5 0.5"</code> を <code>scale="2 2 2"</code> に変更して保存すると、モデルはどうなりましたか？<br>
+        Q3. <code>position="0 0 -5"</code> を <code>position="3 2 -8"</code> に変更すると、モデルはどこに移動しましたか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>複数モデル + プリミティブの組み合わせ ── <code>park.html</code></h3>
+      </div>
+      <p><code>Web08</code> フォルダにもう1つファイルを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>park.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── park.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>3Dモデル + プリミティブ<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- アセットのプリロード --&gt;</span>
+    <span class="kw">&lt;a-assets&gt;</span>
+      <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span>
+        src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+    <span class="kw">&lt;/a-assets&gt;</span>
+
+    <span class="cmt">&lt;!-- 3Dモデル: 恐竜（左側） --&gt;</span>
+    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
+              position=<span class="str">"-3 0 -6"</span>
+              scale=<span class="str">"0.4 0.4 0.4"</span>
+              rotation=<span class="str">"0 45 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 3Dモデル: 恐竜（右側・大きめ） --&gt;</span>
+    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
+              position=<span class="str">"3 0 -8"</span>
+              scale=<span class="str">"0.8 0.8 0.8"</span>
+              rotation=<span class="str">"0 -30 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- プリミティブ: 岩（球を変形） --&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"1 0.3 -4"</span> radius=<span class="str">"0.4"</span>
+             scale=<span class="str">"1 0.6 0.8"</span> color=<span class="str">"#808080"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-1.5 0.2 -5"</span> radius=<span class="str">"0.3"</span>
+             scale=<span class="str">"1.2 0.5 1"</span> color=<span class="str">"#696969"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- プリミティブ: 木（円柱 + 球） --&gt;</span>
+    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"5 0.75 -7"</span> radius=<span class="str">"0.15"</span>
+               height=<span class="str">"1.5"</span> color=<span class="str">"#5C3317"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"5 1.8 -7"</span> radius=<span class="str">"0.8"</span>
+             color=<span class="str">"#2E7D32"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- 床（芝生） --&gt;</span>
+    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"30"</span> height=<span class="str">"30"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+
+    <span class="cmt">&lt;!-- 光源 --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"1 4 2"</span> intensity=<span class="str">"1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.4"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>park.html</code> を右クリック → 「Open with Live Server」</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 同じ恐竜モデルが2体表示されましたか？ 大きさや向きの違いを説明してください。<br>
+        Q2. 3Dモデル（恐竜）とプリミティブ（岩、木）を見比べて、見た目の違いを説明してください。<br>
+        Q3. 左の恐竜の <code>rotation="0 45 0"</code> を <code>rotation="0 180 0"</code> に変えると、どう変わりましたか？</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回のコード体験で動かしたコードを元に、<strong>「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
+          <tr><td><code>scale="0.5 0.5 0.5"</code> を <code>"10 10 10"</code> にする</td><td>「モデルはどうなる？ パフォーマンスへの影響は？」</td></tr>
+          <tr><td><code>&lt;a-assets&gt;</code> を削除して <code>gltf-model="url(...)"</code> に書き換える</td><td>「動作は変わる？ メリット・デメリットは？」</td></tr>
+          <tr><td><code>scale="1 2 1"</code> のようにYだけ大きくする</td><td>「モデルの形はどうなる？」</td></tr>
+          <tr><td><code>src</code> のURLを存在しないファイルにする</td><td>「何が起こる？ エラーは出る？」</td></tr>
+          <tr><td>同じモデルを10個並べる</td><td>「表示速度はどうなる？」</td></tr>
+          <tr><td><code>&lt;a-light&gt;</code> を削除する</td><td>「モデルの見え方はどう変わる？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>3Dアセットの知識を確認する</h3>
+      </div>
+      <p>セクション1の説明をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下の3Dモデル形式の比較表を埋めなさい。</p>
+      <table>
+        <tr><th>形式</th><th>拡張子</th><th>Web向きか？</th><th>理由（空欄を埋める）</th></tr>
+        <tr><td><strong>glTF / GLB</strong></td><td>.gltf / .glb</td><td>最適</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>OBJ</strong></td><td>.obj</td><td>可</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>FBX</strong></td><td>.fbx</td><td>不向き</td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> <code>.gltf</code> 形式と <code>.glb</code> 形式の違いを説明しなさい。それぞれどんな場面で使い分けるか、1〜2文で述べなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> <code>&lt;a-assets&gt;</code> を使ってモデルをプリロードすることのメリットを2つ挙げなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> Web向け3Dモデルのパフォーマンスに関する以下の文が正しいか誤りか答え、誤りの場合は正しい内容に直しなさい。</p>
+      <table>
+        <tr><th style="width:30px">#</th><th>文</th><th>正誤</th><th>訂正（誤りの場合）</th></tr>
+        <tr><td>A</td><td>ポリゴン数が多いほどWebでの表示は速くなる</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td>GLBファイルはテクスチャを含む全データを1ファイルにまとめた形式である</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td>同じモデルを10個配置しても、a-assets でプリロードすればダウンロードは1回で済む</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>3Dモデルのシーンを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験1の <code>index.html</code> を以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td>恐竜モデルの <code>position</code> を <code>"0 0 -8"</code> に変更する（奥に移動）</td></tr>
+          <tr><td>2</td><td>恐竜モデルの <code>scale</code> を <code>"1 1 1"</code> に変更する（原寸表示）</td></tr>
+          <tr><td>3</td><td>恐竜モデルに <code>rotation="0 180 0"</code> を追加する（こちら向きにする）</td></tr>
+          <tr><td>4</td><td>恐竜モデルに以下のアニメーションを追加する:<br><code>animation="property: rotation; to: 0 540 0; dur: 5000; loop: true"</code></td></tr>
+          <tr><td>5</td><td>プリミティブで「柵」を追加する（<code>&lt;a-box&gt;</code> を3〜4個並べて棒状にする）</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント（柵の例）:</strong> <code>&lt;a-box position="-2 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;</code> を x の値を変えて複数配置し、<code>&lt;a-box position="0 0.9 -4" width="4" height="0.1" depth="0.1" color="#A0522D"&gt;&lt;/a-box&gt;</code> で横棒を渡す</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「なぜその値にしたか」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>3Dモデルとプリミティブを組み合わせたシーンを作る</h3>
+      </div>
+      <p>VS Code で <code>Web08</code> フォルダに <strong><code>original.html</code></strong> を新規作成し、3Dモデルとプリミティブを組み合わせた<strong>オリジナルシーン</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>1つ以上の3Dモデル</strong>（glTF / GLB）を <code>&lt;a-assets&gt;</code> でプリロードして使用する</li>
+          <li><strong>3つ以上のプリミティブ</strong>（a-box, a-sphere, a-cylinder など）と組み合わせる</li>
+          <li>テーマを決める（例: 「恐竜のいる公園」「展示室」「宇宙基地」など）</li>
+          <li>モデルの <code>position</code>, <code>scale</code>, <code>rotation</code> を適切に調整する</li>
+          <li>光源（<code>&lt;a-light&gt;</code>）を配置する</li>
+        </ul>
+      </div>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0;font-size:0.9rem;color:#93D500">
+        <strong>モデルの入手先:</strong> コード体験で使った A-Frame 公式の恐竜モデルをそのまま使ってもOKです。余裕があれば <a href="https://poly.pizza" style="color:#76B900">poly.pizza</a> や <a href="https://sketchfab.com" style="color:#76B900">Sketchfab</a> から別のモデルをダウンロードして使ってみましょう。
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>original.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どんなテーマ・シーンを作ったか</li>
+          <li>使用した3Dモデルとその入手元</li>
+          <li>モデルとプリミティブをどのように組み合わせたか</li>
+          <li>scale や position の調整で工夫した点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-06-17T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>エンティティ</th><th>何が表示されるか</th><th>位置 (x, y, z)</th><th>拡大率</th><th>回転</th></tr>
+          <tr><td>1つ目の <code>#tree</code></td><td>木の3Dモデル（大きめ）</td><td>(-3, 0, -5)</td><td>2倍</td><td>なし</td></tr>
+          <tr><td>2つ目の <code>#tree</code></td><td>木の3Dモデル（やや小さめ）</td><td>(3, 0, -5)</td><td>1.5倍</td><td>なし</td></tr>
+          <tr><td><code>#bench</code></td><td>ベンチの3Dモデル</td><td>(0, 0, -4)</td><td>1倍（デフォルト）</td><td>Y軸に90度回転</td></tr>
+          <tr><td><code>&lt;a-plane&gt;</code></td><td>芝生色の床</td><td>原点</td><td>—</td><td>X軸に-90度（水平に倒す）</td></tr>
+          <tr><td><code>&lt;a-sky&gt;</code></td><td>水色の空</td><td>—</td><td>—</td><td>—</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>追加問題の解答:</strong> 同じモデル <code>#tree</code> を使っているので形は同じですが、<code>scale</code> が異なる（2倍 vs 1.5倍）ため、大きさが違って見えます。また <code>position</code> が異なるので配置位置も違います。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th style="width:40%">質問</th><th>回答</th></tr>
+          <tr><td>コードAでは tree.glb を何回ダウンロードする？</td><td><strong>2回。</strong>各エンティティがそれぞれ個別にダウンロードする。</td></tr>
+          <tr><td>コードBでは tree.glb を何回ダウンロードする？</td><td><strong>1回。</strong>a-assets で1度だけダウンロードし、2つのエンティティが共有する。</td></tr>
+          <tr><td>a-assets を使うメリットは？</td><td><strong>1. 重複ダウンロードを防ぎ通信量を節約できる。 2. すべてのアセットを事前に読み込むため、シーン表示時にモデルが「ポンッ」と遅れて出現しない。</strong></td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 緑色の芝生の上に、恐竜（トリケラトプス）の3Dモデルが表示された。背景は水色の空。プリミティブと違い、モデルにはテクスチャがあり立体的でリアルに見える。</li>
+          <li><strong>Q2:</strong> <code>scale="2 2 2"</code> にすると恐竜が4倍の大きさ（各軸2倍）になり、画面いっぱいに広がった。</li>
+          <li><strong>Q3:</strong> <code>position="3 2 -8"</code> にすると、恐竜が右方向（x=3）、上方向（y=2）、さらに奥（z=-8）に移動した。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 2体の恐竜が表示された。左の恐竜は小さめ（scale 0.4）で45度回転しており、右の恐竜は大きめ（scale 0.8）で別の角度を向いている。同じモデルだが大きさと向きが異なる。</li>
+          <li><strong>Q2:</strong> 3Dモデル（恐竜）はテクスチャがあり形が細かくリアル。プリミティブ（岩、木）は単純な形状で単色だが、配置を工夫することでそれらしく見える。モデルとプリミティブを混ぜることでシーンの情報量が上がる。</li>
+          <li><strong>Q3:</strong> <code>rotation="0 180 0"</code> にすると、恐竜がこちら側を向いた（Y軸周りに180度回転）。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（3Dアセットの知識）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>形式</th><th>拡張子</th><th>Web向きか？</th><th>理由</th></tr>
+          <tr><td><strong>glTF / GLB</strong></td><td>.gltf / .glb</td><td>最適</td><td>Webの標準3D形式で、軽量かつ高速に読み込める。テクスチャやアニメーションにも対応し、A-Frame を含む主要フレームワークがすべてサポートしている。</td></tr>
+          <tr><td><strong>OBJ</strong></td><td>.obj</td><td>可</td><td>古くからある形式でシンプルだが、アニメーションに非対応。テクスチャ定義は別ファイル（.mtl）が必要。</td></tr>
+          <tr><td><strong>FBX</strong></td><td>.fbx</td><td>不向き</td><td>ファイルサイズが大きく、ブラウザでの直接読み込みに標準対応していない。ゲームエンジン向け。</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問2. 解答例:</strong></p>
+        <p style="font-size:0.9rem"><code>.gltf</code> はJSON + バイナリ + テクスチャの複数ファイルで構成され、中身を読んで編集しやすい。<code>.glb</code> はすべてを1ファイルにまとめたバイナリ形式で、管理・転送が簡単。編集の必要がなければ <code>.glb</code>、モデルの内部構造を確認・編集したい場合は <code>.gltf</code> を使うとよい。</p>
+        <p style="margin-top:1rem"><strong>問3. 解答例:</strong></p>
+        <ul class="point-list">
+          <li><strong>1. 重複ダウンロードの防止:</strong> 同じモデルを複数回使うとき、1回のダウンロードで済むため通信量が減る。</li>
+          <li><strong>2. スムーズな表示:</strong> すべてのアセットを先に読み込んでからシーンが開始されるため、表示中にモデルが遅れて「ポンッ」と出現することがない。</li>
+        </ul>
+        <p style="margin-top:1rem"><strong>問4.</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>文</th><th>正誤</th><th>訂正</th></tr>
+          <tr><td>A</td><td>ポリゴン数が多いほどWebでの表示は速くなる</td><td style="color:#FF5252;font-weight:700">誤り</td><td>ポリゴン数が多いほど描画負荷が増え、表示は<strong>遅くなる</strong>。Web向けは1モデルあたり10,000ポリゴン以下が推奨。</td></tr>
+          <tr><td>B</td><td>GLBファイルはテクスチャを含む全データを1ファイルにまとめた形式である</td><td style="color:#76B900;font-weight:700">正しい</td><td>—</td></tr>
+          <tr><td>C</td><td>同じモデルを10個配置しても、a-assets でプリロードすればダウンロードは1回で済む</td><td style="color:#76B900;font-weight:700">正しい</td><td>—</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;3Dモデルを読み込む（改造版）&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;a-assets&gt;
+      &lt;a-asset-item id="dino"
+        src="https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"&gt;&lt;/a-asset-item&gt;
+    &lt;/a-assets&gt;
+
+    &lt;!-- 改造1: position を奥に / 改造2: scale を原寸 / 改造3: rotation 追加 / 改造4: アニメーション追加 --&gt;
+    &lt;a-entity gltf-model="#dino"
+              position="0 0 -8"
+              scale="1 1 1"
+              rotation="0 180 0"
+              animation="property: rotation; to: 0 540 0; dur: 5000; loop: true"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 改造5: 柵（縦棒3本 + 横棒1本） --&gt;
+    &lt;a-box position="-2 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="0 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="2 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="0 0.9 -4" width="4" height="0.1" depth="0.1" color="#A0522D"&gt;&lt;/a-box&gt;
+
+    &lt;a-plane rotation="-90 0 0" width="20" height="20" color="#4A7A00"&gt;&lt;/a-plane&gt;
+    &lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;
+    &lt;a-light type="directional" position="1 4 2" intensity="1"&gt;&lt;/a-light&gt;
+    &lt;a-light type="ambient" intensity="0.5"&gt;&lt;/a-light&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（3Dモデル + プリミティブのシーン）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「恐竜のいる公園」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;恐竜のいる公園&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;a-assets&gt;
+      &lt;a-asset-item id="dino"
+        src="https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"&gt;&lt;/a-asset-item&gt;
+    &lt;/a-assets&gt;
+
+    &lt;!-- 恐竜1: メイン（手前） --&gt;
+    &lt;a-entity gltf-model="#dino"
+              position="0 0 -6" scale="0.6 0.6 0.6"
+              rotation="0 160 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 恐竜2: 遠くに小さく --&gt;
+    &lt;a-entity gltf-model="#dino"
+              position="5 0 -12" scale="0.3 0.3 0.3"
+              rotation="0 -90 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 木1 --&gt;
+    &lt;a-cylinder position="-4 0.75 -7" radius="0.15" height="1.5" color="#5C3317"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere position="-4 1.8 -7" radius="0.8" color="#2E7D32"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- 木2 --&gt;
+    &lt;a-cylinder position="4 1 -9" radius="0.2" height="2" color="#5C3317"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere position="4 2.3 -9" radius="1" color="#388E3C"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- 岩 --&gt;
+    &lt;a-sphere position="2 0.3 -4" radius="0.4" scale="1 0.6 0.8" color="#808080"&gt;&lt;/a-sphere&gt;
+    &lt;a-sphere position="-2 0.2 -5" radius="0.3" scale="1.2 0.5 1" color="#696969"&gt;&lt;/a-sphere&gt;
+
+    &lt;!-- 柵 --&gt;
+    &lt;a-box position="-3 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="-1 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="1 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;
+    &lt;a-box position="-1 0.9 -4" width="4" height="0.08" depth="0.08" color="#A0522D"&gt;&lt;/a-box&gt;
+
+    &lt;!-- 看板 --&gt;
+    &lt;a-box position="-5 0.8 -5" width="1.2" height="0.8" depth="0.05" color="#FFF8E1"&gt;&lt;/a-box&gt;
+    &lt;a-cylinder position="-5 0.2 -5" radius="0.05" height="0.8" color="#8B4513"&gt;&lt;/a-cylinder&gt;
+
+    &lt;!-- 地面 --&gt;
+    &lt;a-plane rotation="-90 0 0" width="30" height="30" color="#4A7A00"&gt;&lt;/a-plane&gt;
+
+    &lt;!-- 空 --&gt;
+    &lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;
+
+    &lt;!-- 光源 --&gt;
+    &lt;a-light type="directional" position="2 4 1" intensity="1"&gt;&lt;/a-light&gt;
+    &lt;a-light type="ambient" intensity="0.4"&gt;&lt;/a-light&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>3Dモデルの使用</strong></td><td>1つ以上の glTF/GLB モデルを a-assets でプリロードして使用している</td></tr>
+          <tr><td>2</td><td><strong>プリミティブ3つ以上</strong></td><td>a-box, a-sphere, a-cylinder, a-plane などから3種類以上を使っている</td></tr>
+          <tr><td>3</td><td><strong>position / scale / rotation の調整</strong></td><td>モデルの大きさ・位置・向きが意図的に設定されている</td></tr>
+          <tr><td>4</td><td><strong>テーマの明確さ</strong></td><td>何を表現したシーンか、見てわかる or 音声で説明されている</td></tr>
+          <tr><td>5</td><td><strong>光源の配置</strong></td><td>a-light を使ってシーンに照明を設定している</td></tr>
+          <tr><td>6</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、テーマ・モデルの入手元・配置の工夫を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第8回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

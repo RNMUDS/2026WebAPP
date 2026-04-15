@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第5回: 3D Web表現基礎① カラー・マテリアル・テクスチャ | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第5回: 3D Web表現基礎① カラー・マテリアル・テクスチャ</h1>
+    <p>カラー、マテリアル、テクスチャによる見た目の制御</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>マテリアル理解 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      前回は ECS アーキテクチャと座標系を学びました。<br>
+      今回は<strong>material コンポーネント</strong>を深掘りし、色・質感・テクスチャ（画像）を使ってオブジェクトの<strong>見た目</strong>を自在に制御する方法を学びます。
+    </p>
+
+    <!-- 1.1 カラー指定方法 -->
+    <div class="concept-box">
+      <h4>1.1 カラー指定方法 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        絵の具は「赤」「青」と名前で選べますが、デジタルでは色を<strong>数値</strong>で正確に指定できます。<code>#FF0000</code> は「赤255、緑0、青0」で純粋な赤を表します。
+      </div>
+      <p>A-Frame では以下の3つの方法で色を指定できます。</p>
+      <table>
+        <tr><th>指定方法</th><th>書き方の例</th><th>説明</th></tr>
+        <tr><td><strong>色名</strong></td><td><code>color: red</code>, <code>color: skyblue</code></td><td>CSS で定義された色名（約140色）をそのまま使える</td></tr>
+        <tr><td><strong>16進数（hex）</strong></td><td><code>color: #FF6347</code>, <code>color: #333</code></td><td><code>#RRGGBB</code> の形式。各2桁が赤・緑・青の強さ（00〜FF）を表す</td></tr>
+        <tr><td><strong>RGB</strong></td><td><code>color: rgb(255, 99, 71)</code></td><td>赤・緑・青の値を 0〜255 で直接指定する</td></tr>
+      </table>
+
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">16進数カラーの読み方 <span class="exam-alert">課題に出ます</span></p>
+        <p style="font-size:0.9rem"><code>#FF6347</code> を分解すると: <strong>FF</strong>（赤=255）<strong>63</strong>（緑=99）<strong>47</strong>（青=71）→ 赤が強くオレンジ寄りの色（トマト色）。<code>#000000</code> は黒、<code>#FFFFFF</code> は白、<code>#FF0000</code> は純粋な赤です。</p>
+      </div>
+    </div>
+
+    <!-- 1.2 material コンポーネント -->
+    <div class="concept-box">
+      <h4>1.2 material コンポーネント <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        同じ形のコップでも、<strong>ガラス製</strong>なら透明でツヤがあり、<strong>陶器製</strong>ならマットな質感、<strong>金属製</strong>なら光を反射します。material コンポーネントはこのような「素材の質感」をコントロールします。
+      </div>
+      <p><code>material</code> コンポーネントは、オブジェクトの<strong>表面の見た目</strong>を制御します。前回までは <code>color</code> だけを使っていましたが、他にも多くのプロパティがあります。</p>
+      <table>
+        <tr><th>プロパティ</th><th>値の範囲</th><th>デフォルト</th><th>効果</th></tr>
+        <tr><td><strong>color</strong></td><td>色名 / hex / rgb</td><td><code>#FFF</code></td><td>表面の色を指定する</td></tr>
+        <tr><td><strong>opacity</strong></td><td>0.0 〜 1.0</td><td><code>1.0</code></td><td>不透明度。0で完全に透明、1で完全に不透明</td></tr>
+        <tr><td><strong>transparent</strong></td><td>true / false</td><td><code>false</code></td><td>opacity を使うときは <code>true</code> に設定する必要がある</td></tr>
+        <tr><td><strong>metalness</strong></td><td>0.0 〜 1.0</td><td><code>0.0</code></td><td>金属感。1.0で完全な金属表面（周囲を映し込む）</td></tr>
+        <tr><td><strong>roughness</strong></td><td>0.0 〜 1.0</td><td><code>0.5</code></td><td>表面の粗さ。0でツルツル（鏡面）、1でザラザラ（マット）</td></tr>
+        <tr><td><strong>side</strong></td><td>front / back / double</td><td><code>front</code></td><td>どちら側の面を表示するか</td></tr>
+        <tr><td><strong>src</strong></td><td>画像URL / セレクタ</td><td>なし</td><td>テクスチャ画像を貼り付ける</td></tr>
+      </table>
+      <pre><span class="code-label">HTML ── 使用例</span>
+<span class="cmt">&lt;!-- 半透明の青い箱 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: box"</span>
+  material=<span class="str">"color: blue; opacity: 0.5; transparent: true"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- 金属的な球 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: sphere"</span>
+  material=<span class="str">"color: #C0C0C0; metalness: 0.9; roughness: 0.1"</span>
+  position=<span class="str">"2 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+    </div>
+
+    <!-- 1.3 テクスチャ -->
+    <div class="concept-box">
+      <h4>1.3 テクスチャ ── 画像をオブジェクトの表面に貼る <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        プレゼントの箱に<strong>包装紙</strong>を巻くように、3Dオブジェクトの表面に<strong>画像</strong>を貼ることができます。これをテクスチャマッピングと呼びます。
+      </div>
+      <p><code>material</code> の <code>src</code> プロパティに画像を指定すると、その画像がオブジェクトの表面に貼り付けられます。</p>
+      <pre><span class="code-label">HTML ── 画像URLを直接指定</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: box"</span>
+  material=<span class="str">"src: url(brick.jpg)"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <p style="margin-top:0.5rem">ただし、この書き方では画像を<strong>毎回ダウンロード</strong>してしまいます。複数のオブジェクトで同じ画像を使う場合、次に説明する <code>&lt;a-assets&gt;</code> を使いましょう。</p>
+    </div>
+
+    <!-- 1.4 a-assets -->
+    <div class="concept-box">
+      <h4>1.4 <code>&lt;a-assets&gt;</code> によるアセット管理 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        料理を始める前に食材をまとめて準備する「下ごしらえ」と同じです。<code>&lt;a-assets&gt;</code> で画像を先に読み込んでおけば、3Dシーンの表示がスムーズになります。
+      </div>
+      <p><code>&lt;a-assets&gt;</code> は A-Frame の<strong>アセット管理システム</strong>です。画像・音声・動画などを<strong>事前に読み込み（プリロード）</strong>してから3Dシーンを描画します。</p>
+      <pre><span class="code-label">HTML ── a-assets の使い方</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- アセットの事前読み込み --&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;img</span> id=<span class="str">"brick-tex"</span> src=<span class="str">"brick.jpg"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;img</span> id=<span class="str">"wood-tex"</span> src=<span class="str">"wood.jpg"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+
+  <span class="cmt">&lt;!-- セレクタ（#id）で参照する --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box"</span>
+    material=<span class="str">"src: #brick-tex"</span>
+    position=<span class="str">"-2 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: plane; width: 4; height: 4"</span>
+    material=<span class="str">"src: #wood-tex"</span>
+    position=<span class="str">"0 0 -3"</span>
+    rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <ul class="point-list">
+        <li><code>&lt;a-assets&gt;</code> は <code>&lt;a-scene&gt;</code> の<strong>直下</strong>に書く</li>
+        <li><code>&lt;img id="..."&gt;</code> で画像に ID を付ける</li>
+        <li><code>material="src: #ID名"</code> で参照する（<code>#</code> を付けるのを忘れない）</li>
+        <li>同じ画像を複数のオブジェクトで使い回せる</li>
+        <li>画像ファイルはHTMLと同じフォルダに置くか、パスを指定する</li>
+      </ul>
+    </div>
+
+    <!-- 1.5 透明度 -->
+    <div class="concept-box">
+      <h4>1.5 透明度（opacity）<span class="exam-alert">課題に出ます</span></h4>
+      <p>オブジェクトを半透明にするには、<code>opacity</code> と <code>transparent</code> の<strong>両方</strong>を設定する必要があります。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- 50% 透明な赤い球 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: sphere"</span>
+  material=<span class="str">"color: red; opacity: 0.5; transparent: true"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FF5252;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">よくあるミス</p>
+        <p style="font-size:0.9rem"><code>opacity: 0.5</code> だけ書いて <code>transparent: true</code> を付け忘れると、<strong>透明にならない</strong>ことがあります。透明効果を使うときは必ず <code>transparent: true</code> も一緒に書いてください。</p>
+      </div>
+    </div>
+
+    <!-- 1.6 side: double -->
+    <div class="concept-box">
+      <h4>1.6 両面表示（side: double）</h4>
+      <div class="analogy">
+        紙を1枚持って正面から見ると面が見えますが、裏返すと見えなくなります。3Dでも同じで、デフォルトでは<strong>表面だけ</strong>が描画されます。壁や看板の裏側も見せたいときは <code>side: double</code> を使います。
+      </div>
+      <p><code>side</code> プロパティは描画する面を制御します。</p>
+      <table>
+        <tr><th>値</th><th>効果</th><th>使いどころ</th></tr>
+        <tr><td><code>front</code></td><td>表面のみ描画（デフォルト）</td><td>通常のオブジェクト</td></tr>
+        <tr><td><code>back</code></td><td>裏面のみ描画</td><td>内側から見る場合（トンネルの中など）</td></tr>
+        <tr><td><code>double</code></td><td>両面を描画</td><td>壁、看板など裏からも見えるもの</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">前回の発展課題で壁を作ったとき、裏側から見ると壁が消えたかもしれません。<code>side: double</code> を付けると解決します。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>metalness と roughness の組み合わせ効果</h3>
+      </div>
+      <p>以下の4つの球は、色は同じですが <code>metalness</code> と <code>roughness</code> が異なります。見た目の違いを確認しましょう。</p>
+      <table>
+        <tr><th>球</th><th>metalness</th><th>roughness</th><th>見た目</th></tr>
+        <tr><td>A</td><td>0.0</td><td>0.5</td><td>プラスチックのような標準的な見た目</td></tr>
+        <tr><td>B</td><td>0.0</td><td>0.0</td><td>ツルツルのプラスチック（光沢あり）</td></tr>
+        <tr><td>C</td><td>1.0</td><td>0.5</td><td>少し曇った金属（ブラッシュド加工）</td></tr>
+        <tr><td>D</td><td>1.0</td><td>0.0</td><td>鏡面のような完全な金属（周囲が映る）</td></tr>
+      </table>
+      <ul class="point-list">
+        <li><strong>metalness</strong> が高いと金属的に周囲の環境を映し込む</li>
+        <li><strong>roughness</strong> が低いとツルツル（光が集中して反射）、高いとザラザラ（光が拡散）</li>
+        <li>この2つの組み合わせで「プラスチック」「ガラス」「金属」「ゴム」などさまざまな質感を表現できる</li>
+      </ul>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: material プロパティから見た目を予測する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のエンティティの material プロパティを読み、見た目を予測して表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- A --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: sphere"</span>
+    material=<span class="str">"color: #C0C0C0; metalness: 0.9; roughness: 0.1"</span>
+    position=<span class="str">"-3 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- B --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box"</span>
+    material=<span class="str">"color: red; opacity: 0.3; transparent: true"</span>
+    position=<span class="str">"-1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- C --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box"</span>
+    material=<span class="str">"color: #8B4513; roughness: 1.0; metalness: 0.0"</span>
+    position=<span class="str">"1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- D --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: sphere"</span>
+    material=<span class="str">"color: gold; metalness: 1.0; roughness: 0.3"</span>
+    position=<span class="str">"3 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: plane; width: 10; height: 10"</span>
+    material=<span class="str">"color: #EEE"</span>
+    position=<span class="str">"0 0 -4"</span>
+    rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>ラベル</th><th>形</th><th>色</th><th>質感・透明度の予測</th></tr>
+        <tr><td>A</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>D</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
+    </div>
+
+    <!-- Trace 2 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 2: a-assets とテクスチャの参照を追跡する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のコードで、各エンティティがどの画像を参照しているかを追跡し、表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-assets&gt;</span>
+    <span class="kw">&lt;img</span> id=<span class="str">"tex-brick"</span> src=<span class="str">"brick.jpg"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;img</span> id=<span class="str">"tex-wood"</span> src=<span class="str">"wood.jpg"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;img</span> id=<span class="str">"tex-grass"</span> src=<span class="str">"grass.jpg"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;/a-assets&gt;</span>
+
+  <span class="cmt">&lt;!-- E1 --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box; width: 4; height: 2"</span>
+    material=<span class="str">"src: #tex-brick"</span>
+    position=<span class="str">"0 1 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- E2 --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: plane; width: 8; height: 8"</span>
+    material=<span class="str">"src: #tex-grass"</span>
+    position=<span class="str">"0 0 -4"</span>
+    rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- E3 --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box; width: 1; height: 0.8; depth: 0.5"</span>
+    material=<span class="str">"src: #tex-wood; roughness: 0.8"</span>
+    position=<span class="str">"2 0.4 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>エンティティ</th><th>参照している <code>src</code></th><th>対応する画像ファイル名</th><th>何に見えそうか</th></tr>
+        <tr><td>E1</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>E2</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>E3</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>マテリアルの比較 ── <code>material.html</code></h3>
+      </div>
+      <p><code>S:\Web_Prog\Web05</code> フォルダを作成し、VS Code で開きます。新しいファイルを作成します。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>Sドライブの <code>Web_Prog</code> 内に <strong><code>Web05</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web05</code> を開く</li>
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>material.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── material.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Material Comparison<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- A: デフォルト (metalness:0, roughness:0.5) --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere"</span>
+      material=<span class="str">"color: #C0C0C0; metalness: 0.0; roughness: 0.5"</span>
+      position=<span class="str">"-3 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- B: ツルツルプラスチック --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere"</span>
+      material=<span class="str">"color: #C0C0C0; metalness: 0.0; roughness: 0.0"</span>
+      position=<span class="str">"-1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- C: 曇った金属 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere"</span>
+      material=<span class="str">"color: #C0C0C0; metalness: 1.0; roughness: 0.5"</span>
+      position=<span class="str">"1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- D: 鏡面金属 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere"</span>
+      material=<span class="str">"color: #C0C0C0; metalness: 1.0; roughness: 0.0"</span>
+      position=<span class="str">"3 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- E: 半透明の赤い箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: red; opacity: 0.4; transparent: true"</span>
+      position=<span class="str">"0 1 -2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- F: ザラザラ茶色の箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: #8B4513; roughness: 1.0; metalness: 0.0"</span>
+      position=<span class="str">"-3 1 -2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- G: 金色の球 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere"</span>
+      material=<span class="str">"color: gold; metalness: 1.0; roughness: 0.3"</span>
+      position=<span class="str">"3 1 -2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: plane; width: 12; height: 12"</span>
+      material=<span class="str">"color: #EEE"</span>
+      position=<span class="str">"0 0 -3"</span>
+      rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
+        <li>ブラウザに3D空間が表示される</li>
+        <li>マウスで視点を動かして、各球の<strong>光の反射の違い</strong>を観察する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
+        Q2. A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明する<br>
+        Q3. E（半透明の赤い箱）の後ろにあるオブジェクトは透けて見えるか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>テクスチャとアセット管理 ── <code>texture.html</code></h3>
+      </div>
+      <p>同じ <code>Web05</code> フォルダにファイルと画像を準備します。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">画像の準備</p>
+        <p style="font-size:0.9rem">テクスチャ用の画像ファイルが必要です。以下のいずれかの方法で準備してください。</p>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li><strong>方法A:</strong> フリー素材サイト（<a href="https://www.textures.com/" style="color:#76B900">textures.com</a> や <a href="https://polyhaven.com/textures" style="color:#76B900">polyhaven.com</a>）からレンガ・木目などの画像をダウンロードし、<code>Web05</code> フォルダに保存</li>
+          <li><strong>方法B:</strong> 自分で撮った写真や、手持ちの画像ファイル（JPG/PNG）を <code>Web05</code> フォルダにコピー</li>
+        </ul>
+        <p style="font-size:0.85rem;color:#999;margin-top:0.5rem">ここでは <code>brick.jpg</code>（レンガ）、<code>wood.jpg</code>（木目）という名前で用意した前提で進めます。自分の画像のファイル名が異なる場合は、コード内のファイル名を書き換えてください。</p>
+      </div>
+
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>texture.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── texture.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Texture &amp; Assets<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- アセットの事前読み込み --&gt;</span>
+    <span class="kw">&lt;a-assets&gt;</span>
+      <span class="kw">&lt;img</span> id=<span class="str">"brick-tex"</span> src=<span class="str">"brick.jpg"</span><span class="kw">&gt;</span>
+      <span class="kw">&lt;img</span> id=<span class="str">"wood-tex"</span> src=<span class="str">"wood.jpg"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;/a-assets&gt;</span>
+
+    <span class="cmt">&lt;!-- レンガの壁 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box; width: 4; height: 2.5; depth: 0.2"</span>
+      material=<span class="str">"src: #brick-tex"</span>
+      position=<span class="str">"0 1.25 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 木の床 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: plane; width: 8; height: 8"</span>
+      material=<span class="str">"src: #wood-tex"</span>
+      position=<span class="str">"0 0 -3"</span>
+      rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- テクスチャなしの箱（比較用） --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: #8B4513"</span>
+      position=<span class="str">"-2 0.5 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- テクスチャありの箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"src: #wood-tex"</span>
+      position=<span class="str">"2 0.5 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 半透明のテクスチャ箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"src: #brick-tex; opacity: 0.5; transparent: true"</span>
+      position=<span class="str">"0 0.5 -2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>texture.html</code> を右クリック → 「Open with Live Server」</p>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>画像が表示されない場合:</strong> 画像ファイル名がコード内の <code>src</code> と一致しているか確認してください。ファイル名の大文字/小文字も区別されます。
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. テクスチャなしの茶色の箱（左）とテクスチャありの箱（右）を見比べて、リアルさの違いは？<br>
+        Q2. 半透明のテクスチャ箱はどう見えるか？ テクスチャと透明度は同時に使えるか？<br>
+        Q3. <code>&lt;a-assets&gt;</code> を使う利点は何か？ もし使わなかったらどうなるか？</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回学んだ カラー指定・material プロパティ・テクスチャ・a-assets の内容から、<strong>「この概念を説明できるか？」「このプロパティを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:45%">質問例</th><th>意図</th></tr>
+          <tr><td><code>#FF0000</code> は何色か？ <code>#00FF00</code> は？</td><td>16進数カラーの理解</td></tr>
+          <tr><td><code>opacity: 0.5</code> だけ書いて <code>transparent: true</code> を書き忘れるとどうなるか？</td><td>透明度の注意点</td></tr>
+          <tr><td><code>metalness: 1.0; roughness: 0.0</code> の球はどんな見た目になるか？</td><td>質感プロパティの理解</td></tr>
+          <tr><td><code>&lt;a-assets&gt;</code> を使わずに <code>material="src: url(image.jpg)"</code> と書くデメリットは？</td><td>アセット管理の理解</td></tr>
+          <tr><td><code>side: double</code> はどんなときに必要か？</td><td>両面表示の理解</td></tr>
+          <tr><td>テクスチャ画像が表示されない原因を3つ挙げられるか？</td><td>トラブルシューティング</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識問題 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>マテリアルプロパティの理解</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。</p>
+      <table>
+        <tr><th>プロパティ</th><th>値の範囲</th><th>効果（空欄を埋める）</th></tr>
+        <tr><td><strong>color</strong></td><td>色名 / hex / rgb</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>opacity</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>metalness</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>roughness</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>side</strong></td><td>front / back / double</td><td class="blank-cell"></td></tr>
+        <tr><td><strong>src</strong></td><td>画像URL / セレクタ</td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> 以下の material 設定を読み、表示されるオブジェクトの見た目を予測しなさい。</p>
+      <table>
+        <tr><th>material 設定</th><th>予測される見た目（空欄を埋める）</th></tr>
+        <tr><td><code>material="color: #FFD700; metalness: 1.0; roughness: 0.2"</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>material="color: white; opacity: 0.2; transparent: true"</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>material="color: #333; roughness: 1.0; metalness: 0.0"</code></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> 以下のコードにはバグがあり、意図した表示になりません。バグの原因と修正方法を答えなさい。</p>
+      <pre><span class="code-label">HTML ── 意図: 半透明の青い球を表示する</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: sphere"</span>
+  material=<span class="str">"color: blue; opacity: 0.3"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> <code>&lt;a-assets&gt;</code> を使ったテクスチャの適用について、以下の問いに答えなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        (a) <code>&lt;a-assets&gt;</code> はHTMLのどこに書くか？<br>
+        (b) アセットに登録した画像をエンティティで使うとき、どのように参照するか？<br>
+        (c) <code>&lt;a-assets&gt;</code> を使う利点を1つ挙げなさい。
+      </div>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>マテリアルとテクスチャを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験1の <code>material.html</code> を以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td>A（デフォルト球）の color を <code>#FF6347</code>（トマト色）に変更し、<code>roughness</code> を <code>0.0</code> にする</td></tr>
+          <tr><td>2</td><td>E（半透明の赤い箱）の <code>opacity</code> を <code>0.7</code> に変更し、色を <code>green</code> にする</td></tr>
+          <tr><td>3</td><td>新しいエンティティを追加: <code>geometry="primitive: cylinder; radius: 0.5; height: 1.5"</code> に <code>material="color: #B87333; metalness: 0.8; roughness: 0.4"</code>（銅のような質感）を設定する</td></tr>
+          <tr><td>4</td><td>画像ファイルを1枚用意し、<code>&lt;a-assets&gt;</code> を追加して、床のプレーンにテクスチャを適用する</td></tr>
+          <tr><td>5</td><td>新しく壁（plane）を追加し、<code>side: double</code> を設定して両面表示にする</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「変更による見た目の変化」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>テクスチャを使ったギャラリーを作る</h3>
+      </div>
+      <p>VS Code で <code>Web05</code> フォルダに <strong><code>gallery.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、テクスチャとマテリアルプロパティを活用した<strong>展示ギャラリー（美術館風の部屋）</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>テクスチャ画像を3枚以上</strong>使用する（壁・床・展示物など）</li>
+          <li><code>&lt;a-assets&gt;</code> で画像をプリロードする</li>
+          <li><strong>metalness / roughness</strong> を使って異なる質感のオブジェクトを<strong>2つ以上</strong>配置する</li>
+          <li><strong>透明度（opacity + transparent）</strong>を<strong>1か所以上</strong>使う（ガラスケース、窓など）</li>
+          <li><code>side: double</code> を壁の少なくとも1面に適用する</li>
+          <li>ギャラリーの構成: 床・壁・展示台や額縁を含む空間を作る</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>gallery.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どんなギャラリー/展示空間をイメージしたか</li>
+          <li>どのテクスチャ画像をどこに使ったか</li>
+          <li>metalness/roughness をどのオブジェクトに使い、どんな質感を表現したか</li>
+          <li>透明度をどこで使い、どんな効果を狙ったか</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>ヒント: ギャラリーの構成例</summary>
+        <div class="answer-content">
+          <ul class="point-list">
+            <li>壁を3面設置し、各壁にテクスチャ（レンガ・コンクリートなど）を貼る</li>
+            <li>壁に「額縁」（薄い box + 画像テクスチャ）を掛ける → 絵画の展示</li>
+            <li>中央にガラスケース（半透明の box）を置き、中に金属的なオブジェクト（metalness 高め）を入れる</li>
+            <li>床には木目テクスチャ、天井は白い plane</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-06-03T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>ラベル</th><th>形</th><th>色</th><th>質感・透明度</th></tr>
+          <tr><td>A</td><td>球</td><td>シルバー (#C0C0C0)</td><td>metalness: 0.9 で金属的に周囲を映し込む。roughness: 0.1 でほぼ鏡面。光沢のある金属球。</td></tr>
+          <tr><td>B</td><td>箱</td><td>赤</td><td>opacity: 0.3 + transparent: true で、かなり透明。後ろのオブジェクトが透けて見える赤いガラスのような箱。</td></tr>
+          <tr><td>C</td><td>箱</td><td>茶色 (#8B4513)</td><td>roughness: 1.0 で完全にマット。metalness: 0.0 で非金属。ザラザラした木材やダンボールのような質感。</td></tr>
+          <tr><td>D</td><td>球</td><td>金色 (gold)</td><td>metalness: 1.0 で完全な金属。roughness: 0.3 で少し曇りのある金属。磨かれた金のような見た目。</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>エンティティ</th><th>参照している src</th><th>対応する画像ファイル名</th><th>何に見えそうか</th></tr>
+          <tr><td>E1</td><td><code>#tex-brick</code></td><td>brick.jpg</td><td>レンガの壁（幅4m、高さ2mの箱にレンガテクスチャ）</td></tr>
+          <tr><td>E2</td><td><code>#tex-grass</code></td><td>grass.jpg</td><td>芝生の地面（8m四方の平面に草テクスチャ）</td></tr>
+          <tr><td>E3</td><td><code>#tex-wood</code></td><td>wood.jpg</td><td>木目の小箱（roughness: 0.8 でマットな木の質感）</td></tr>
+        </table>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li><code>a-assets</code> 内の <code>&lt;img id="..."&gt;</code> で定義した ID を、<code>material="src: #ID名"</code> で参照している</li>
+          <li>画像は事前に読み込まれるため、シーン表示時にはすでにテクスチャが準備されている</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 予測とおおむね合っていた。金属球（C, D）は予想以上に暗く見えた。これは metalness が高いと周囲の環境を映し込むが、シンプルなシーンでは映し込む明るい要素が少ないため。</li>
+          <li><strong>Q2:</strong> A（metalness:0, roughness:0.5）は普通のプラスチック風。B（metalness:0, roughness:0）は光沢のあるツルツルした球。C（metalness:1, roughness:0.5）は少し曇った金属で暗め。D（metalness:1, roughness:0）は鏡面のように周囲を映す金属。metalness は金属感、roughness は反射の鮮明さを制御している。</li>
+          <li><strong>Q3:</strong> はい、E の後ろにあるオブジェクトが透けて見えた。opacity: 0.4 なので赤い色がかかった半透明の箱を通して背景が見える。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> テクスチャなしの茶色い箱は「のっぺり」した単色に見えるが、テクスチャありの箱は木目の模様が表面に描かれて非常にリアルになった。テクスチャは単色よりもはるかにリアリティが高い。</li>
+          <li><strong>Q2:</strong> 半透明のテクスチャ箱は、レンガのテクスチャがうっすら見えつつ、後ろのオブジェクトも透けて見えた。テクスチャと透明度は同時に使える。</li>
+          <li><strong>Q3:</strong> <code>&lt;a-assets&gt;</code> を使うと画像が事前にまとめて読み込まれるため、同じ画像を複数回使っても1回しかダウンロードされない。使わない場合、各エンティティが個別に画像を読み込むため、表示が遅くなる可能性がある。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（マテリアルプロパティ）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>プロパティ</th><th>値の範囲</th><th>効果</th></tr>
+          <tr><td><strong>color</strong></td><td>色名 / hex / rgb</td><td>表面の色を指定する</td></tr>
+          <tr><td><strong>opacity</strong></td><td>0.0 〜 1.0</td><td>不透明度。0で完全に透明、1で完全に不透明。transparent: true と併用する。</td></tr>
+          <tr><td><strong>metalness</strong></td><td>0.0 〜 1.0</td><td>金属感。値が高いほど周囲の環境を映し込む金属的な表面になる。</td></tr>
+          <tr><td><strong>roughness</strong></td><td>0.0 〜 1.0</td><td>表面の粗さ。0でツルツル（鏡面反射）、1でザラザラ（拡散反射）。</td></tr>
+          <tr><td><strong>side</strong></td><td>front / back / double</td><td>描画する面を制御する。double で両面表示。</td></tr>
+          <tr><td><strong>src</strong></td><td>画像URL / セレクタ</td><td>テクスチャ画像をオブジェクトの表面に貼り付ける。</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問2.</strong></p>
+        <table>
+          <tr><th>material 設定</th><th>予測される見た目</th></tr>
+          <tr><td><code>color: #FFD700; metalness: 1.0; roughness: 0.2</code></td><td>磨かれた金の表面。周囲をやや鮮明に映し込む。金のトロフィーのような見た目。</td></tr>
+          <tr><td><code>color: white; opacity: 0.2; transparent: true</code></td><td>ほぼ透明で、うっすらと白い。ガラスや氷のような見た目。後ろのオブジェクトがはっきり透けて見える。</td></tr>
+          <tr><td><code>color: #333; roughness: 1.0; metalness: 0.0</code></td><td>非常にマットで暗い灰色。光の反射がほとんどなく、チョークやアスファルトのような質感。</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問3. 解答:</strong></p>
+        <p style="font-size:0.9rem"><strong>バグの原因:</strong> <code>transparent: true</code> が設定されていない。<code>opacity</code> の値を変えても、<code>transparent: true</code> がないと透明度が適用されないことがある。</p>
+        <p style="font-size:0.9rem"><strong>修正方法:</strong> material を <code>"color: blue; opacity: 0.3; transparent: true"</code> に変更する。</p>
+
+        <p style="margin-top:1rem"><strong>問4.</strong></p>
+        <ul class="point-list">
+          <li><strong>(a)</strong> <code>&lt;a-scene&gt;</code> タグの直下（一番上）に書く。</li>
+          <li><strong>(b)</strong> <code>&lt;img id="名前"&gt;</code> で ID を付けて登録し、エンティティの material で <code>src: #名前</code> と参照する。</li>
+          <li><strong>(c)</strong> 画像がシーン表示前にまとめて読み込まれるため、同じ画像を複数箇所で使い回してもダウンロードは1回で済み、表示パフォーマンスが向上する。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-scene&gt;
+  &lt;!-- 改造4: アセット追加 --&gt;
+  &lt;a-assets&gt;
+    &lt;img id="floor-tex" src="wood.jpg"&gt;
+  &lt;/a-assets&gt;
+
+  &lt;!-- A: 改造1 - トマト色 + ツルツル --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere"
+    material="color: #FF6347; metalness: 0.0; roughness: 0.0"
+    position="-3 1 -4"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- B: ツルツルプラスチック --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere"
+    material="color: #C0C0C0; metalness: 0.0; roughness: 0.0"
+    position="-1 1 -4"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- C: 曇った金属 --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere"
+    material="color: #C0C0C0; metalness: 1.0; roughness: 0.5"
+    position="1 1 -4"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- D: 鏡面金属 --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere"
+    material="color: #C0C0C0; metalness: 1.0; roughness: 0.0"
+    position="3 1 -4"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- E: 改造2 - 半透明の緑の箱 --&gt;
+  &lt;a-entity
+    geometry="primitive: box"
+    material="color: green; opacity: 0.7; transparent: true"
+    position="0 1 -2"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- F: ザラザラ茶色の箱 --&gt;
+  &lt;a-entity
+    geometry="primitive: box"
+    material="color: #8B4513; roughness: 1.0; metalness: 0.0"
+    position="-3 1 -2"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- G: 金色の球 --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere"
+    material="color: gold; metalness: 1.0; roughness: 0.3"
+    position="3 1 -2"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- 改造3: 銅の円柱 --&gt;
+  &lt;a-entity
+    geometry="primitive: cylinder; radius: 0.5; height: 1.5"
+    material="color: #B87333; metalness: 0.8; roughness: 0.4"
+    position="0 0.75 -4"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- 改造4: テクスチャ床 --&gt;
+  &lt;a-entity
+    geometry="primitive: plane; width: 12; height: 12"
+    material="src: #floor-tex"
+    position="0 0 -3"
+    rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- 改造5: 両面表示の壁 --&gt;
+  &lt;a-entity
+    geometry="primitive: plane; width: 8; height: 3"
+    material="color: #FAEBD7; side: double"
+    position="0 1.5 -6"&gt;&lt;/a-entity&gt;
+
+  &lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;
+&lt;/a-scene&gt;</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（テクスチャギャラリー）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「モダンアートギャラリー」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Art Gallery&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;!-- アセット読み込み --&gt;
+    &lt;a-assets&gt;
+      &lt;img id="tex-wood" src="wood.jpg"&gt;
+      &lt;img id="tex-marble" src="marble.jpg"&gt;
+      &lt;img id="tex-art1" src="art1.jpg"&gt;
+      &lt;img id="tex-art2" src="art2.jpg"&gt;
+    &lt;/a-assets&gt;
+
+    &lt;!-- === 部屋の構造 === --&gt;
+    &lt;!-- 木目の床 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 8; height: 8"
+      material="src: #tex-wood"
+      position="0 0 -4"
+      rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 正面の壁（大理石テクスチャ + 両面表示） --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 8; height: 3.5"
+      material="src: #tex-marble; side: double"
+      position="0 1.75 -8"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 左の壁 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 8; height: 3.5"
+      material="color: #F5F5F5; side: double"
+      position="-4 1.75 -4"
+      rotation="0 90 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 右の壁 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 8; height: 3.5"
+      material="color: #F5F5F5; side: double"
+      position="4 1.75 -4"
+      rotation="0 -90 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 天井 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 8; height: 8"
+      material="color: white; side: double"
+      position="0 3.5 -4"
+      rotation="90 0 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- === 絵画（壁に掛けた額縁） === --&gt;
+    &lt;!-- 額縁1（左壁） --&gt;
+    &lt;a-entity position="-3.9 1.8 -5" rotation="0 90 0"&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 1.6; height: 1.2; depth: 0.05"
+        material="color: #333; roughness: 0.3; metalness: 0.1"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: plane; width: 1.4; height: 1.0"
+        material="src: #tex-art1"
+        position="0 0 0.03"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- 額縁2（正面壁） --&gt;
+    &lt;a-entity position="0 1.8 -7.9"&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 2.0; height: 1.4; depth: 0.05"
+        material="color: #8B4513; roughness: 0.6; metalness: 0.0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: plane; width: 1.8; height: 1.2"
+        material="src: #tex-art2"
+        position="0 0 0.03"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- === ガラスケース（半透明） === --&gt;
+    &lt;a-entity position="0 0 -5"&gt;
+      &lt;!-- 展示台 --&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 0.8; height: 0.8; depth: 0.8"
+        material="color: #222; roughness: 0.2; metalness: 0.3"
+        position="0 0.4 0"&gt;&lt;/a-entity&gt;
+      &lt;!-- ガラスカバー --&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 0.6; height: 0.6; depth: 0.6"
+        material="color: white; opacity: 0.15; transparent: true; metalness: 0.1; roughness: 0.0"
+        position="0 1.1 0"&gt;&lt;/a-entity&gt;
+      &lt;!-- 展示物（金属球） --&gt;
+      &lt;a-entity
+        geometry="primitive: sphere; radius: 0.2"
+        material="color: gold; metalness: 1.0; roughness: 0.1"
+        position="0 1.1 0"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- === 彫刻風オブジェクト === --&gt;
+    &lt;a-entity position="2.5 0 -6"&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.3; height: 1.0"
+        material="color: #CCC; roughness: 0.8; metalness: 0.0"
+        position="0 0.5 0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: torus; radius: 0.4; radiusTubular: 0.08"
+        material="color: #C0C0C0; metalness: 0.9; roughness: 0.2"
+        position="0 1.3 0"
+        rotation="90 0 0"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>テクスチャ画像3枚以上</strong></td><td>a-assets に3つ以上の img を登録し、material の src で使用している</td></tr>
+          <tr><td>2</td><td><strong>a-assets 使用</strong></td><td>画像をプリロードしている</td></tr>
+          <tr><td>3</td><td><strong>metalness/roughness 使用</strong></td><td>異なる質感のオブジェクトが2つ以上ある</td></tr>
+          <tr><td>4</td><td><strong>透明度使用</strong></td><td>opacity + transparent: true を1か所以上使っている</td></tr>
+          <tr><td>5</td><td><strong>side: double 使用</strong></td><td>壁に side: double を設定している</td></tr>
+          <tr><td>6</td><td><strong>ギャラリー構成</strong></td><td>床・壁・展示物を含む空間になっている</td></tr>
+          <tr><td>7</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、テーマ・テクスチャ・質感・透明度の使い方を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第5回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

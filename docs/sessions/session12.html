@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第12回: リアルタイムWebプログラミング④ | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第12回: リアルタイムWebプログラミング④</h1>
+    <p>空間内オブジェクトの共有状態管理、データベースとの連携</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識問題 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      前回までにSocket.IOでリアルタイム通信を実装しました。<br>
+      しかし、サーバを再起動すると<strong>すべてのデータが消えてしまう</strong>問題があります。今回は<strong>データベース（SQLite）</strong>を導入し、データを永続化する方法を学びます。
+    </p>
+
+    <!-- 1.1 なぜデータベースが必要か -->
+    <div class="concept-box">
+      <h4>1.1 なぜデータベースが必要か <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        メモ帳に書いた内容は、メモ帳を閉じると消えます。でもノートに書いておけば、次に開いたときもそのまま残っています。<br>
+        サーバのメモリは「メモ帳」、データベースは「ノート」のようなものです。
+      </div>
+      <p>これまでのチャットアプリやアバター同期では、サーバのメモリ（変数）にデータを保持していました。</p>
+      <table>
+        <tr><th>保存方法</th><th>特徴</th><th>サーバ再起動時</th></tr>
+        <tr><td><strong>メモリ（変数）</strong></td><td>高速だがプロセス終了で消える</td><td>すべてのデータが<strong>消失</strong></td></tr>
+        <tr><td><strong>データベース</strong></td><td>ファイルに永続保存される</td><td>データが<strong>残る</strong></td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>具体的な問題:</strong></p>
+      <ul class="point-list">
+        <li>チャットの履歴が再起動で全部消える</li>
+        <li>3Dオブジェクトの位置や色の変更が保存されない</li>
+        <li>新しく接続したユーザに過去のデータを送れない</li>
+      </ul>
+      <p style="margin-top:0.5rem">データベースを使えば、これらの問題をすべて解決できます。</p>
+    </div>
+
+    <!-- 1.2 SQLite とは -->
+    <div class="concept-box">
+      <h4>1.2 SQLite とは <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        大きな図書館（MySQL, PostgreSQL）は管理人が常駐し、たくさんの人が同時に使えますが、設置が大変です。<br>
+        <strong>SQLite</strong> は「自分だけの小さな本棚」のようなもので、設置不要ですぐに使えます。
+      </div>
+      <p><strong>SQLite</strong> は、ファイルベースの軽量なリレーショナルデータベースです。</p>
+      <table>
+        <tr><th>特徴</th><th>説明</th></tr>
+        <tr><td><strong>サーバ不要</strong></td><td>別途データベースサーバを起動する必要がない（組み込み型）</td></tr>
+        <tr><td><strong>ファイルベース</strong></td><td>データベース全体が1つのファイル（例: <code>chat.db</code>）に保存される</td></tr>
+        <tr><td><strong>軽量</strong></td><td>インストールが簡単で、小〜中規模のアプリに最適</td></tr>
+        <tr><td><strong>SQL対応</strong></td><td>標準的なSQL文でデータを操作できる</td></tr>
+      </table>
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">SQLite vs MySQL / PostgreSQL</p>
+        <p style="font-size:0.9rem">MySQL や PostgreSQL は大規模なサービス向けですが、この授業で作る規模のアプリなら <strong>SQLite で十分</strong>です。設定もインストールも簡単で、学習コストが低いのが利点です。</p>
+      </div>
+    </div>
+
+    <!-- 1.3 better-sqlite3 パッケージ -->
+    <div class="concept-box">
+      <h4>1.3 better-sqlite3 パッケージ</h4>
+      <p>Node.js から SQLite を操作するには <strong>better-sqlite3</strong> というパッケージを使います。</p>
+      <pre><span class="code-label">Terminal</span>
+npm install better-sqlite3</pre>
+      <p style="margin-top:0.5rem"><strong>基本的な使い方:</strong></p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// better-sqlite3 を読み込む</span>
+<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
+
+<span class="cmt">// データベースファイルを開く（なければ自動作成）</span>
+<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'myapp.db'</span>);</pre>
+      <p style="margin-top:0.5rem">これだけで <code>myapp.db</code> というファイルが作成され、データベースとして使えるようになります。</p>
+    </div>
+
+    <!-- 1.4 基本SQL -->
+    <div class="concept-box">
+      <h4>1.4 基本的なSQL文 <span class="exam-alert">課題に出ます</span></h4>
+      <p><strong>SQL</strong>（Structured Query Language）は、データベースを操作するための言語です。以下の4つが基本です。</p>
+      <table>
+        <tr><th>SQL文</th><th>意味</th><th>例</th></tr>
+        <tr><td><strong>CREATE TABLE</strong></td><td>テーブル（表）を作成する</td><td><code>CREATE TABLE messages (id INTEGER PRIMARY KEY, text TEXT)</code></td></tr>
+        <tr><td><strong>INSERT INTO</strong></td><td>データを追加する</td><td><code>INSERT INTO messages (text) VALUES ('こんにちは')</code></td></tr>
+        <tr><td><strong>SELECT</strong></td><td>データを取得する</td><td><code>SELECT * FROM messages</code></td></tr>
+        <tr><td><strong>UPDATE</strong></td><td>データを更新する</td><td><code>UPDATE messages SET text = '修正' WHERE id = 1</code></td></tr>
+      </table>
+
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">テーブルとは <span class="exam-alert">課題に出ます</span></p>
+        <p style="font-size:0.9rem">テーブルはExcelのシートのようなものです。<strong>列（カラム）</strong>がデータの種類、<strong>行（レコード）</strong>が個々のデータを表します。</p>
+        <table style="margin-top:0.5rem">
+          <tr><th>id</th><th>name</th><th>text</th><th>created_at</th></tr>
+          <tr><td>1</td><td>太郎</td><td>こんにちは</td><td>2026-07-15 16:30:00</td></tr>
+          <tr><td>2</td><td>花子</td><td>やあ！</td><td>2026-07-15 16:30:15</td></tr>
+          <tr><td>3</td><td>太郎</td><td>元気？</td><td>2026-07-15 16:30:30</td></tr>
+        </table>
+      </div>
+
+      <p style="margin-top:0.5rem"><strong>better-sqlite3 での書き方:</strong></p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// テーブルを作成</span>
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  )
+`</span>);
+
+<span class="cmt">// データを追加（プリペアドステートメント）</span>
+<span class="kw">const</span> insert = db.<span class="fn">prepare</span>(<span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>);
+insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span class="str">'こんにちは'</span>);
+
+<span class="cmt">// データを全件取得</span>
+<span class="kw">const</span> rows = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM messages'</span>).<span class="fn">all</span>();
+console.<span class="fn">log</span>(rows);
+<span class="cmt">// → [{ id: 1, name: '太郎', text: 'こんにちは', created_at: '2026-07-15 16:30:00' }]</span></pre>
+
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">プリペアドステートメントとは？</p>
+        <p style="font-size:0.9rem"><code>?</code> をプレースホルダとして使い、後から値を渡す方法です。SQL文に直接値を埋め込むよりも<strong>安全</strong>（SQLインジェクション対策）で<strong>高速</strong>です。</p>
+      </div>
+    </div>
+
+    <!-- 1.5 オブジェクト状態の永続化 -->
+    <div class="concept-box">
+      <h4>1.5 オブジェクト状態の永続化</h4>
+      <p>3D空間内のオブジェクト（位置、色など）をデータベースに保存すれば、サーバを再起動しても状態が維持されます。</p>
+      <pre><span class="code-label">JavaScript</span>
+<span class="cmt">// オブジェクト状態テーブル</span>
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS objects (
+    obj_id TEXT PRIMARY KEY,
+    x REAL DEFAULT 0,
+    y REAL DEFAULT 0,
+    z REAL DEFAULT 0,
+    color TEXT DEFAULT '#FFFFFF'
+  )
+`</span>);
+
+<span class="cmt">// オブジェクトの位置を保存（なければ追加、あれば更新）</span>
+<span class="kw">const</span> upsert = db.<span class="fn">prepare</span>(<span class="str">`
+  INSERT INTO objects (obj_id, x, y, z, color)
+  VALUES (?, ?, ?, ?, ?)
+  ON CONFLICT(obj_id) DO UPDATE SET x=?, y=?, z=?, color=?
+`</span>);
+
+<span class="kw">function</span> <span class="fn">saveObject</span>(id, x, y, z, color) {
+  upsert.<span class="fn">run</span>(id, x, y, z, color, x, y, z, color);
+}</pre>
+    </div>
+
+    <!-- 1.6 チャット履歴の保存 -->
+    <div class="concept-box">
+      <h4>1.6 チャット履歴の保存</h4>
+      <p>チャットメッセージをデータベースに保存すれば、サーバ再起動後もメッセージが残り、新規接続ユーザにも過去のメッセージを表示できます。</p>
+      <ul class="point-list">
+        <li>メッセージ送信時に <code>INSERT INTO</code> でデータベースに保存</li>
+        <li>新規接続時に <code>SELECT</code> で過去メッセージを取得して送信</li>
+        <li>メッセージ数が多い場合は <code>ORDER BY ... LIMIT</code> で最新N件だけ取得</li>
+      </ul>
+    </div>
+
+    <!-- 1.7 新規接続時のデータ復元 -->
+    <div class="concept-box">
+      <h4>1.7 新規接続時のデータ復元 <span class="exam-alert">課題に出ます</span></h4>
+      <p>新しいユーザが接続したとき、データベースからデータを読み込んで送信します。</p>
+      <pre><span class="code-label">JavaScript</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  <span class="cmt">// 1. 保存済みのオブジェクト状態を送信</span>
+  <span class="kw">const</span> objects = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM objects'</span>).<span class="fn">all</span>();
+  socket.<span class="fn">emit</span>(<span class="str">'init-objects'</span>, objects);
+
+  <span class="cmt">// 2. 過去のチャット履歴（最新50件）を送信</span>
+  <span class="kw">const</span> messages = db.<span class="fn">prepare</span>(
+    <span class="str">'SELECT * FROM messages ORDER BY id DESC LIMIT 50'</span>
+  ).<span class="fn">all</span>().<span class="fn">reverse</span>();
+  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, messages);
+});</pre>
+      <p style="margin-top:0.5rem">これにより、途中から参加したユーザも過去の状態を確認できるようになります。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>SQLの基本操作を読む</h3>
+      </div>
+      <p>以下のSQL文を順に実行したとき、テーブルの状態がどう変わるかを確認しましょう。</p>
+      <pre><span class="code-label">SQL</span>
+<span class="cmt">-- 1. テーブルを作成</span>
+<span class="kw">CREATE TABLE</span> items (
+  id <span class="op">INTEGER PRIMARY KEY AUTOINCREMENT</span>,
+  name <span class="op">TEXT NOT NULL</span>,
+  color <span class="op">TEXT DEFAULT</span> <span class="str">'white'</span>
+);
+
+<span class="cmt">-- 2. データを3件追加</span>
+<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'box1'</span>, <span class="str">'red'</span>);
+<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'sphere1'</span>, <span class="str">'blue'</span>);
+<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'cylinder1'</span>, <span class="str">'green'</span>);
+
+<span class="cmt">-- 3. 全件取得</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> items;
+
+<span class="cmt">-- 4. box1 の色を yellow に更新</span>
+<span class="kw">UPDATE</span> items <span class="kw">SET</span> color = <span class="str">'yellow'</span> <span class="kw">WHERE</span> name = <span class="str">'box1'</span>;</pre>
+
+      <table>
+        <tr><th>手順</th><th>操作</th><th>テーブルの状態</th></tr>
+        <tr><td>1</td><td>CREATE TABLE</td><td>空のテーブルが作成される（id, name, color の3列）</td></tr>
+        <tr><td>2</td><td>INSERT x 3</td><td>3行のデータが追加される</td></tr>
+        <tr><td>3</td><td>SELECT *</td><td>3行すべてが返る: (1,'box1','red'), (2,'sphere1','blue'), (3,'cylinder1','green')</td></tr>
+        <tr><td>4</td><td>UPDATE</td><td>id=1 の color が 'red' → 'yellow' に変わる</td></tr>
+      </table>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: SQL文の実行結果を予測する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のSQL文を順に実行したとき、最後の SELECT の結果を予測しなさい。</p>
+      <pre><span class="code-label">SQL</span>
+<span class="kw">CREATE TABLE</span> users (
+  id <span class="op">INTEGER PRIMARY KEY AUTOINCREMENT</span>,
+  name <span class="op">TEXT NOT NULL</span>,
+  score <span class="op">INTEGER DEFAULT</span> <span class="num">0</span>
+);
+
+<span class="kw">INSERT INTO</span> users (name, score) <span class="kw">VALUES</span> (<span class="str">'Alice'</span>, <span class="num">10</span>);
+<span class="kw">INSERT INTO</span> users (name, score) <span class="kw">VALUES</span> (<span class="str">'Bob'</span>, <span class="num">25</span>);
+<span class="kw">INSERT INTO</span> users (name) <span class="kw">VALUES</span> (<span class="str">'Charlie'</span>);
+<span class="kw">UPDATE</span> users <span class="kw">SET</span> score = <span class="num">30</span> <span class="kw">WHERE</span> name = <span class="str">'Alice'</span>;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> users;</pre>
+      <table>
+        <tr><th>id</th><th>name</th><th>score</th></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋めて記入してください。Charlie の score に注目してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして実行し、</strong>結果を<strong>観察</strong>してください。</p>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>データベースの基本操作 ── テーブル作成・追加・取得・表示</h3>
+      </div>
+      <p><code>S:\Web_Prog\Web12</code> フォルダを作成し、VS Code で開いてください。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>ターミナルで <code>npm init -y</code> を実行</li>
+        <li>ターミナルで <code>npm install better-sqlite3</code> を実行</li>
+        <li>新しいファイル <strong><code>db-test.js</code></strong> を作成し、下のコードを貼り付け</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── db-test.js</span>
+<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
+<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'test.db'</span>);
+
+<span class="cmt">// テーブルを作成（存在しない場合のみ）</span>
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS fruits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    color TEXT NOT NULL,
+    price INTEGER DEFAULT 0
+  )
+`</span>);
+
+console.<span class="fn">log</span>(<span class="str">'=== テーブル作成完了 ==='</span>);
+
+<span class="cmt">// データを追加</span>
+<span class="kw">const</span> insert = db.<span class="fn">prepare</span>(
+  <span class="str">'INSERT INTO fruits (name, color, price) VALUES (?, ?, ?)'</span>
+);
+
+insert.<span class="fn">run</span>(<span class="str">'りんご'</span>, <span class="str">'赤'</span>, <span class="num">150</span>);
+insert.<span class="fn">run</span>(<span class="str">'バナナ'</span>, <span class="str">'黄'</span>, <span class="num">100</span>);
+insert.<span class="fn">run</span>(<span class="str">'ぶどう'</span>, <span class="str">'紫'</span>, <span class="num">300</span>);
+
+console.<span class="fn">log</span>(<span class="str">'=== 3件追加完了 ==='</span>);
+
+<span class="cmt">// 全件取得して表示</span>
+<span class="kw">const</span> allFruits = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM fruits'</span>).<span class="fn">all</span>();
+console.<span class="fn">log</span>(<span class="str">'全件:'</span>, allFruits);
+
+<span class="cmt">// 条件付き取得（価格が150以上）</span>
+<span class="kw">const</span> expensive = db.<span class="fn">prepare</span>(
+  <span class="str">'SELECT * FROM fruits WHERE price >= ?'</span>
+).<span class="fn">all</span>(<span class="num">150</span>);
+console.<span class="fn">log</span>(<span class="str">'150円以上:'</span>, expensive);
+
+<span class="cmt">// データを更新</span>
+db.<span class="fn">prepare</span>(<span class="str">'UPDATE fruits SET price = ? WHERE name = ?'</span>).<span class="fn">run</span>(<span class="num">200</span>, <span class="str">'バナナ'</span>);
+
+<span class="cmt">// 更新後の全件を表示</span>
+<span class="kw">const</span> updated = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM fruits'</span>).<span class="fn">all</span>();
+console.<span class="fn">log</span>(<span class="str">'更新後:'</span>, updated);
+
+db.<span class="fn">close</span>();
+console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);</pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>ターミナルで <code>node db-test.js</code> を実行</li>
+        <li>ターミナルの出力を確認する</li>
+        <li><strong>もう一度</strong> <code>node db-test.js</code> を実行し、データがどうなるか観察する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. 1回目の実行で表示されたデータを書き出してください<br>
+        Q2. 2回目の実行でデータはどうなりましたか？ なぜそうなったか説明してください<br>
+        Q3. <code>Web12</code> フォルダに <code>test.db</code> というファイルが作られていることを確認してください</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>チャットアプリにメッセージ永続化を追加する</h3>
+      </div>
+      <p>同じ <code>Web12</code> フォルダに以下の2ファイルを作成してください。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>ターミナルで <code>npm install express socket.io</code> を実行（未インストールの場合）</li>
+        <li>新しいファイル <strong><code>server.js</code></strong> を作成</li>
+        <li>新しいファイル <strong><code>index.html</code></strong> を作成</li>
+      </ol>
+
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
+
+<span class="cmt">// --- Express + Socket.IO セットアップ ---</span>
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'.'</span>));
+
+<span class="cmt">// --- データベースセットアップ ---</span>
+<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'chat.db'</span>);
+
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  )
+`</span>);
+
+<span class="cmt">// プリペアドステートメントを事前に用意</span>
+<span class="kw">const</span> insertMsg = db.<span class="fn">prepare</span>(
+  <span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>
+);
+<span class="kw">const</span> getHistory = db.<span class="fn">prepare</span>(
+  <span class="str">'SELECT * FROM messages ORDER BY id DESC LIMIT 50'</span>
+);
+
+<span class="cmt">// --- Socket.IO イベント ---</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
+
+  <span class="cmt">// 接続時に過去のチャット履歴を送信</span>
+  <span class="kw">const</span> history = getHistory.<span class="fn">all</span>().<span class="fn">reverse</span>();
+  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, history);
+
+  <span class="cmt">// メッセージ受信 → DB保存 → 全員に配信</span>
+  socket.<span class="fn">on</span>(<span class="str">'chat-message'</span>, (data) => {
+    <span class="cmt">// データベースに保存</span>
+    <span class="kw">const</span> result = insertMsg.<span class="fn">run</span>(data.name, data.text);
+
+    <span class="cmt">// 保存したメッセージ（IDと日時付き）を全員に配信</span>
+    <span class="kw">const</span> saved = {
+      id: result.lastInsertRowid,
+      name: data.name,
+      text: data.text,
+      created_at: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>(<span class="str">'ja-JP'</span>)
+    };
+    io.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, saved);
+  });
+
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () => {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+  });
+});
+
+<span class="cmt">// --- サーバ起動 ---</span>
+server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+
+      <pre><span class="code-label">HTML ── index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>永続チャット<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+    #chat-log { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;
+                margin-bottom: 1rem; border-radius: 8px; background: #f9f9f9; }
+    .msg { margin-bottom: 0.5rem; }
+    .msg .name { font-weight: bold; color: #333; }
+    .msg .time { font-size: 0.75rem; color: #999; margin-left: 0.5rem; }
+    .msg .text { margin-left: 0.5rem; }
+    #form { display: flex; gap: 0.5rem; }
+    #form input { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 6px; }
+    #form button { padding: 0.5rem 1.5rem; background: #76B900; color: white;
+                   border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    h1 { color: #333; margin-bottom: 1rem; }
+    .history-label { font-size: 0.8rem; color: #999; text-align: center;
+                     border-bottom: 1px dashed #ccc; margin-bottom: 1rem; padding-bottom: 0.5rem; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>永続チャット<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="str">"chat-log"</span><span class="kw">&gt;&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="str">"form"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span> id=<span class="str">"name"</span> placeholder=<span class="str">"名前"</span> value=<span class="str">"ゲスト"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span> id=<span class="str">"text"</span> placeholder=<span class="str">"メッセージを入力..."</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;button</span> onclick=<span class="str">"send()"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+    <span class="kw">const</span> chatLog = document.<span class="fn">getElementById</span>(<span class="str">'chat-log'</span>);
+
+    <span class="cmt">// 過去の履歴を受信して表示</span>
+    socket.<span class="fn">on</span>(<span class="str">'chat-history'</span>, (messages) => {
+      <span class="kw">if</span> (messages.length > <span class="num">0</span>) {
+        chatLog.innerHTML = <span class="str">'&lt;div class="history-label"&gt;--- 過去のメッセージ ---&lt;/div&gt;'</span>;
+        messages.<span class="fn">forEach</span>((msg) => <span class="fn">addMessage</span>(msg));
+      }
+    });
+
+    <span class="cmt">// 新しいメッセージを受信</span>
+    socket.<span class="fn">on</span>(<span class="str">'chat-message'</span>, (msg) => {
+      <span class="fn">addMessage</span>(msg);
+    });
+
+    <span class="kw">function</span> <span class="fn">addMessage</span>(msg) {
+      <span class="kw">const</span> div = document.<span class="fn">createElement</span>(<span class="str">'div'</span>);
+      div.className = <span class="str">'msg'</span>;
+      div.innerHTML = <span class="str">`&lt;span class="name"&gt;${msg.name}&lt;/span&gt;`</span>
+        + <span class="str">`&lt;span class="time"&gt;${msg.created_at || ''}&lt;/span&gt;`</span>
+        + <span class="str">`&lt;br&gt;&lt;span class="text"&gt;${msg.text}&lt;/span&gt;`</span>;
+      chatLog.<span class="fn">appendChild</span>(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    <span class="kw">function</span> <span class="fn">send</span>() {
+      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>).value || <span class="str">'ゲスト'</span>;
+      <span class="kw">const</span> text = document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value;
+      <span class="kw">if</span> (!text) <span class="kw">return</span>;
+      socket.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, { name, text });
+      document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value = <span class="str">''</span>;
+    }
+
+    document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) => {
+      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) <span class="fn">send</span>();
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ターミナルで <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li>メッセージを数件送信する</li>
+        <li>ターミナルで <strong>Ctrl+C</strong> でサーバを停止する</li>
+        <li>もう一度 <code>node server.js</code> でサーバを再起動する</li>
+        <li>ブラウザをリロードして<strong>過去のメッセージが表示されるか</strong>確認する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. サーバ再起動後、過去のメッセージは表示されましたか？<br>
+        Q2. 「--- 過去のメッセージ ---」というラベルは表示されましたか？<br>
+        Q3. データベースを使わなかった場合（前回までのチャット）との違いを説明してください</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回のコード体験で動かしたプログラムをもとに、<strong>「データベースに関する質問を2つ」</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:35%">テーマ</th><th>質問例</th></tr>
+          <tr><td>メモリ vs データベース</td><td>「サーバの変数に保存するのとDBに保存するのでは、何が違う？」</td></tr>
+          <tr><td>SQLの基本</td><td>「SELECT * FROM messages の * は何を意味する？」</td></tr>
+          <tr><td>永続化の意味</td><td>「chat.db ファイルを削除するとどうなる？」</td></tr>
+          <tr><td>新規接続時</td><td>「途中から参加した人に過去のメッセージを見せるには？」</td></tr>
+          <tr><td>テーブル設計</td><td>「もしユーザのプロフィール画像も保存したい場合、テーブルはどう変える？」</td></tr>
+          <tr><td>AUTOINCREMENT</td><td>「id が AUTOINCREMENT だと何が便利？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識問題 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>データベースとSQLの基礎知識</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。 <span class="exam-alert">課題に出ます</span></p>
+      <table>
+        <tr><th>SQL文</th><th>意味（空欄を埋める）</th><th>使う場面（空欄を埋める）</th></tr>
+        <tr><td><strong>CREATE TABLE</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>INSERT INTO</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>SELECT</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>UPDATE</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> サーバのメモリ（変数）にデータを保存する場合と、データベースに保存する場合の<strong>違い</strong>を、以下の観点から説明しなさい。 <span class="exam-alert">課題に出ます</span></p>
+      <table>
+        <tr><th>観点</th><th>メモリ（変数）</th><th>データベース</th></tr>
+        <tr><td><strong>サーバ再起動時</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>アクセス速度</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>データ量の限界</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> 以下の場面で、データをデータベースに保存すべきかメモリに保持すべきか選び、理由を書きなさい。</p>
+      <table>
+        <tr><th style="width:30px"></th><th>場面</th><th>DB or メモリ？</th><th>理由（空欄を埋める）</th></tr>
+        <tr><td>A</td><td>ユーザの登録情報（名前、メールアドレス）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td>現在接続中のユーザ一覧</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td>チャットの過去ログ</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>D</td><td>マウスカーソルの現在位置（リアルタイム表示用）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>チャットアプリを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験2の永続チャットアプリを以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td><code>messages</code> テーブルに <strong><code>room TEXT DEFAULT 'general'</code></strong> という列を追加する（CREATE TABLE を変更）</td></tr>
+          <tr><td>2</td><td><code>INSERT</code> 文で <code>room</code> の値も保存するように変更する（固定値 <code>'general'</code> でOK）</td></tr>
+          <tr><td>3</td><td>チャット履歴の取得（SELECT文）で最新 <strong>100件</strong> を取得するように変更する</td></tr>
+          <tr><td>4</td><td>サーバ起動時にコンソールに <strong>「現在のメッセージ数: XX件」</strong> と表示する（SELECT COUNT(*) を使う）</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>db.prepare('SELECT COUNT(*) as count FROM messages').get().count</code> でメッセージ数を取得できます。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後の <code>server.js</code> のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「なぜその変更が必要か」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>3Dシーンにオブジェクト状態の永続化を実装する</h3>
+      </div>
+      <p><code>Web12</code> フォルダに以下のファイルを追加で作成し、3Dオブジェクトの状態（位置・色）をデータベースに保存するアプリを作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li>A-Frame（1.7.1）で3Dシーンを表示する</li>
+          <li>Socket.IO でサーバと通信する</li>
+          <li>3Dオブジェクトをクリックすると<strong>色が変わる</strong>（ランダムまたは順番）</li>
+          <li>色の変更を<strong>データベースに保存</strong>する</li>
+          <li>ページをリロードしても<strong>変更後の色が復元</strong>される</li>
+          <li>複数ブラウザで開いたとき、色の変更が<strong>リアルタイムに同期</strong>される</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td>サーバ側（<code>server.js</code>）とクライアント側（<code>index.html</code> または <code>scene.html</code>）のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>データベースにどのようなテーブルを作成したか</li>
+          <li>クリック時のデータの流れ（クライアント → サーバ → DB → 全クライアント）</li>
+          <li>サーバ再起動後にデータが復元されることの確認結果</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:0.8rem"><strong>評価チェックリスト:</strong></p>
+      <table>
+        <tr><th style="width:30px">#</th><th>チェック項目</th></tr>
+        <tr><td>1</td><td>A-Frame で3Dオブジェクトが表示される</td></tr>
+        <tr><td>2</td><td>クリックで色が変わる</td></tr>
+        <tr><td>3</td><td>色の変更がデータベースに保存される</td></tr>
+        <tr><td>4</td><td>ページリロードで色が復元される</td></tr>
+        <tr><td>5</td><td>複数ブラウザで色が同期される</td></tr>
+        <tr><td>6</td><td>音声で仕組みを説明している</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-07-15T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <p>最後の <code>SELECT * FROM users</code> の結果:</p>
+        <table>
+          <tr><th>id</th><th>name</th><th>score</th></tr>
+          <tr><td>1</td><td>Alice</td><td>30</td></tr>
+          <tr><td>2</td><td>Bob</td><td>25</td></tr>
+          <tr><td>3</td><td>Charlie</td><td>0</td></tr>
+        </table>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>Alice の score は最初 10 だったが、UPDATE で 30 に変更された</li>
+          <li>Bob の score は INSERT 時に 25 を指定したのでそのまま</li>
+          <li>Charlie は score を指定しなかったため、DEFAULT 値の <strong>0</strong> が自動的に設定された</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 全件として3件が表示された: [{id:1, name:'りんご', color:'赤', price:150}, {id:2, name:'バナナ', color:'黄', price:100}, {id:3, name:'ぶどう', color:'紫', price:300}]。150円以上はりんごとぶどうの2件。更新後はバナナの price が 200 になっていた。</li>
+          <li><strong>Q2:</strong> 2回目の実行ではデータが<strong>6件</strong>になった。同じ INSERT が再実行されるため、りんご・バナナ・ぶどうがもう一度追加された。データベースは永続化されるので、前回のデータがそのまま残っている。</li>
+          <li><strong>Q3:</strong> Web12 フォルダに test.db ファイルが作成されていた。このファイルがデータベースの実体である。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> はい。サーバを Ctrl+C で停止し、再度 node server.js で起動してブラウザをリロードしたところ、「--- 過去のメッセージ ---」のラベルとともに、停止前に送信したメッセージがすべて表示された。</li>
+          <li><strong>Q2:</strong> はい。過去のメッセージがある場合に「--- 過去のメッセージ ---」というラベルが表示された。</li>
+          <li><strong>Q3:</strong> 前回までのチャットアプリでは、サーバを再起動するとメッセージが全部消えていた。今回はデータベース（chat.db）に保存しているため、サーバを再起動してもメッセージが残る。また、新しく接続した人にも過去のメッセージを見せることができるようになった。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（データベースとSQLの基礎知識）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>SQL文</th><th>意味</th><th>使う場面</th></tr>
+          <tr><td><strong>CREATE TABLE</strong></td><td>新しいテーブル（表）を作成する</td><td>アプリの初回起動時にデータの入れ物を用意する</td></tr>
+          <tr><td><strong>INSERT INTO</strong></td><td>テーブルに新しいデータ（行）を追加する</td><td>チャットメッセージの送信時、ユーザ登録時など</td></tr>
+          <tr><td><strong>SELECT</strong></td><td>テーブルからデータを取得する</td><td>チャット履歴の表示、ユーザ情報の確認など</td></tr>
+          <tr><td><strong>UPDATE</strong></td><td>既存のデータを変更する</td><td>オブジェクトの色や位置の変更、プロフィール更新など</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問2.</strong></p>
+        <table>
+          <tr><th>観点</th><th>メモリ（変数）</th><th>データベース</th></tr>
+          <tr><td><strong>サーバ再起動時</strong></td><td>すべて消失する</td><td>データが残る（永続化される）</td></tr>
+          <tr><td><strong>アクセス速度</strong></td><td>非常に高速（ナノ秒単位）</td><td>メモリより遅い（ファイルI/Oが発生するため）</td></tr>
+          <tr><td><strong>データ量の限界</strong></td><td>サーバのメモリ容量に制限される（数GB程度）</td><td>ディスク容量まで保存可能（数百GB以上）</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問3.</strong></p>
+        <table>
+          <tr><th style="width:30px"></th><th>場面</th><th>DB or メモリ？</th><th>理由</th></tr>
+          <tr><td>A</td><td>ユーザの登録情報</td><td>DB</td><td>永続的に保持する必要があるデータ。サーバ再起動で消えてはならない。</td></tr>
+          <tr><td>B</td><td>現在接続中のユーザ一覧</td><td>メモリ</td><td>接続中だけ必要な一時的なデータ。切断されたら不要になる。</td></tr>
+          <tr><td>C</td><td>チャットの過去ログ</td><td>DB</td><td>後から見返す必要がある履歴データ。永続化が必要。</td></tr>
+          <tr><td>D</td><td>マウスカーソルの現在位置</td><td>メモリ</td><td>常に変化する一時データ。毎フレーム更新されるため、DBに保存すると遅すぎる。</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const Database = require('better-sqlite3');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static('.'));
+
+const db = new Database('chat.db');
+
+// 改造1: room 列を追加
+db.exec(`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    text TEXT NOT NULL,
+    room TEXT DEFAULT 'general',
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  )
+`);
+
+// 改造2: INSERT に room を追加
+const insertMsg = db.prepare(
+  'INSERT INTO messages (name, text, room) VALUES (?, ?, ?)'
+);
+// 改造3: LIMIT を 100 に変更
+const getHistory = db.prepare(
+  'SELECT * FROM messages ORDER BY id DESC LIMIT 100'
+);
+
+// 改造4: メッセージ数を表示
+const msgCount = db.prepare('SELECT COUNT(*) as count FROM messages').get().count;
+console.log('現在のメッセージ数: ' + msgCount + '件');
+
+io.on('connection', (socket) =&gt; {
+  console.log('接続:', socket.id);
+
+  const history = getHistory.all().reverse();
+  socket.emit('chat-history', history);
+
+  socket.on('chat-message', (data) =&gt; {
+    // 改造2: room も保存
+    const result = insertMsg.run(data.name, data.text, 'general');
+
+    const saved = {
+      id: result.lastInsertRowid,
+      name: data.name,
+      text: data.text,
+      created_at: new Date().toLocaleString('ja-JP')
+    };
+    io.emit('chat-message', saved);
+  });
+
+  socket.on('disconnect', () =&gt; {
+    console.log('切断:', socket.id);
+  });
+});
+
+server.listen(3000, () =&gt; {
+  console.log('サーバ起動: http://localhost:3000');
+});</pre>
+        <p style="margin-top:1rem"><strong>各改造のポイント:</strong></p>
+        <ul class="point-list">
+          <li><strong>改造1:</strong> CREATE TABLE に <code>room TEXT DEFAULT 'general'</code> を追加。将来的に複数ルームに対応するためのカラム。</li>
+          <li><strong>改造2:</strong> INSERT 文を <code>(name, text, room)</code> に変更し、run に 'general' を追加。</li>
+          <li><strong>改造3:</strong> LIMIT 50 を LIMIT 100 に変更。より多くの履歴を表示できるようになる。</li>
+          <li><strong>改造4:</strong> <code>SELECT COUNT(*) as count FROM messages</code> で件数を取得し、console.log で表示。サーバ起動時に現在の蓄積データ量を確認できる。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（3Dシーンの状態永続化）</summary>
+      <div class="answer-content">
+        <p><strong>server.js:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const Database = require('better-sqlite3');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static('.'));
+
+const db = new Database('scene.db');
+
+// オブジェクト状態テーブル
+db.exec(`
+  CREATE TABLE IF NOT EXISTS objects (
+    obj_id TEXT PRIMARY KEY,
+    color TEXT DEFAULT '#FFFFFF'
+  )
+`);
+
+// 初期データ（存在しない場合のみ追加）
+const insertOrIgnore = db.prepare(
+  'INSERT OR IGNORE INTO objects (obj_id, color) VALUES (?, ?)'
+);
+insertOrIgnore.run('box1', '#4CC3D9');
+insertOrIgnore.run('sphere1', '#EF2D5E');
+insertOrIgnore.run('cylinder1', '#FFC65D');
+
+const updateColor = db.prepare(
+  'UPDATE objects SET color = ? WHERE obj_id = ?'
+);
+const getAllObjects = db.prepare('SELECT * FROM objects');
+
+const COLORS = ['#FF5252','#4FC3F7','#76B900','#FFB800','#E040FB','#FF6D00','#00BCD4'];
+
+io.on('connection', (socket) =&gt; {
+  // 接続時に保存済みの色を送信
+  const objects = getAllObjects.all();
+  socket.emit('init-objects', objects);
+
+  // 色変更リクエスト
+  socket.on('change-color', (data) =&gt; {
+    const newColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+    updateColor.run(newColor, data.obj_id);
+    io.emit('color-changed', { obj_id: data.obj_id, color: newColor });
+  });
+});
+
+server.listen(3000, () =&gt; {
+  console.log('サーバ起動: http://localhost:3000');
+});</pre>
+
+        <p style="margin-top:1rem"><strong>scene.html:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;永続3Dシーン&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;a-box id="box1" position="-1.5 1 -4" color="#4CC3D9"
+           class="clickable" cursor-listener&gt;&lt;/a-box&gt;
+    &lt;a-sphere id="sphere1" position="0 1.25 -5" radius="1.25" color="#EF2D5E"
+              class="clickable" cursor-listener&gt;&lt;/a-sphere&gt;
+    &lt;a-cylinder id="cylinder1" position="1.5 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"
+                class="clickable" cursor-listener&gt;&lt;/a-cylinder&gt;
+    &lt;a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"&gt;&lt;/a-plane&gt;
+    &lt;a-sky color="#ECECEC"&gt;&lt;/a-sky&gt;
+    &lt;a-camera&gt;
+      &lt;a-cursor color="#333"&gt;&lt;/a-cursor&gt;
+    &lt;/a-camera&gt;
+  &lt;/a-scene&gt;
+
+  &lt;script src="/socket.io/socket.io.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const socket = io();
+
+    // 保存済みの色を復元
+    socket.on('init-objects', (objects) =&gt; {
+      objects.forEach((obj) =&gt; {
+        const el = document.getElementById(obj.obj_id);
+        if (el) el.setAttribute('color', obj.color);
+      });
+    });
+
+    // 色の変更をリアルタイム反映
+    socket.on('color-changed', (data) =&gt; {
+      const el = document.getElementById(data.obj_id);
+      if (el) el.setAttribute('color', data.color);
+    });
+
+    // クリックで色変更リクエスト
+    document.querySelectorAll('.clickable').forEach((el) =&gt; {
+      el.addEventListener('click', () =&gt; {
+        socket.emit('change-color', { obj_id: el.id });
+      });
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>A-Frame表示</strong></td><td>3Dオブジェクトがブラウザに表示される</td></tr>
+          <tr><td>2</td><td><strong>クリックで色変更</strong></td><td>オブジェクトをクリックすると色が変わる</td></tr>
+          <tr><td>3</td><td><strong>DB保存</strong></td><td>色の変更が scene.db に保存される</td></tr>
+          <tr><td>4</td><td><strong>リロード復元</strong></td><td>ページをリロードしても変更後の色が表示される</td></tr>
+          <tr><td>5</td><td><strong>リアルタイム同期</strong></td><td>別タブで開いても色の変更が即座に反映される</td></tr>
+          <tr><td>6</td><td><strong>音声説明</strong></td><td>テーブル設計・データの流れ・復元確認を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第12回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|SQL)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

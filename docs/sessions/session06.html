@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第6回: 3D Web表現基礎② ライティング・カメラ | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第6回: 3D Web表現基礎②</h1>
+    <p>ライティング、影、カメラと視点の設計</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      3Dシーンの見た目を決めるのは、オブジェクトの形や色だけではありません。<br>
+      <strong>ライト（光源）</strong>と<strong>カメラ（視点）</strong>の設定で、同じオブジェクトでもまったく違う印象になります。
+    </p>
+
+    <!-- 1.1 ライトの種類 -->
+    <div class="concept-box">
+      <h4>1.1 ライトの種類 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        部屋全体を照らす蛍光灯、手元だけを照らすデスクライト、舞台のスポットライト ── 照明の種類で空間の雰囲気がまったく変わります。A-Frame の <code>&lt;a-light&gt;</code> も同じように、用途に合わせて使い分けます。
+      </div>
+      <p>A-Frame では <code>&lt;a-light type="..."&gt;</code> でライトの種類を指定します。何もライトを置かない場合、A-Frame はデフォルトで <strong>ambient light（強度 0.39）と directional light（強度 0.39）</strong>を自動で追加します。自分で <code>&lt;a-light&gt;</code> を1つでも追加すると、デフォルトライトは無効になります。</p>
+
+      <table>
+        <tr><th>type</th><th>名称</th><th>特徴</th><th>用途</th></tr>
+        <tr><td><code>ambient</code></td><td>環境光</td><td>シーン全体を<strong>均一に</strong>照らす。影を作らない。方向がない。</td><td>最低限の明るさを確保する下地の光</td></tr>
+        <tr><td><code>directional</code></td><td>平行光源</td><td>太陽光のように<strong>一方向から</strong>平行に照らす。影を作れる。</td><td>太陽光、月光の再現</td></tr>
+        <tr><td><code>point</code></td><td>点光源</td><td>電球のように<strong>全方向</strong>に光を放つ。距離で減衰する。</td><td>電球、ランプ、炎</td></tr>
+        <tr><td><code>spot</code></td><td>スポットライト</td><td>円錐状に光を当てる。<strong>角度</strong>と<strong>減衰</strong>を制御できる。</td><td>舞台照明、懐中電灯</td></tr>
+        <tr><td><code>hemisphere</code></td><td>半球光</td><td>上（空）と下（地面）の<strong>2色で</strong>照らす。影は作らない。</td><td>屋外の自然な雰囲気</td></tr>
+      </table>
+
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- 環境光: シーン全体をうっすら照らす --&gt;</span>
+<span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+<span class="cmt">&lt;!-- 平行光源: 上方から太陽のように照らす --&gt;</span>
+<span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.6"</span>
+         position=<span class="str">"-1 2 1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+<span class="cmt">&lt;!-- 点光源: 電球のように光を放つ --&gt;</span>
+<span class="kw">&lt;a-light</span> type=<span class="str">"point"</span> color=<span class="str">"#FFE082"</span> intensity=<span class="str">"0.8"</span>
+         distance=<span class="str">"10"</span> position=<span class="str">"0 3 -4"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+<span class="cmt">&lt;!-- スポットライト: 円錐状に照らす --&gt;</span>
+<span class="kw">&lt;a-light</span> type=<span class="str">"spot"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"1"</span>
+         angle=<span class="str">"45"</span> penumbra=<span class="str">"0.2"</span>
+         position=<span class="str">"0 4 -3"</span> target=<span class="str">"#stage-obj"</span><span class="kw">&gt;&lt;/a-light&gt;</span></pre>
+
+      <p style="margin-top:0.5rem"><strong>主な属性:</strong></p>
+      <table>
+        <tr><th>属性</th><th>説明</th><th>デフォルト</th></tr>
+        <tr><td><code>intensity</code></td><td>光の強さ（0 = 消灯、1 = 標準）</td><td>1.0</td></tr>
+        <tr><td><code>color</code></td><td>光の色</td><td>#FFF（白）</td></tr>
+        <tr><td><code>distance</code></td><td>point/spot の光が届く距離（0 = 無限）</td><td>0</td></tr>
+        <tr><td><code>angle</code></td><td>spot の照射角度（度）</td><td>60</td></tr>
+        <tr><td><code>penumbra</code></td><td>spot の境界ぼかし（0-1）</td><td>0</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.2 影 -->
+    <div class="concept-box">
+      <h4>1.2 影（シャドウ） <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        現実世界では光があれば必ず影ができます。3D空間では影の計算はコストが高いため、<strong>明示的にON</strong>にしないと影は表示されません。
+      </div>
+      <p>A-Frame で影を表示するには <strong>3つの設定</strong> がすべて必要です。</p>
+
+      <table>
+        <tr><th style="width:30px">#</th><th>設定</th><th>コード</th></tr>
+        <tr><td>1</td><td><strong>シーンでシャドウを有効化</strong></td><td><code>&lt;a-scene shadow="type: pcfsoft"&gt;</code></td></tr>
+        <tr><td>2</td><td><strong>ライトで影を投射</strong>（directional または spot のみ）</td><td><code>&lt;a-light ... castShadow="true"&gt;</code></td></tr>
+        <tr><td>3</td><td><strong>オブジェクトで影を投射/受け取り</strong></td><td><code>shadow="cast: true; receive: true"</code></td></tr>
+      </table>
+
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
+  <span class="cmt">&lt;!-- 影を落とすライト --&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"-1 3 1"</span>
+           intensity=<span class="str">"0.6"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+  <span class="cmt">&lt;!-- 影を投射するオブジェクト --&gt;</span>
+  <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span>
+         shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+  <span class="cmt">&lt;!-- 影を受け取る床 --&gt;</span>
+  <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+           width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#CCC"</span>
+           shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">影が表示されない場合のチェックリスト <span class="exam-alert">課題に出ます</span></p>
+        <ul class="point-list" style="font-size:0.9rem">
+          <li><code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> を書いたか？</li>
+          <li>ライトの <code>castShadow="true"</code> を指定したか？</li>
+          <li>ライトの type は <code>directional</code> か <code>spot</code> か？（ambient / point / hemisphere は影を作れない）</li>
+          <li>オブジェクトに <code>shadow="cast: true"</code> を書いたか？</li>
+          <li>床に <code>shadow="receive: true"</code> を書いたか？</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1.3 カメラ -->
+    <div class="concept-box">
+      <h4>1.3 カメラとコントロール <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        映画の撮影では、カメラの位置や向きで同じシーンでも印象がまったく変わります。3D空間でも、カメラの位置を変えると見える景色が変わります。
+      </div>
+      <p>A-Frame ではデフォルトでカメラが <code>position="0 1.6 0"</code>（人間の目の高さ）に自動配置されます。<code>&lt;a-camera&gt;</code> を自分で書くと、デフォルトカメラは無効になります。</p>
+
+      <table>
+        <tr><th>要素/属性</th><th>説明</th></tr>
+        <tr><td><code>&lt;a-camera&gt;</code></td><td>カメラエンティティ。position で初期位置を指定する。</td></tr>
+        <tr><td><code>look-controls</code></td><td>マウスドラッグやタッチで<strong>視線の方向</strong>を変える（デフォルトON）</td></tr>
+        <tr><td><code>wasd-controls</code></td><td>W/A/S/Dキーで<strong>カメラの位置</strong>を移動する（デフォルトON）</td></tr>
+        <tr><td><code>fov</code></td><td>視野角（Field of View）。大きいと広角、小さいと望遠。デフォルト: 80</td></tr>
+      </table>
+
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- カメラを高い位置から見下ろすように配置 --&gt;</span>
+<span class="kw">&lt;a-camera</span> position=<span class="str">"0 5 8"</span> rotation=<span class="str">"-30 0 0"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+
+<span class="cmt">&lt;!-- 移動を無効にして固定カメラにする --&gt;</span>
+<span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 4"</span>
+          look-controls=<span class="str">"enabled: false"</span>
+          wasd-controls=<span class="str">"enabled: false"</span><span class="kw">&gt;&lt;/a-camera&gt;</span></pre>
+    </div>
+
+    <!-- 1.4 カーソル -->
+    <div class="concept-box">
+      <h4>1.4 カーソル（a-cursor） <span class="exam-alert">課題に出ます</span></h4>
+      <p><code>&lt;a-cursor&gt;</code> はカメラの中央から前方にレイキャスト（光線）を飛ばし、3Dオブジェクトとの<strong>交差判定</strong>を行う要素です。VR空間でのクリック操作に使います。</p>
+
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 0"</span><span class="kw">&gt;</span>
+  <span class="cmt">&lt;!-- カメラの子要素としてカーソルを配置 --&gt;</span>
+  <span class="kw">&lt;a-cursor</span> color=<span class="str">"#FF5252"</span> fuse=<span class="str">"true"</span> fuse-timeout=<span class="str">"1500"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
+<span class="kw">&lt;/a-camera&gt;</span></pre>
+
+      <table>
+        <tr><th>属性</th><th>説明</th></tr>
+        <tr><td><code>fuse</code></td><td><code>true</code> にすると、一定時間見つめるだけでクリック扱いになる（VR向け）</td></tr>
+        <tr><td><code>fuse-timeout</code></td><td>fuse でクリックが発生するまでの時間（ミリ秒）</td></tr>
+        <tr><td><code>color</code></td><td>カーソルの表示色</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>カーソルのイベント:</strong> カーソルがオブジェクトと交差すると <code>mouseenter</code>、離れると <code>mouseleave</code>、クリックすると <code>click</code> イベントが発生します。第7回のアニメーションと組み合わせて使います。</p>
+    </div>
+
+    <!-- 1.5 複数カメラ -->
+    <div class="concept-box">
+      <h4>1.5 複数カメラの切り替え（概念）</h4>
+      <p>A-Frame では複数の <code>&lt;a-camera&gt;</code> を配置し、<code>active</code> 属性で切り替えることができます。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- 通常の一人称視点 --&gt;</span>
+<span class="kw">&lt;a-camera</span> id=<span class="str">"cam-fps"</span> position=<span class="str">"0 1.6 0"</span> active=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+
+<span class="cmt">&lt;!-- 上からの俯瞰カメラ --&gt;</span>
+<span class="kw">&lt;a-camera</span> id=<span class="str">"cam-top"</span> position=<span class="str">"0 10 0"</span> rotation=<span class="str">"-90 0 0"</span>
+          active=<span class="str">"false"</span>
+          look-controls=<span class="str">"enabled: false"</span>
+          wasd-controls=<span class="str">"enabled: false"</span><span class="kw">&gt;&lt;/a-camera&gt;</span></pre>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">JavaScript で <code>setAttribute('active', true/false)</code> を切り替えてカメラを変更します。詳細は後の回で扱います。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>ライトの有無による見え方の違いを読む</h3>
+      </div>
+      <p>以下の3パターンのコードで、同じ白い球がどう見えるか確認しましょう。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- パターンA: ライトなし（A-Frameデフォルト） --&gt;</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span>
+
+<span class="cmt">&lt;!-- パターンB: 環境光のみ --&gt;</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.5"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span>
+
+<span class="cmt">&lt;!-- パターンC: 環境光 + 平行光源 --&gt;</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.8"</span>
+           position=<span class="str">"-1 2 1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <table>
+        <tr><th>パターン</th><th>使用ライト</th><th>球の見え方</th></tr>
+        <tr><td>A</td><td>なし（デフォルト自動追加）</td><td>明るい部分と暗い部分ができる（デフォルトの ambient + directional）</td></tr>
+        <tr><td>B</td><td>ambient のみ</td><td>全体が均一な灰白色。立体感がなく平面的に見える。</td></tr>
+        <tr><td>C</td><td>ambient + directional</td><td>光の当たる面は明るく、反対側は暗い。立体感がある。</td></tr>
+      </table>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: ライトの効果を予測する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のコードを読み、各ライトの効果を予測して表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFA500"</span> intensity=<span class="str">"0.7"</span>
+           position=<span class="str">"2 4 1"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"point"</span> color=<span class="str">"#4FC3F7"</span> intensity=<span class="str">"0.5"</span>
+           distance=<span class="str">"8"</span> position=<span class="str">"-2 2 -3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+  <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -4"</span> color=<span class="str">"white"</span>
+         shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+  <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+           width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#EEE"</span>
+           shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#111"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>ライト</th><th>種類</th><th>色</th><th>予想される効果</th><th>影を作るか？</th></tr>
+        <tr><td>1つ目</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>2つ目</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>3つ目</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>追加の問い:</strong> 箱の影は床に表示されますか？ その理由を書いてください。</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加の問いに答えてください。</div></div>
+    </div>
+
+    <!-- Trace 2 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 2: カメラの位置と見え方</h3>
+      </div>
+      <p><strong>問題:</strong> 以下の3つのカメラ設定で、シーンがどう見えるか予測しなさい。シーンには <code>position="0 1 -4"</code> の赤い箱が1つあるとします。</p>
+      <table>
+        <tr><th>カメラ設定</th><th>カメラの位置と向き</th><th>予想される見え方（空欄を埋める）</th></tr>
+        <tr><td>A</td><td><code>position="0 1.6 0"</code>（デフォルト）</td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td><code>position="0 10 -4" rotation="-90 0 0"</code></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td><code>position="5 1.6 -4"</code></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 各カメラ設定での見え方の予測を記入してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>ライトの比較 ── <code>light-compare.html</code></h3>
+      </div>
+      <p><code>S:\Web_Prog\Web06</code> フォルダを作成し、以下のファイルを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code で <strong>「ファイル」→「フォルダーを開く」</strong> から <code>S:\Web_Prog\Web06</code> を開く</li>
+        <li>新しいファイル <strong><code>light-compare.html</code></strong> を作成</li>
+        <li>下のコードをコピーして貼り付け、保存</li>
+      </ol>
+      <pre><span class="code-label">HTML ── light-compare.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Light Comparison<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- ====== ライト設定 ====== --&gt;</span>
+    <span class="cmt">&lt;!-- 環境光: シーン全体の最低限の明るさ --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+    <span class="cmt">&lt;!-- 平行光源: 太陽のような光（右上から） --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.6"</span>
+             position=<span class="str">"2 4 1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+    <span class="cmt">&lt;!-- 点光源: 暖色の電球（左側） --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"point"</span> color=<span class="str">"#FFE082"</span> intensity=<span class="str">"0.8"</span>
+             distance=<span class="str">"10"</span> position=<span class="str">"-3 2 -3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+    <span class="cmt">&lt;!-- 点光源の位置を示す小さな球 --&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-3 2 -3"</span> radius=<span class="str">"0.1"</span>
+             color=<span class="str">"#FFE082"</span>
+             material=<span class="str">"shader: flat"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- ====== オブジェクト ====== --&gt;</span>
+    <span class="cmt">&lt;!-- 左の球: 白 --&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-2 1.2 -5"</span> radius=<span class="str">"1"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- 中央の箱: 白 --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -5"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+    <span class="cmt">&lt;!-- 右の円柱: 白 --&gt;</span>
+    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"2 1 -5"</span> radius=<span class="str">"0.6"</span> height=<span class="str">"2"</span>
+               color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -5"</span> rotation=<span class="str">"-90 0 0"</span>
+             width=<span class="str">"12"</span> height=<span class="str">"12"</span> color=<span class="str">"#555"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#111"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
+        <li>3Dオブジェクトの明暗を観察する</li>
+      </ol>
+      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">試してみよう</p>
+        <ul class="point-list" style="font-size:0.9rem">
+          <li><code>&lt;a-light type="ambient"&gt;</code> の行を削除（またはコメントアウト）して保存 → 暗くなるか？</li>
+          <li><code>&lt;a-light type="directional"&gt;</code> の行だけ残して他のライトを削除 → どう変わるか？</li>
+          <li>点光源の <code>position</code> を <code>"3 2 -3"</code>（右側）に変更 → オブジェクトの明暗はどう変わるか？</li>
+        </ul>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 3つのオブジェクト（球・箱・円柱）の明暗の違いを観察して書く。左側と右側で明るさは違うか？<br>
+        Q2. 上の「試してみよう」から1つ以上試した結果を書く</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>影とカメラ ── <code>shadow-camera.html</code></h3>
+      </div>
+      <p>同じ <code>Web06</code> フォルダにもう1つファイルを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>新しいファイル <strong><code>shadow-camera.html</code></strong> を作成</li>
+        <li>下のコードをコピーして貼り付け、保存</li>
+      </ol>
+      <pre><span class="code-label">HTML ── shadow-camera.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Shadow &amp; Camera<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
+    <span class="cmt">&lt;!-- ====== ライト ====== --&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.8"</span>
+             position=<span class="str">"-2 4 2"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+    <span class="cmt">&lt;!-- ====== 影を落とすオブジェクト ====== --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"-1.5 1 -4"</span> color=<span class="str">"#FF5252"</span>
+           shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.2 -4"</span> radius=<span class="str">"0.8"</span> color=<span class="str">"#4FC3F7"</span>
+             shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"1.5 0.75 -4"</span> radius=<span class="str">"0.4"</span> height=<span class="str">"1.5"</span>
+               color=<span class="str">"#FFB800"</span> shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+
+    <span class="cmt">&lt;!-- ====== 影を受ける床 ====== --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+             width=<span class="str">"12"</span> height=<span class="str">"12"</span> color=<span class="str">"#EEE"</span>
+             shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+
+    <span class="cmt">&lt;!-- ====== カメラ ====== --&gt;</span>
+    <span class="kw">&lt;a-camera</span> position=<span class="str">"0 3 4"</span> rotation=<span class="str">"-15 0 0"</span><span class="kw">&gt;</span>
+      <span class="kw">&lt;a-cursor</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
+    <span class="kw">&lt;/a-camera&gt;</span>
+
+    <span class="cmt">&lt;!-- 空 --&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>shadow-camera.html</code> を右クリック → 「Open with Live Server」</p>
+      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">試してみよう</p>
+        <ul class="point-list" style="font-size:0.9rem">
+          <li>カメラの <code>position</code> を <code>"0 1.6 0"</code>（デフォルト高さ、オブジェクトの手前）に変更 → 視点はどう変わるか？</li>
+          <li>カメラの <code>position</code> を <code>"0 8 -4"</code>、<code>rotation</code> を <code>"-90 0 0"</code> に変更 → 真上から見下ろす視点</li>
+          <li>directional light の <code>castShadow="true"</code> を削除 → 影はどうなるか？</li>
+        </ul>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 床に影は表示されましたか？ どの方向に影が伸びていましたか？<br>
+        Q2. カーソル（緑の小さな円）はどこに表示されていますか？ カーソルを箱や球に合わせるとどうなりますか？<br>
+        Q3. 上の「試してみよう」から1つ以上試した結果を書く</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今日学んだライト・影・カメラの内容をもとに、<strong>「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
+          <tr><td>ambient light の color を <code>"#F00"</code>（赤）にする</td><td>「シーン全体はどう見える？ なぜ？」</td></tr>
+          <tr><td>directional light の position を <code>"0 -1 0"</code>（下から）にする</td><td>「光はどこから当たる？ オブジェクトの見え方は？」</td></tr>
+          <tr><td>箱の <code>shadow="cast: true"</code> を削除する</td><td>「床の影はどうなる？ なぜ？」</td></tr>
+          <tr><td>カメラの position を <code>"0 0.3 0"</code> にする</td><td>「どんな視点になる？ 何が見える？」</td></tr>
+          <tr><td>すべてのライトを削除する</td><td>「オブジェクトは見える？ なぜ？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>ライト・影・カメラの知識を整理する</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下のライトの種類の表を完成させなさい。</p>
+      <table>
+        <tr><th>type</th><th>名称（日本語）</th><th>光の特徴（空欄を埋める）</th><th>影を作れるか？（空欄を埋める）</th></tr>
+        <tr><td><code>ambient</code></td><td>環境光</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>directional</code></td><td>平行光源</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>point</code></td><td>点光源</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>spot</code></td><td>スポットライト</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>hemisphere</code></td><td>半球光</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> A-Frame で影を表示するために必要な3つの設定を、具体的なコード例とともに書きなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> 以下の文が正しいか誤りかを答え、誤りの場合は正しい説明を書きなさい。</p>
+      <table>
+        <tr><th style="width:30px">#</th><th>文</th><th style="width:80px">正誤</th><th>誤りの場合の訂正（空欄を埋める）</th></tr>
+        <tr><td>A</td><td>ambient light は影を作ることができる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td>自分で <code>&lt;a-light&gt;</code> を追加すると、デフォルトライトは無効になる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td>カメラの <code>wasd-controls</code> はマウスで視線を動かす機能である。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>D</td><td><code>&lt;a-cursor fuse="true"&gt;</code> は一定時間見つめるとクリック扱いになる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> <code>&lt;a-camera position="0 1.6 0"&gt;</code> の <code>1.6</code> は何を意味していますか？ なぜこの値がデフォルトなのか説明しなさい。</p>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>ライト・影・カメラを設定する（コード改造）</h3>
+      </div>
+      <p>コード体験2の <code>shadow-camera.html</code> を以下の指示どおりに改造しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td>ambient light の色を <code>"#330011"</code>（暗い赤紫）に変更する</td></tr>
+          <tr><td>2</td><td>directional light の色を <code>"#FFA500"</code>（オレンジ）に、position を <code>"3 5 -1"</code> に変更する</td></tr>
+          <tr><td>3</td><td>新しく <code>&lt;a-light type="point"&gt;</code> を1つ追加する。色は <code>"#4FC3F7"</code>（水色）、position は <code>"2 2 -2"</code></td></tr>
+          <tr><td>4</td><td>新しく <code>&lt;a-sphere&gt;</code> を1つ追加し、<code>shadow="cast: true; receive: true"</code> を設定する</td></tr>
+          <tr><td>5</td><td>カメラの position を <code>"3 2 2"</code> に、rotation を <code>"-10 -20 0"</code> に変更する（斜め横から見る視点）</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        1. 改造後のコード全体を貼り付ける<br>
+        2. 各改造について「どの行を変えたか」と「見え方がどう変わったか」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>ドラマチックなライティングシーンを作る</h3>
+      </div>
+      <p>VS Code で <code>Web06</code> フォルダに <strong><code>dramatic.html</code></strong> を新規作成し、ライティングとカメラを駆使した<strong>印象的な3Dシーン</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>3種類以上のライト</strong>を使う（ambient, directional, point, spot, hemisphere から選択）</li>
+          <li><strong>影</strong>を表示する（shadow の3つの設定をすべて含む）</li>
+          <li><strong>カメラ</strong>の位置をデフォルトから変更する</li>
+          <li><strong>カーソル</strong>（<code>&lt;a-cursor&gt;</code>）を配置する</li>
+          <li>テーマを決める（例: 「スポットライトステージ」「夕焼けの丘」「ホラー空間」「博物館」など）</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>dramatic.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どんなテーマ・雰囲気のシーンを作ったか</li>
+          <li>各ライトをなぜその色・位置・種類にしたか</li>
+          <li>カメラの位置をどう決めたか</li>
+          <li>影の使い方で工夫した点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-06-10T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>ライト</th><th>種類</th><th>色</th><th>予想される効果</th><th>影を作るか？</th></tr>
+          <tr><td>1つ目</td><td>ambient（環境光）</td><td>#333（暗い灰色）</td><td>シーン全体をうっすら照らす。立体感は出ない。最低限の明るさを提供する下地。</td><td>いいえ</td></tr>
+          <tr><td>2つ目</td><td>directional（平行光源）</td><td>#FFA500（オレンジ）</td><td>右上（position="2 4 1"）からオレンジ色の平行光が当たる。オブジェクトの右上が明るく、左下が暗くなる。強度0.7。</td><td>はい（castShadow="true"）</td></tr>
+          <tr><td>3つ目</td><td>point（点光源）</td><td>#4FC3F7（水色）</td><td>左側（position="-2 2 -3"）から水色の光が放射される。距離8まで届く。オブジェクトの左側が青みがかる。</td><td>いいえ（point light はA-Frameで影を投射しない設定）</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>追加の問い:</strong> はい、箱の影は床に表示されます。理由: (1) <code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> でシャドウが有効、(2) directional light に <code>castShadow="true"</code> が設定されている、(3) 箱に <code>shadow="cast: true"</code>、床に <code>shadow="receive: true"</code> が設定されている。3つの条件がすべて揃っているためです。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>カメラ設定</th><th>カメラの位置と向き</th><th>見え方</th></tr>
+          <tr><td>A</td><td><code>position="0 1.6 0"</code>（デフォルト）</td><td>人間の目の高さ（1.6m）から正面を見る。箱は z=-4 にあるので、4m 先に赤い箱が見える。</td></tr>
+          <tr><td>B</td><td><code>position="0 10 -4" rotation="-90 0 0"</code></td><td>箱の真上10mの位置から真下を見下ろす俯瞰視点。箱の上面だけが見える。</td></tr>
+          <tr><td>C</td><td><code>position="5 1.6 -4"</code></td><td>箱と同じ z=-4 だが、右に5mずれた位置。カメラはデフォルトで z=-方向を向くため、箱は視界の左端に見えるか、視界外になる可能性がある。</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 3つのオブジェクトはすべて白色だが、左側の球は点光源（暖色）に近いため少し黄色みがかって見えた。右側の円柱は directional light（白）で照らされた面が最も明るかった。オブジェクトの裏側は暗い。</li>
+          <li><strong>Q2:</strong> ambient light を削除すると、光が当たっていない面が完全に真っ暗になった。ambient light はシーン全体の最低限の明るさを保つ役割があることがわかった。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 床に影が表示された。directional light が左上（position="-2 4 2"）から照らしているため、影は各オブジェクトの右下方向に伸びていた。</li>
+          <li><strong>Q2:</strong> カーソル（緑の小さな円）は画面中央に表示されていた。カーソルをオブジェクトに合わせると、カーソルがオブジェクトの表面に「くっつく」ように見えた（レイキャストが交差した位置）。</li>
+          <li><strong>Q3:</strong> カメラを <code>"0 8 -4"</code> + <code>rotation="-90 0 0"</code> にすると真上からの俯瞰視点になり、3つのオブジェクトの上面と床の影を一度に見渡せた。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（ライト・影・カメラの知識）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>type</th><th>名称（日本語）</th><th>光の特徴</th><th>影を作れるか？</th></tr>
+          <tr><td><code>ambient</code></td><td>環境光</td><td>シーン全体を均一に照らす。方向がない。</td><td>いいえ</td></tr>
+          <tr><td><code>directional</code></td><td>平行光源</td><td>太陽光のように一方向から平行に照らす。</td><td>はい</td></tr>
+          <tr><td><code>point</code></td><td>点光源</td><td>電球のように全方向に光を放つ。距離で減衰する。</td><td>いいえ（A-Frameでは非対応）</td></tr>
+          <tr><td><code>spot</code></td><td>スポットライト</td><td>円錐状に光を当てる。角度と減衰を制御できる。</td><td>はい</td></tr>
+          <tr><td><code>hemisphere</code></td><td>半球光</td><td>上（空）と下（地面）の2色で照らす。</td><td>いいえ</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問2.</strong> 影を表示するための3つの設定:</p>
+        <ol style="padding-left:1.5rem;font-size:0.9rem;line-height:2">
+          <li><strong>シーンでシャドウを有効化:</strong> <code>&lt;a-scene shadow="type: pcfsoft"&gt;</code></li>
+          <li><strong>ライトで影を投射:</strong> <code>&lt;a-light type="directional" castShadow="true"&gt;</code>（type は directional または spot）</li>
+          <li><strong>オブジェクトで影を設定:</strong> 影を落とすオブジェクトに <code>shadow="cast: true"</code>、影を受け取る面に <code>shadow="receive: true"</code></li>
+        </ol>
+
+        <p style="margin-top:1rem"><strong>問3.</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>文</th><th style="width:80px">正誤</th><th>訂正</th></tr>
+          <tr><td>A</td><td>ambient light は影を作ることができる。</td><td>誤り</td><td>ambient light は方向がないため影を作れません。影を作れるのは directional と spot のみです。</td></tr>
+          <tr><td>B</td><td>自分で <code>&lt;a-light&gt;</code> を追加すると、デフォルトライトは無効になる。</td><td>正しい</td><td>--</td></tr>
+          <tr><td>C</td><td>カメラの <code>wasd-controls</code> はマウスで視線を動かす機能である。</td><td>誤り</td><td>wasd-controls はキーボードのW/A/S/Dキーでカメラの位置を移動する機能です。マウスで視線を動かすのは look-controls です。</td></tr>
+          <tr><td>D</td><td><code>&lt;a-cursor fuse="true"&gt;</code> は一定時間見つめるとクリック扱いになる。</td><td>正しい</td><td>--</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問4.</strong> <code>1.6</code> はメートル単位で、人間の平均的な目の高さ（約160cm）を表しています。3D空間で一人称視点の体験を作る際、現実世界と同じ視点の高さにすることで、自然な没入感を得られるようにしています。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-scene shadow="type: pcfsoft"&gt;
+  &lt;!-- 改造1: ambient を暗い赤紫に --&gt;
+  &lt;a-light type="ambient" color="#330011"&gt;&lt;/a-light&gt;
+
+  &lt;!-- 改造2: directional をオレンジに、位置を変更 --&gt;
+  &lt;a-light type="directional" color="#FFA500" intensity="0.8"
+           position="3 5 -1" castShadow="true"&gt;&lt;/a-light&gt;
+
+  &lt;!-- 改造3: 水色の点光源を追加 --&gt;
+  &lt;a-light type="point" color="#4FC3F7" intensity="0.6"
+           distance="10" position="2 2 -2"&gt;&lt;/a-light&gt;
+
+  &lt;!-- 既存オブジェクト --&gt;
+  &lt;a-box position="-1.5 1 -4" color="#FF5252"
+         shadow="cast: true"&gt;&lt;/a-box&gt;
+  &lt;a-sphere position="0 1.2 -4" radius="0.8" color="#4FC3F7"
+           shadow="cast: true"&gt;&lt;/a-sphere&gt;
+  &lt;a-cylinder position="1.5 0.75 -4" radius="0.4" height="1.5"
+             color="#FFB800" shadow="cast: true"&gt;&lt;/a-cylinder&gt;
+
+  &lt;!-- 改造4: 新しい球を追加（影を投射・受け取り） --&gt;
+  &lt;a-sphere position="-0.5 0.5 -2.5" radius="0.4" color="#93D500"
+           shadow="cast: true; receive: true"&gt;&lt;/a-sphere&gt;
+
+  &lt;!-- 床 --&gt;
+  &lt;a-plane position="0 0 -4" rotation="-90 0 0"
+           width="12" height="12" color="#EEE"
+           shadow="receive: true"&gt;&lt;/a-plane&gt;
+
+  &lt;!-- 改造5: カメラを斜め横から --&gt;
+  &lt;a-camera position="3 2 2" rotation="-10 -20 0"&gt;
+    &lt;a-cursor color="#76B900"&gt;&lt;/a-cursor&gt;
+  &lt;/a-camera&gt;
+
+  &lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;
+&lt;/a-scene&gt;</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（ドラマチックなライティング）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「スポットライトステージ」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Spotlight Stage&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene shadow="type: pcfsoft"&gt;
+    &lt;!-- 環境光: 暗めの青で夜の雰囲気 --&gt;
+    &lt;a-light type="ambient" color="#0A0A2E" intensity="0.3"&gt;&lt;/a-light&gt;
+
+    &lt;!-- メインスポットライト: 白 --&gt;
+    &lt;a-light type="spot" color="#FFFFFF" intensity="2"
+             angle="30" penumbra="0.3"
+             position="0 6 -3" target="#center-obj"
+             castShadow="true"&gt;&lt;/a-light&gt;
+
+    &lt;!-- サイドライト: 赤 --&gt;
+    &lt;a-light type="point" color="#FF1744" intensity="0.6"
+             distance="8" position="-4 2 -4"&gt;&lt;/a-light&gt;
+
+    &lt;!-- サイドライト: 青 --&gt;
+    &lt;a-light type="point" color="#2979FF" intensity="0.6"
+             distance="8" position="4 2 -4"&gt;&lt;/a-light&gt;
+
+    &lt;!-- ステージ床 --&gt;
+    &lt;a-plane position="0 0 -4" rotation="-90 0 0"
+             width="10" height="10" color="#1A1A1A"
+             shadow="receive: true"&gt;&lt;/a-plane&gt;
+
+    &lt;!-- 中央のオブジェクト（主役） --&gt;
+    &lt;a-box id="center-obj" position="0 1 -4" color="white"
+           shadow="cast: true"&gt;&lt;/a-box&gt;
+
+    &lt;!-- 左の円柱 --&gt;
+    &lt;a-cylinder position="-2 1.5 -5" radius="0.3" height="3"
+               color="#333" shadow="cast: true"&gt;&lt;/a-cylinder&gt;
+
+    &lt;!-- 右の円柱 --&gt;
+    &lt;a-cylinder position="2 1.5 -5" radius="0.3" height="3"
+               color="#333" shadow="cast: true"&gt;&lt;/a-cylinder&gt;
+
+    &lt;!-- 後方の壁 --&gt;
+    &lt;a-plane position="0 3 -7" width="10" height="6"
+             color="#111"&gt;&lt;/a-plane&gt;
+
+    &lt;!-- カメラ: 客席の視点 --&gt;
+    &lt;a-camera position="0 2 3" rotation="-10 0 0"&gt;
+      &lt;a-cursor color="#FF5252" fuse="true" fuse-timeout="1500"&gt;&lt;/a-cursor&gt;
+    &lt;/a-camera&gt;
+
+    &lt;!-- 暗い空 --&gt;
+    &lt;a-sky color="#050510"&gt;&lt;/a-sky&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>3種類以上のライト</strong></td><td>ambient, directional/spot, point, hemisphere から3種類以上を使用</td></tr>
+          <tr><td>2</td><td><strong>影の表示</strong></td><td>scene の shadow、ライトの castShadow、オブジェクトの shadow 属性の3つが揃っている</td></tr>
+          <tr><td>3</td><td><strong>カメラの位置変更</strong></td><td>デフォルトの position="0 1.6 0" から意図的に変更されている</td></tr>
+          <tr><td>4</td><td><strong>カーソルの配置</strong></td><td>&lt;a-cursor&gt; がカメラの子要素として配置されている</td></tr>
+          <tr><td>5</td><td><strong>テーマの明確さ</strong></td><td>ライティングの色や配置がテーマと一致している</td></tr>
+          <tr><td>6</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、テーマ・ライトの意図・カメラ位置・工夫を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第6回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

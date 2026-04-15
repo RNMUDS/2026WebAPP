@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第9回: リアルタイムWebプログラミング① | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第9回: リアルタイムWebプログラミング①</h1>
+    <p>Socket.IO導入、双方向通信、テキストチャットの実装</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      今回から<strong>大きな転換点</strong>です。これまでの A-Frame 演習は「HTMLファイルを Live Server で開くだけ」でしたが、ここからは<strong>自分でサーバプログラムを書いて起動</strong>します。<br>
+      Node.js + Socket.IO を使い、複数のブラウザがリアルタイムに通信する<strong>テキストチャット</strong>を作ります。
+    </p>
+
+    <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:12px;padding:1.2rem;margin:0 0 1.5rem">
+      <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin-bottom:0.5rem">今回からの変更点</p>
+      <table>
+        <tr><th>これまで（第1〜8回）</th><th>今回から（第9回〜）</th></tr>
+        <tr><td>HTMLファイルを作成</td><td>HTMLファイル <strong>+ サーバプログラム（server.js）</strong> を作成</td></tr>
+        <tr><td>Live Server で起動</td><td><strong>ターミナルで <code>node server.js</code></strong> で起動</td></tr>
+        <tr><td>静的なページ</td><td><strong>リアルタイム双方向通信</strong></td></tr>
+        <tr><td>1人で確認</td><td><strong>複数のブラウザタブで確認</strong></td></tr>
+      </table>
+    </div>
+
+    <!-- 1.1 HTTPの限界 -->
+    <div class="concept-box">
+      <h4>1.1 HTTPの限界 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        HTTPは「手紙のやりとり」です。クライアントが手紙（リクエスト）を送らない限り、サーバから連絡することはできません。チャットのように「相手が発言したら即座に届く」仕組みには向いていません。
+      </div>
+      <p>第1回で学んだ <strong>HTTP通信</strong> は<strong>リクエスト - レスポンス型</strong>です。</p>
+      <ul class="point-list">
+        <li>クライアントがリクエストを送る → サーバがレスポンスを返す → <strong>通信終了</strong></li>
+        <li>サーバ側から自発的にクライアントへデータを送ることは<strong>できない</strong></li>
+        <li>新しい情報を得るには、クライアントが<strong>繰り返しリクエスト</strong>するしかない（ポーリング）</li>
+      </ul>
+      <p style="margin-top:0.5rem">チャット、オンラインゲーム、共同編集など<strong>リアルタイム性</strong>が求められるアプリには、HTTPだけでは不十分です。</p>
+    </div>
+
+    <!-- 1.2 WebSocket -->
+    <div class="concept-box">
+      <h4>1.2 WebSocket とは <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        HTTPが「手紙」なら、WebSocket は「電話」です。一度つながれば、<strong>どちらからでもいつでも話しかけられる</strong>常時接続の通信路です。
+      </div>
+      <p><strong>WebSocket</strong> は、クライアントとサーバの間に<strong>永続的な双方向通信路</strong>を開くプロトコルです。</p>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 260" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- HTTP section -->
+          <text x="170" y="20" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="12">HTTP（毎回切れる）</text>
+          <rect x="30" y="30" width="100" height="40" rx="8" fill="#1A1A1A" stroke="#FF5252" stroke-width="2"/>
+          <text x="80" y="55" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="11">クライアント</text>
+          <rect x="220" y="30" width="100" height="40" rx="8" fill="#1A1A1A" stroke="#FF5252" stroke-width="2"/>
+          <text x="270" y="55" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="11">サーバ</text>
+          <line x1="130" y1="40" x2="220" y2="40" stroke="#FF5252" stroke-width="1.5" marker-end="url(#arr1)"/>
+          <line x1="220" y1="55" x2="130" y2="55" stroke="#FF5252" stroke-width="1.5" marker-end="url(#arr1)" stroke-dasharray="4"/>
+          <text x="175" y="82" text-anchor="middle" fill="#999" font-size="9">リクエスト → レスポンス → 切断</text>
+          <line x1="130" y1="90" x2="220" y2="90" stroke="#FF5252" stroke-width="1.5" marker-end="url(#arr1)"/>
+          <line x1="220" y1="100" x2="130" y2="100" stroke="#FF5252" stroke-width="1.5" marker-end="url(#arr1)" stroke-dasharray="4"/>
+          <text x="175" y="120" text-anchor="middle" fill="#999" font-size="9">リクエスト → レスポンス → 切断</text>
+
+          <!-- WebSocket section -->
+          <text x="540" y="20" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">WebSocket（つなぎっぱなし）</text>
+          <rect x="400" y="30" width="100" height="40" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="450" y="55" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="11">クライアント</text>
+          <rect x="590" y="30" width="100" height="40" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="640" y="55" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="11">サーバ</text>
+          <line x1="500" y1="40" x2="590" y2="40" stroke="#76B900" stroke-width="2" marker-end="url(#arr2)"/>
+          <text x="545" y="35" text-anchor="middle" fill="#999" font-size="8">接続開始</text>
+          <rect x="500" y="55" width="90" height="70" rx="4" fill="none" stroke="#76B900" stroke-width="2"/>
+          <line x1="500" y1="65" x2="590" y2="65" stroke="#76B900" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <line x1="590" y1="80" x2="500" y2="80" stroke="#4FC3F7" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <line x1="500" y1="95" x2="590" y2="95" stroke="#76B900" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <line x1="590" y1="110" x2="500" y2="110" stroke="#4FC3F7" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <text x="545" y="140" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">双方向・リアルタイム</text>
+
+          <!-- Comparison -->
+          <rect x="30" y="170" width="310" height="70" rx="10" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <text x="185" y="190" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="11">HTTP</text>
+          <text x="185" y="210" text-anchor="middle" fill="#999" font-size="10">クライアントが聞かないと情報が来ない</text>
+          <text x="185" y="226" text-anchor="middle" fill="#999" font-size="10">毎回接続 → 切断の繰り返し</text>
+
+          <rect x="370" y="170" width="310" height="70" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="1"/>
+          <text x="525" y="190" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">WebSocket</text>
+          <text x="525" y="210" text-anchor="middle" fill="#999" font-size="10">サーバからいつでもデータを送れる</text>
+          <text x="525" y="226" text-anchor="middle" fill="#999" font-size="10">1回接続したらつなぎっぱなし</text>
+
+          <defs>
+            <marker id="arr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF5252"/></marker>
+            <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <table>
+        <tr><th></th><th>HTTP</th><th>WebSocket</th></tr>
+        <tr><td><strong>通信方向</strong></td><td>クライアント → サーバのみ（一方向）</td><td>双方向（どちらからでも送信可能）</td></tr>
+        <tr><td><strong>接続</strong></td><td>毎回接続→切断の繰り返し</td><td>一度接続したら維持し続ける</td></tr>
+        <tr><td><strong>リアルタイム性</strong></td><td>低い（ポーリングが必要）</td><td>高い（即座にデータが届く）</td></tr>
+        <tr><td><strong>用途</strong></td><td>Webページの表示、API通信</td><td>チャット、ゲーム、共同編集</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.3 Socket.IO -->
+    <div class="concept-box">
+      <h4>1.3 Socket.IO とは <span class="exam-alert">課題に出ます</span></h4>
+      <p><strong>Socket.IO</strong> は、WebSocket を<strong>簡単に使えるようにしたライブラリ</strong>です。</p>
+      <table>
+        <tr><th>機能</th><th>説明</th></tr>
+        <tr><td><strong>自動フォールバック</strong></td><td>WebSocket が使えない環境では、HTTP ロングポーリングに自動で切り替える</td></tr>
+        <tr><td><strong>自動再接続</strong></td><td>接続が切れても自動で再接続を試みる</td></tr>
+        <tr><td><strong>イベントベース</strong></td><td><code>emit</code>（送信）と <code>on</code>（受信）の2つのメソッドだけで通信できる</td></tr>
+        <tr><td><strong>ルーム</strong></td><td>特定のグループにだけメッセージを送れる（第10回以降で使用）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">Socket.IO は<strong>サーバ側（Node.js）</strong>と<strong>クライアント側（ブラウザ）</strong>の両方にライブラリがあり、セットで使います。</p>
+    </div>
+
+    <!-- 1.4 emit / on パターン -->
+    <div class="concept-box">
+      <h4>1.4 emit / on パターン <span class="exam-alert">コード体験に直結</span></h4>
+      <div class="analogy">
+        <code>emit</code> は「叫ぶ」、<code>on</code> は「耳を傾ける」です。Aさんが <code>emit('hello', 'こんにちは')</code> で叫ぶと、<code>on('hello', ...)</code> で耳を傾けている全員に届きます。
+      </div>
+      <p>Socket.IO の通信は<strong>イベント名</strong>と<strong>データ</strong>のペアで行います。</p>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 180" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <rect x="30" y="30" width="180" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="120" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">クライアント（ブラウザ）</text>
+          <text x="120" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11" font-weight="700">socket.emit('chat', msg)</text>
+
+          <rect x="490" y="30" width="180" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="580" y="50" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">サーバ（Node.js）</text>
+          <text x="580" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11" font-weight="700">socket.on('chat', fn)</text>
+
+          <line x1="210" y1="45" x2="490" y2="45" stroke="#76B900" stroke-width="2.5" marker-end="url(#ea1)"/>
+          <text x="350" y="38" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">emit('chat', 'こんにちは')</text>
+
+          <line x1="490" y1="115" x2="210" y2="115" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#ea2)"/>
+          <text x="350" y="108" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">io.emit('chat', 'こんにちは')</text>
+
+          <rect x="30" y="100" width="180" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="120" y="120" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">全クライアント</text>
+          <text x="120" y="138" text-anchor="middle" fill="#E0E0E0" font-size="11" font-weight="700">socket.on('chat', fn)</text>
+
+          <rect x="490" y="100" width="180" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="580" y="120" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">サーバ</text>
+          <text x="580" y="138" text-anchor="middle" fill="#E0E0E0" font-size="11" font-weight="700">io.emit('chat', msg)</text>
+
+          <defs>
+            <marker id="ea1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="ea2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <pre><span class="code-label">JavaScript ── 基本パターン</span>
+<span class="cmt">// 送信側（どちら側からでも使える）</span>
+socket.<span class="fn">emit</span>(<span class="str">'イベント名'</span>, データ);
+
+<span class="cmt">// 受信側（どちら側からでも使える）</span>
+socket.<span class="fn">on</span>(<span class="str">'イベント名'</span>, <span class="kw">function</span>(データ) {
+  <span class="cmt">// データを受け取ったときの処理</span>
+});</pre>
+    </div>
+
+    <!-- 1.5 broadcast -->
+    <div class="concept-box">
+      <h4>1.5 broadcast（ブロードキャスト）<span class="exam-alert">課題に出ます</span></h4>
+      <p>サーバからメッセージを送る方法は3種類あります。</p>
+      <table>
+        <tr><th>メソッド</th><th>送信先</th><th>使い場面</th></tr>
+        <tr><td><code>io.emit('event', data)</code></td><td><strong>全員</strong>（送信者を含む全クライアント）</td><td>全体チャットメッセージ</td></tr>
+        <tr><td><code>socket.broadcast.emit('event', data)</code></td><td><strong>送信者以外</strong>の全クライアント</td><td>「○○さんが入室しました」通知</td></tr>
+        <tr><td><code>socket.emit('event', data)</code></td><td><strong>送信者のみ</strong></td><td>エラーメッセージ、個別通知</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.6 接続/切断イベント -->
+    <div class="concept-box">
+      <h4>1.6 接続/切断イベント <span class="exam-alert">コード体験に直結</span></h4>
+      <p>Socket.IO には組み込みのイベントがあります。</p>
+      <pre><span class="code-label">JavaScript ── サーバ側</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  console.<span class="fn">log</span>(<span class="str">'ユーザが接続しました'</span>, socket.id);
+
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'ユーザが切断しました'</span>, socket.id);
+  });
+});</pre>
+      <table>
+        <tr><th>イベント</th><th>発生タイミング</th><th>引数</th></tr>
+        <tr><td><code>connection</code></td><td>クライアントがサーバに接続したとき</td><td><code>socket</code>（その接続を表すオブジェクト）</td></tr>
+        <tr><td><code>disconnect</code></td><td>クライアントが切断したとき（タブを閉じるなど）</td><td>切断理由の文字列</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><code>socket.id</code> は各接続に自動で割り当てられる<strong>一意のID</strong>です。ユーザの識別に使えます。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>Socket.IO の通信フローを読む</h3>
+      </div>
+      <p>以下のサーバコードとクライアントコードを見て、通信の流れを確認しましょう。</p>
+      <pre><span class="code-label">JavaScript ── サーバ（server.js）</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+  });
+});</pre>
+      <pre><span class="code-label">JavaScript ── クライアント（index.html内）</span>
+socket.<span class="fn">emit</span>(<span class="str">'chat'</span>, <span class="str">'こんにちは'</span>);
+
+socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+  <span class="cmt">// msg = 'こんにちは' が届く</span>
+});</pre>
+      <table>
+        <tr><th>順序</th><th>何が起きるか</th></tr>
+        <tr><td>1</td><td>クライアントが <code>emit('chat', 'こんにちは')</code> でサーバに送信</td></tr>
+        <tr><td>2</td><td>サーバの <code>on('chat', ...)</code> が発火し、<code>msg = 'こんにちは'</code> を受け取る</td></tr>
+        <tr><td>3</td><td>サーバが <code>io.emit('chat', msg)</code> で<strong>全クライアント</strong>に送信</td></tr>
+        <tr><td>4</td><td>各クライアントの <code>on('chat', ...)</code> が発火し、メッセージを表示</td></tr>
+      </table>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: emit/on の流れを追う</h3>
+      </div>
+      <p><strong>問題:</strong> ユーザA（ブラウザタブ1）とユーザB（ブラウザタブ2）が同時にサーバに接続しています。ユーザAが <code>"hello"</code> と送信したとき、以下の表を埋めなさい。</p>
+      <pre><span class="code-label">JavaScript ── サーバ</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+  });
+});</pre>
+      <table>
+        <tr><th style="width:50px">順番</th><th>何が起きるか</th><th>誰が受け取るか</th></tr>
+        <tr><td>①</td><td>ユーザAが <code>emit('chat', 'hello')</code> を実行</td><td class="blank-cell"></td></tr>
+        <tr><td>②</td><td>サーバの <code>on('chat', ...)</code> が発火し、<code>msg</code> に <span class="blank-cell" style="display:inline-block;min-width:60px;padding:0.2rem 0.5rem"></span> が入る</td><td>サーバ</td></tr>
+        <tr><td>③</td><td>サーバが <code>io.emit('chat', msg)</code> を実行</td><td class="blank-cell"></td></tr>
+        <tr><td>④</td><td>ユーザAとユーザBの <code>on('chat', ...)</code> が発火</td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>追加問題:</strong> もし <code>io.emit</code> の代わりに <code>socket.broadcast.emit</code> を使ったら、③の送信先はどう変わりますか？</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加問題にも回答してください。</div></div>
+    </div>
+
+    <!-- Trace 2 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 2: サーバ起動の流れを理解する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のサーバ起動コードを読み、空欄を埋めなさい。</p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
+      <table>
+        <tr><th style="width:40%">コード</th><th>何をしているか（空欄を埋める）</th></tr>
+        <tr><td><code>require('express')</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>http.createServer(app)</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>new Server(server)</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>express.static('public')</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>server.listen(3000)</code></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた表を記入してください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1rem">今回は <strong>Live Server ではなく</strong>、ターミナルからサーバを起動します。手順をよく読んでください。</p>
+
+    <div class="card" style="border-left:4px solid #76B900;margin-bottom:1.5rem">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>プロジェクトのセットアップ</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web09</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web09</code> を開く</li>
+        <li>VS Code 上部メニュー <strong>「ターミナル」→「新しいターミナル」</strong>を開く</li>
+        <li>ターミナルに以下のコマンドを入力して Enter（初期化 + ライブラリのインストール）</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+npm init -y
+npm install express socket.io</pre>
+      <ol start="5" style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>エクスプローラに <code>node_modules</code> フォルダと <code>package.json</code> が作成されたことを確認する</li>
+        <li><code>Web09</code> フォルダの中に <strong><code>public</code></strong> フォルダを作成する（HTMLファイル用）</li>
+      </ol>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>フォルダ構成:</strong><br>
+        <code>Web09/</code><br>
+        <code>&nbsp;&nbsp;├── server.js</code> &nbsp;← サーバプログラム<br>
+        <code>&nbsp;&nbsp;├── public/</code> &nbsp;← HTMLファイルを入れるフォルダ<br>
+        <code>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── index.html</code><br>
+        <code>&nbsp;&nbsp;├── package.json</code><br>
+        <code>&nbsp;&nbsp;└── node_modules/</code> &nbsp;← npm が自動生成（触らない）
+      </div>
+    </div>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>Socket.IO の接続確認 ── 最小構成</h3>
+      </div>
+      <p>まず、サーバとクライアントが接続できることを確認します。2つのファイルを作成してください。</p>
+
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong>（Web09 フォルダ直下に作成）</p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+<span class="cmt">// public フォルダの中身を静的ファイルとして配信</span>
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// クライアントが接続したとき</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
+
+  <span class="cmt">// クライアントが切断したとき</span>
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+  });
+});
+
+<span class="cmt">// サーバをポート3000で起動</span>
+server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+
+      <p style="margin-top:1.5rem"><strong>ファイル2: <code>public/index.html</code></strong>（public フォルダ内に作成）</p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Socket.IO 接続テスト<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; background: <span class="str">#111</span>; color: <span class="str">#eee</span>; padding: <span class="num">2</span>rem; }
+    <span class="str">#status</span> { font-size: <span class="num">1.5</span>rem; margin-top: <span class="num">1</span>rem; }
+    .connected { color: <span class="str">#76B900</span>; }
+    .disconnected { color: <span class="str">#FF5252</span>; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>Socket.IO 接続テスト<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;p</span> id=<span class="str">"status"</span> class=<span class="str">"disconnected"</span><span class="kw">&gt;</span>接続中...<span class="kw">&lt;/p&gt;</span>
+
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">var</span> socket = <span class="fn">io</span>();
+
+    socket.<span class="fn">on</span>(<span class="str">'connect'</span>, <span class="kw">function</span>() {
+      <span class="kw">var</span> el = document.<span class="fn">getElementById</span>(<span class="str">'status'</span>);
+      el.textContent = <span class="str">'接続成功! ID: '</span> + socket.id;
+      el.className = <span class="str">'connected'</span>;
+    });
+
+    socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+      <span class="kw">var</span> el = document.<span class="fn">getElementById</span>(<span class="str">'status'</span>);
+      el.textContent = <span class="str">'切断されました'</span>;
+      el.className = <span class="str">'disconnected'</span>;
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code のターミナルで以下を入力して Enter</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+node server.js</pre>
+      <ol start="2" style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ターミナルに <code>サーバ起動: http://localhost:3000</code> と表示されることを確認</li>
+        <li>ブラウザで <strong><code>http://localhost:3000</code></strong> にアクセス</li>
+        <li>画面に<strong>「接続成功! ID: xxxxx」</strong>と緑色で表示されれば成功</li>
+        <li>ターミナルにも <code>接続: xxxxx</code> とログが出ることを確認</li>
+      </ol>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>サーバの停止方法:</strong> ターミナルで <kbd>Ctrl+C</kbd> を押すとサーバが停止します。コードを変更したらサーバを停止 → 再起動（<code>node server.js</code>）してください。
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. ブラウザに何が表示されましたか？（ID も含めて記録する）<br>
+        Q2. ブラウザのタブを閉じると、ターミナルにはどんなログが出ましたか？<br>
+        Q3. ブラウザのタブを2つ開くと、ターミナルにはどんなログが出ましたか？ ID は同じでしたか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>テキストチャットアプリを作る</h3>
+      </div>
+      <p>接続確認ができたら、チャット機能を作ります。<strong>server.js と public/index.html の両方を書き換えてください。</strong></p>
+      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.85rem;color:#FFB800">
+        <strong>重要:</strong> まずターミナルで <kbd>Ctrl+C</kbd> を押してサーバを停止してから、コードを書き換えてください。
+      </div>
+
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong>（上書き）</p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
+
+  <span class="cmt">// クライアントから 'chat' イベントを受け取ったとき</span>
+  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+    console.<span class="fn">log</span>(<span class="str">'メッセージ:'</span>, msg);
+    <span class="cmt">// 全クライアントに転送する</span>
+    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+  });
+
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+  });
+});
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+
+      <p style="margin-top:1.5rem"><strong>ファイル2: <code>public/index.html</code></strong>（上書き）</p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>チャットアプリ<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body {
+      font-family: sans-serif;
+      background: <span class="str">#111</span>;
+      color: <span class="str">#eee</span>;
+      max-width: <span class="num">600</span>px;
+      margin: <span class="num">0</span> auto;
+      padding: <span class="num">1</span>rem;
+    }
+    h1 { color: <span class="str">#76B900</span>; }
+    <span class="str">#messages</span> {
+      list-style: none;
+      padding: <span class="num">0</span>;
+      height: <span class="num">400</span>px;
+      overflow-y: auto;
+      border: <span class="num">1</span>px solid <span class="str">#333</span>;
+      border-radius: <span class="num">8</span>px;
+      margin: <span class="num">1</span>rem <span class="num">0</span>;
+      background: <span class="str">#0A0A0A</span>;
+    }
+    <span class="str">#messages</span> li {
+      padding: <span class="num">0.5</span>rem <span class="num">1</span>rem;
+      border-bottom: <span class="num">1</span>px solid <span class="str">#222</span>;
+    }
+    <span class="str">#form</span> {
+      display: flex;
+      gap: <span class="num">0.5</span>rem;
+    }
+    <span class="str">#input</span> {
+      flex: <span class="num">1</span>;
+      padding: <span class="num">0.6</span>rem <span class="num">1</span>rem;
+      border: <span class="num">1</span>px solid <span class="str">#333</span>;
+      border-radius: <span class="num">8</span>px;
+      background: <span class="str">#1A1A1A</span>;
+      color: <span class="str">#eee</span>;
+      font-size: <span class="num">1</span>rem;
+    }
+    <span class="str">#send</span> {
+      padding: <span class="num">0.6</span>rem <span class="num">1.5</span>rem;
+      background: <span class="str">#76B900</span>;
+      color: white;
+      border: none;
+      border-radius: <span class="num">8</span>px;
+      font-size: <span class="num">1</span>rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    <span class="str">#send</span>:hover { background: <span class="str">#93D500</span>; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>チャットアプリ<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;ul</span> id=<span class="str">"messages"</span><span class="kw">&gt;&lt;/ul&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="str">"form"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span> id=<span class="str">"input"</span> type=<span class="str">"text"</span> placeholder=<span class="str">"メッセージを入力..."</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;button</span> id=<span class="str">"send"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">var</span> socket = <span class="fn">io</span>();
+    <span class="kw">var</span> input = document.<span class="fn">getElementById</span>(<span class="str">'input'</span>);
+    <span class="kw">var</span> sendBtn = document.<span class="fn">getElementById</span>(<span class="str">'send'</span>);
+    <span class="kw">var</span> messages = document.<span class="fn">getElementById</span>(<span class="str">'messages'</span>);
+
+    <span class="cmt">// 送信ボタンを押したとき</span>
+    sendBtn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+      <span class="kw">var</span> msg = input.value;
+      <span class="kw">if</span> (msg) {
+        socket.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+        input.value = <span class="str">''</span>;
+      }
+    });
+
+    <span class="cmt">// Enterキーでも送信</span>
+    input.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(e) {
+      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) {
+        sendBtn.<span class="fn">click</span>();
+      }
+    });
+
+    <span class="cmt">// サーバからメッセージを受け取ったとき</span>
+    socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+      <span class="kw">var</span> li = document.<span class="fn">createElement</span>(<span class="str">'li'</span>);
+      li.textContent = msg;
+      messages.<span class="fn">appendChild</span>(li);
+      <span class="cmt">// 自動スクロール</span>
+      messages.scrollTop = messages.scrollHeight;
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ターミナルで <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li>メッセージを入力して「送信」をクリック → メッセージが表示される</li>
+        <li><strong>ブラウザのタブをもう1つ開いて</strong> <code>http://localhost:3000</code> にアクセス</li>
+        <li>片方のタブでメッセージを送ると、<strong>もう片方のタブにもリアルタイムで表示される</strong></li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. タブ1で送ったメッセージが、タブ2にも表示されましたか？<br>
+        Q2. タブ2で送ったメッセージが、タブ1にも表示されましたか？<br>
+        Q3. ターミナル（サーバ側）のログには何が出力されていましたか？<br>
+        Q4. 片方のタブを閉じたとき、ターミナルにはどんなログが出ましたか？</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回のコード体験で動かしたコードを元に、<strong>「ここを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:45%">変更内容</th><th>質問例</th></tr>
+          <tr><td>server.js の <code>io.emit</code> を <code>socket.broadcast.emit</code> に変える</td><td>「自分の画面に自分のメッセージは表示される？」</td></tr>
+          <tr><td>クライアントの <code>&lt;script src="/socket.io/socket.io.js"&gt;</code> を削除する</td><td>「チャットは動く？ なぜ？」</td></tr>
+          <tr><td><code>server.listen(3000)</code> の <code>3000</code> を <code>8080</code> に変える</td><td>「ブラウザで何番にアクセスすればいい？」</td></tr>
+          <tr><td>server.js の <code>express.static('public')</code> の <code>'public'</code> を <code>'html'</code> に変える</td><td>「ページは表示される？ なぜ？」</td></tr>
+          <tr><td>3人がそれぞれ別のタブで同じURLを開く</td><td>「1人がメッセージを送ると何人に届く？」</td></tr>
+          <tr><td>サーバを <kbd>Ctrl+C</kbd> で停止した状態でメッセージを送信</td><td>「何が起きる？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>WebSocketとSocket.IOの知識を確認する</h3>
+      </div>
+      <p>セクション1の説明をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> 以下のHTTPとWebSocketの比較表を埋めなさい。</p>
+      <table>
+        <tr><th></th><th>HTTP</th><th>WebSocket</th></tr>
+        <tr><td><strong>通信方向</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>接続の持続</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>リアルタイム性</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>具体的な用途</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> Socket.IO の <code>emit</code> と <code>on</code> の役割をそれぞれ1文で説明しなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> 以下の3つの送信方法の違いを説明しなさい。A（ユーザA）がメッセージを送った場合、それぞれ誰にメッセージが届くか答えなさい。（接続中のユーザ: A, B, C の3人）</p>
+      <table>
+        <tr><th>サーバ側コード</th><th>メッセージが届くユーザ</th><th>使い場面（空欄を埋める）</th></tr>
+        <tr><td><code>io.emit('chat', msg)</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>socket.broadcast.emit('chat', msg)</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><code>socket.emit('chat', msg)</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> コード体験2のチャットアプリで、メッセージが送信されてから相手の画面に表示されるまでの流れを、以下の語句をすべて使って3〜5文で説明しなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        使う語句: <strong>emit</strong>、<strong>on</strong>、<strong>io.emit</strong>、<strong>サーバ</strong>、<strong>全クライアント</strong>
+      </div>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>チャットアプリを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験2のチャットアプリに以下の機能を追加しなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th><th>ヒント</th></tr>
+          <tr><td>1</td><td><strong>入室通知:</strong> 新しいユーザが接続したとき「新しいユーザが参加しました」と全員に通知する</td><td>server.js の <code>connection</code> 内で <code>io.emit('chat', '新しいユーザが参加しました')</code></td></tr>
+          <tr><td>2</td><td><strong>タイムスタンプ:</strong> メッセージの先頭に現在時刻を付ける（例: <code>[14:30] こんにちは</code>）</td><td>server.js の <code>chat</code> イベント内で、<code>new Date().toLocaleTimeString('ja-JP')</code> を使って時刻を付ける</td></tr>
+        </table>
+      </div>
+
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント（タイムスタンプ）:</strong></p>
+      <pre><span class="code-label">JavaScript ── server.js 内の chat イベント</span>
+socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
+  <span class="kw">var</span> time = <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleTimeString</span>(<span class="str">'ja-JP'</span>);
+  io.<span class="fn">emit</span>(<span class="str">'chat'</span>, <span class="str">'['</span> + time + <span class="str">'] '</span> + msg);
+});</pre>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後の server.js のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を追加/変更したか」と「その処理が何をしているか」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>拡張チャットアプリを作る</h3>
+      </div>
+      <p>コード体験2のチャットアプリを拡張して、以下の機能を追加してください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件（すべて実装すること）</p>
+        <ul class="point-list">
+          <li><strong>ユーザ名入力:</strong> チャット開始前にユーザ名を入力し、メッセージに名前を表示する（例: <code>[14:30] 田中: こんにちは</code>）</li>
+          <li><strong>接続人数の表示:</strong> 現在の接続人数をリアルタイムで画面に表示する</li>
+          <li><strong>入退室通知:</strong> 「○○さんが参加しました」「○○さんが退出しました」を全員に通知する</li>
+        </ul>
+      </div>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0;font-size:0.85rem;color:#93D500">
+        <strong>実装のヒント:</strong><br>
+        - ユーザ名は <code>prompt()</code> や入力欄で取得し、<code>emit('join', name)</code> でサーバに送る<br>
+        - サーバ側で接続中のユーザ数を管理し、接続/切断のたびに <code>io.emit('count', 人数)</code> で配信する<br>
+        - 切断時にユーザ名を通知するには、サーバ側でユーザ名を記憶しておく必要がある
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>server.js</code> と <code>public/index.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どの機能を実装したか</li>
+          <li>emit / on のイベント設計（どんなイベント名を使い、どんなデータを送っているか）</li>
+          <li>工夫した点や苦労した点</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-06-24T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th style="width:50px">順番</th><th>何が起きるか</th><th>誰が受け取るか</th></tr>
+          <tr><td>①</td><td>ユーザAが <code>emit('chat', 'hello')</code> を実行</td><td>サーバ</td></tr>
+          <tr><td>②</td><td>サーバの <code>on('chat', ...)</code> が発火し、<code>msg</code> に <strong>'hello'</strong> が入る</td><td>サーバ</td></tr>
+          <tr><td>③</td><td>サーバが <code>io.emit('chat', msg)</code> を実行</td><td><strong>ユーザA + ユーザB（全員）</strong></td></tr>
+          <tr><td>④</td><td>ユーザAとユーザBの <code>on('chat', ...)</code> が発火</td><td><strong>ユーザA + ユーザB</strong></td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>追加問題の解答:</strong> <code>socket.broadcast.emit</code> を使った場合、③の送信先は<strong>ユーザBのみ</strong>（送信者Aを除いた全員）になる。ユーザAの画面にはメッセージが表示されない。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th style="width:40%">コード</th><th>何をしているか</th></tr>
+          <tr><td><code>require('express')</code></td><td><strong>Express フレームワーク</strong>を読み込む。Webサーバの機能（静的ファイル配信、ルーティング等）を提供する。</td></tr>
+          <tr><td><code>http.createServer(app)</code></td><td>Express アプリを使って<strong>HTTPサーバ</strong>を作成する。Socket.IO を同じサーバ上で動かすために必要。</td></tr>
+          <tr><td><code>new Server(server)</code></td><td>HTTPサーバに<strong>Socket.IO のリアルタイム通信機能</strong>を追加する。</td></tr>
+          <tr><td><code>express.static('public')</code></td><td><strong><code>public</code> フォルダ</strong>の中身（HTML, CSS, JS, 画像など）を静的ファイルとしてブラウザに配信する設定。</td></tr>
+          <tr><td><code>server.listen(3000)</code></td><td>サーバを<strong>ポート3000</strong>で起動し、クライアントからの接続を待ち受ける。</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 黒い背景に「Socket.IO 接続テスト」という見出しと、「接続成功! ID: _abc123def」のような緑色のテキストが表示された。</li>
+          <li><strong>Q2:</strong> ブラウザのタブを閉じると、ターミナルに「切断: _abc123def」のようなログが出た。</li>
+          <li><strong>Q3:</strong> タブを2つ開くと、ターミナルに「接続: xxx」のログが2行出た。それぞれのIDは異なっていた（各接続に固有のIDが割り当てられる）。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> タブ1で送ったメッセージが、タブ2にもリアルタイムで表示された。</li>
+          <li><strong>Q2:</strong> タブ2で送ったメッセージも、タブ1にリアルタイムで表示された。双方向通信ができている。</li>
+          <li><strong>Q3:</strong> ターミナルに「メッセージ: こんにちは」のように、送信されたメッセージの内容がログとして出力された。</li>
+          <li><strong>Q4:</strong> 「切断: xxxxx」のようなログが出て、そのユーザのIDが表示された。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（WebSocketとSocket.IOの知識）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th></th><th>HTTP</th><th>WebSocket</th></tr>
+          <tr><td><strong>通信方向</strong></td><td>クライアント → サーバの一方向（リクエストしないとデータが来ない）</td><td>双方向（どちらからでもいつでも送信可能）</td></tr>
+          <tr><td><strong>接続の持続</strong></td><td>毎回接続 → 切断の繰り返し</td><td>一度接続したら維持し続ける（永続接続）</td></tr>
+          <tr><td><strong>リアルタイム性</strong></td><td>低い（ポーリングが必要）</td><td>高い（データが即座に届く）</td></tr>
+          <tr><td><strong>具体的な用途</strong></td><td>Webページの表示、API通信、フォーム送信</td><td>チャット、オンラインゲーム、共同編集、株価配信</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問2. 解答例:</strong></p>
+        <ul class="point-list">
+          <li><strong>emit:</strong> 指定したイベント名でデータを送信するメソッド。</li>
+          <li><strong>on:</strong> 指定したイベント名のデータを受信したときに、コールバック関数を実行するメソッド。</li>
+        </ul>
+        <p style="margin-top:1rem"><strong>問3.</strong></p>
+        <table>
+          <tr><th>サーバ側コード</th><th>メッセージが届くユーザ</th><th>使い場面</th></tr>
+          <tr><td><code>io.emit('chat', msg)</code></td><td><strong>A, B, C（全員）</strong></td><td>全体チャットメッセージなど、送信者を含む全員にメッセージを届けたいとき</td></tr>
+          <tr><td><code>socket.broadcast.emit('chat', msg)</code></td><td><strong>B, C（送信者A以外）</strong></td><td>「○○さんが入室しました」のような通知。送信者自身には不要な情報を送るとき</td></tr>
+          <tr><td><code>socket.emit('chat', msg)</code></td><td><strong>A（送信者のみ）</strong></td><td>エラーメッセージや個別通知など、特定のユーザだけに送りたいとき</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>問4. 解答例:</strong></p>
+        <p style="font-size:0.9rem">クライアント（ブラウザ）がメッセージを <code>emit('chat', msg)</code> でサーバに送信する。サーバは <code>on('chat', ...)</code> でこのイベントを受信し、メッセージデータを受け取る。サーバは受け取ったメッセージを <code>io.emit('chat', msg)</code> で全クライアントに転送する。すべてのクライアントは <code>on('chat', ...)</code> でメッセージを受信し、画面のメッセージ一覧に追加して表示する。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static('public'));
+
+io.on('connection', function(socket) {
+  console.log('接続:', socket.id);
+
+  // 改造1: 入室通知を全員に送る
+  io.emit('chat', '新しいユーザが参加しました');
+
+  socket.on('chat', function(msg) {
+    // 改造2: タイムスタンプを付ける
+    var time = new Date().toLocaleTimeString('ja-JP');
+    io.emit('chat', '[' + time + '] ' + msg);
+  });
+
+  socket.on('disconnect', function() {
+    console.log('切断:', socket.id);
+  });
+});
+
+server.listen(3000, function() {
+  console.log('サーバ起動: http://localhost:3000');
+});</pre>
+        <p style="margin-top:1rem"><strong>変更点の説明:</strong></p>
+        <ul class="point-list">
+          <li><strong>改造1（入室通知）:</strong> <code>connection</code> イベント内の先頭に <code>io.emit('chat', '新しいユーザが参加しました')</code> を追加。新しい接続が発生するたびに全クライアントに通知される。</li>
+          <li><strong>改造2（タイムスタンプ）:</strong> <code>chat</code> イベントハンドラ内で <code>new Date().toLocaleTimeString('ja-JP')</code> を呼び出して現在時刻を取得し、メッセージの先頭に <code>[時:分:秒]</code> の形で付与してから配信している。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（拡張チャットアプリ）</summary>
+      <div class="answer-content">
+        <p><strong>server.js</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static('public'));
+
+// ユーザ名を保持するオブジェクト
+var users = {};
+
+io.on('connection', function(socket) {
+  console.log('接続:', socket.id);
+
+  // ユーザ名の登録
+  socket.on('join', function(name) {
+    users[socket.id] = name;
+    // 入室通知
+    io.emit('chat', name + ' さんが参加しました');
+    // 接続人数を配信
+    io.emit('count', Object.keys(users).length);
+  });
+
+  // チャットメッセージ
+  socket.on('chat', function(msg) {
+    var name = users[socket.id] || '名無し';
+    var time = new Date().toLocaleTimeString('ja-JP');
+    io.emit('chat', '[' + time + '] ' + name + ': ' + msg);
+  });
+
+  // 切断時
+  socket.on('disconnect', function() {
+    var name = users[socket.id];
+    if (name) {
+      io.emit('chat', name + ' さんが退出しました');
+      delete users[socket.id];
+      io.emit('count', Object.keys(users).length);
+    }
+    console.log('切断:', socket.id);
+  });
+});
+
+server.listen(3000, function() {
+  console.log('サーバ起動: http://localhost:3000');
+});</pre>
+
+        <p style="margin-top:1.5rem"><strong>public/index.html</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;拡張チャットアプリ&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      font-family: sans-serif;
+      background: #111; color: #eee;
+      max-width: 600px; margin: 0 auto; padding: 1rem;
+    }
+    h1 { color: #76B900; }
+    #user-count {
+      color: #93D500; font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    #messages {
+      list-style: none; padding: 0;
+      height: 400px; overflow-y: auto;
+      border: 1px solid #333; border-radius: 8px;
+      margin: 1rem 0; background: #0A0A0A;
+    }
+    #messages li {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #222;
+    }
+    #form { display: flex; gap: 0.5rem; }
+    #input {
+      flex: 1; padding: 0.6rem 1rem;
+      border: 1px solid #333; border-radius: 8px;
+      background: #1A1A1A; color: #eee; font-size: 1rem;
+    }
+    #send {
+      padding: 0.6rem 1.5rem;
+      background: #76B900; color: white; border: none;
+      border-radius: 8px; font-size: 1rem;
+      font-weight: bold; cursor: pointer;
+    }
+    #send:hover { background: #93D500; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;拡張チャットアプリ&lt;/h1&gt;
+  &lt;p id="user-count"&gt;接続人数: 0&lt;/p&gt;
+  &lt;ul id="messages"&gt;&lt;/ul&gt;
+  &lt;div id="form"&gt;
+    &lt;input id="input" type="text" placeholder="メッセージを入力..."&gt;
+    &lt;button id="send"&gt;送信&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;script src="/socket.io/socket.io.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    var socket = io();
+    var input = document.getElementById('input');
+    var sendBtn = document.getElementById('send');
+    var messages = document.getElementById('messages');
+    var countEl = document.getElementById('user-count');
+
+    // ユーザ名を入力
+    var userName = prompt('ユーザ名を入力してください');
+    if (!userName) userName = '名無し';
+    socket.emit('join', userName);
+
+    sendBtn.addEventListener('click', function() {
+      var msg = input.value;
+      if (msg) {
+        socket.emit('chat', msg);
+        input.value = '';
+      }
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendBtn.click();
+    });
+
+    socket.on('chat', function(msg) {
+      var li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+    // 接続人数の更新
+    socket.on('count', function(n) {
+      countEl.textContent = '接続人数: ' + n;
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>ユーザ名の入力と表示</strong></td><td>メッセージにユーザ名が含まれている（例: <code>[14:30] 田中: こんにちは</code>）</td></tr>
+          <tr><td>2</td><td><strong>接続人数のリアルタイム表示</strong></td><td>新しいユーザが参加/退出するたびに人数が更新される</td></tr>
+          <tr><td>3</td><td><strong>入退室通知</strong></td><td>「○○さんが参加しました」「○○さんが退出しました」が表示される</td></tr>
+          <tr><td>4</td><td><strong>複数タブで動作確認</strong></td><td>2つ以上のタブで同時にチャットが機能する</td></tr>
+          <tr><td>5</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、実装した機能・emit/onの設計・工夫した点を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第9回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

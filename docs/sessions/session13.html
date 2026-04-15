@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第13回: 総合制作① 設計 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+
+/* ============ WORKSHEET STYLING ============ */
+.worksheet-field {
+  background: #0A0A0A;
+  border: 2px dashed #4A7A00;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  min-height: 60px;
+}
+.worksheet-field p {
+  color: #666;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第13回: 総合制作① 設計</h1>
+    <p>マルチユーザ3D Webアプリケーションの設計</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計4項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span>設計ドキュメント</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>詳細設計 + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>設計プレゼン + フィードバック</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-trace">ワークシート</span>設計ワークシート記入</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      今回から最終制作に入ります。<br>
+      第13回は<strong>設計</strong>、第14回は<strong>実装・調整</strong>、第15回は<strong>発表</strong>です。<br>
+      まずは「何を作るか」「どう作るか」を計画しましょう。
+    </p>
+
+    <!-- 1.1 最終制作の要件 -->
+    <div class="concept-box">
+      <h4>1.1 最終制作の要件 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        家を建てる前に設計図を描くように、アプリを作る前に<strong>何を作るか</strong>を明確にしておくことが重要です。<br>
+        設計なしに作り始めると、途中で方向がわからなくなり、完成しないリスクが高まります。
+      </div>
+      <p>最終制作では、これまで学んだ技術を組み合わせて<strong>マルチユーザ3D Webアプリケーション</strong>を作ります。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:12px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">使用技術（必須）</p>
+        <table>
+          <tr><th>技術</th><th>用途</th><th>学んだ回</th></tr>
+          <tr><td><strong>A-Frame 1.7.1</strong></td><td>3D空間の構築</td><td>第4〜8回</td></tr>
+          <tr><td><strong>Node.js + Express</strong></td><td>サーバの構築</td><td>第2〜3回</td></tr>
+          <tr><td><strong>Socket.IO</strong></td><td>リアルタイム通信</td><td>第9〜12回</td></tr>
+        </table>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:12px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">基本機能（必須） <span class="exam-alert">設計課題に含む</span></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>機能</th><th>説明</th></tr>
+          <tr><td>1</td><td><strong>マルチプレイ（アバター同期）</strong></td><td>複数のブラウザからアクセスし、各ユーザのアバターが3D空間内に表示される。位置・回転がリアルタイムに同期される。</td></tr>
+          <tr><td>2</td><td><strong>吹き出しチャット</strong></td><td>3D空間内でテキストメッセージを送信でき、アバターの上に吹き出しとして表示される。</td></tr>
+        </table>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:12px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:1rem;margin-bottom:0.8rem">自由要素（個性を出す部分）</p>
+        <ul class="point-list">
+          <li><strong>テーマ</strong> ── 空間のコンセプト（教室、宇宙、水中、美術館、ゲーム空間など）</li>
+          <li><strong>3Dデザイン</strong> ── オブジェクトの配置、色、テクスチャ、ライティング</li>
+          <li><strong>追加機能</strong> ── オブジェクト操作、エフェクト、音声、スコア、DB永続化など</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1.2 設計の進め方 -->
+    <div class="concept-box">
+      <h4>1.2 設計の進め方</h4>
+      <p>以下の5ステップで設計を進めます。</p>
+      <div style="background:#1A1A1A;border-radius:10px;padding:1.5rem;margin:0.5rem 0">
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;font-size:0.9rem">
+          <span style="background:#76B900;color:white;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">1. テーマ決定</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">2. 機能一覧</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">3. 画面設計</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#1a2e0a;color:#76B900;padding:0.3rem 0.8rem;border-radius:6px;border:1px solid #76B900;font-weight:700">4. 技術選定</span>
+          <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
+          <span style="background:#FFB800;color:#111;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">5. ファイル構成</span>
+        </div>
+      </div>
+
+      <table style="margin-top:1rem">
+        <tr><th>ステップ</th><th>内容</th><th>ポイント</th></tr>
+        <tr><td><strong>1. テーマ決定</strong></td><td>「どんな3D空間を作るか」を決める</td><td>自分が興味を持てるテーマを選ぶ。作りたいもののイメージを言葉にする。</td></tr>
+        <tr><td><strong>2. 機能一覧</strong></td><td>必須機能 + 追加機能をリスト化する</td><td>必須の2機能を先に書き、余力で追加する機能を優先順位付けする。</td></tr>
+        <tr><td><strong>3. 画面設計</strong></td><td>3D空間のレイアウトをスケッチする</td><td>手描きでOK。どこに何を配置するか、UIはどこに置くかを決める。</td></tr>
+        <tr><td><strong>4. 技術選定</strong></td><td>各機能をどの技術で実現するか整理する</td><td>過去の回で学んだ技術を振り返り、該当する技術を選ぶ。</td></tr>
+        <tr><td><strong>5. ファイル構成</strong></td><td>プロジェクトのフォルダ・ファイル構成を決める</td><td>server.js / index.html / style.css など、必要なファイルを洗い出す。</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.3 過去の回で学んだ技術の振り返り -->
+    <div class="concept-box">
+      <h4>1.3 過去の回で学んだ技術の振り返り <span class="exam-alert">設計で参照</span></h4>
+      <p>設計時に「どの技術を使えばよいか」を判断するための振り返り表です。</p>
+      <table>
+        <tr><th>回</th><th>テーマ</th><th>学んだ技術・キーワード</th><th>最終制作での活用例</th></tr>
+        <tr><td>1</td><td>全体構造の整理</td><td>クライアント・サーバ、HTTP、A-Frame基礎</td><td>全体設計の基盤</td></tr>
+        <tr><td>2</td><td>サーバサイド基礎</td><td>Node.js、Express、ルーティング</td><td>サーバの構築</td></tr>
+        <tr><td>3</td><td>クライアント-サーバ通信</td><td>JSON、fetch、APIエンドポイント</td><td>データの送受信</td></tr>
+        <tr><td>4</td><td>3D表現入門</td><td>A-Frame、エンティティ、コンポーネント、座標系</td><td>3D空間の構築</td></tr>
+        <tr><td>5</td><td>3D表現①</td><td>カラー、マテリアル、テクスチャ</td><td>オブジェクトの見た目</td></tr>
+        <tr><td>6</td><td>3D表現②</td><td>ライティング、影、カメラ</td><td>雰囲気・演出</td></tr>
+        <tr><td>7</td><td>3D表現③</td><td>アニメーション、動き</td><td>動的な表現</td></tr>
+        <tr><td>8</td><td>3Dアセット活用</td><td>glTFモデルの読み込み</td><td>3Dモデルの配置</td></tr>
+        <tr><td>9</td><td>リアルタイム①</td><td>Socket.IO、双方向通信、チャット</td><td>チャット機能</td></tr>
+        <tr><td>10</td><td>リアルタイム②</td><td>アバター位置・回転の同期</td><td>マルチプレイ</td></tr>
+        <tr><td>11</td><td>リアルタイム③</td><td>イベント・アニメーション同期</td><td>インタラクション同期</td></tr>
+        <tr><td>12</td><td>リアルタイム④</td><td>SQLite、データ永続化</td><td>チャット履歴・状態保存</td></tr>
+      </table>
+    </div>
+
+    <!-- 1.4 設計ドキュメントの例 -->
+    <div class="concept-box">
+      <h4>1.4 設計ドキュメントの例</h4>
+      <p>以下は「<strong>バーチャル水族館</strong>」をテーマにした設計例です。自分の設計の参考にしてください。</p>
+
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1.2rem;margin:0.75rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">設計例: バーチャル水族館</p>
+
+        <p style="font-size:0.9rem;margin-bottom:0.5rem"><strong>テーマ:</strong> 海の中を自由に泳げるバーチャル水族館。複数人が同時に入り、魚や海の生物を観察しながらチャットできる。</p>
+
+        <p style="font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem"><strong>機能一覧:</strong></p>
+        <table>
+          <tr><th>区分</th><th>機能</th><th>使用技術</th></tr>
+          <tr><td style="color:#76B900">必須</td><td>マルチプレイ（ダイバーアバター同期）</td><td>Socket.IO + A-Frame</td></tr>
+          <tr><td style="color:#76B900">必須</td><td>吹き出しチャット（泡のデザイン）</td><td>Socket.IO + A-Frame text</td></tr>
+          <tr><td style="color:#4FC3F7">追加</td><td>魚の群れアニメーション</td><td>A-Frame animation</td></tr>
+          <tr><td style="color:#4FC3F7">追加</td><td>チャット履歴の永続化</td><td>SQLite + better-sqlite3</td></tr>
+          <tr><td style="color:#999">余力</td><td>BGM（海の音）</td><td>HTML5 Audio</td></tr>
+        </table>
+
+        <p style="font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem"><strong>ファイル構成:</strong></p>
+        <pre style="background:#0A0A0A;border:1px solid #333;font-size:0.85rem;padding:0.8rem"><span class="code-label">ファイル構成</span>
+Web13/
+  server.js          <span class="cmt">← Express + Socket.IO サーバ</span>
+  index.html         <span class="cmt">← A-Frame 3Dシーン + チャットUI</span>
+  style.css          <span class="cmt">← チャットUIのスタイル</span>
+  package.json       <span class="cmt">← npm 設定</span>
+  aquarium.db        <span class="cmt">← SQLite データベース（自動生成）</span>
+  assets/
+    fish.glb         <span class="cmt">← 魚の3Dモデル</span>
+    coral.glb        <span class="cmt">← サンゴの3Dモデル</span>
+    ocean-sound.mp3  <span class="cmt">← BGM</span></pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. DESIGN WORKSHEET ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>設計ワークシート</h2>
+    </div>
+
+    <p style="margin-bottom:1.5rem">以下のワークシートに沿って、自分の最終制作の設計を進めてください。<br>各項目をNotionに記入していきます。</p>
+
+    <!-- Worksheet 1: テーマ -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 1</span>
+        <h3>テーマを決める</h3>
+      </div>
+      <p>どんな3D空間を作りたいですか？ テーマとコンセプトを決めましょう。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">テーマの例</p>
+        <table>
+          <tr><th>ジャンル</th><th>テーマ例</th></tr>
+          <tr><td>自然</td><td>水族館、宇宙、深海、森、キャンプ場</td></tr>
+          <tr><td>建物</td><td>美術館、学校、カフェ、城、図書館</td></tr>
+          <tr><td>ゲーム</td><td>迷路、宝探し、レース、タワーディフェンス</td></tr>
+          <tr><td>ファンタジー</td><td>魔法の世界、天空の城、地下都市</td></tr>
+          <tr><td>日常</td><td>自分の部屋、商店街、公園、祭り</td></tr>
+        </table>
+      </div>
+      <div class="worksheet-field">
+        <p>ここにテーマとコンセプトを記入（例: 「バーチャル教室 ── 授業をオンラインで体験できる3D教室空間」）</p>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> テーマ名と、どんな空間を作りたいかを2〜3文で説明してください。</div></div>
+    </div>
+
+    <!-- Worksheet 2: 機能一覧 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 2</span>
+        <h3>機能一覧を作る</h3>
+      </div>
+      <p>実装する機能をリストアップしましょう。必須機能 + 追加機能に分けて整理します。</p>
+      <table>
+        <tr><th>区分</th><th>機能名</th><th>説明（空欄を埋める）</th><th>使用技術（空欄を埋める）</th></tr>
+        <tr><td style="color:#76B900;font-weight:700">必須</td><td>マルチプレイ</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td style="color:#76B900;font-weight:700">必須</td><td>吹き出しチャット</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td style="color:#4FC3F7;font-weight:700">追加1</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td style="color:#4FC3F7;font-weight:700">追加2</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td style="color:#999;font-weight:700">余力</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 上の表を埋めてください。追加機能は1つ以上考えましょう。</div></div>
+    </div>
+
+    <!-- Worksheet 3: 画面設計 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3</span>
+        <h3>画面設計（スケッチ）</h3>
+      </div>
+      <p>3D空間のレイアウトを<strong>手描きのスケッチ</strong>で描いてください。以下の要素を含めましょう。</p>
+      <ul class="point-list">
+        <li>3D空間全体の見取り図（上から見た図 or パース図）</li>
+        <li>主要なオブジェクトの配置（どこに何を置くか）</li>
+        <li>アバターの出現位置</li>
+        <li>チャットUIの位置（画面下部？ 3D空間内？）</li>
+        <li>その他のUI要素（名前入力、ボタンなど）</li>
+      </ul>
+      <div class="worksheet-field">
+        <p>紙にスケッチを描いて、スマートフォンで撮影し、Notionに画像として貼り付けてください。</p>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> スケッチ画像を貼り付けてください。きれいに描く必要はありません。内容が伝わればOKです。</div></div>
+    </div>
+
+    <!-- Worksheet 4: 技術選定 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 4</span>
+        <h3>技術選定</h3>
+      </div>
+      <p>機能一覧の各機能について、どの技術を使って実現するかを整理しましょう。セクション1の振り返り表を参考にしてください。</p>
+      <table>
+        <tr><th>機能</th><th>クライアント側の技術</th><th>サーバ側の技術</th><th>参考にする回</th></tr>
+        <tr><td>3D空間の表示</td><td class="blank-cell"></td><td>—</td><td class="blank-cell"></td></tr>
+        <tr><td>アバター同期</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>吹き出しチャット</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>追加機能1</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 上の表を埋めてください。</div></div>
+    </div>
+
+    <!-- Worksheet 5: ファイル構成 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 5</span>
+        <h3>ファイル構成を決める</h3>
+      </div>
+      <p>プロジェクトに必要なファイルとフォルダの構成を決めましょう。</p>
+      <div style="background:#0A0A0A;border:1px solid #333;border-radius:10px;padding:1rem;margin:0.75rem 0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:1.8">
+        <span style="color:#76B900;font-weight:700">最低限必要なファイル:</span><br>
+        <span style="color:#999">Web13/</span><br>
+        <span style="color:#E0E0E0">&nbsp;&nbsp;server.js</span> <span style="color:#616161">← Express + Socket.IO サーバ</span><br>
+        <span style="color:#E0E0E0">&nbsp;&nbsp;index.html</span> <span style="color:#616161">← A-Frame シーン + UI</span><br>
+        <span style="color:#E0E0E0">&nbsp;&nbsp;package.json</span> <span style="color:#616161">← npm init -y で作成</span><br>
+        <span style="color:#FFB800">&nbsp;&nbsp;（ここに自分のファイルを追加）</span>
+      </div>
+      <div class="worksheet-field">
+        <p>自分のプロジェクトのファイル構成を書いてください（上の形式に倣う）</p>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> ファイル構成を記入してください。各ファイルの役割も簡潔に書きましょう。</div></div>
+    </div>
+
+    <!-- Worksheet 6: スケジュール -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 6</span>
+        <h3>実装スケジュール</h3>
+      </div>
+      <p>第14回（実装回）での作業計画を立てましょう。90分をどう使うか考えます。</p>
+      <table>
+        <tr><th>時間</th><th>作業内容（空欄を埋める）</th><th>完了条件（空欄を埋める）</th></tr>
+        <tr><td><strong>0:00 - 0:20</strong><br>(20分)</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>0:20 - 0:50</strong><br>(30分)</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>0:50 - 1:10</strong><br>(20分)</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>1:10 - 1:30</strong><br>(20分)</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> スケジュール表を埋めてください。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. (No code experience - replaced by worksheet) ============ -->
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">3</div>
+      <h2>グループ口頭試問（設計プレゼン）</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、設計内容を発表し合いましょう。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>設計プレゼン（1人2分 × 全員）</h3>
+      </div>
+      <p>1人ずつ順番に、自分の設計内容をグループメンバーに発表してください。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">発表で伝えること</p>
+        <ul class="point-list">
+          <li><strong>テーマ</strong>: 何を作るか（30秒）</li>
+          <li><strong>必須機能</strong>: マルチプレイとチャットをどう実現するか（30秒）</li>
+          <li><strong>追加機能</strong>: どんな独自機能を入れるか（30秒）</li>
+          <li><strong>スケッチ</strong>: 画面設計を見せながら説明（30秒）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>フィードバック（全員発表後・10分）</h3>
+      </div>
+      <p>全員の発表が終わったら、お互いにフィードバックを行います。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">フィードバックの観点</p>
+        <table>
+          <tr><th style="width:30px"></th><th>観点</th><th>質問例</th></tr>
+          <tr><td>1</td><td><strong>実現可能性</strong></td><td>「この機能は次回の90分で実装できそうか？」</td></tr>
+          <tr><td>2</td><td><strong>面白さ</strong></td><td>「使ってみたいと思うか？ どこが面白いか？」</td></tr>
+          <tr><td>3</td><td><strong>改善提案</strong></td><td>「こうするともっと良くなるのでは？」</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各メンバーのテーマと、あなたが伝えたフィードバック</li>
+          <li>他のメンバーからもらったフィードバック（自分の設計に対するもの）</li>
+          <li>フィードバックを受けて<strong>設計を修正する点</strong>があれば記入</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">4</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題: 設計ドキュメント -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題</span>
+        <h3>設計ドキュメントを完成させる</h3>
+      </div>
+      <p>セクション2のワークシート（Step 1〜6）をすべて完成させ、以下の構成で設計ドキュメントとしてまとめなさい。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">設計ドキュメントに含める内容</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>項目</th><th>記入内容</th></tr>
+          <tr><td>1</td><td><strong>テーマ・コンセプト</strong></td><td>テーマ名と2〜3文の説明</td></tr>
+          <tr><td>2</td><td><strong>機能一覧</strong></td><td>必須機能2つ + 追加機能1つ以上（表形式）</td></tr>
+          <tr><td>3</td><td><strong>画面設計スケッチ</strong></td><td>手描きスケッチの写真</td></tr>
+          <tr><td>4</td><td><strong>技術選定表</strong></td><td>各機能に対する使用技術と参考にする回</td></tr>
+          <tr><td>5</td><td><strong>ファイル構成</strong></td><td>プロジェクトのファイル・フォルダ構成</td></tr>
+          <tr><td>6</td><td><strong>実装スケジュール</strong></td><td>第14回の90分の作業計画</td></tr>
+        </table>
+      </div>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 上記6項目をすべて含む設計ドキュメントをNotionページにまとめてください。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">5</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>詳細設計 + 追加機能の提案</h3>
+      </div>
+      <p>標準課題の設計ドキュメントをさらに深め、詳細な設計と追加機能の提案を行ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>詳細ワイヤーフレーム</strong> ── 画面のUI要素（ボタン、入力欄、表示領域）を含む詳細な画面設計図を描く。手描きまたはデジタルツールで作成。</li>
+          <li><strong>追加機能の詳細提案</strong> ── 基本機能に加えて実装したい追加機能を1つ以上選び、以下を説明する:
+            <ul class="point-list" style="margin-top:0.3rem;margin-left:1rem">
+              <li>機能の概要（何ができるか）</li>
+              <li>実装方法の概要（どの技術をどう使うか）</li>
+              <li>ユーザにとっての価値（なぜこの機能が必要か）</li>
+            </ul>
+          </li>
+          <li><strong>Socket.IO イベント設計</strong> ── クライアントとサーバ間でやり取りするイベント名とデータ構造を表にまとめる</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">Socket.IO イベント設計の例</p>
+        <table>
+          <tr><th>イベント名</th><th>方向</th><th>データ構造</th><th>用途</th></tr>
+          <tr><td><code>join</code></td><td>クライアント → サーバ</td><td><code>{ name: "太郎" }</code></td><td>参加通知</td></tr>
+          <tr><td><code>player-joined</code></td><td>サーバ → 全クライアント</td><td><code>{ id: "xxx", name: "太郎" }</code></td><td>新規参加の通知</td></tr>
+          <tr><td><code>move</code></td><td>クライアント → サーバ</td><td><code>{ x: 0, y: 1.6, z: -3, ry: 90 }</code></td><td>位置・回転の送信</td></tr>
+          <tr><td><code>chat</code></td><td>クライアント → サーバ</td><td><code>{ text: "こんにちは" }</code></td><td>チャット送信</td></tr>
+          <tr><td><code>chat-broadcast</code></td><td>サーバ → 全クライアント</td><td><code>{ id: "xxx", name: "太郎", text: "こんにちは" }</code></td><td>チャット配信</td></tr>
+        </table>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. 詳細設計ドキュメント</strong></td>
+            <td>詳細ワイヤーフレーム + 追加機能提案 + Socket.IOイベント設計をNotionにまとめる</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>追加機能をなぜ選んだか</li>
+          <li>その機能をどうやって実装する予定か</li>
+          <li>フィードバックを受けて修正した点（あれば）</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:0.8rem"><strong>評価チェックリスト:</strong></p>
+      <table>
+        <tr><th style="width:30px">#</th><th>チェック項目</th></tr>
+        <tr><td>1</td><td>詳細ワイヤーフレームにUI要素が含まれている</td></tr>
+        <tr><td>2</td><td>追加機能の概要・実装方法・ユーザ価値が記述されている</td></tr>
+        <tr><td>3</td><td>Socket.IO イベント設計が表形式でまとまっている</td></tr>
+        <tr><td>4</td><td>音声で設計の意図と実装計画を説明している</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-07-22T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">6</div>
+      <h2>解答例</h2>
+    </div>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 解答例（設計ドキュメント）</summary>
+      <div class="answer-content">
+        <p style="margin-bottom:1rem">以下は「<strong>バーチャル教室</strong>」をテーマにした設計ドキュメントの例です。</p>
+
+        <p><strong>1. テーマ・コンセプト</strong></p>
+        <p style="font-size:0.9rem;margin-bottom:1rem">テーマ: バーチャル教室。オンラインで友達と一緒に教室に入り、吹き出しチャットで会話しながら3D空間を体験できるアプリ。教室の雰囲気を再現し、黒板にメッセージを書ける機能も付ける。</p>
+
+        <p><strong>2. 機能一覧</strong></p>
+        <table>
+          <tr><th>区分</th><th>機能</th><th>説明</th><th>使用技術</th></tr>
+          <tr><td style="color:#76B900">必須</td><td>マルチプレイ</td><td>複数ユーザが教室に入り、生徒アバターとして表示される。位置・回転がリアルタイム同期。</td><td>Socket.IO + A-Frame</td></tr>
+          <tr><td style="color:#76B900">必須</td><td>吹き出しチャット</td><td>アバターの上にチャットメッセージが吹き出しとして表示される。</td><td>Socket.IO + A-Frame text</td></tr>
+          <tr><td style="color:#4FC3F7">追加</td><td>黒板メッセージ</td><td>教室前方の黒板に共有メッセージを書き込める。</td><td>Socket.IO + A-Frame text</td></tr>
+          <tr><td style="color:#999">余力</td><td>チャット永続化</td><td>チャット履歴をDBに保存。途中参加者にも表示。</td><td>SQLite + better-sqlite3</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>3. 画面設計スケッチ</strong></p>
+        <p style="font-size:0.9rem;color:#999">（手描きスケッチの写真をここに貼る）</p>
+        <div style="background:#1A1A1A;border:2px dashed #4A7A00;border-radius:10px;padding:2rem;text-align:center;color:#666;margin:0.5rem 0">
+          教室の見取り図（上から）:<br>
+          前方に黒板、中央に机×6、各机に椅子<br>
+          右下にチャット入力UI（HTML overlay）<br>
+          カメラ初期位置 = 教室後方
+        </div>
+
+        <p style="margin-top:1rem"><strong>4. 技術選定表</strong></p>
+        <table>
+          <tr><th>機能</th><th>クライアント側</th><th>サーバ側</th><th>参考にする回</th></tr>
+          <tr><td>3D空間</td><td>A-Frame 1.7.1</td><td>—</td><td>第4〜8回</td></tr>
+          <tr><td>アバター同期</td><td>Socket.IO client + A-Frame</td><td>Socket.IO server</td><td>第10回</td></tr>
+          <tr><td>吹き出しチャット</td><td>Socket.IO client + A-Frame text</td><td>Socket.IO server</td><td>第9回</td></tr>
+          <tr><td>黒板メッセージ</td><td>Socket.IO client + A-Frame text</td><td>Socket.IO server</td><td>第11回</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>5. ファイル構成</strong></p>
+        <pre style="background:#0A0A0A;border:1px solid #333;font-size:0.85rem;padding:0.8rem">Web13/
+  server.js      ← Express + Socket.IO サーバ
+  index.html     ← A-Frame 教室シーン + チャットUI
+  style.css      ← チャットUIのスタイル
+  package.json   ← npm 設定</pre>
+
+        <p style="margin-top:1rem"><strong>6. 実装スケジュール</strong></p>
+        <table>
+          <tr><th>時間</th><th>作業内容</th><th>完了条件</th></tr>
+          <tr><td>0:00 - 0:20</td><td>サーバセットアップ + 3D教室の基本配置</td><td>node server.js で起動し、ブラウザに教室が表示される</td></tr>
+          <tr><td>0:20 - 0:50</td><td>マルチプレイ実装（アバター同期）</td><td>2つのブラウザでアバターが動く</td></tr>
+          <tr><td>0:50 - 1:10</td><td>吹き出しチャット実装</td><td>チャットメッセージが吹き出しとして表示される</td></tr>
+          <tr><td>1:10 - 1:30</td><td>教室の見た目の調整 + 追加機能</td><td>教室らしい見た目になり、動作確認が完了している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（詳細設計）</summary>
+      <div class="answer-content">
+        <p><strong>追加機能の詳細提案: 黒板メッセージ機能</strong></p>
+        <table>
+          <tr><th>項目</th><th>内容</th></tr>
+          <tr><td><strong>概要</strong></td><td>教室前方の黒板をクリックすると入力欄が表示され、メッセージを書き込める。書き込んだ内容は全ユーザにリアルタイムに表示される。</td></tr>
+          <tr><td><strong>実装方法</strong></td><td>A-Frame の <code>&lt;a-text&gt;</code> で黒板上にテキストを表示。Socket.IO の <code>board-write</code> イベントでメッセージを送受信。</td></tr>
+          <tr><td><strong>ユーザ価値</strong></td><td>吹き出しチャットは流れてしまうが、黒板のメッセージは残る。「お知らせ」や「共有メモ」として使える。教室らしい体験になる。</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>Socket.IO イベント設計:</strong></p>
+        <table>
+          <tr><th>イベント名</th><th>方向</th><th>データ構造</th><th>用途</th></tr>
+          <tr><td><code>join</code></td><td>C → S</td><td><code>{ name: "太郎" }</code></td><td>参加通知。名前を送信。</td></tr>
+          <tr><td><code>player-joined</code></td><td>S → All</td><td><code>{ id: "abc", name: "太郎" }</code></td><td>新規参加をブロードキャスト</td></tr>
+          <tr><td><code>player-left</code></td><td>S → All</td><td><code>{ id: "abc" }</code></td><td>離脱をブロードキャスト</td></tr>
+          <tr><td><code>move</code></td><td>C → S</td><td><code>{ x, y, z, ry }</code></td><td>位置・回転を送信</td></tr>
+          <tr><td><code>player-moved</code></td><td>S → Others</td><td><code>{ id, x, y, z, ry }</code></td><td>他ユーザの移動を配信</td></tr>
+          <tr><td><code>chat</code></td><td>C → S</td><td><code>{ text: "..." }</code></td><td>吹き出しチャット送信</td></tr>
+          <tr><td><code>chat-broadcast</code></td><td>S → All</td><td><code>{ id, name, text }</code></td><td>吹き出しチャット配信</td></tr>
+          <tr><td><code>board-write</code></td><td>C → S</td><td><code>{ text: "..." }</code></td><td>黒板への書き込み</td></tr>
+          <tr><td><code>board-update</code></td><td>S → All</td><td><code>{ text: "..." }</code></td><td>黒板の内容を全員に配信</td></tr>
+          <tr><td><code>init-state</code></td><td>S → C</td><td><code>{ players: [...], board: "..." }</code></td><td>接続時の初期状態</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>評価ポイント:</strong></p>
+        <ul class="point-list">
+          <li>イベント設計が表形式で整理されており、データ構造が明確</li>
+          <li>追加機能の「概要・実装方法・ユーザ価値」の3点が記述されている</li>
+          <li>ワイヤーフレームにUI要素の配置が描かれている</li>
+          <li>音声で設計意図と実装計画を説明している</li>
+        </ul>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第13回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|SQL)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

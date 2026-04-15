@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第4回: Webにおける3D表現入門 | Webプログラミング演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #111111;
+  color: #e0e0e0;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYOUT ============ */
+.container { max-width: 860px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+section { padding: clamp(2rem, 5vw, 4rem) 0; }
+section + section { border-top: 1px solid #222; }
+
+/* ============ HEADER ============ */
+.hero {
+  background: linear-gradient(135deg, #111111, #1a2e0a, #0a1a0a);
+  color: white;
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(118,185,0,0.3), transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(147,213,0,0.2), transparent 50%);
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+.hero p { font-size: clamp(0.95rem, 1.8vw, 1.15rem); opacity: 0.85; max-width: 600px; }
+
+/* ============ SUBMISSION BOX ============ */
+.submission-box {
+  background: linear-gradient(135deg, #1A1A1A, #1a2e0a);
+  border: 2px solid #76B900;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin: 2rem 0;
+}
+.submission-box h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #76B900;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.submission-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+.sub-item {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.sub-count {
+  background: #76B900;
+  color: white;
+  border-radius: 6px;
+  min-width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* ============ TAGS ============ */
+.tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.tag-example   { background: #1a2e0a; color: #76B900; }
+.tag-trace     { background: #2e1a0a; color: #FFB800; }
+.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
+.tag-standard  { background: #1a2e0a; color: #93D500; }
+.tag-advanced  { background: #2e1a0a; color: #FFB800; }
+.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+
+/* ============ EXAM ALERT TAG ============ */
+.exam-alert {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid #FF5252;
+  color: #FF5252;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  animation: exam-pulse 2s ease-in-out 3;
+}
+@keyframes exam-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.section-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: white;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #141414;
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid #2a2a2a;
+}
+.card-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #222;
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 700; }
+.card.example   { border-left: 4px solid #76B900; }
+.card.trace     { border-left: 4px solid #93D500; }
+.card.code-exp  { border-left: 4px solid #4A7A00; }
+.card.standard  { border-left: 4px solid #76B900; }
+.card.advanced  { border-left: 4px solid #FFB800; }
+.card.group     { border-left: 4px solid #4FC3F7; }
+
+/* ============ NOTION CALLOUT ============ */
+.notion-submit {
+  background: #1a2e0a;
+  border: 1px solid #76B900;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.notion-submit::before { content: '\1F4DD'; font-size: 1rem; flex-shrink: 0; }
+.notion-submit strong { color: #FFB800; }
+
+/* ============ TABLES ============ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+th {
+  background: rgba(118, 185, 0, 0.15);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #76B900;
+  letter-spacing: 0.02em;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-top: 1px solid #222;
+}
+tr:nth-child(even) td { background: #111; }
+.blank-cell {
+  background: #1a2e0a !important;
+  border: 1px dashed #4A7A00;
+  min-width: 100px;
+}
+
+/* ============ CODE ============ */
+pre {
+  background: #0A0A0A;
+  color: #E0E0E0;
+  border-radius: 12px;
+  padding: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  line-height: 1.7;
+  margin: 1rem 0;
+  position: relative;
+}
+pre .kw { color: #76B900; }
+pre .fn { color: #93D500; }
+pre .str { color: #FFB800; }
+pre .cmt { color: #616161; font-style: italic; }
+pre .num { color: #FF5252; }
+pre .op { color: #4FC3F7; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: rgba(255,255,255,0.08);
+  color: #999999;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0 12px 0 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ============ EXPLANATION BLOCKS ============ */
+.concept-box {
+  background: rgba(118, 185, 0, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #2a3a1a;
+}
+.concept-box h4 {
+  font-size: 0.95rem; font-weight: 700; color: #76B900; margin-bottom: 0.5rem;
+}
+.analogy {
+  background: #1a1a0a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid #FFB800;
+  font-size: 0.95rem;
+}
+.analogy::before {
+  content: '\1F4A1 日常の例';
+  display: block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #FFB800;
+  margin-bottom: 0.3rem;
+}
+.point-list {
+  list-style: none;
+  padding: 0;
+}
+.point-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+.point-list li::before {
+  content: '\25B8';
+  position: absolute; left: 0;
+  color: #76B900;
+  font-weight: 700;
+}
+
+/* ============ DIAGRAMS (SVG) ============ */
+.diagram-container {
+  display: flex; justify-content: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.diagram-container svg {
+  max-width: 100%; height: auto;
+  background: #1A1A1A;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #444;
+}
+
+/* ============ ANSWERS (COLLAPSIBLE) ============ */
+details {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #1a1a1a;
+  user-select: none;
+}
+details summary::marker { content: ''; }
+details summary::before {
+  content: '\25B6';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #666;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
+
+/* ============ FOOTER ============ */
+footer {
+  background: #0A0A0A;
+  color: #999999;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+  .submission-items { grid-template-columns: 1fr; }
+  .section-num { width: 36px; height: 36px; font-size: 0.95rem; }
+}
+
+/* ============ COPY BUTTON ============ */
+pre { position: relative; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  color: #999;
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+  z-index: 2;
+}
+.copy-btn:hover { background: #76B900; color: white; border-color: #76B900; }
+.copy-btn.copied { background: #76B900; color: white; border-color: #76B900; }
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  details summary::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
+    <h1>第4回: Webにおける3D表現入門</h1>
+    <p>A-Frame導入、エンティティ、コンポーネント、座標系、基本ジオメトリ</p>
+  </div>
+</header>
+
+<!-- ============ SUBMISSION GUIDE ============ -->
+<section style="padding-top:2rem;padding-bottom:0">
+  <div class="container">
+    <div class="submission-box">
+      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
+      <div class="submission-items">
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
+        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>ECS理解 + コード改造</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1. EXPLANATION ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">1</div>
+      <h2>説明</h2>
+    </div>
+
+    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+      第1回では A-Frame の基本タグ（<code>&lt;a-box&gt;</code> など）で3D空間を作りました。<br>
+      今回はその裏側にある<strong>エンティティ・コンポーネント・システム（ECS）</strong>というアーキテクチャを理解し、より柔軟な3D表現の土台を作ります。
+    </p>
+
+    <!-- 1.1 ECS -->
+    <div class="concept-box">
+      <h4>1.1 エンティティ・コンポーネント・システム（ECS）<span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        レゴブロックで車を作るとき、車体（土台）にタイヤ・ハンドル・ライトなどの<strong>パーツを取り付け</strong>ます。パーツの組み合わせを変えれば、同じ土台からトラックにもレーシングカーにもなります。<br>
+        ECS も同じで、空の「モノ」（エンティティ）に<strong>機能パーツ（コンポーネント）</strong>を付け外しして3Dオブジェクトを作ります。
+      </div>
+      <p>A-Frame は<strong>ECS（Entity-Component-System）</strong>というアーキテクチャを採用しています。</p>
+      <table>
+        <tr><th>用語</th><th>役割</th><th>A-Frameでの対応</th></tr>
+        <tr><td><strong>Entity（エンティティ）</strong></td><td>「モノ」の入れ物。それ自体は何の見た目も動作も持たない。</td><td><code>&lt;a-entity&gt;</code> タグ</td></tr>
+        <tr><td><strong>Component（コンポーネント）</strong></td><td>エンティティに追加する「機能パーツ」。見た目・位置・動きなどを1つずつ定義する。</td><td>HTML属性（<code>geometry</code>, <code>material</code>, <code>position</code> など）</td></tr>
+        <tr><td><strong>System（システム）</strong></td><td>コンポーネントをまとめて処理するエンジン。開発者が直接触ることは少ない。</td><td>A-Frameの内部処理（描画ループ等）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">ECS の最大の利点は<strong>組み合わせの自由度</strong>です。geometry を変えれば形が変わり、material を変えれば見た目が変わり、animation を付ければ動く ―― すべて独立したパーツとしてエンティティに付け外しできます。</p>
+    </div>
+
+    <!-- 1.2 a-entity -->
+    <div class="concept-box">
+      <h4>1.2 エンティティ: <code>&lt;a-entity&gt;</code> <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        エンティティは「何も描かれていない白いキャンバス」です。そのままでは何も見えませんが、<strong>絵の具（material）</strong>と<strong>型紙（geometry）</strong>を与えると初めて「形のある見えるモノ」になります。
+      </div>
+      <p><code>&lt;a-entity&gt;</code> は A-Frame の<strong>汎用要素</strong>です。単体では何も表示されませんが、コンポーネント（属性）を追加することで3Dオブジェクトになります。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- 何も表示されない（コンポーネントがないため）--&gt;</span>
+<span class="kw">&lt;a-entity&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- geometry + material を追加すると赤い箱になる --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: box"</span>
+  material=<span class="str">"color: red"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <ul class="point-list">
+        <li><code>&lt;a-entity&gt;</code> だけ書いても何も見えない ―― コンポーネントが「見た目」を決める</li>
+        <li>コンポーネントはHTML属性として <code>属性名="プロパティ: 値"</code> の形式で書く</li>
+        <li>複数のプロパティはセミコロン <code>;</code> で区切る: <code>geometry="primitive: box; width: 2; height: 0.5"</code></li>
+      </ul>
+    </div>
+
+    <!-- 1.3 主要コンポーネント -->
+    <div class="concept-box">
+      <h4>1.3 主要コンポーネント <span class="exam-alert">課題に出ます</span></h4>
+      <p>エンティティに追加できる代表的なコンポーネントを見てみましょう。</p>
+      <table>
+        <tr><th>コンポーネント</th><th>役割</th><th>記述例</th></tr>
+        <tr><td><strong>geometry</strong></td><td>形を決める（箱、球、円柱…）</td><td><code>geometry="primitive: box; width: 2"</code></td></tr>
+        <tr><td><strong>material</strong></td><td>見た目を決める（色、透明度…）</td><td><code>material="color: red; opacity: 0.8"</code></td></tr>
+        <tr><td><strong>position</strong></td><td>位置を決める（x, y, z）</td><td><code>position="0 1 -3"</code></td></tr>
+        <tr><td><strong>rotation</strong></td><td>回転を決める（度数法）</td><td><code>rotation="0 45 0"</code></td></tr>
+        <tr><td><strong>scale</strong></td><td>拡大縮小を決める</td><td><code>scale="2 1 0.5"</code></td></tr>
+      </table>
+      <p style="margin-top:0.5rem">これらはすべて<strong>独立したコンポーネント</strong>です。必要なものだけ組み合わせてエンティティに付けられます。</p>
+    </div>
+
+    <!-- 1.4 座標系 -->
+    <div class="concept-box">
+      <h4>1.4 3D座標系の詳細 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        教室に立っているところを想像してください。<strong>右手を横に伸ばす方向が X</strong>（右がプラス）、<strong>頭の上が Y</strong>（上がプラス）、<strong>自分の背中側が Z</strong>（手前がプラス）です。
+      </div>
+      <p>A-Frame は<strong>右手座標系</strong>を使います。単位は<strong>メートル</strong>です。</p>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 500 300" width="500" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- Origin -->
+          <circle cx="250" cy="200" r="5" fill="#76B900"/>
+          <text x="260" y="220" fill="#888" font-size="11">原点 (0, 0, 0)</text>
+          <!-- X axis -->
+          <line x1="250" y1="200" x2="430" y2="200" stroke="#FF5252" stroke-width="2.5" marker-end="url(#arrowR)"/>
+          <text x="435" y="205" fill="#FF5252" font-weight="700" font-size="14">X</text>
+          <text x="350" y="225" fill="#888" font-size="10">右 (+)</text>
+          <!-- Y axis -->
+          <line x1="250" y1="200" x2="250" y2="40" stroke="#76B900" stroke-width="2.5" marker-end="url(#arrowG)"/>
+          <text x="255" y="35" fill="#76B900" font-weight="700" font-size="14">Y</text>
+          <text x="260" y="100" fill="#888" font-size="10">上 (+)</text>
+          <!-- Z axis -->
+          <line x1="250" y1="200" x2="120" y2="270" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#arrowB)"/>
+          <text x="105" y="285" fill="#4FC3F7" font-weight="700" font-size="14">Z</text>
+          <text x="145" y="255" fill="#888" font-size="10">手前 (+)</text>
+          <!-- Camera -->
+          <rect x="200" y="170" width="30" height="20" rx="4" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="215" y="165" text-anchor="middle" fill="#FFB800" font-size="9" font-weight="700">カメラ</text>
+          <!-- Note -->
+          <rect x="30" y="20" width="180" height="50" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <text x="120" y="40" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">右手座標系</text>
+          <text x="120" y="58" text-anchor="middle" fill="#E0E0E0" font-size="10">単位: メートル (1 = 1m)</text>
+          <defs>
+            <marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF5252"/></marker>
+            <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <table>
+        <tr><th>軸</th><th>方向</th><th>プラスの向き</th></tr>
+        <tr><td><strong>X 軸</strong></td><td>左右</td><td>右がプラス</td></tr>
+        <tr><td><strong>Y 軸</strong></td><td>上下</td><td>上がプラス</td></tr>
+        <tr><td><strong>Z 軸</strong></td><td>手前奥</td><td>手前がプラス（カメラに向かってくる方向）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>カメラのデフォルト位置は <code>(0, 1.6, 0)</code></strong> です（立っている人の目の高さ約1.6m）。Z がマイナスの方向が「カメラの正面（奥）」になるため、オブジェクトを見えるようにするには<strong>Z をマイナスに</strong>します。</p>
+    </div>
+
+    <!-- 1.5 プリミティブ vs エンティティ -->
+    <div class="concept-box">
+      <h4>1.5 プリミティブ vs エンティティ <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        「カレーライス」と言えば「ご飯 + カレールー + 皿」がセットで伝わります。プリミティブも同じで、<strong>よく使う組み合わせに名前を付けたショートカット</strong>です。
+      </div>
+      <p>第1回で使った <code>&lt;a-box&gt;</code> や <code>&lt;a-sphere&gt;</code> は<strong>プリミティブ</strong>と呼ばれ、エンティティ + コンポーネントの<strong>ショートカット（省略記法）</strong>です。</p>
+      <table>
+        <tr><th>プリミティブ記法（ショートカット）</th><th>エンティティ・コンポーネント記法（正式）</th></tr>
+        <tr>
+          <td><code>&lt;a-box position="0 1 -3" color="red"&gt;</code></td>
+          <td><code>&lt;a-entity geometry="primitive: box" material="color: red" position="0 1 -3"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;a-sphere position="0 2 -5" radius="1.5" color="blue"&gt;</code></td>
+          <td><code>&lt;a-entity geometry="primitive: sphere; radius: 1.5" material="color: blue" position="0 2 -5"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;a-cylinder position="1 0.5 -3" radius="0.5" height="1" color="yellow"&gt;</code></td>
+          <td><code>&lt;a-entity geometry="primitive: cylinder; radius: 0.5; height: 1" material="color: yellow" position="1 0.5 -3"&gt;</code></td>
+        </tr>
+      </table>
+      <p style="margin-top:0.5rem">どちらの書き方でも<strong>結果はまったく同じ</strong>です。プリミティブは初心者に読みやすく、エンティティ・コンポーネント記法は細かい制御やカスタムコンポーネントの追加に便利です。</p>
+    </div>
+
+    <!-- 1.6 rotation -->
+    <div class="concept-box">
+      <h4>1.6 rotation属性 ── 回転の指定 <span class="exam-alert">課題に出ます</span></h4>
+      <div class="analogy">
+        串に刺した焼き鳥を想像してください。串を<strong>X軸</strong>に見立てると、串を回すと焼き鳥が前後に回転します。<strong>Y軸</strong>を中心にすると左右に回転（首を振る動き）、<strong>Z軸</strong>を中心にすると時計回り/反時計回りに回ります。
+      </div>
+      <p><code>rotation</code> は<strong>度数法（degree）</strong>で X軸、Y軸、Z軸 の回転角度を指定します。</p>
+      <table>
+        <tr><th>記述例</th><th>動き</th></tr>
+        <tr><td><code>rotation="45 0 0"</code></td><td>X軸を中心に45度回転（前方向にお辞儀）</td></tr>
+        <tr><td><code>rotation="0 90 0"</code></td><td>Y軸を中心に90度回転（横を向く）</td></tr>
+        <tr><td><code>rotation="0 0 30"</code></td><td>Z軸を中心に30度回転（時計の針のように傾く）</td></tr>
+        <tr><td><code>rotation="-90 0 0"</code></td><td>X軸を中心に-90度回転（平面を床にする定番パターン）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem">第1回で <code>&lt;a-plane rotation="-90 0 0"&gt;</code> と書いて床を作りました。これは<strong>デフォルトで垂直に立っている平面を、X軸を中心に-90度回転させて水平に倒す</strong>操作です。</p>
+    </div>
+
+    <!-- 1.7 scale -->
+    <div class="concept-box">
+      <h4>1.7 scale属性 ── 拡大縮小</h4>
+      <div class="analogy">
+        写真の拡大印刷と同じです。縦横均等に2倍にすれば大きく、0.5倍にすれば小さくなります。縦だけ3倍にすれば縦長に引き延ばされます。
+      </div>
+      <p><code>scale</code> は X軸、Y軸、Z軸 の<strong>拡大率</strong>を指定します。デフォルトは <code>"1 1 1"</code>（等倍）です。</p>
+      <table>
+        <tr><th>記述例</th><th>効果</th></tr>
+        <tr><td><code>scale="1 1 1"</code></td><td>元のサイズ（デフォルト）</td></tr>
+        <tr><td><code>scale="2 2 2"</code></td><td>全方向に2倍（大きくなる）</td></tr>
+        <tr><td><code>scale="0.5 0.5 0.5"</code></td><td>全方向に半分（小さくなる）</td></tr>
+        <tr><td><code>scale="1 3 1"</code></td><td>Y軸方向のみ3倍（縦長に引き延ばし）</td></tr>
+        <tr><td><code>scale="2 0.5 1"</code></td><td>横に2倍、縦に半分（平たくなる）</td></tr>
+      </table>
+      <p style="margin-top:0.5rem"><strong>注意:</strong> scale は geometry のサイズ指定（<code>width</code>, <code>height</code>）とは異なります。geometry はオブジェクト自体の形状を定義し、scale はそのオブジェクト全体を変形させます。子エンティティがある場合、scale は子にも影響します。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 2. EXAMPLES & TRACE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">2</div>
+      <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- Example -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>プリミティブとエンティティ・コンポーネント記法の対応</h3>
+      </div>
+      <p>以下の2つのコードは<strong>まったく同じ結果</strong>を表示します。対応関係を確認しましょう。</p>
+      <pre><span class="code-label">HTML ── プリミティブ記法</span>
+<span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> width=<span class="str">"2"</span> height=<span class="str">"0.5"</span> depth=<span class="str">"1"</span> color=<span class="str">"orange"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
+      <pre><span class="code-label">HTML ── エンティティ・コンポーネント記法</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"primitive: box; width: 2; height: 0.5; depth: 1"</span>
+  material=<span class="str">"color: orange"</span>
+  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <table>
+        <tr><th>プリミティブの属性</th><th>エンティティの対応コンポーネント</th></tr>
+        <tr><td><code>width="2" height="0.5" depth="1"</code></td><td><code>geometry="primitive: box; width: 2; height: 0.5; depth: 1"</code></td></tr>
+        <tr><td><code>color="orange"</code></td><td><code>material="color: orange"</code></td></tr>
+        <tr><td><code>position="0 1 -3"</code></td><td><code>position="0 1 -3"</code>（同じ）</td></tr>
+      </table>
+      <ul class="point-list">
+        <li>プリミティブの <code>color</code> 属性は、内部的には <code>material</code> コンポーネントの <code>color</code> プロパティに変換される</li>
+        <li>プリミティブの <code>width</code>, <code>height</code>, <code>depth</code> は <code>geometry</code> コンポーネントのプロパティになる</li>
+        <li><code>position</code> はどちらの記法でも同じ書き方</li>
+      </ul>
+    </div>
+
+    <!-- Trace 1 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 1: プリミティブをエンティティ記法に変換する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のプリミティブ記法を、エンティティ・コンポーネント記法に書き換えなさい。</p>
+      <pre><span class="code-label">HTML ── 変換前（プリミティブ）</span>
+<span class="kw">&lt;a-sphere</span> position=<span class="str">"2 1.5 -4"</span> radius=<span class="str">"0.8"</span> color=<span class="str">"#FF6347"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+<span class="kw">&lt;a-cylinder</span> position=<span class="str">"-1 1 -5"</span> radius=<span class="str">"0.3"</span> height=<span class="str">"2"</span> color=<span class="str">"green"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
+
+<span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"8"</span> height=<span class="str">"8"</span> color=<span class="str">"#CCC"</span><span class="kw">&gt;&lt;/a-plane&gt;</span></pre>
+      <p style="margin-top:0.5rem">変換後のエンティティ・コンポーネント記法を以下の形式で記入してください。</p>
+      <pre><span class="code-label">HTML ── 変換後（エンティティ・コンポーネント）── 空欄を埋める</span>
+<span class="cmt">&lt;!-- 球 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"______________________"</span>
+  material=<span class="str">"______________________"</span>
+  position=<span class="str">"______________________"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- 円柱 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"______________________"</span>
+  material=<span class="str">"______________________"</span>
+  position=<span class="str">"______________________"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- 床 --&gt;</span>
+<span class="kw">&lt;a-entity</span>
+  geometry=<span class="str">"______________________"</span>
+  material=<span class="str">"______________________"</span>
+  position=<span class="str">"______________________"</span>
+  rotation=<span class="str">"______________________"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めたコードを記入してください。</div></div>
+    </div>
+
+    <!-- Trace 2 -->
+    <div class="card trace">
+      <div class="card-header">
+        <span class="tag tag-trace">トレース演習</span>
+        <h3>トレース演習 2: rotation と scale の効果を予測する</h3>
+      </div>
+      <p><strong>問題:</strong> 以下のコードで、各エンティティがどのように表示されるかを予測し、表を埋めなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- A --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box"</span>
+    material=<span class="str">"color: red"</span>
+    position=<span class="str">"-2 1 -4"</span>
+    rotation=<span class="str">"0 45 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- B --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: box"</span>
+    material=<span class="str">"color: blue"</span>
+    position=<span class="str">"0 1 -4"</span>
+    scale=<span class="str">"2 0.5 1"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- C --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: sphere; radius: 0.5"</span>
+    material=<span class="str">"color: green"</span>
+    position=<span class="str">"2 1 -4"</span>
+    scale=<span class="str">"1 2 1"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="kw">&lt;a-entity</span>
+    geometry=<span class="str">"primitive: plane; width: 10; height: 10"</span>
+    material=<span class="str">"color: #CCC"</span>
+    position=<span class="str">"0 0 -4"</span>
+    rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+      <table>
+        <tr><th>ラベル</th><th>形</th><th>色</th><th>見え方の予測（rotationやscaleの影響）</th></tr>
+        <tr><td>A</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>B</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>C</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
+    </div>
+    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
+
+    <!-- Code Exp 1 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 1</span>
+        <h3>プリミティブ vs エンティティ・コンポーネント ── <code>compare.html</code></h3>
+      </div>
+      <p><code>S:\Web_Prog\Web04</code> フォルダを作成し、VS Code で開きます。新しいファイルを作成します。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>Sドライブの <code>Web_Prog</code> 内に <strong><code>Web04</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web04</code> を開く</li>
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>compare.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── compare.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Primitive vs Entity-Component<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- 左側: プリミティブ記法 --&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"-2 1 -4"</span> color=<span class="str">"#FF6347"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-2 2.5 -4"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#4FC3F7"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+    <span class="cmt">&lt;!-- 右側: エンティティ・コンポーネント記法（同じ結果） --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: #FF6347"</span>
+      position=<span class="str">"2 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere; radius: 0.5"</span>
+      material=<span class="str">"color: #4FC3F7"</span>
+      position=<span class="str">"2 2.5 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 中央のラベル代わりの柱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: cylinder; radius: 0.05; height: 3"</span>
+      material=<span class="str">"color: #666"</span>
+      position=<span class="str">"0 1.5 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: plane; width: 12; height: 12"</span>
+      material=<span class="str">"color: #7BC8A4"</span>
+      position=<span class="str">"0 0 -4"</span>
+      rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
+        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
+        <li>ブラウザに3D空間が表示される</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
+        Q1. 左側（プリミティブ）と右側（エンティティ・コンポーネント）の表示結果を比べて、違いはあるか？<br>
+        Q2. ブラウザの開発者ツール（F12 → Elements）で <code>&lt;a-box&gt;</code> タグをクリックして確認すると、内部的にどのような属性が付いているか？</div></div>
+    </div>
+
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>rotation・scale・ネスト ── <code>transform.html</code></h3>
+      </div>
+      <p>同じ <code>Web04</code> フォルダにもう1つファイルを作ります。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>ファイル名を <strong><code>transform.html</code></strong> と入力して Enter</li>
+        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
+      </ol>
+      <pre><span class="code-label">HTML ── transform.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Rotation, Scale &amp; Nesting<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+
+    <span class="cmt">&lt;!-- A: 45度回転した赤い箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: red"</span>
+      position=<span class="str">"-2 1 -4"</span>
+      rotation=<span class="str">"0 45 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- B: 横に潰れた青い箱 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: box"</span>
+      material=<span class="str">"color: blue"</span>
+      position=<span class="str">"0 1 -4"</span>
+      scale=<span class="str">"2 0.5 1"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- C: 縦長の緑の球 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: sphere; radius: 0.5"</span>
+      material=<span class="str">"color: green"</span>
+      position=<span class="str">"2 1 -4"</span>
+      scale=<span class="str">"1 2 1"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- D: ネストされたエンティティ（親子関係） --&gt;</span>
+    <span class="kw">&lt;a-entity</span> position=<span class="str">"0 1 -7"</span> rotation=<span class="str">"0 30 0"</span><span class="kw">&gt;</span>
+      <span class="cmt">&lt;!-- 親エンティティの中に子を配置 --&gt;</span>
+      <span class="kw">&lt;a-entity</span>
+        geometry=<span class="str">"primitive: box; width: 2; height: 0.2; depth: 2"</span>
+        material=<span class="str">"color: #8B4513"</span>
+        position=<span class="str">"0 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+      <span class="kw">&lt;a-entity</span>
+        geometry=<span class="str">"primitive: sphere; radius: 0.3"</span>
+        material=<span class="str">"color: #FFD700"</span>
+        position=<span class="str">"0 0.5 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+      <span class="kw">&lt;a-entity</span>
+        geometry=<span class="str">"primitive: cylinder; radius: 0.1; height: 0.6"</span>
+        material=<span class="str">"color: #C0C0C0"</span>
+        position=<span class="str">"0.6 0.4 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+    <span class="kw">&lt;/a-entity&gt;</span>
+
+    <span class="cmt">&lt;!-- 床 --&gt;</span>
+    <span class="kw">&lt;a-entity</span>
+      geometry=<span class="str">"primitive: plane; width: 12; height: 12"</span>
+      material=<span class="str">"color: #CCC"</span>
+      position=<span class="str">"0 0 -4"</span>
+      rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>transform.html</code> を右クリック → 「Open with Live Server」</p>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. トレース演習2の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
+        Q2. D（ネストされたエンティティ）は何に見えるか？ 親エンティティの rotation="0 30 0" を "0 0 0" に変えるとどう変わるか？<br>
+        Q3. B の scale="2 0.5 1" を "1 1 1" に戻すとどうなるか？ 実際に試す</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#4A7A00">4</div>
+      <h2>グループ口頭試問</h2>
+    </div>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 1</span>
+        <h3>質問を考える（個人・5分）</h3>
+      </div>
+      <p>今回学んだ ECS・エンティティ・コンポーネント・座標系・rotation・scale の内容から、<strong>「この概念を説明できるか？」「このコードを変えたらどうなる？」という質問を2つ</strong>考えてください。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <table>
+          <tr><th style="width:45%">質問例</th><th>意図</th></tr>
+          <tr><td>ECS の E・C・S はそれぞれ何の略で、A-Frame ではどう対応するか？</td><td>ECS の理解</td></tr>
+          <tr><td><code>&lt;a-box color="red"&gt;</code> をエンティティ・コンポーネント記法に書き換えるとどうなるか？</td><td>記法の変換</td></tr>
+          <tr><td><code>scale="1 3 1"</code> をかけた球はどんな形になるか？</td><td>scale の理解</td></tr>
+          <tr><td>A-Frame の座標系で Z 軸のプラス方向はどちらか？ カメラの方？ 奥の方？</td><td>座標系の理解</td></tr>
+          <tr><td>親エンティティに <code>rotation="0 90 0"</code> を付けると、子エンティティはどうなるか？</td><td>ネストの理解</td></tr>
+          <tr><td><code>&lt;a-entity&gt;&lt;/a-entity&gt;</code> だけ書くと何が表示されるか？ なぜ？</td><td>エンティティの理解</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を2つ書いてください。</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-group">Phase 2</span>
+        <h3>口頭試問（グループ・10分）</h3>
+      </div>
+      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
+      <table style="margin:1rem 0">
+        <tr><th style="width:20%">役割</th><th>やること</th></tr>
+        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
+        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
+        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      </table>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
+        <ul class="point-list">
+          <li><strong>グループメンバー全員の氏名</strong></li>
+          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
+          <li>回答の要点</li>
+          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 5. STANDARD TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">5</div>
+      <h2>標準課題</h2>
+    </div>
+
+    <!-- 標準課題 1: 知識問題 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 1</span>
+        <h3>ECSと座標系の理解</h3>
+      </div>
+      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+
+      <p style="margin-top:1rem"><strong>問1.</strong> ECS の3つの用語について、以下の表の空欄を埋めなさい。</p>
+      <table>
+        <tr><th>用語</th><th>役割（空欄を埋める）</th><th>A-Frameでの対応（空欄を埋める）</th></tr>
+        <tr><td><strong>Entity</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>Component</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td><strong>System</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <p style="margin-top:1rem"><strong>問2.</strong> 以下のプリミティブ記法を、エンティティ・コンポーネント記法に書き換えなさい。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-box</span> position=<span class="str">"1 2 -5"</span> width=<span class="str">"3"</span> height=<span class="str">"0.5"</span> color=<span class="str">"purple"</span> rotation=<span class="str">"0 30 0"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
+
+      <p style="margin-top:1rem"><strong>問3.</strong> A-Frame の3D座標系について、以下の問いに答えなさい。</p>
+      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
+        (a) X軸、Y軸、Z軸はそれぞれどの方向に対応するか？<br>
+        (b) カメラのデフォルト位置は何か？ その高さは何を意味しているか？<br>
+        (c) オブジェクトを「カメラから見て奥」に配置するには、position の Z を正の値にするか、負の値にするか？
+      </div>
+
+      <p style="margin-top:1rem"><strong>問4.</strong> 以下の <code>scale</code> の値を適用した <code>&lt;a-entity geometry="primitive: box"&gt;</code>（1m四方の箱）はどのような見た目になるか、それぞれ説明しなさい。</p>
+      <table>
+        <tr><th>scale の値</th><th>見た目（空欄を埋める）</th></tr>
+        <tr><td><code>scale="2 2 2"</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>scale="3 1 1"</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>scale="1 0.1 1"</code></td><td class="blank-cell"></td></tr>
+      </table>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+    </div>
+
+    <!-- 標準課題 2: コード改造 -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題 2</span>
+        <h3>エンティティ・コンポーネント記法でシーンを改造する（コード改造）</h3>
+      </div>
+      <p>コード体験2の <code>transform.html</code> を以下の指示どおりに改造しなさい。<strong>すべてエンティティ・コンポーネント記法（<code>&lt;a-entity&gt;</code>）を使うこと。</strong></p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>1</td><td>A（赤い箱）の rotation を <code>"45 45 0"</code> に変更する（X軸とY軸の両方で回転）</td></tr>
+          <tr><td>2</td><td>B（青い箱）に <code>rotation="0 0 30"</code> を追加する（Z軸で傾ける）</td></tr>
+          <tr><td>3</td><td>C（緑の球）の scale を <code>"2 2 2"</code> に変更する（均等に拡大）</td></tr>
+          <tr><td>4</td><td>新しいエンティティを追加: <code>geometry="primitive: torus; radius: 0.8; radiusTubular: 0.1"</code>（ドーナツ型）を position <code>"0 2 -4"</code>、rotation <code>"90 0 0"</code>、好きな色で配置</td></tr>
+          <tr><td>5</td><td>D（ネストされたエンティティ）の親の position を <code>"3 1 -5"</code> に移動し、子エンティティにもう1つ sphere を追加する</td></tr>
+        </table>
+      </div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
+        ① 改造後のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「変更による見た目の変化」を書く</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ADVANCED TASK ============ -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#FFB800">6</div>
+      <h2>発展課題</h2>
+    </div>
+
+    <div class="card advanced">
+      <div class="card-header">
+        <span class="tag tag-advanced">発展課題</span>
+        <h3>エンティティ・コンポーネント記法で3D部屋を作る</h3>
+      </div>
+      <p>VS Code で <code>Web04</code> フォルダに <strong><code>room.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、エンティティ・コンポーネント記法で<strong>家具のある3D部屋</strong>を作ってください。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>すべてエンティティ・コンポーネント記法</strong>（<code>&lt;a-entity&gt;</code>）で書く（プリミティブ不可）</li>
+          <li>部屋の構成要素: <strong>床・壁（少なくとも2面）・天井</strong>を作る</li>
+          <li>家具を<strong>3つ以上</strong>配置する（例: テーブル、椅子、棚、ランプなど）</li>
+          <li>家具は<strong>ネスト（親子関係）</strong>を使って、複数のエンティティを組み合わせて作る</li>
+          <li><code>rotation</code> と <code>scale</code> をそれぞれ<strong>1か所以上</strong>使う</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <table>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr>
+            <td><strong style="color:#76B900">1. コード</strong></td>
+            <td><code>room.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">2. 音声説明</strong></td>
+            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
+            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+          </tr>
+        </table>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
+        <ul class="point-list" style="margin-top:0.3rem">
+          <li>どんな部屋をイメージしたか</li>
+          <li>各家具をどのようにエンティティの組み合わせで作ったか</li>
+          <li>ネスト（親子関係）をどこで使い、なぜ便利だったか</li>
+          <li>rotation・scale をどこで使い、どんな効果があったか</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>ヒント: テーブルの作り方（参考）</summary>
+        <div class="answer-content">
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- テーブル（天板 + 脚4本） --&gt;</span>
+&lt;a-entity position="0 0 -3"&gt;
+  <span class="cmt">&lt;!-- 天板 --&gt;</span>
+  &lt;a-entity
+    geometry="primitive: box; width: 1.5; height: 0.08; depth: 0.8"
+    material="color: #8B4513"
+    position="0 0.7 0"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚（左前） --&gt;</span>
+  &lt;a-entity
+    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
+    material="color: #5C3317"
+    position="-0.6 0.35 0.3"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚（右前） --&gt;</span>
+  &lt;a-entity
+    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
+    material="color: #5C3317"
+    position="0.6 0.35 0.3"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚（左奥） --&gt;</span>
+  &lt;a-entity
+    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
+    material="color: #5C3317"
+    position="-0.6 0.35 -0.3"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚（右奥） --&gt;</span>
+  &lt;a-entity
+    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
+    material="color: #5C3317"
+    position="0.6 0.35 -0.3"&gt;&lt;/a-entity&gt;
+&lt;/a-entity&gt;</pre>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section" data-release="2026-05-27T16:20">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#616161">7</div>
+      <h2>解答例</h2>
+    </div>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 球 --&gt;</span>
+&lt;a-entity
+  geometry="primitive: sphere; radius: 0.8"
+  material="color: #FF6347"
+  position="2 1.5 -4"&gt;&lt;/a-entity&gt;
+
+<span class="cmt">&lt;!-- 円柱 --&gt;</span>
+&lt;a-entity
+  geometry="primitive: cylinder; radius: 0.3; height: 2"
+  material="color: green"
+  position="-1 1 -5"&gt;&lt;/a-entity&gt;
+
+<span class="cmt">&lt;!-- 床 --&gt;</span>
+&lt;a-entity
+  geometry="primitive: plane; width: 8; height: 8"
+  material="color: #CCC"
+  position="0 0 -4"
+  rotation="-90 0 0"&gt;&lt;/a-entity&gt;</pre>
+        <ul class="point-list">
+          <li>プリミティブの <code>radius</code>, <code>height</code>, <code>width</code> は <code>geometry</code> コンポーネントのプロパティになる</li>
+          <li><code>color</code> は <code>material</code> コンポーネントの <code>color</code> プロパティになる</li>
+          <li><code>position</code> と <code>rotation</code> はそのまま独立したコンポーネントとして記述する</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
+      <div class="answer-content">
+        <table>
+          <tr><th>ラベル</th><th>形</th><th>色</th><th>見え方の予測</th></tr>
+          <tr><td>A</td><td>箱</td><td>赤</td><td>Y軸を中心に45度回転しているため、箱の角がカメラ正面を向く（ダイヤモンドのように見える）</td></tr>
+          <tr><td>B</td><td>箱</td><td>青</td><td>X方向に2倍、Y方向に0.5倍なので、横に広く縦に潰れた平たい箱になる</td></tr>
+          <tr><td>C</td><td>球</td><td>緑</td><td>Y方向に2倍に引き延ばされた楕円体（卵形）になる</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> 左側（プリミティブ）と右側（エンティティ・コンポーネント）の表示結果はまったく同じだった。形、色、サイズ、位置に違いはない。</li>
+          <li><strong>Q2:</strong> 開発者ツールで <code>&lt;a-box&gt;</code> を確認すると、内部的に <code>geometry</code>, <code>material</code>, <code>position</code> などのコンポーネント属性が自動的に付与されていた。プリミティブは内部でエンティティ・コンポーネントに変換されていることがわかる。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> A は予測どおり角がカメラを向いていた。B は横に広く平たい箱になっていた。C は卵のような縦長の楕円形になっていた。</li>
+          <li><strong>Q2:</strong> D は茶色の板の上に金色の球と銀色の円柱が乗った「トロフィー」のように見えた。親の rotation="0 30 0" を "0 0 0" に変えると、全体がカメラの正面を向き、回転が解除された。親の回転が子エンティティ全体に影響することが確認できた。</li>
+          <li><strong>Q3:</strong> scale="1 1 1" に戻すと、通常の1m四方の箱に戻った。scale の効果がなくなり、geometry で定義された元のサイズで表示された。</li>
+        </ul>
+      </div>
+    </details>
+
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
+    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <div id="answers-content">
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題 1 解答（ECSと座標系）</summary>
+      <div class="answer-content">
+        <p><strong>問1.</strong></p>
+        <table>
+          <tr><th>用語</th><th>役割</th><th>A-Frameでの対応</th></tr>
+          <tr><td><strong>Entity</strong></td><td>「モノ」の入れ物。それ自体は見た目も動作も持たない。</td><td><code>&lt;a-entity&gt;</code> タグ</td></tr>
+          <tr><td><strong>Component</strong></td><td>エンティティに追加する機能パーツ。見た目・位置・動きを定義する。</td><td>HTML属性（geometry, material, position など）</td></tr>
+          <tr><td><strong>System</strong></td><td>コンポーネントをまとめて処理するエンジン。描画ループなどの内部処理。</td><td>A-Frameの内部処理（開発者が直接触ることは少ない）</td></tr>
+        </table>
+
+        <p style="margin-top:1rem"><strong>問2. 解答:</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-entity
+  geometry="primitive: box; width: 3; height: 0.5"
+  material="color: purple"
+  position="1 2 -5"
+  rotation="0 30 0"&gt;&lt;/a-entity&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>問3.</strong></p>
+        <ul class="point-list">
+          <li><strong>(a)</strong> X軸 = 左右、Y軸 = 上下、Z軸 = 手前奥</li>
+          <li><strong>(b)</strong> カメラのデフォルト位置は (0, 1.6, 0)。1.6m は立っている人の目の高さに相当する。</li>
+          <li><strong>(c)</strong> Z を負の値にする。カメラはデフォルトで Z のマイナス方向を向いているため。</li>
+        </ul>
+
+        <p style="margin-top:1rem"><strong>問4.</strong></p>
+        <table>
+          <tr><th>scale の値</th><th>見た目</th></tr>
+          <tr><td><code>scale="2 2 2"</code></td><td>全方向に2倍に拡大された 2m四方の箱になる</td></tr>
+          <tr><td><code>scale="3 1 1"</code></td><td>X方向にのみ3倍に引き延ばされ、横長の箱になる（幅3m、高さ1m、奥行き1m）</td></tr>
+          <tr><td><code>scale="1 0.1 1"</code></td><td>Y方向が0.1倍になり、非常に薄い板状の箱になる（高さ0.1m）</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">改造</span> 標準課題 2 解答例（コード改造）</summary>
+      <div class="answer-content">
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;a-scene&gt;
+  &lt;!-- A: 改造1 - X軸とY軸の両方で回転 --&gt;
+  &lt;a-entity
+    geometry="primitive: box"
+    material="color: red"
+    position="-2 1 -4"
+    rotation="45 45 0"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- B: 改造2 - Z軸で傾ける --&gt;
+  &lt;a-entity
+    geometry="primitive: box"
+    material="color: blue"
+    position="0 1 -4"
+    scale="2 0.5 1"
+    rotation="0 0 30"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- C: 改造3 - 均等に拡大 --&gt;
+  &lt;a-entity
+    geometry="primitive: sphere; radius: 0.5"
+    material="color: green"
+    position="2 1 -4"
+    scale="2 2 2"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- 改造4: ドーナツを追加 --&gt;
+  &lt;a-entity
+    geometry="primitive: torus; radius: 0.8; radiusTubular: 0.1"
+    material="color: #FF00FF"
+    position="0 2 -4"
+    rotation="90 0 0"&gt;&lt;/a-entity&gt;
+
+  &lt;!-- D: 改造5 - 位置変更 + 球追加 --&gt;
+  &lt;a-entity position="3 1 -5" rotation="0 30 0"&gt;
+    &lt;a-entity
+      geometry="primitive: box; width: 2; height: 0.2; depth: 2"
+      material="color: #8B4513"
+      position="0 0 0"&gt;&lt;/a-entity&gt;
+    &lt;a-entity
+      geometry="primitive: sphere; radius: 0.3"
+      material="color: #FFD700"
+      position="0 0.5 0"&gt;&lt;/a-entity&gt;
+    &lt;a-entity
+      geometry="primitive: cylinder; radius: 0.1; height: 0.6"
+      material="color: #C0C0C0"
+      position="0.6 0.4 0"&gt;&lt;/a-entity&gt;
+    &lt;!-- 追加した球 --&gt;
+    &lt;a-entity
+      geometry="primitive: sphere; radius: 0.2"
+      material="color: #FF5252"
+      position="-0.5 0.4 0"&gt;&lt;/a-entity&gt;
+  &lt;/a-entity&gt;
+
+  &lt;a-entity
+    geometry="primitive: plane; width: 12; height: 12"
+    material="color: #CCC"
+    position="0 0 -4"
+    rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+  &lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;
+&lt;/a-scene&gt;</pre>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題 解答例（3D部屋）</summary>
+      <div class="answer-content">
+        <p><strong>テーマ: 「シンプルなリビングルーム」</strong></p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My Living Room&lt;/title&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;!-- === 部屋の構造 === --&gt;
+    &lt;!-- 床 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 6; height: 6"
+      material="color: #D2B48C"
+      position="0 0 -3"
+      rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+    &lt;!-- 壁（正面） --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 6; height: 3"
+      material="color: #FAEBD7; side: double"
+      position="0 1.5 -6"&gt;&lt;/a-entity&gt;
+    &lt;!-- 壁（左） --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 6; height: 3"
+      material="color: #FAF0E6; side: double"
+      position="-3 1.5 -3"
+      rotation="0 90 0"&gt;&lt;/a-entity&gt;
+    &lt;!-- 天井 --&gt;
+    &lt;a-entity
+      geometry="primitive: plane; width: 6; height: 6"
+      material="color: #FFFFF0; side: double"
+      position="0 3 -3"
+      rotation="90 0 0"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- === テーブル === --&gt;
+    &lt;a-entity position="0 0 -3.5"&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 1.2; height: 0.06; depth: 0.7"
+        material="color: #8B4513"
+        position="0 0.55 0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.03; height: 0.55"
+        material="color: #5C3317"
+        position="-0.5 0.275 0.25"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.03; height: 0.55"
+        material="color: #5C3317"
+        position="0.5 0.275 0.25"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.03; height: 0.55"
+        material="color: #5C3317"
+        position="-0.5 0.275 -0.25"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.03; height: 0.55"
+        material="color: #5C3317"
+        position="0.5 0.275 -0.25"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- === ソファ === --&gt;
+    &lt;a-entity position="-2.2 0 -3" rotation="0 90 0"&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 1.8; height: 0.4; depth: 0.7"
+        material="color: #4A6741"
+        position="0 0.3 0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: box; width: 1.8; height: 0.6; depth: 0.15"
+        material="color: #3D5637"
+        position="0 0.6 -0.28"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- === ランプ === --&gt;
+    &lt;a-entity position="2 0 -5"&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.15; height: 0.05"
+        material="color: #333"
+        position="0 0.025 0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cylinder; radius: 0.03; height: 1.2"
+        material="color: #666"
+        position="0 0.65 0"&gt;&lt;/a-entity&gt;
+      &lt;a-entity
+        geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.05; height: 0.3"
+        material="color: #FFE4B5"
+        position="0 1.35 0"
+        scale="1 0.8 1"&gt;&lt;/a-entity&gt;
+    &lt;/a-entity&gt;
+
+    &lt;!-- 空は使わず天井で覆う --&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <p style="margin-top:1rem"><strong>評価ポイント（以下をすべて満たしていればOK）:</strong></p>
+        <table>
+          <tr><th style="width:30px">#</th><th>チェック項目</th><th>詳細</th></tr>
+          <tr><td>1</td><td><strong>すべてエンティティ・コンポーネント記法</strong></td><td>プリミティブ（&lt;a-box&gt; 等）ではなく &lt;a-entity&gt; + geometry + material を使っている</td></tr>
+          <tr><td>2</td><td><strong>床・壁・天井</strong></td><td>部屋を構成する面が存在する（壁は2面以上）</td></tr>
+          <tr><td>3</td><td><strong>家具3つ以上</strong></td><td>テーブル、椅子、ソファ、棚、ランプなど、識別できる家具がある</td></tr>
+          <tr><td>4</td><td><strong>ネスト使用</strong></td><td>親 &lt;a-entity&gt; の中に子エンティティを配置して、1つの家具を構成している</td></tr>
+          <tr><td>5</td><td><strong>rotation 使用</strong></td><td>少なくとも1か所で rotation を使っている</td></tr>
+          <tr><td>6</td><td><strong>scale 使用</strong></td><td>少なくとも1か所で scale を使っている</td></tr>
+          <tr><td>7</td><td><strong>音声説明</strong></td><td>1〜2分の音声で、テーマ・構成・工夫した点を説明している</td></tr>
+        </table>
+      </div>
+    </details>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Webプログラミング演習 ─ 2026年度前期 ─ 第4回
+  </div>
+</footer>
+
+<script src="answer-gate.js"></script>
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'コピー';
+  btn.addEventListener('click', function() {
+    var code = pre.textContent.replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    navigator.clipboard.writeText(code).then(function() {
+      btn.textContent = 'コピーしました';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'コピー';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>
