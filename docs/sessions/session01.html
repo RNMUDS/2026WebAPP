@@ -577,12 +577,94 @@ node -v
 npm -v</pre>
     </div>
 
-    <!-- 提出方法 -->
-    <div class="card" style="border-left:4px solid #FFB800">
-      <div class="card-header"><h3>提出方法（Notion → PDF → Manaba）</h3></div>
+    <!-- Notion とは -->
+    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.2rem">課題の回答・提出に使うツール: Notion</h3>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header"><h3>Notion とは</h3></div>
+      <p><strong>Notion</strong> は、Webブラウザ上で使えるノート・ドキュメント作成ツールです。テキスト、表、コードブロック、画像、音声ファイルなどを1つのページにまとめられます。</p>
+      <p style="margin-top:0.5rem">この授業では、毎回の課題の回答を<strong>Notionで作成</strong>し、最終的に<strong>PDFにエクスポート</strong>してManabaに提出します。アプリのインストールは不要で、ブラウザだけで操作できます。</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 1</span>
+        <h3>Notionにログインする</h3>
+      </div>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>各演習の回答を<strong>自分のNotionノート</strong>に記録する</li>
-        <li>すべて記録し終えたら、Notionページ右上の <strong>「...」→「エクスポート」→「PDF」</strong></li>
+        <li>Webブラウザ（Chrome推奨）で <strong>notion.so</strong> にアクセスする</li>
+        <li>大学のメールアドレスでログインする（初回はアカウント作成が必要）</li>
+        <li>ログイン後、左サイドバーに自分のワークスペースが表示される</li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 2</span>
+        <h3>授業ノートのページを作成する</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>左サイドバーの <strong>「+ 新規ページ」</strong> をクリック</li>
+        <li>タイトルに <strong>「第1回: Webアプリケーション全体構造の整理」</strong> と入力</li>
+        <li>タイトルの下の空白部分をクリックすると、本文を書き始められる</li>
+      </ol>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3</span>
+        <h3>基本操作を覚える</h3>
+      </div>
+      <table>
+        <tr><th style="width:30%">やりたいこと</th><th>操作方法</th></tr>
+        <tr><td><strong>見出し</strong>を作る</td><td>行の先頭に <code>##</code> + スペース → 自動で見出しになる</td></tr>
+        <tr><td><strong>箇条書き</strong>を作る</td><td>行の先頭に <code>-</code> + スペース</td></tr>
+        <tr><td><strong>番号付きリスト</strong></td><td>行の先頭に <code>1.</code> + スペース</td></tr>
+        <tr><td><strong>太字</strong>にする</td><td>テキストを選択して <kbd>Ctrl+B</kbd>（Macは <kbd>Cmd+B</kbd>）</td></tr>
+        <tr><td><strong>コードブロック</strong></td><td>行の先頭に <code>```</code> → Enter</td></tr>
+        <tr><td><strong>表（テーブル）</strong></td><td><code>/table</code> と入力 → 「テーブル」を選択</td></tr>
+        <tr><td><strong>画像</strong>を貼る</td><td>画像ファイルを直接ドラッグ＆ドロップ</td></tr>
+        <tr><td><strong>音声</strong>を添付</td><td><code>/audio</code> と入力 → ファイルをアップロード</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 4</span>
+        <h3>回答の構成</h3>
+      </div>
+      <p>以下の構成で、各課題の回答を順番に記録してください。</p>
+      <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem 1.2rem;margin:0.75rem 0;font-size:0.9rem;font-family:'JetBrains Mono',monospace;line-height:1.8">
+        <span style="color:#76B900;font-weight:700"># 第1回: Webアプリケーション全体構造の整理</span><br>
+        <span style="color:#888">名前: ○○ ○○ ｜ 学籍番号: xxxxxxxx</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 1. トレース演習1</span><br>
+        <span style="color:#888">（表を埋める）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 2. トレース演習2</span><br>
+        <span style="color:#888">（空欄を埋める）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 3. コード体験1</span><br>
+        <span style="color:#888">（観察記録）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 4. コード体験2</span><br>
+        <span style="color:#888">（観察記録）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 5. 標準課題1: Webの仕組み</span><br>
+        <span style="color:#888">（問1〜問4の回答）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 6. 標準課題2: コード改造</span><br>
+        <span style="color:#888">（改造後コード + 変更理由）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 7. 発展課題</span><br>
+        <span style="color:#888">（コード + 音声添付）</span><br><br>
+        <span style="color:#76B900;font-weight:700">## 8. グループ口頭試問</span><br>
+        <span style="color:#888">（メンバー氏名・質疑・評価）</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 5</span>
+        <h3>PDFにエクスポートして提出する</h3>
+      </div>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>Notionページ右上の <strong>「...」</strong> メニューをクリック</li>
+        <li><strong>「エクスポート」</strong> を選択</li>
+        <li>フォーマットを <strong>「PDF」</strong> に設定し、エクスポートする</li>
         <li>ダウンロードされたPDFファイルを <strong>Manabaの課題提出欄</strong> にアップロードする</li>
       </ol>
     </div>
@@ -816,7 +898,7 @@ npm -v</pre>
         <tr><td><code>&lt;a-sphere&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
         <tr><td><code>&lt;a-cylinder&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
         <tr><td><code>&lt;a-plane&gt;</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>&lt;a-sky&gt;</code></td><td class="blank-cell"></td><td>—</td><td class="blank-cell"></td><td>—</td></tr>
+        <tr><td><code>&lt;a-sky&gt;</code></td><td>—</td><td>—</td><td class="blank-cell"></td><td>—</td></tr>
       </table>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
     </div>
@@ -1134,7 +1216,7 @@ npm -v</pre>
           <tr><td><code>&lt;a-sphere&gt;</code></td><td>球</td><td>(0, 1.25, -5)</td><td>ピンク (#EF2D5E)</td><td>radius="1.25"（半径1.25）</td></tr>
           <tr><td><code>&lt;a-cylinder&gt;</code></td><td>円柱</td><td>(1, 0.75, -3)</td><td>黄色 (#FFC65D)</td><td>radius="0.5", height="1.5"</td></tr>
           <tr><td><code>&lt;a-plane&gt;</code></td><td>平面（床）</td><td>(0, 0, -4)</td><td>緑 (#7BC8A4)</td><td>rotation="-90 0 0"（水平に倒す）, width/height="4"</td></tr>
-          <tr><td><code>&lt;a-sky&gt;</code></td><td>空（背景）</td><td>—</td><td>薄灰色 (#ECECEC)</td><td>—</td></tr>
+          <tr><td><code>&lt;a-sky&gt;</code></td><td>—</td><td>—</td><td>薄灰色 (#ECECEC)</td><td>空間全体の背景色</td></tr>
         </table>
       </div>
     </details>
