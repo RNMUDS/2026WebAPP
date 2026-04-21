@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -402,7 +445,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -413,6 +456,58 @@ pre { position: relative; }
       前回までにSocket.IOでリアルタイム通信を実装しました。<br>
       しかし、サーバを再起動すると<strong>すべてのデータが消えてしまう</strong>問題があります。今回は<strong>データベース（SQLite）</strong>を導入し、データを永続化する方法を学びます。
     </p>
+
+    <!-- Real-time Architecture Overview SVG -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 760 320" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <rect x="20" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="120" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">クライアント（ブラウザ）</text>
+        <text x="120" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">A-Frame + Socket.IO Client</text>
+        <rect x="280" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="380" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">サーバ（Node.js）</text>
+        <text x="380" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">Express + Socket.IO Server</text>
+        <rect x="540" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+        <text x="640" y="45" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">データベース（SQLite）</text>
+        <text x="640" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">better-sqlite3 / ファイル保存</text>
+        <line x1="220" y1="50" x2="280" y2="50" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr12a)"/>
+        <line x1="480" y1="50" x2="540" y2="50" stroke="#76B900" stroke-width="2" marker-end="url(#arr12b)"/>
+        <rect x="20" y="120" width="720" height="1" fill="#333"/>
+        <text x="100" y="110" text-anchor="middle" fill="#888" font-size="9">メッセージ送信フロー</text>
+        <rect x="20" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1.5"/>
+        <text x="100" y="158" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">1. メッセージ送信</text>
+        <text x="100" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('chat', data)</text>
+        <rect x="210" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
+        <text x="290" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">2. DBに保存</text>
+        <text x="290" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">INSERT INTO messages</text>
+        <rect x="400" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
+        <text x="480" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">3. 全員に配信</text>
+        <text x="480" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">io.emit('chat', saved)</text>
+        <rect x="590" y="140" width="150" height="45" rx="8" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
+        <text x="665" y="158" text-anchor="middle" fill="#93D500" font-weight="700" font-size="9">4. 画面に表示</text>
+        <text x="665" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">DOM 更新</text>
+        <line x1="180" y1="162" x2="210" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
+        <line x1="370" y1="162" x2="400" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
+        <line x1="560" y1="162" x2="590" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
+        <text x="100" y="210" text-anchor="middle" fill="#888" font-size="9">新規ユーザ接続フロー</text>
+        <rect x="20" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#E040FB" stroke-width="1.5"/>
+        <text x="100" y="238" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="9">新規ユーザ接続</text>
+        <text x="100" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">connection イベント</text>
+        <rect x="210" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
+        <text x="290" y="238" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="9">DBから読み込み</text>
+        <text x="290" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">SELECT * FROM messages</text>
+        <rect x="400" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
+        <text x="480" y="238" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">履歴を送信</text>
+        <text x="480" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('history', rows)</text>
+        <line x1="180" y1="242" x2="210" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
+        <line x1="370" y1="242" x2="400" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
+        <text x="380" y="300" text-anchor="middle" fill="#888" font-size="11">データベースにより、サーバ再起動後もデータが保持され、新規ユーザにも過去の状態を送信できる</text>
+        <defs>
+          <marker id="arr12a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          <marker id="arr12b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="arr12c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <!-- 1.1 なぜデータベースが必要か -->
     <div class="concept-box">
@@ -471,6 +566,16 @@ npm install better-sqlite3</pre>
 <span class="cmt">// データベースファイルを開く（なければ自動作成）</span>
 <span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'myapp.db'</span>);</pre>
       <p style="margin-top:0.5rem">これだけで <code>myapp.db</code> というファイルが作成され、データベースとして使えるようになります。</p>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:0.75rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">用語</p>
+        <table style="margin:0">
+          <tr><td style="width:180px"><strong>永続化（Persistence）</strong></td><td>プロセスが終了してもデータを失わないようにファイルやデータベースに保存すること。</td></tr>
+          <tr><td><strong>SQLite</strong></td><td>サーバプロセス不要で動作する軽量なリレーショナルデータベース。データベース全体が1つのファイルに格納される。</td></tr>
+          <tr><td><strong>better-sqlite3</strong></td><td>Node.js から SQLite を同期的に操作するためのパッケージ。非同期 API より扱いやすい。</td></tr>
+          <tr><td><strong>プリペアドステートメント</strong></td><td>SQL文のテンプレートを事前にコンパイルし、パラメータだけを差し替えて実行する方式。SQLインジェクション対策として有効。</td></tr>
+        </table>
+      </div>
     </div>
 
     <!-- 1.4 基本SQL -->
@@ -516,6 +621,12 @@ insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span clas
 <span class="kw">const</span> rows = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM messages'</span>).<span class="fn">all</span>();
 console.<span class="fn">log</span>(rows);
 <span class="cmt">// → [{ id: 1, name: '太郎', text: 'こんにちは', created_at: '2026-07-15 16:30:00' }]</span></pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">上のコードで <code>insert.run</code> を2回実行した後、<code>SELECT * FROM messages</code> は何件返すか予測してみよう。<code>AUTOINCREMENT</code> の id 値はどうなるか。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した件数と各行の id 値を書いてください。</div></div>
+      </div>
 
       <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">プリペアドステートメントとは？</p>
@@ -585,7 +696,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -660,7 +771,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -737,6 +848,12 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
         Q1. 1回目の実行で表示されたデータを書き出してください<br>
         Q2. 2回目の実行でデータはどうなりましたか？ なぜそうなったか説明してください<br>
         Q3. <code>Web12</code> フォルダに <code>test.db</code> というファイルが作られていることを確認してください</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（2分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>test.db</code> ファイルを削除してからもう一度 <code>node db-test.js</code> を実行してみよう。削除しない場合とデータ件数がどう変わるか比較してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 削除した場合と削除しなかった場合の件数の違いと、その理由を書いてください。</div></div>
+      </div>
     </div>
 
     <!-- Code Exp 2 -->
@@ -912,7 +1029,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -971,7 +1088,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -1042,7 +1159,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

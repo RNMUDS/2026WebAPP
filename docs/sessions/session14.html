@@ -420,9 +420,51 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-checklist">チェック</a>
+  <a href="#sec-debug">デバッグ</a>
+  <a href="#sec-implementation">実装</a>
+  <a href="#sec-review" class="nav-advanced">レビュー</a>
+  <a href="#sec-submit-prep">提出</a>
+  <a href="#sec-reference">参考</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -450,7 +492,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. IMPLEMENTATION CHECKLIST ============ -->
-<section>
+<section id="sec-checklist">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -461,6 +503,47 @@ pre { position: relative; }
       最終制作で必須となる機能を確認します。<br>
       以下のチェックリストを使って、現在の実装状況を把握してください。
     </p>
+
+    <!-- Implementation Workflow SVG -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 760 180" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <rect x="10" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="65" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">1. サーバ起動</text>
+        <text x="65" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">Express + Socket.IO</text>
+        <line x1="120" y1="52" x2="140" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+        <rect x="140" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="195" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">2. 3Dシーン</text>
+        <text x="195" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">A-Frame 静的構築</text>
+        <line x1="250" y1="52" x2="270" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+        <rect x="270" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="325" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">3. 接続確認</text>
+        <text x="325" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">Socket.IO 疎通</text>
+        <line x1="380" y1="52" x2="400" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+        <rect x="400" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="455" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">4. アバター同期</text>
+        <text x="455" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">位置・回転の送受信</text>
+        <line x1="510" y1="52" x2="530" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+        <rect x="530" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+        <text x="585" y="42" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">5. チャット</text>
+        <text x="585" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">吹き出し表示</text>
+        <line x1="640" y1="52" x2="660" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+        <rect x="660" y="20" width="90" height="65" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
+        <text x="705" y="42" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="10">6. 仕上げ</text>
+        <text x="705" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">UI・デザイン調整</text>
+
+        <text x="380" y="120" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">各段階が動いてから次に進む</text>
+        <text x="380" y="145" text-anchor="middle" fill="#888" font-size="10">一度に全部作ろうとせず、段階的に動作確認しながら実装する</text>
+
+        <defs>
+          <marker id="arr14" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header"><h3>必須機能チェックリスト</h3></div>
@@ -519,7 +602,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 2. DEBUG GUIDE ============ -->
-<section>
+<section id="sec-debug">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FF5252">2</div>
@@ -616,6 +699,12 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) => {
   console.<span class="fn">log</span>(<span class="str">'受信:'</span>, data);
   <span class="cmt">// ここでA-Frameエンティティを更新</span>
 });</pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（2分）</p>
+        <p style="color:#ccc;font-size:0.9rem">自分のプロジェクトで、サーバ側の <code>connection</code> イベント内に <code>console.log('接続数:', io.engine.clientsCount)</code> を追加し、2つのタブを開いたときの接続数を確認してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 確認した接続数と、タブを閉じたときの変化を書いてください。</div></div>
+      </div>
     </div>
 
     <div class="card" style="border-left:4px solid #4FC3F7">
@@ -643,7 +732,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) => {
 </section>
 
 <!-- ============ 3. IMPLEMENTATION ORDER ============ -->
-<section>
+<section id="sec-implementation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">3</div>
@@ -762,7 +851,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 </section>
 
 <!-- ============ 4. CODE REVIEW ============ -->
-<section>
+<section id="sec-review">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4FC3F7">4</div>
@@ -823,7 +912,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 </section>
 
 <!-- ============ 5. SUBMISSION PREPARATION ============ -->
-<section>
+<section id="sec-submit-prep">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">5</div>

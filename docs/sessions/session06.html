@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -403,7 +446,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -431,6 +474,55 @@ pre { position: relative; }
         <tr><td><code>spot</code></td><td>スポットライト</td><td>円錐状に光を当てる。<strong>角度</strong>と<strong>減衰</strong>を制御できる。</td><td>舞台照明、懐中電灯</td></tr>
         <tr><td><code>hemisphere</code></td><td>半球光</td><td>上（空）と下（地面）の<strong>2色で</strong>照らす。影は作らない。</td><td>屋外の自然な雰囲気</td></tr>
       </table>
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 700 220" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- Ambient -->
+          <rect x="10" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="75" y="52" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">ambient</text>
+          <text x="75" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">環境光</text>
+          <text x="75" y="90" text-anchor="middle" fill="#999" font-size="9">全方向に均一</text>
+          <text x="75" y="102" text-anchor="middle" fill="#FF5252" font-size="8">影: 不可</text>
+          <!-- Directional -->
+          <rect x="150" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="215" y="52" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">directional</text>
+          <text x="215" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">平行光源</text>
+          <line x1="180" y1="85" x2="250" y2="85" stroke="#FFB800" stroke-width="1.5" marker-end="url(#lt-arr)"/>
+          <line x1="180" y1="92" x2="250" y2="92" stroke="#FFB800" stroke-width="1.5" marker-end="url(#lt-arr)"/>
+          <text x="215" y="105" text-anchor="middle" fill="#76B900" font-size="8">影: 可能</text>
+          <!-- Point -->
+          <rect x="290" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="355" y="52" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">point</text>
+          <text x="355" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">点光源</text>
+          <circle cx="355" cy="90" r="4" fill="#4FC3F7"/>
+          <line x1="355" y1="86" x2="355" y2="78" stroke="#4FC3F7" stroke-width="1"/>
+          <line x1="355" y1="94" x2="355" y2="102" stroke="#4FC3F7" stroke-width="1"/>
+          <line x1="349" y1="90" x2="341" y2="90" stroke="#4FC3F7" stroke-width="1"/>
+          <line x1="361" y1="90" x2="369" y2="90" stroke="#4FC3F7" stroke-width="1"/>
+          <text x="355" y="112" text-anchor="middle" fill="#999" font-size="8">全方向に放射</text>
+          <!-- Spot -->
+          <rect x="430" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
+          <text x="495" y="52" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">spot</text>
+          <text x="495" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">スポットライト</text>
+          <circle cx="495" cy="82" r="3" fill="#E040FB"/>
+          <line x1="485" y1="85" x2="475" y2="105" stroke="#E040FB" stroke-width="1" opacity="0.5"/>
+          <line x1="505" y1="85" x2="515" y2="105" stroke="#E040FB" stroke-width="1" opacity="0.5"/>
+          <line x1="495" y1="85" x2="495" y2="105" stroke="#E040FB" stroke-width="1.5"/>
+          <text x="495" y="112" text-anchor="middle" fill="#76B900" font-size="8">影: 可能</text>
+          <!-- Hemisphere -->
+          <rect x="570" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
+          <text x="635" y="52" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">hemisphere</text>
+          <text x="635" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">半球光</text>
+          <rect x="610" y="80" width="50" height="12" rx="2" fill="#87CEEB" opacity="0.3"/>
+          <text x="635" y="89" text-anchor="middle" fill="#87CEEB" font-size="7">空色</text>
+          <rect x="610" y="94" width="50" height="12" rx="2" fill="#5C3317" opacity="0.3"/>
+          <text x="635" y="103" text-anchor="middle" fill="#A0522D" font-size="7">地面色</text>
+          <!-- Label -->
+          <text x="350" y="145" text-anchor="middle" fill="#666" font-size="10">A-Frame の5種類のライト ── 用途に合わせて使い分ける</text>
+          <defs>
+            <marker id="lt-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#FFB800"/></marker>
+          </defs>
+        </svg>
+      </div>
 
       <pre><span class="code-label">HTML</span>
 <span class="cmt">&lt;!-- 環境光: シーン全体をうっすら照らす --&gt;</span>
@@ -448,6 +540,11 @@ pre { position: relative; }
 <span class="kw">&lt;a-light</span> type=<span class="str">"spot"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"1"</span>
          angle=<span class="str">"45"</span> penumbra=<span class="str">"0.2"</span>
          position=<span class="str">"0 4 -3"</span> target=<span class="str">"#stage-obj"</span><span class="kw">&gt;&lt;/a-light&gt;</span></pre>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem">コード体験の <code>light-compare.html</code> で、<code>type="spot"</code> のライトを追加し、<code>angle</code> と <code>penumbra</code> を変えてみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 追加したコードと、光の当たり方の変化を1文で書く</div></div>
+</div>
 
       <p style="margin-top:0.5rem"><strong>主な属性:</strong></p>
       <table>
@@ -490,6 +587,11 @@ pre { position: relative; }
            width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#CCC"</span>
            shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem"><code>castShadow="true"</code> を削除して影が消えることを確認し、再度追加してみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 影が消えた/戻った挙動を1文で書く</div></div>
+</div>
 
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">影が表示されない場合のチェックリスト <span class="exam-alert">課題に出ます</span></p>
@@ -527,6 +629,11 @@ pre { position: relative; }
 <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 4"</span>
           look-controls=<span class="str">"enabled: false"</span>
           wasd-controls=<span class="str">"enabled: false"</span><span class="kw">&gt;&lt;/a-camera&gt;</span></pre>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem">カメラの <code>fov</code> を <code>"40"</code>（望遠）と <code>"120"</code>（広角）に変えて、見え方の違いを確認してみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> fov の値を変えたときの視界の変化を1文で書く</div></div>
+</div>
     </div>
 
     <!-- 1.4 カーソル -->
@@ -565,11 +672,22 @@ pre { position: relative; }
       <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">JavaScript で <code>setAttribute('active', true/false)</code> を切り替えてカメラを変更します。詳細は後の回で扱います。</p>
     </div>
 
+
+    <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4D6; キーワード</p>
+      <table style="font-size:0.88rem">
+        <tr><td style="width:140px;color:#FFB800;font-weight:600">intensity（強度）</td><td style="color:#ccc">光の明るさを表す数値。0 で消灯、1 が標準。2 以上で過剰に明るくなる。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">castShadow</td><td style="color:#ccc">ライトが影を投射するかどうかのフラグ。<code>true</code> で有効。directional と spot のみ対応。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">レイキャスト</td><td style="color:#ccc">カメラから仮想の光線（レイ）を飛ばし、3Dオブジェクトとの交差を判定する仕組み。カーソルのクリック検出に使われる。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">fov（視野角）</td><td style="color:#ccc">Field of View。カメラが映す範囲の角度。値が大きいと広角（魚眼風）、小さいと望遠になる。</td></tr>
+      </table>
+    </div>
+
   </div>
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -666,7 +784,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -820,7 +938,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -878,7 +996,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -946,7 +1064,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

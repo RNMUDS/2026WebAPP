@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -404,7 +447,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -520,6 +563,37 @@ pre { position: relative; }
       <p style="margin-top:0.5rem"><strong>カメラのデフォルト位置は <code>(0, 1.6, 0)</code></strong> です（立っている人の目の高さ約1.6m）。Z がマイナスの方向が「カメラの正面（奥）」になるため、オブジェクトを見えるようにするには<strong>Z をマイナスに</strong>します。</p>
     </div>
 
+    <!-- A-Frame / Three.js Scene Structure -->
+    <div class="concept-box">
+      <h4>A-Frame のシーン構造</h4>
+      <div class="diagram-container">
+        <svg viewBox="0 0 600 200" width="600" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <text x="300" y="18" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">A-Frame シーン構造（Three.js ベース）</text>
+          <rect x="200" y="30" width="200" height="35" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="300" y="53" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">&lt;a-scene&gt;</text>
+          <rect x="30" y="90" width="130" height="35" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="95" y="112" text-anchor="middle" fill="#FFB800" font-size="10">Camera</text>
+          <rect x="180" y="90" width="130" height="35" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="245" y="112" text-anchor="middle" fill="#4FC3F7" font-size="10">Entity (3Dオブジェクト)</text>
+          <rect x="330" y="90" width="130" height="35" rx="8" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
+          <text x="395" y="112" text-anchor="middle" fill="#93D500" font-size="10">Light</text>
+          <rect x="480" y="90" width="100" height="35" rx="8" fill="#1A1A1A" stroke="#888" stroke-width="1.5"/>
+          <text x="530" y="112" text-anchor="middle" fill="#888" font-size="10">Sky / Assets</text>
+          <line x1="250" y1="65" x2="95" y2="90" stroke="#555" stroke-width="1"/>
+          <line x1="300" y1="65" x2="245" y2="90" stroke="#555" stroke-width="1"/>
+          <line x1="350" y1="65" x2="395" y2="90" stroke="#555" stroke-width="1"/>
+          <line x1="400" y1="65" x2="530" y2="90" stroke="#555" stroke-width="1"/>
+          <rect x="140" y="150" width="120" height="30" rx="6" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1"/>
+          <text x="200" y="170" text-anchor="middle" fill="#ccc" font-size="9">geometry + material</text>
+          <rect x="280" y="150" width="120" height="30" rx="6" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1"/>
+          <text x="340" y="170" text-anchor="middle" fill="#ccc" font-size="9">position + rotation</text>
+          <line x1="245" y1="125" x2="200" y2="150" stroke="#333" stroke-width="1"/>
+          <line x1="245" y1="125" x2="340" y2="150" stroke="#333" stroke-width="1"/>
+        </svg>
+      </div>
+      <p style="font-size:0.9rem;color:#888;margin-top:0.5rem"><code>&lt;a-scene&gt;</code> の中にカメラ・3Dオブジェクト・ライト・背景がすべて配置される。各 Entity にはコンポーネント（geometry, material, position 等）が付与される。</p>
+    </div>
+
     <!-- 1.5 プリミティブ vs エンティティ -->
     <div class="concept-box">
       <h4>1.5 プリミティブ vs エンティティ <span class="exam-alert">課題に出ます</span></h4>
@@ -542,7 +616,7 @@ pre { position: relative; }
           <td><code>&lt;a-entity geometry="primitive: cylinder; radius: 0.5; height: 1" material="color: yellow" position="1 0.5 -3"&gt;</code></td>
         </tr>
       </table>
-      <p style="margin-top:0.5rem">どちらの書き方でも<strong>結果はまったく同じ</strong>です。プリミティブは初心者に読みやすく、エンティティ・コンポーネント記法は細かい制御やカスタムコンポーネントの追加に便利です。</p>
+      <p style="margin-top:0.5rem">どちらの書き方でも<strong>結果はまったく同じ</strong>です。プリミティブは短くて読みやすく、エンティティ・コンポーネント記法は細かい制御やカスタムコンポーネントの追加に便利です。</p>
     </div>
 
     <!-- 1.6 rotation -->
@@ -584,7 +658,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -616,6 +690,12 @@ pre { position: relative; }
         <li>プリミティブの <code>width</code>, <code>height</code>, <code>depth</code> は <code>geometry</code> コンポーネントのプロパティになる</li>
         <li><code>position</code> はどちらの記法でも同じ書き方</li>
       </ul>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>&lt;a-sphere radius="1" color="blue"&gt;</code> をエンティティ・コンポーネント記法に頭の中で変換してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変換後のコードを1行で書く</div></div>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -704,7 +784,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -776,6 +856,12 @@ pre { position: relative; }
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
         Q1. 左側（プリミティブ）と右側（エンティティ・コンポーネント）の表示結果を比べて、違いはあるか？<br>
         Q2. ブラウザの開発者ツール（F12 → Elements）で <code>&lt;a-box&gt;</code> タグをクリックして確認すると、内部的にどのような属性が付いているか？</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">右側のエンティティ・コンポーネント記法の箱に <code>scale="2 1 1"</code> を追加して保存し、プリミティブ側との見た目の違いを確認しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> scale 追加後の箱の見た目の変化を記録する</div></div>
+      </div>
     </div>
 
     <!-- Code Exp 2 -->
@@ -855,13 +941,19 @@ pre { position: relative; }
         Q1. トレース演習2の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
         Q2. D（ネストされたエンティティ）は何に見えるか？ 親エンティティの rotation="0 30 0" を "0 0 0" に変えるとどう変わるか？<br>
         Q3. B の scale="2 0.5 1" を "1 1 1" に戻すとどうなるか？ 実際に試す</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">D（ネストされたエンティティ）の親に <code>scale="2 2 2"</code> を追加して保存し、子エンティティ全体がどう変化するか確認しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 親の scale が子に及ぼす影響を記録する</div></div>
+      </div>
     </div>
 
   </div>
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -920,7 +1012,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -992,7 +1084,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

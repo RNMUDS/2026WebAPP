@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -403,7 +446,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -472,6 +515,16 @@ pre { position: relative; }
       </div>
 
       <p>A-Frame でクリックを検知するには、<code>cursor</code> コンポーネントを使います。</p>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:0.75rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">用語</p>
+        <table style="margin:0">
+          <tr><td style="width:140px"><strong>cursor コンポーネント</strong></td><td>A-Frame でマウスや視線によるオブジェクト選択を実現する仕組み。<code>&lt;a-cursor&gt;</code> をカメラの子要素として配置する。</td></tr>
+          <tr><td><strong>raycaster</strong></td><td>カメラ中心から仮想の光線を飛ばし、光線が当たったオブジェクトを判定する手法。<code>objects</code> 属性で対象を CSS セレクタで指定する。</td></tr>
+          <tr><td><strong>emit / broadcast</strong></td><td>Socket.IO のメッセージ送信方法。<code>emit</code> は特定の相手へ、<code>broadcast.emit</code> は送信者以外の全員へ、<code>io.emit</code> は全員へ送信する。</td></tr>
+        </table>
+      </div>
+
       <pre><span class="code-label">HTML</span>
 <span class="cmt">&lt;!-- カーソル（視線 or マウス）を有効にする --&gt;</span>
 <span class="kw">&lt;a-camera&gt;</span>
@@ -481,6 +534,12 @@ pre { position: relative; }
 <span class="cmt">&lt;!-- クリック対象のオブジェクト --&gt;</span>
 <span class="kw">&lt;a-box</span> id=<span class="str">"target-box"</span> class=<span class="str">"clickable"</span>
        position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">上のコードで <code>class="clickable"</code> を削除した場合、カーソルを合わせたときの挙動はどう変わるか予測してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した内容と、その理由（raycaster の <code>objects</code> 属性との関係）を書いてください。</div></div>
+      </div>
     </div>
 
     <!-- 1.2 オブジェクトの状態管理 -->
@@ -511,6 +570,12 @@ socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span 
   objectStates[data.id].color = data.newColor;
   io.<span class="fn">emit</span>(<span class="str">'objectUpdated'</span>, data);
 });</pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">上のコードで <code>socket.emit('initState', objectStates)</code> の行を削除した場合、途中から接続したユーザの画面はどうなるか考えてみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した結果と、サーバ側での状態保持の役割を書いてください。</div></div>
+      </div>
     </div>
 
     <!-- 1.3 アニメーションの同期 -->
@@ -526,6 +591,12 @@ box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
   dur: <span class="num">1000</span>,
   easing: <span class="str">'easeInOutQuad'</span>
 });</pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>dur</code>（duration）の値を <code>1000</code> から <code>3000</code> に変えた場合、アニメーションの見え方はどう変わるか予測してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した結果を書いてください。</div></div>
+      </div>
     </div>
 
     <!-- 1.4 共有オブジェクト vs 個人オブジェクト -->
@@ -559,7 +630,7 @@ box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
 </section>
 
 <!-- ============ 2. EXAMPLES ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -587,7 +658,7 @@ box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -938,7 +1009,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -997,7 +1068,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -1058,7 +1129,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

@@ -404,9 +404,50 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session15.html">15</a></div>
+  <a href="#sec-presentation">発表</a>
+  <a href="#sec-evaluation">評価</a>
+  <a href="#sec-tech-review">技術</a>
+  <a href="#sec-reflection">振り返り</a>
+  <a href="#sec-future">今後</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -434,7 +475,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. PRESENTATION FORMAT ============ -->
-<section>
+<section id="sec-presentation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -512,7 +553,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 2. PEER EVALUATION ============ -->
-<section>
+<section id="sec-evaluation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4FC3F7">2</div>
@@ -577,7 +618,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 3. TECHNOLOGY REVIEW ============ -->
-<section>
+<section id="sec-tech-review">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">3</div>
@@ -586,8 +627,41 @@ pre { position: relative; }
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
       全15回で学んだ技術を振り返ります。<br>
-      ひとつひとつの技術がどうつながって、最終制作のマルチユーザ3D Webアプリケーションになったかを確認しましょう。
+      各技術がどうつながって、最終制作のマルチユーザ3D Webアプリケーションになったかを確認します。
     </p>
+
+    <!-- Course Summary / Technology Stack SVG -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 760 280" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <rect x="20" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="130" y="45" text-anchor="middle" fill="#76B900" font-weight="900" font-size="13">サーバサイド</text>
+        <text x="130" y="65" text-anchor="middle" fill="#999" font-size="9">第2〜3回</text>
+        <text x="130" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">Node.js + Express</text>
+        <text x="130" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">HTTP / JSON / 静的配信</text>
+        <rect x="270" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+        <text x="380" y="45" text-anchor="middle" fill="#FFB800" font-weight="900" font-size="13">3D表現</text>
+        <text x="380" y="65" text-anchor="middle" fill="#999" font-size="9">第4〜8回</text>
+        <text x="380" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">A-Frame 1.7.1</text>
+        <text x="380" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">ジオメトリ / ライト / glTF</text>
+        <rect x="520" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="630" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="900" font-size="13">リアルタイム通信</text>
+        <text x="630" y="65" text-anchor="middle" fill="#999" font-size="9">第9〜12回</text>
+        <text x="630" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">Socket.IO</text>
+        <text x="630" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">同期 / チャット / DB連携</text>
+        <line x1="130" y1="120" x2="380" y2="170" stroke="#76B900" stroke-width="2" marker-end="url(#arr15a)"/>
+        <line x1="380" y1="120" x2="380" y2="170" stroke="#FFB800" stroke-width="2" marker-end="url(#arr15b)"/>
+        <line x1="630" y1="120" x2="380" y2="170" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr15c)"/>
+        <rect x="220" y="175" width="320" height="60" rx="12" fill="#76B900" stroke="#93D500" stroke-width="2"/>
+        <text x="380" y="200" text-anchor="middle" fill="white" font-weight="900" font-size="13">マルチユーザ3D Webアプリ</text>
+        <text x="380" y="220" text-anchor="middle" fill="white" font-size="10">第13〜15回: 設計 → 実装 → 発表</text>
+        <text x="380" y="265" text-anchor="middle" fill="#888" font-size="11">3つの柱を統合して最終制作を完成させる</text>
+        <defs>
+          <marker id="arr15a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="arr15b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="arr15c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header"><h3>全15回の学習マップ</h3></div>
@@ -656,12 +730,18 @@ pre { position: relative; }
           3つの柱を統合 → マルチユーザ3D Webアプリケーション（第13〜15回）
         </div>
       </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（3分）</p>
+        <p style="color:#ccc;font-size:0.9rem">上の「3つの柱」それぞれについて、自分の最終制作で具体的にどのように使ったかを1文ずつ書き出してみよう（例: 「サーバサイド: Express で静的ファイルを配信し、Socket.IO のイベントハンドラを5つ定義した」）。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 3つの柱と自分の実装の対応を書いてください。</div></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ============ 4. REFLECTION ============ -->
-<section>
+<section id="sec-reflection">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">4</div>
@@ -725,7 +805,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 5. FURTHER LEARNING ============ -->
-<section>
+<section id="sec-future">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>

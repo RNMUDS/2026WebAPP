@@ -386,9 +386,51 @@ pre { position: relative; }
   font-size: 0.85rem;
   font-style: italic;
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-design">設計</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -418,7 +460,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -428,8 +470,39 @@ pre { position: relative; }
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
       今回から最終制作に入ります。<br>
       第13回は<strong>設計</strong>、第14回は<strong>実装・調整</strong>、第15回は<strong>発表</strong>です。<br>
-      まずは「何を作るか」「どう作るか」を計画しましょう。
+      まず「何を作るか」「どう作るか」を計画します。
     </p>
+
+    <!-- System Design Process SVG -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 760 160" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <rect x="10" y="30" width="130" height="70" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="75" y="55" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">1. テーマ決定</text>
+        <text x="75" y="75" text-anchor="middle" fill="#E0E0E0" font-size="8">コンセプトを定める</text>
+        <line x1="140" y1="65" x2="160" y2="65" stroke="#76B900" stroke-width="2" marker-end="url(#arr13a)"/>
+        <rect x="160" y="30" width="130" height="70" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="225" y="55" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">2. 機能一覧</text>
+        <text x="225" y="75" text-anchor="middle" fill="#E0E0E0" font-size="8">必須 + 追加を整理</text>
+        <line x1="290" y1="65" x2="310" y2="65" stroke="#76B900" stroke-width="2" marker-end="url(#arr13a)"/>
+        <rect x="310" y="30" width="130" height="70" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+        <text x="375" y="55" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">3. 画面設計</text>
+        <text x="375" y="75" text-anchor="middle" fill="#E0E0E0" font-size="8">スケッチで配置決定</text>
+        <line x1="440" y1="65" x2="460" y2="65" stroke="#FFB800" stroke-width="2" marker-end="url(#arr13b)"/>
+        <rect x="460" y="30" width="130" height="70" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="525" y="55" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">4. 技術選定</text>
+        <text x="525" y="75" text-anchor="middle" fill="#E0E0E0" font-size="8">過去の回と対応付け</text>
+        <line x1="590" y1="65" x2="610" y2="65" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr13c)"/>
+        <rect x="610" y="30" width="140" height="70" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
+        <text x="680" y="55" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">5. ファイル構成</text>
+        <text x="680" y="75" text-anchor="middle" fill="#E0E0E0" font-size="8">プロジェクト構造を決定</text>
+        <text x="380" y="140" text-anchor="middle" fill="#888" font-size="11">設計の5ステップ: 各段階の成果物をNotionに記録する</text>
+        <defs>
+          <marker id="arr13a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="arr13b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="arr13c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <!-- 1.1 最終制作の要件 -->
     <div class="concept-box">
@@ -557,7 +630,7 @@ Web13/
 </section>
 
 <!-- ============ 2. DESIGN WORKSHEET ============ -->
-<section>
+<section id="sec-design">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -586,6 +659,10 @@ Web13/
       </div>
       <div class="worksheet-field">
         <p>ここにテーマとコンセプトを記入（例: 「バーチャル教室 ── 授業をオンラインで体験できる3D教室空間」）</p>
+      </div>
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（2分）</p>
+        <p style="color:#ccc;font-size:0.9rem">テーマ案を3つ書き出し、それぞれについて「必須機能（アバター同期・チャット）をどう組み込めるか」を1文で書いてみよう。最も実現しやすいものを選ぶ。</p>
       </div>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> テーマ名と、どんな空間を作りたいかを2〜3文で説明してください。</div></div>
     </div>
@@ -689,7 +766,7 @@ Web13/
 <!-- ============ 3. (No code experience - replaced by worksheet) ============ -->
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">3</div>
@@ -746,7 +823,7 @@ Web13/
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">4</div>
@@ -780,7 +857,7 @@ Web13/
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">5</div>

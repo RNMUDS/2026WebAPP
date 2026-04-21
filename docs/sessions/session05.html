@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -404,7 +447,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -415,6 +458,49 @@ pre { position: relative; }
       前回は ECS アーキテクチャと座標系を学びました。<br>
       今回は<strong>material コンポーネント</strong>を深掘りし、色・質感・テクスチャ（画像）を使ってオブジェクトの<strong>見た目</strong>を自在に制御する方法を学びます。
     </p>
+
+    <!-- Material/Texture Pipeline Diagram -->
+    <div class="diagram-container" style="margin-bottom:2rem">
+      <svg viewBox="0 0 700 200" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <text x="350" y="18" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">マテリアル・テクスチャ パイプライン</text>
+        <!-- Geometry -->
+        <rect x="20" y="40" width="110" height="55" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="75" y="60" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">geometry</text>
+        <text x="75" y="78" text-anchor="middle" fill="#888" font-size="9">形状を定義</text>
+        <text x="75" y="90" text-anchor="middle" fill="#555" font-size="8">box / sphere / ...</text>
+        <!-- Material -->
+        <rect x="170" y="30" width="160" height="75" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="250" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">material</text>
+        <text x="250" y="68" text-anchor="middle" fill="#E0E0E0" font-size="9">color / opacity</text>
+        <text x="250" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">metalness / roughness</text>
+        <text x="250" y="96" text-anchor="middle" fill="#E0E0E0" font-size="9">src (テクスチャ)</text>
+        <!-- Texture source -->
+        <rect x="170" y="125" width="160" height="45" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
+        <text x="250" y="143" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">&lt;a-assets&gt;</text>
+        <text x="250" y="160" text-anchor="middle" fill="#888" font-size="9">画像を事前読み込み</text>
+        <line x1="250" y1="125" x2="250" y2="105" stroke="#FFB800" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#s5a1)"/>
+        <!-- Result -->
+        <rect x="380" y="40" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
+        <text x="445" y="60" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">描画結果</text>
+        <text x="445" y="78" text-anchor="middle" fill="#E0E0E0" font-size="9">形 + 色 + 質感</text>
+        <text x="445" y="90" text-anchor="middle" fill="#888" font-size="8">= 3Dオブジェクトの見た目</text>
+        <!-- Light -->
+        <rect x="555" y="40" width="120" height="55" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
+        <text x="615" y="60" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">ライト</text>
+        <text x="615" y="78" text-anchor="middle" fill="#888" font-size="9">光の当たり方で</text>
+        <text x="615" y="90" text-anchor="middle" fill="#888" font-size="9">見え方が変化</text>
+        <!-- Arrows -->
+        <line x1="130" y1="67" x2="170" y2="67" stroke="#4FC3F7" stroke-width="1.5" marker-end="url(#s5a2)"/>
+        <line x1="330" y1="67" x2="380" y2="67" stroke="#76B900" stroke-width="2" marker-end="url(#s5a3)"/>
+        <line x1="555" y1="67" x2="510" y2="67" stroke="#FFB800" stroke-width="1.5" marker-end="url(#s5a4)"/>
+        <defs>
+          <marker id="s5a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="s5a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          <marker id="s5a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="s5a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <!-- 1.1 カラー指定方法 -->
     <div class="concept-box">
@@ -554,7 +640,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -580,6 +666,12 @@ pre { position: relative; }
         <li><strong>roughness</strong> が低いとツルツル（光が集中して反射）、高いとザラザラ（光が拡散）</li>
         <li>この2つの組み合わせで「プラスチック」「ガラス」「金属」「ゴム」などさまざまな質感を表現できる</li>
       </ul>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">「ゴムボール」を表現するには metalness と roughness をそれぞれいくつにすればよいか、予測してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した値と理由を記録する（例: metalness: 0, roughness: 0.8 → 非金属でザラザラ）</div></div>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -681,7 +773,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -777,6 +869,12 @@ pre { position: relative; }
         Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
         Q2. A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明する<br>
         Q3. E（半透明の赤い箱）の後ろにあるオブジェクトは透けて見えるか？</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">E（半透明の赤い箱）の <code>opacity</code> を <code>0.9</code> に変更して保存し、透明度の変化を確認しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> opacity 0.4 と 0.9 の見た目の違いを記録する</div></div>
+      </div>
     </div>
 
     <!-- Code Exp 2 -->
@@ -861,13 +959,19 @@ pre { position: relative; }
         Q1. テクスチャなしの茶色の箱（左）とテクスチャありの箱（右）を見比べて、リアルさの違いは？<br>
         Q2. 半透明のテクスチャ箱はどう見えるか？ テクスチャと透明度は同時に使えるか？<br>
         Q3. <code>&lt;a-assets&gt;</code> を使う利点は何か？ もし使わなかったらどうなるか？</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">レンガの壁の material に <code>roughness: 1.0</code> を追加して保存し、壁の質感がどう変わるか確認しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> roughness 追加前後の壁の見た目の違いを記録する</div></div>
+      </div>
     </div>
 
   </div>
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -926,7 +1030,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -1004,7 +1108,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

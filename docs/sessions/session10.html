@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -403,7 +446,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -523,6 +566,11 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
   avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
   avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, data.rotation);
 });</pre>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem">アバターの色 (<code>data.color</code>) を <code>"#FF5252"</code> から別の色に変えて、3D空間内のアバターの見た目が変わることを確認してみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した色とアバターの見え方を1文で書く</div></div>
+</div>
     </div>
 
     <!-- 1.5 ユーザID管理 -->
@@ -551,11 +599,22 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
       </table>
     </div>
 
+
+    <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4D6; キーワード</p>
+      <table style="font-size:0.88rem">
+        <tr><td style="width:160px;color:#FFB800;font-weight:600">アバター</td><td style="color:#ccc">3D空間内で各ユーザを表すエンティティ。ここでは色付きの箱（a-box）を使用。他ユーザの存在と位置を視覚的に示す。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">setInterval</td><td style="color:#ccc">一定間隔でコールバック関数を実行するJavaScript関数。ここでは100msごとにカメラ位置をサーバに送信する用途で使う。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">position / rotation</td><td style="color:#ccc">3D空間内のオブジェクトの位置(x,y,z)と回転角度(x,y,z)。カメラのこれらの値を送受信してアバターを同期する。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">クリーンアップ</td><td style="color:#ccc">ユーザ切断時にアバターをDOMから削除する処理。これを怠ると動かない「幽霊アバター」が残り続ける。</td></tr>
+      </table>
+    </div>
+
   </div>
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -583,7 +642,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -859,7 +918,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -918,7 +977,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -986,7 +1045,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

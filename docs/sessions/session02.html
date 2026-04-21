@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -404,7 +447,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -415,6 +458,38 @@ pre { position: relative; }
       第1回ではブラウザ側（クライアント）でHTMLを表示しました。<br>
       今回はいよいよ<strong>サーバ側</strong>のプログラムを書き、ブラウザからのリクエストに応じて異なるレスポンスを返す仕組みを学びます。
     </p>
+
+    <!-- Server-Side Processing Flow -->
+    <div class="diagram-container" style="margin-bottom:2rem">
+      <svg viewBox="0 0 700 160" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <text x="350" y="18" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">サーバサイド処理の流れ</text>
+        <rect x="20" y="35" width="120" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="80" y="55" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">ブラウザ</text>
+        <text x="80" y="72" text-anchor="middle" fill="#888" font-size="9">GET /about</text>
+        <rect x="190" y="35" width="120" height="50" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+        <text x="250" y="55" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">Express</text>
+        <text x="250" y="72" text-anchor="middle" fill="#888" font-size="9">ルーティング</text>
+        <rect x="360" y="35" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+        <text x="430" y="55" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">ルート処理関数</text>
+        <text x="430" y="72" text-anchor="middle" fill="#888" font-size="9">function(req, res)</text>
+        <rect x="550" y="35" width="120" height="50" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
+        <text x="610" y="55" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">レスポンス</text>
+        <text x="610" y="72" text-anchor="middle" fill="#888" font-size="9">res.send() / json()</text>
+        <line x1="140" y1="60" x2="190" y2="60" stroke="#76B900" stroke-width="2" marker-end="url(#s2a1)"/>
+        <line x1="310" y1="60" x2="360" y2="60" stroke="#FFB800" stroke-width="2" marker-end="url(#s2a2)"/>
+        <line x1="500" y1="60" x2="550" y2="60" stroke="#4FC3F7" stroke-width="2" marker-end="url(#s2a3)"/>
+        <line x1="550" y1="105" x2="140" y2="105" stroke="#93D500" stroke-width="2" marker-end="url(#s2a4)"/>
+        <text x="350" y="120" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">HTML / JSON をブラウザに返す</text>
+        <rect x="20" y="90" width="120" height="30" rx="8" fill="#76B900"/>
+        <text x="80" y="110" text-anchor="middle" fill="white" font-weight="700" font-size="10">画面に表示</text>
+        <defs>
+          <marker id="s2a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="s2a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="s2a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          <marker id="s2a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
+        </defs>
+      </svg>
+    </div>
 
     <!-- 1.1 Node.js とは -->
     <div class="concept-box">
@@ -547,7 +622,7 @@ app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span cla
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -584,6 +659,12 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
         <tr><td><code>http://localhost:3000/hello</code></td><td>「Hello, World!」という文字列</td><td>res.send()</td></tr>
         <tr><td><code>http://localhost:3000/api/time</code></td><td>現在時刻のJSONデータ</td><td>res.json()</td></tr>
       </table>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">上のコードに <code>app.get('/test', ...)</code> というルートを追加したとして、<code>http://localhost:3000/test</code> にアクセスしたら何が返るか予測してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した動作を1行で書く</div></div>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -630,7 +711,7 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -701,7 +782,9 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
 node server.js</pre>
         </li>
         <li>「サーバ起動: http://localhost:3000」と表示されたら成功</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く
+          <div style="margin:0.8rem 0"><img src="images/session02-hello-express.png" alt="ブラウザで localhost:3000 を開いた画面。Hello Express! と表示されている" style="max-width:420px;width:100%;border-radius:8px;border:1px solid #333"></div>
+        </li>
         <li>次に <code>http://localhost:3000/about</code> を開く</li>
         <li>次に <code>http://localhost:3000/api/hello</code> を開く</li>
         <li>確認が終わったらターミナルで <kbd>Ctrl+C</kbd> を押してサーバを停止</li>
@@ -710,6 +793,12 @@ node server.js</pre>
         Q1. 3つのURL（<code>/</code>、<code>/about</code>、<code>/api/hello</code>）それぞれで何が表示されましたか？<br>
         Q2. <code>/api/hello</code> の表示と <code>/</code> の表示の違いは何ですか？（見た目、データ形式の違い）<br>
         Q3. 存在しないURL（例: <code>/contact</code>）にアクセスするとどうなりましたか？</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>/api/hello</code> のレスポンスに <code>author: '自分の名前'</code> を追加してみよう。保存 → Ctrl+C → 再起動 → ブラウザで確認。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 追加後の JSON 表示内容を記録する</div></div>
+      </div>
     </div>
 
     <!-- Code Exp 2 -->
@@ -784,13 +873,19 @@ node server2.js</pre>
         Q1. <code>http://localhost:3000</code> で何が表示されましたか？（server.js のときと違いを比べる）<br>
         Q2. <code>/api/info</code> にアクセスしたときは何が表示されましたか？<br>
         Q3. <code>express.static('public')</code> の役割を自分の言葉で説明してください</div></div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>public/index.html</code> の <code>&lt;h1&gt;</code> テキストを自分の名前に変えて保存し、ブラウザで更新されることを確認しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更が反映されたかどうかを1行で記録する</div></div>
+      </div>
     </div>
 
   </div>
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -849,7 +944,7 @@ node server2.js</pre>
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -925,7 +1020,7 @@ app.<span class="fn">get</span>(<span class="str">'/help'</span>, <span class="k
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>

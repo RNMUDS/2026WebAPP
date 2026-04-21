@@ -371,9 +371,52 @@ pre { position: relative; }
   html { scroll-behavior: auto; }
   details summary::before { transition: none; }
 }
+
+/* ============ SECTION NAV ============ */
+.section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222;
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.section-nav a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.45rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
+.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-advanced { color: #FFB800; }
+
+/* ============ SCROLL TARGET OFFSET ============ */
+[id] { scroll-margin-top: 3rem; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ SECTION NAV ============ -->
+<nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-explanation">説明</a>
+  <a href="#sec-examples">例題</a>
+  <a href="#sec-code-exp">体験</a>
+  <a href="#sec-group-exam" class="nav-advanced">試問</a>
+  <a href="#sec-standard" class="nav-assignment">標準</a>
+  <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-answers">解答</a>
+</nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
@@ -403,7 +446,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 1. EXPLANATION ============ -->
-<section>
+<section id="sec-explanation">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">1</div>
@@ -434,6 +477,11 @@ pre { position: relative; }
 
       <table>
         <tr><th>属性</th><th>説明</th><th>例</th></tr>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem"><code>dur</code> を <code>500</code> に変えて回転速度の違いを確認し、次に <code>easing</code> を <code>easeInOutQuad</code> に変えてみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 速度と動きの違いを1文で書く</div></div>
+</div>
         <tr><td><code>property</code></td><td>変化させる対象のプロパティ <span class="exam-alert">課題に出ます</span></td><td>rotation, position, scale, color, opacity</td></tr>
         <tr><td><code>from</code></td><td>開始値（省略するとオブジェクトの現在値）</td><td><code>0 0 0</code></td></tr>
         <tr><td><code>to</code></td><td>終了値</td><td><code>0 360 0</code></td></tr>
@@ -443,6 +491,47 @@ pre { position: relative; }
         <tr><td><code>direction</code></td><td>アニメーションの方向</td><td><code>normal</code>, <code>alternate</code>, <code>reverse</code></td></tr>
         <tr><td><code>startEvents</code></td><td>アニメーション開始のトリガーイベント</td><td><code>click</code>, <code>mouseenter</code></td></tr>
       </table>
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 700 180" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <!-- Loop circle -->
+          <rect x="40" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="110" y="52" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">animation 開始</text>
+          <text x="110" y="67" text-anchor="middle" fill="#999" font-size="9">from の値からスタート</text>
+          
+          <line x1="180" y1="55" x2="230" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#an-arr)"/>
+          
+          <rect x="230" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="300" y="52" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">値を補間</text>
+          <text x="300" y="67" text-anchor="middle" fill="#999" font-size="9">easing に従い変化</text>
+          
+          <line x1="370" y1="55" x2="420" y2="55" stroke="#FFB800" stroke-width="2" marker-end="url(#an-arr2)"/>
+          
+          <rect x="420" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="490" y="52" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">to の値に到達</text>
+          <text x="490" y="67" text-anchor="middle" fill="#999" font-size="9">dur ミリ秒後</text>
+          
+          <line x1="560" y1="55" x2="610" y2="55" stroke="#4FC3F7" stroke-width="2" marker-end="url(#an-arr3)"/>
+          
+          <rect x="610" y="30" width="70" height="50" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
+          <text x="645" y="52" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">loop?</text>
+          <text x="645" y="67" text-anchor="middle" fill="#999" font-size="9">繰り返し</text>
+          
+          <!-- Loop back arrow -->
+          <path d="M 645 80 L 645 120 L 110 120 L 110 80" fill="none" stroke="#93D500" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#an-arr4)"/>
+          <text x="380" y="138" text-anchor="middle" fill="#93D500" font-size="9" font-weight="600">loop: true → from に戻って再開 / direction: alternate → 逆方向に再生</text>
+          
+          <!-- dur label -->
+          <rect x="180" y="5" width="380" height="20" rx="4" fill="none" stroke="#666" stroke-width="1" stroke-dasharray="3"/>
+          <text x="370" y="18" text-anchor="middle" fill="#666" font-size="9">dur（所要時間）ミリ秒</text>
+          
+          <defs>
+            <marker id="an-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#76B900"/></marker>
+            <marker id="an-arr2" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#FFB800"/></marker>
+            <marker id="an-arr3" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#4FC3F7"/></marker>
+            <marker id="an-arr4" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#93D500"/></marker>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.2 アニメーション可能なプロパティ -->
@@ -538,6 +627,11 @@ pre { position: relative; }
 
       <table>
         <tr><th>イベント</th><th>発生タイミング</th></tr>
+<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+  <p style="color:#ccc;font-size:0.9rem">クリックで色が変わるコードの <code>to</code> の色を好きな色に変えて試してみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した色のコードと見た目を1文で書く</div></div>
+</div>
         <tr><td><code>click</code></td><td>オブジェクトをクリック（またはカーソルの fuse で選択）したとき</td></tr>
         <tr><td><code>mouseenter</code></td><td>カーソル/マウスがオブジェクトに乗ったとき</td></tr>
         <tr><td><code>mouseleave</code></td><td>カーソル/マウスがオブジェクトから離れたとき</td></tr>
@@ -570,11 +664,22 @@ pre { position: relative; }
                      easing: easeInOutQuad"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span></pre>
     </div>
 
+
+    <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4D6; キーワード</p>
+      <table style="font-size:0.88rem">
+        <tr><td style="width:160px;color:#FFB800;font-weight:600">easing（イージング）</td><td style="color:#ccc">アニメーションの加速・減速カーブ。linear は等速、easeOut は減速停止。自然な動きに欠かせない概念。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">direction: alternate</td><td style="color:#ccc">アニメーションの再生方向を毎回反転する。from→to→from→to... と往復動作になる。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">startEvents</td><td style="color:#ccc">アニメーション開始のトリガーとなるイベント名。省略すると即時開始。click や mouseenter を指定してインタラクティブにする。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">animation__2（サフィックス）</td><td style="color:#ccc">1つのオブジェクトに複数のアニメーションを付けるための命名規則。<code>__</code> の後に任意の名前を付ける。</td></tr>
+      </table>
+    </div>
+
   </div>
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section>
+<section id="sec-examples">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
@@ -684,7 +789,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
-<section>
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#93D500">3</div>
@@ -876,7 +981,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section>
+<section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
@@ -935,7 +1040,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 5. STANDARD TASK ============ -->
-<section>
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#76B900">5</div>
@@ -1007,7 +1112,7 @@ pre { position: relative; }
 </section>
 
 <!-- ============ 6. ADVANCED TASK ============ -->
-<section>
+<section id="sec-advanced">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#FFB800">6</div>
