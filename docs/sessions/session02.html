@@ -755,6 +755,64 @@ npm install express</pre>
         </table>
         <p style="margin-top:0.6rem;color:#FFB800;font-size:0.85rem"><strong>&#x26A0; よくある勘違い:</strong> ソースコードを保存しただけでは、<strong>動いているサーバには反映されません</strong>。サーバは起動したときのコードを覚えているので、修正を反映するには必ず「停止 → 再起動」が必要です（Live Server とはここが違います）。</p>
       </div>
+
+      <!-- ============ PORT CONFLICT TROUBLESHOOTING ============ -->
+      <div style="background:#2e0a0a;border:1px solid #FF5252;border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:0.9rem;color:#E0E0E0">
+        <p style="color:#FF5252;font-weight:700;margin-bottom:0.6rem">&#x1F6A8; エラー「ポート3000はすでに使われています」が出たら</p>
+        <p style="margin-bottom:0.6rem"><code>node server.js</code> を実行したときに、次のような赤いエラーメッセージが出て<strong>サーバが起動しないことがあります</strong>。</p>
+        <pre style="margin:0.4rem 0 0.7rem;background:#1a0505;border:1px solid #FF5252"><span class="code-label" style="color:#FF5252">Terminal ── エラー例</span>
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] ...</pre>
+        <p style="margin-bottom:0.6rem"><strong>原因:</strong> 「<code>EADDRINUSE</code>」は「address already in use（アドレスはすでに使用中）」という意味です。<strong>別のプログラム（多くの場合、前に起動したまま停止し忘れている自分のnodeサーバ）が、すでにポート3000を使っている</strong>ため、新しいサーバがそこに割り込めない状態です。</p>
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin:0.5rem 0;font-size:0.85rem;color:#E0E0E0">
+          <strong style="color:#FFB800">&#x1F4A1; ポート番号とは？</strong><br>
+          パソコンを<strong>マンション</strong>、1つひとつのサーバを<strong>部屋</strong>に例えると、<strong>ポート番号は部屋番号</strong>です。同じマンション（同じPC）の同じ部屋（ポート3000）に、2つのサーバを同時に住まわせることはできません。
+        </div>
+        <p style="color:#93D500;font-weight:700;margin-top:0.8rem;margin-bottom:0.3rem">&#x2705; 対処法（上から順に試してください）</p>
+
+        <p style="color:#93D500;font-weight:600;margin-top:0.6rem;margin-bottom:0.2rem">【方法1】前に開いたターミナルでサーバが動いていないか確認する <span style="color:#999;font-weight:400;font-size:0.85rem">（いちばん多い原因）</span></p>
+        <ol style="padding-left:1.4rem;line-height:1.9;font-size:0.9rem">
+          <li>VS Code の下部にある<strong>ターミナルパネル</strong>を見る。右上に「ターミナルのリスト」（<code>1: zsh</code>、<code>2: zsh</code>など）があれば、<strong>複数のターミナルが開いています</strong>。</li>
+          <li>それぞれのターミナルをクリックして中身を見る。「サーバ起動: http://localhost:3000」と表示されたままでプロンプト（<code>&gt;</code> や <code>$</code>）が見えないものが<strong>サーバが動いたままのターミナル</strong>です。</li>
+          <li>そのターミナルをクリックして <kbd>Ctrl</kbd>+<kbd>C</kbd> を押し、サーバを停止する。</li>
+          <li>もう一度 <code>node server.js</code> を実行する。</li>
+        </ol>
+
+        <p style="color:#93D500;font-weight:600;margin-top:0.8rem;margin-bottom:0.2rem">【方法2】ポートを使っているプロセスを探して強制終了する</p>
+        <p style="font-size:0.88rem;margin-bottom:0.3rem">ターミナルが見つからない（閉じてしまった／裏で動いているなど）場合は、OS ごとのコマンドで<strong>ポート3000を使っているプログラムのPID（プロセスID）</strong>を調べて、強制終了します。</p>
+        <table style="margin:0.4rem 0;font-size:0.85rem">
+          <tr><th style="width:20%">OS</th><th>コマンド</th></tr>
+          <tr><td><strong>Windows</strong><br>(PowerShell / コマンドプロンプト)</td>
+            <td>
+              <pre style="margin:0;padding:0.6rem 0.8rem;font-size:0.82rem"><span class="code-label">Terminal</span>
+netstat -ano | findstr :3000
+taskkill /F /PID &lt;表示されたPID&gt;</pre>
+              <span style="color:#999;font-size:0.8rem">例: 最右列に <code>12345</code> と出たら <code>taskkill /F /PID 12345</code></span>
+            </td>
+          </tr>
+          <tr><td><strong>macOS / Linux</strong></td>
+            <td>
+              <pre style="margin:0;padding:0.6rem 0.8rem;font-size:0.82rem"><span class="code-label">Terminal</span>
+lsof -i :3000
+kill -9 &lt;表示されたPID&gt;</pre>
+              <span style="color:#999;font-size:0.8rem">例: <code>PID</code> 列に <code>12345</code> と出たら <code>kill -9 12345</code></span>
+            </td>
+          </tr>
+        </table>
+        <p style="color:#FFB800;font-size:0.82rem;margin-top:0.3rem"><strong>&#x26A0; 注意:</strong> 他人のPCや共用マシンでは、<strong>そのPIDが本当に自分のnodeサーバか</strong>を確認してから kill してください。別のアプリを誤って終了させないために、<code>lsof -i :3000</code> / <code>netstat -ano</code> の出力の「プログラム名」欄が <code>node</code> になっていることを確認しましょう。</p>
+
+        <p style="color:#93D500;font-weight:600;margin-top:0.8rem;margin-bottom:0.2rem">【方法3】別のポート番号を使う <span style="color:#999;font-weight:400;font-size:0.85rem">（一時しのぎ）</span></p>
+        <p style="font-size:0.88rem;margin-bottom:0.3rem">どうしてもポート3000を空けられないときは、<code>server.js</code> の<strong>最後の <code>app.listen(3000, ...)</code></strong> の <code>3000</code> を <code>3001</code> や <code>8080</code> に書き換えて保存 → 再起動します。その場合、ブラウザでも <code>http://localhost:3001</code> のように<strong>新しいポート番号でアクセス</strong>してください。</p>
+        <pre style="margin:0.3rem 0 0.3rem"><span class="code-label">JavaScript</span>
+app.<span class="fn">listen</span>(<span class="num">3001</span>, <span class="kw">function</span>() {   <span class="cmt">// 3000 → 3001 に変更</span>
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3001'</span>);
+});</pre>
+
+        <p style="color:#93D500;font-weight:600;margin-top:0.8rem;margin-bottom:0.2rem">【方法4】最後の手段: PC を再起動する</p>
+        <p style="font-size:0.88rem">上のどれでも直らない場合は、PC を再起動すれば動いているプロセスは全部リセットされるので、必ずポートは空きます。時間はかかりますが確実です。</p>
+
+        <p style="color:#FFB800;font-size:0.83rem;margin-top:0.7rem"><strong>&#x1F4DD; 予防のコツ:</strong> サーバを起動したターミナルは<strong>むやみに「×」で閉じない</strong>でください（プロセスだけ生き残ることがあります）。必ず先に <kbd>Ctrl</kbd>+<kbd>C</kbd> で停止してからターミナルを閉じる習慣をつけると、ポート競合はほとんど起きません。</p>
+      </div>
     </div>
 
     <!-- Code Exp 1 -->
