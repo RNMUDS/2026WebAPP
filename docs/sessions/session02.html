@@ -744,8 +744,16 @@ node -v</pre>
 npm init -y
 npm install express</pre>
       <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express</code> で Express がインストールされます。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
-        <strong>サーバの起動と停止:</strong> サーバは <code>node ファイル名.js</code> で起動します。<strong>停止するときは <kbd>Ctrl+C</kbd></strong> をターミナルで押してください。コードを修正したら、一度 <kbd>Ctrl+C</kbd> で停止してから再度 <code>node ファイル名.js</code> で起動し直します。
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:1rem 1.2rem;margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0">
+        <p style="color:#93D500;font-weight:700;margin-bottom:0.6rem">&#x1F4A1; サーバの「起動」「停止」「再起動」について</p>
+        <p style="margin-bottom:0.6rem">サーバプログラムは、ブラウザのように「閉じて終わり」ではありません。<strong>ターミナルの中でずっと動き続けている</strong>プログラムです。そのため、次の3つの操作を覚える必要があります。</p>
+        <table style="margin:0.6rem 0">
+          <tr><th style="width:25%">操作</th><th>やり方</th><th>どうなる？</th></tr>
+          <tr><td><strong style="color:#93D500">起動</strong></td><td>ターミナルで <code>node ファイル名.js</code> と入力して Enter</td><td>「サーバ起動: http://localhost:3000」のようなメッセージが表示され、<strong>カーソルが戻ってこなくなる</strong>（＝動き続けている状態）</td></tr>
+          <tr><td><strong style="color:#FFB800">停止</strong></td><td>サーバが動いているターミナルを選択した状態で <kbd>Ctrl</kbd>+<kbd>C</kbd> を押す（Macでも同じく Ctrl）</td><td>プログラムが終了し、<strong>カーソル（プロンプト <code>&gt;</code> や <code>$</code>）が戻ってくる</strong></td></tr>
+          <tr><td><strong style="color:#4FC3F7">再起動</strong></td><td><strong>停止 → もう一度起動</strong>の2ステップ</td><td>修正後のコードで動き出す</td></tr>
+        </table>
+        <p style="margin-top:0.6rem;color:#FFB800;font-size:0.85rem"><strong>&#x26A0; よくある勘違い:</strong> ソースコードを保存しただけでは、<strong>動いているサーバには反映されません</strong>。サーバは起動したときのコードを覚えているので、修正を反映するには必ず「停止 → 再起動」が必要です（Live Server とはここが違います）。</p>
       </div>
     </div>
 
@@ -810,7 +818,20 @@ node server.js</pre>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-        <p style="color:#ccc;font-size:0.9rem"><code>/api/hello</code> のレスポンスに <code>author: '自分の名前'</code> を追加してみよう。保存 → Ctrl+C → 再起動 → ブラウザで確認。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.5rem"><code>/api/hello</code> のレスポンスに <code>author: '自分の名前'</code> を追加してみましょう。例:</p>
+        <pre style="margin:0.3rem 0 0.6rem"><span class="code-label">JavaScript</span>
+res.<span class="fn">json</span>({ message: <span class="str">'Hello from API!'</span>, timestamp: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>(), author: <span class="str">'自分の名前'</span> });</pre>
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">修正を反映させるには、以下の順番で操作します。<strong>「保存したらすぐブラウザに反映される」わけではない</strong>ので注意してください。</p>
+        <ol style="padding-left:1.4rem;font-size:0.88rem;line-height:1.9;color:#ccc">
+          <li><strong>ファイルを保存する</strong>（<kbd>Ctrl</kbd>+<kbd>S</kbd> / Macは <kbd>Cmd</kbd>+<kbd>S</kbd>）<br>
+            <span style="color:#999;font-size:0.82rem">VS Code のタブに表示されていた「●」が消えれば保存済みです。</span></li>
+          <li><strong>サーバを停止する</strong>: サーバが動いているターミナルをクリックしてから <kbd>Ctrl</kbd>+<kbd>C</kbd> を押す<br>
+            <span style="color:#999;font-size:0.82rem">プロンプト（<code>&gt;</code> や <code>$</code>）が再び表示されれば停止完了です。何も起きない場合は、ターミナルがアクティブになっているか確認してください。</span></li>
+          <li><strong>サーバを再起動する</strong>: もう一度 <code>node server.js</code> を実行<br>
+            <span style="color:#999;font-size:0.82rem">↑キーを押すと直前のコマンドが呼び出せるので便利です。「サーバ起動: http://localhost:3000」が再度表示されればOK。</span></li>
+          <li><strong>ブラウザで確認する</strong>: <code>http://localhost:3000/api/hello</code> を開いているタブで <kbd>F5</kbd>（または <kbd>Ctrl</kbd>+<kbd>R</kbd> / <kbd>Cmd</kbd>+<kbd>R</kbd>）を押して再読み込みする<br>
+            <span style="color:#999;font-size:0.82rem">JSONに <code>"author": "自分の名前"</code> が追加されていれば成功です。</span></li>
+        </ol>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 追加後の JSON 表示内容を記録する</div></div>
       </div>
     </div>
@@ -874,14 +895,16 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
 });</pre>
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>もし前のサーバがまだ動いていたら <kbd>Ctrl+C</kbd> で停止する</li>
-        <li>ターミナルで以下を実行:
+        <li><strong>前のサーバ（server.js）が動いていたら停止する</strong>: ターミナルに「サーバ起動: http://localhost:3000」と表示されたままで、プロンプト（<code>&gt;</code> や <code>$</code>）が見えない状態なら、まだ動いています。その場合はターミナルをクリックしてから <kbd>Ctrl</kbd>+<kbd>C</kbd> を押して停止してください。<br>
+          <span style="color:#999;font-size:0.85rem">※ 同じポート（3000）を2つのサーバで同時に使うことはできません。停止せずに起動しようとすると「address already in use」というエラーが出ます。</span></li>
+        <li>ターミナルで以下を実行してサーバを起動する:
           <pre><span class="code-label">Terminal</span>
 node server2.js</pre>
+          <span style="color:#999;font-size:0.85rem">「サーバ起動: http://localhost:3000」が表示されればOK。</span>
         </li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く → HTMLページが表示される</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く → HTMLページ（「Express Static Server」の緑の見出し）が表示される</li>
         <li>次に <code>http://localhost:3000/api/info</code> を開く → JSONデータが表示される</li>
-        <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
+        <li>確認が終わったらターミナルをクリックして <kbd>Ctrl</kbd>+<kbd>C</kbd> でサーバを停止する（プロンプトが戻ってくる）</li>
       </ol>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
         Q1. <code>http://localhost:3000</code> で何が表示されましたか？（server.js のときと違いを比べる）<br>
@@ -890,7 +913,16 @@ node server2.js</pre>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-        <p style="color:#ccc;font-size:0.9rem"><code>public/index.html</code> の <code>&lt;h1&gt;</code> テキストを自分の名前に変えて保存し、ブラウザで更新されることを確認しよう。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.5rem"><code>public/index.html</code> の <code>&lt;h1&gt;Express Static Server&lt;/h1&gt;</code> を自分の名前（例: <code>&lt;h1&gt;田中のページ&lt;/h1&gt;</code>）に書き換えて、ブラウザに反映されるか確認してみましょう。</p>
+        <p style="color:#93D500;font-size:0.88rem;margin-bottom:0.3rem"><strong>ポイント:</strong> 静的ファイル（HTML）の変更は、<strong>サーバの再起動は不要</strong>です。<code>express.static</code> はアクセスが来るたびにフォルダ内のファイルを読み直して返すためです（JavaScriptサーバコードを書き換えた場合とは違います）。</p>
+        <ol style="padding-left:1.4rem;font-size:0.88rem;line-height:1.9;color:#ccc">
+          <li><code>public/index.html</code> を VS Code で開き、<code>&lt;h1&gt;</code> タグの中身を書き換える</li>
+          <li><strong>ファイルを保存する</strong>（<kbd>Ctrl</kbd>+<kbd>S</kbd> / Macは <kbd>Cmd</kbd>+<kbd>S</kbd>）<br>
+            <span style="color:#999;font-size:0.82rem">VS Code のタブの「●」が消えれば保存済みです。</span></li>
+          <li>ブラウザで <code>http://localhost:3000</code> のタブに戻り、<kbd>F5</kbd>（または <kbd>Ctrl</kbd>+<kbd>R</kbd> / <kbd>Cmd</kbd>+<kbd>R</kbd>）を押して<strong>ページを再読み込み</strong>する<br>
+            <span style="color:#999;font-size:0.82rem">見出しが書き換えた文字になっていれば成功です。変わらない場合は、保存できているか／正しいファイルを開いているかを確認してください。</span></li>
+        </ol>
+        <p style="color:#FFB800;font-size:0.82rem;margin-top:0.4rem"><strong>&#x26A0; 注意:</strong> <code>server2.js</code>（JavaScriptのサーバコード）を書き換えた場合は、前述のとおり「保存 → <kbd>Ctrl</kbd>+<kbd>C</kbd> で停止 → <code>node server2.js</code> で再起動 → ブラウザで再読み込み」が必要です。</p>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更が反映されたかどうかを1行で記録する</div></div>
       </div>
     </div>
