@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1149,6 +1150,152 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第3回
+
+名前:
+学籍番号:
+
+---
+
+## 例題: Fetch API の処理の流れを読む
+### やってみよう（console.log('E: 最後') を追加した場合の出力順予測）
+（例: A→B→D→E→C のように予測した順番を書く）
+
+---
+
+## トレース演習: データの流れを追う
+### 空欄を埋めた文章
+| 順番 | 何が起きるか |
+|---|---|
+| ① | `showUser()` が呼ばれ、`fetch()` がサーバの （　　　　） に GETリクエストを送る |
+| ② | サーバの `app.get('/api/user')` が実行され、（　　　　） というJSONデータを返す |
+| ③ | `response.json()` がレスポンスをJavaScriptの （　　　　） に変換する |
+| ④ | `data.name` は （　　　　）、`data.score` は （　　　　） |
+| ⑤ | `id="output"` の要素の中身が「（　　　　）」に書き換わる |
+
+---
+
+## コード体験 1: JSON APIとクライアント表示（server.js + public/index.html）
+### Q1. ボタンを押す前と押した後で、画面の表示はどう変わったか
+
+### Q2. ブラウザで http://localhost:3000/api/members に直接アクセスすると何が表示されるか
+
+### Q3. ページ全体が再読み込みされたか？ それとも一部だけ変わったか？
+
+### やってみよう（members 配列に自分の名前を追加 → 反映されたか）
+
+---
+
+## コード体験 2: POSTリクエストでデータを送信する（server2.js + public/post.html）
+### Q1. 送信ボタンを押した後、画面にどんな応答が表示されたか
+
+### Q2. VS Code のターミナルに何が表示されたか（console.log の出力）
+
+### Q3. コード体験1（GETでデータ取得）とコード体験2（POSTでデータ送信）の違い
+
+### やってみよう（空の名前・空のメッセージを送信したときのサーバ応答）
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: クライアント–サーバ通信の仕組みを説明する
+### 問1. JSONデータから値を読み取る
+| アクセス方法 | 値 |
+|---|---|
+| `data.student.name`          |   |
+| `data.student.grade`         |   |
+| `data.student.courses[0]`    |   |
+| `data.student.courses[2]`    |   |
+| `data.active`                |   |
+| `data.student.courses.length`|   |
+
+### 問2. GET と POST の違い
+|           | GET | POST |
+|-----------|-----|------|
+| 目的          |   |   |
+| データの場所  |   |   |
+| Express       |   |   |
+| 使用例        |   |   |
+
+### 問3. `fetch('/api/data')` からデータが画面に表示されるまでの流れ（fetch / GETリクエスト / res.json() / await / innerHTML をすべて使って3〜5文）
+
+### 問4. `app.use(express.json())` は何のために必要か。この行がないとどうなるか（1〜2文）
+
+---
+
+## 標準課題 2: APIとクライアント表示を拡張する（コード改造）
+### ① 改造後の server.js
+```javascript
+（ここに server.js の改造後コードを貼り付け）
+```
+
+### ① 改造後の public/index.html
+```html
+（ここに index.html の改造後コードを貼り付け）
+```
+
+### ② 各改造について「追加・変更した箇所」と「変更理由」
+1. `/api/schedule` ルート追加:
+2. `/api/members` にメンバーを2人追加:
+3. 「予定を表示」ボタンと取得・表示関数の追加:
+4. メンバー表示の役割を `<strong>` で太字に変更:
+
+---
+
+## 発展課題: ミニ掲示板を作る
+### 1. board-server.js のコード
+```javascript
+（ここに貼り付け）
+```
+
+### 2. public/board.html のコード
+```html
+（ここに貼り付け）
+```
+
+### 3. 音声説明（1〜2分の音声ファイルをNotionに添付）
+- 掲示板のデータの流れ（POST で送信 → サーバ保存 → GET で取得 → 表示）:
+- GET と POST をどう使い分けたか:
+- 工夫した点・難しかった点:
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-05-13T16:20">
   <div class="container">
@@ -1212,7 +1359,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

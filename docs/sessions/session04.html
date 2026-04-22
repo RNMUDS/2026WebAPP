@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1169,6 +1170,170 @@ pre { position: relative; }
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第4回
+
+名前:
+学籍番号:
+
+---
+
+## 例題: プリミティブとエンティティ・コンポーネント記法の対応
+### やってみよう（&lt;a-sphere radius="1" color="blue"&gt; をエンティティ・コンポーネント記法に変換）
+（変換後のコードを1行で書く）
+
+---
+
+## トレース演習 1: プリミティブをエンティティ記法に変換する
+```html
+&lt;!-- 球 --&gt;
+&lt;a-entity
+  geometry="______________________"
+  material="______________________"
+  position="______________________"&gt;&lt;/a-entity&gt;
+
+&lt;!-- 円柱 --&gt;
+&lt;a-entity
+  geometry="______________________"
+  material="______________________"
+  position="______________________"&gt;&lt;/a-entity&gt;
+
+&lt;!-- 床 --&gt;
+&lt;a-entity
+  geometry="______________________"
+  material="______________________"
+  position="______________________"
+  rotation="______________________"&gt;&lt;/a-entity&gt;
+```
+
+---
+
+## トレース演習 2: rotation と scale の効果を予測する
+| ラベル | 形 | 色 | 見え方の予測（rotationやscaleの影響） |
+|---|---|---|---|
+| A |   |   |   |
+| B |   |   |   |
+| C |   |   |   |
+
+---
+
+## コード体験 1: プリミティブ vs エンティティ・コンポーネント（compare.html）
+### Q1. 左側（プリミティブ）と右側（エンティティ・コンポーネント）の表示結果の違い
+
+### Q2. 開発者ツール（F12 → Elements）で &lt;a-box&gt; に内部的に付いている属性
+
+### やってみよう（右側の箱に scale="2 1 1" を追加した後の見た目の変化）
+
+---
+
+## コード体験 2: rotation・scale・ネスト（transform.html）
+### Q1. トレース演習2の予測と実際の表示の比較（違った点）
+
+### Q2. D（ネストされたエンティティ）は何に見えるか / 親の rotation を "0 0 0" に変えるとどう変わるか
+
+### Q3. B の scale="2 0.5 1" を "1 1 1" に戻したときの変化
+
+### やってみよう（親に scale="2 2 2" を追加したとき、子エンティティ全体への影響）
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: ECSと座標系の理解
+### 問1. ECS の3つの用語
+| 用語 | 役割 | A-Frameでの対応 |
+|---|---|---|
+| Entity    |   |   |
+| Component |   |   |
+| System    |   |   |
+
+### 問2. プリミティブ記法の書き換え
+元のコード:
+```html
+&lt;a-box position="1 2 -5" width="3" height="0.5" color="purple" rotation="0 30 0"&gt;&lt;/a-box&gt;
+```
+エンティティ・コンポーネント記法:
+```html
+（ここに書き換え後のコードを貼り付け）
+```
+
+### 問3. A-Frame の3D座標系
+- (a) X軸 / Y軸 / Z軸はそれぞれどの方向か:
+- (b) カメラのデフォルト位置とその高さの意味:
+- (c) カメラから見て奥に配置するには Z を正・負どちらにするか:
+
+### 問4. scale の見た目
+| scale の値 | 見た目 |
+|---|---|
+| scale="2 2 2"   |   |
+| scale="3 1 1"   |   |
+| scale="1 0.1 1" |   |
+
+---
+
+## 標準課題 2: エンティティ・コンポーネント記法でシーンを改造する
+### ① 改造後のコード全体（transform.html）
+```html
+（ここに改造後の transform.html を貼り付け）
+```
+
+### ② 各改造について「変更した行」と「見た目の変化」
+1. A（赤い箱）の rotation を "45 45 0" に変更:
+2. B（青い箱）に rotation="0 0 30" を追加:
+3. C（緑の球）の scale を "2 2 2" に変更:
+4. torus（ドーナツ）エンティティを追加（position "0 2 -4", rotation "90 0 0"）:
+5. D の親 position を "3 1 -5" に移動、子に sphere を追加:
+
+---
+
+## 発展課題: エンティティ・コンポーネント記法で3D部屋を作る
+### 1. コード（room.html 全体）
+```html
+（ここに貼り付け）
+```
+
+### 2. 音声説明（1〜2分の音声ファイルを添付）
+- どんな部屋をイメージしたか
+- 各家具をどのようにエンティティの組み合わせで作ったか
+- ネスト（親子関係）をどこで使い、なぜ便利だったか
+- rotation・scale をどこで使い、どんな効果があったか
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-05-27T16:20">
   <div class="container">
@@ -1258,7 +1423,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

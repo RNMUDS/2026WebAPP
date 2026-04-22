@@ -429,6 +429,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -932,6 +933,172 @@ Web13/
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第13回
+
+名前:
+学籍番号:
+
+---
+
+## 設計ワークシート Step 1: テーマを決める
+### テーマ名
+
+### コンセプト（2〜3文）
+（どんな3D空間を作りたいかを2〜3文で説明）
+
+### テーマ案の比較（やってみよう）
+| テーマ案 | 必須機能をどう組み込めるか |
+|---|---|
+| 案1: | |
+| 案2: | |
+| 案3: | |
+| 選んだテーマ | |
+
+---
+
+## 設計ワークシート Step 2: 機能一覧
+| 区分 | 機能名 | 説明 | 使用技術 |
+|---|---|---|---|
+| 必須 | マルチプレイ |   |   |
+| 必須 | 吹き出しチャット |   |   |
+| 追加1 |   |   |   |
+| 追加2 |   |   |   |
+| 余力  |   |   |   |
+
+---
+
+## 設計ワークシート Step 3: 画面設計（スケッチ）
+（紙に描いたスケッチを撮影してここに画像として貼り付け）
+
+スケッチに含めた要素:
+- 3D空間全体の見取り図:
+- 主要オブジェクトの配置:
+- アバターの出現位置:
+- チャットUIの位置:
+- その他のUI要素:
+
+---
+
+## 設計ワークシート Step 4: 技術選定
+| 機能 | クライアント側の技術 | サーバ側の技術 | 参考にする回 |
+|---|---|---|---|
+| 3D空間の表示 |   | — |   |
+| アバター同期 |   |   |   |
+| 吹き出しチャット |   |   |   |
+| 追加機能1 |   |   |   |
+
+---
+
+## 設計ワークシート Step 5: ファイル構成
+```
+Web13/
+  server.js          ←
+  index.html         ←
+  package.json       ←
+  （自分のファイルを追加）
+```
+
+各ファイルの役割:
+- server.js:
+- index.html:
+- package.json:
+- （追加ファイル）:
+
+---
+
+## 設計ワークシート Step 6: 実装スケジュール（第14回 90分）
+| 時間 | 作業内容 | 完了条件 |
+|---|---|---|
+| 0:00 - 0:20 (20分) |   |   |
+| 0:20 - 0:50 (30分) |   |   |
+| 0:50 - 1:10 (20分) |   |   |
+| 1:10 - 1:30 (20分) |   |   |
+
+---
+
+## グループ口頭試問（設計プレゼン）
+### グループメンバー全員の氏名
+
+### 各メンバーのテーマと、あなたが伝えたフィードバック
+| メンバー | テーマ | 自分が伝えたフィードバック |
+|---|---|---|
+|   |   |   |
+|   |   |   |
+|   |   |   |
+
+### 他のメンバーからもらったフィードバック（自分の設計に対して）
+-
+-
+-
+
+### フィードバックを受けて設計を修正する点
+-
+-
+
+---
+
+## 標準課題: 設計ドキュメント（6項目まとめ）
+### 1. テーマ・コンセプト
+
+### 2. 機能一覧（表）
+
+### 3. 画面設計スケッチ（画像）
+
+### 4. 技術選定表
+
+### 5. ファイル構成
+
+### 6. 実装スケジュール
+
+---
+
+## 発展課題: 詳細設計 + 追加機能の提案
+### 1. 詳細ワイヤーフレーム（UI要素を含む画面設計図）
+（手描きまたはデジタルツールで作成した画像を貼り付け）
+
+### 2. 追加機能の詳細提案
+- 機能の概要（何ができるか）:
+- 実装方法の概要（どの技術をどう使うか）:
+- ユーザにとっての価値（なぜこの機能が必要か）:
+
+### 3. Socket.IO イベント設計
+| イベント名 | 方向 | データ構造 | 用途 |
+|---|---|---|---|
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+
+### 4. 音声説明（1〜2分の音声ファイルを添付）
+説明内容:
+- 追加機能をなぜ選んだか
+- その機能をどうやって実装する予定か
+- フィードバックを受けて修正した点（あれば）
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-22T16:20">
   <div class="container">
@@ -959,7 +1126,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|SQL)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|SQL|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

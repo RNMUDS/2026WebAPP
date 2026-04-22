@@ -447,6 +447,7 @@ pre { position: relative; }
   <a href="#sec-tech-review">技術</a>
   <a href="#sec-reflection">振り返り</a>
   <a href="#sec-future">今後</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -892,6 +893,131 @@ pre { position: relative; }
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第15回
+
+名前:
+学籍番号:
+
+---
+
+## 発表の記録
+### 発表テーマ（自分の作品）
+（どんな3D空間を作ったか・コンセプトを1〜2文で）
+
+### 使用した主な技術（該当するものを残す）
+- A-Frame（ジオメトリ / マテリアル / ライト / アニメーション / glTF）
+- Node.js + Express（ルーティング / 静的配信 / JSON）
+- Socket.IO（アバター同期 / チャット / 状態共有 / DB連携）
+- その他:
+
+### 実装した必須機能
+- [ ] 3Dシーンの構築
+- [ ] アバター同期
+- [ ] チャット機能
+
+### 実装した追加機能・工夫
+（箇条書きで）
+
+### 発表で工夫した点・困った点
+（発表の感想を1〜2文）
+
+### 受けた質問と自分の回答
+| 質問 | 回答の要点 |
+|------|-----------|
+|      |           |
+|      |           |
+
+---
+
+## 相互評価シート（発表者ごとにコピーして記入）
+**発表者名:** _______________
+
+| 評価項目 | 説明 | 評点(1-5) |
+|---------|------|-----------|
+| 創造性 | テーマの独自性、3D空間のデザインの面白さ |   |
+| 技術的品質 | 必須機能の動作、追加機能の実装度 |   |
+| 完成度 | 全体のまとまり、バグの少なさ |   |
+| 発表の質 | 説明のわかりやすさ、デモの見せ方 |   |
+
+| 項目 | 記入内容 |
+|------|---------|
+| 印象に残った点 |   |
+| 改善の提案     |   |
+
+（※ このブロックを発表者の人数分コピーして全員分記入すること）
+
+---
+
+## 技術の振り返り: 3つの柱と自分の実装
+### サーバサイド（第2〜3回: Node.js + Express）
+（自分の最終制作でどう使ったか・1文）
+
+### 3D表現（第4〜8回: A-Frame）
+（自分の最終制作でどう使ったか・1文）
+
+### リアルタイム通信（第9〜12回: Socket.IO）
+（自分の最終制作でどう使ったか・1文）
+
+### 学習マップ上で最も理解が深まった回
+（第X回: 理由を1〜2文）
+
+---
+
+## 振り返りエッセイ（質問1〜5すべてに3文以上で回答）
+### 質問1. 最も印象に残ったこと
+（具体的な回を挙げて説明）
+
+### 質問2. 最も難しかったこと
+（どう克服したか、または今も苦手な点）
+
+### 質問3. 身についたスキル（3つ）
+1.
+2.
+3.
+
+### 質問4. もっと学びたいこと
+（関連して今後深めたい分野）
+
+### 質問5. 自分の作品について
+**満足している点:**
+
+**改善したい点:**
+
+---
+
+## 今後の学びへ: 次に挑戦したいこと
+（A-Frame公式 / Socket.IO / Three.js / WebXR / Express本格開発 / ポートフォリオ公開 などから1つ以上選んで、具体的に何をやるか1〜2文）
+
+### GitHub / ポートフォリオ公開の予定
+- [ ] リポジトリを公開する
+- [ ] README.md にデモ動画/スクリーンショットを追加する
+- [ ] 公開URL:
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <footer>
   <div class="container">
     Webプログラミング演習 ─ 2026年度前期 ─ 第15回
@@ -904,7 +1030,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Markdown)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Markdown|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

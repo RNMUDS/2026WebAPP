@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1164,6 +1165,172 @@ pre { position: relative; }
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第7回
+
+名前:
+学籍番号:
+
+---
+
+## 説明: やってみよう（dur / easing の変更）
+- dur を 500 に変えたときの速度の違い:
+- easing を easeInOutQuad に変えたときの動きの違い:
+（速度と動きの違いを1文でまとめる）
+
+---
+
+## 説明: やってみよう（クリックで色変化）
+- 変更した色コード（例: #FF9800）:
+- 見た目の印象（1文）:
+
+---
+
+## トレース演習 1: アニメーションの動きを予測する
+| オブジェクト | 形 | 何が変化するか（property） | どう動くか（予測） | 速さ（dur） |
+|---|---|---|---|---|
+| A |   |   |   |   |
+| B |   |   |   |   |
+| C |   |   |   |   |
+
+---
+
+## トレース演習 2: イベントトリガーの動作を予測する
+| ユーザ操作 | 発生イベント | 何が起こるか（予測） |
+|---|---|---|
+| カーソルを箱に合わせる | mouseenter |   |
+| カーソルを箱から外す   | mouseleave |   |
+| 箱をクリックする       | click      |   |
+
+---
+
+## コード体験 1: 基本アニメーション（animation-basic.html）
+### Q1. 4つのオブジェクトそれぞれの動きを1文ずつ
+- 赤い箱（rotation）     :
+- 青い球（position）     :
+- 黄色の円柱（opacity）  :
+- 緑のトーラス（複数）   :
+
+### Q2. トレース演習1の予測と実際の動きの比較（合っていたか、違った点）
+
+### Q3. バウンドする球の easing を easeInOutQuad に変えたときの動きの違い
+
+---
+
+## コード体験 2: クリックでアニメーション（animation-click.html）
+### Q1. 各オブジェクトのインタラクション
+- 赤い箱（click で回転）           :
+- 青い球（hover で拡大・離すと戻る）:
+- 緑の円柱（click で色変化＋ジャンプ）:
+
+### Q2. トレース演習2の予測と実際の動作の比較
+
+### Q3. 円柱をクリックしたとき、色変化とジャンプは同時に起こったか
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: アニメーションの知識を整理する
+### 問1. animation コンポーネントの主な属性
+| 属性 | 説明 | 値の例 |
+|---|---|---|
+| property    |   |   |
+| to          |   |   |
+| dur         |   |   |
+| loop        |   |   |
+| easing      |   |   |
+| direction   |   |   |
+| startEvents |   |   |
+
+### 問2. イージング関数の違い
+- linear        :
+- easeInOutQuad :
+- easeOutBounce :
+
+### 問3. 1つのオブジェクトに3つのアニメーション（回転・移動・色変化）を同時適用する属性名の書き方
+
+### 問4. material.opacity をアニメーションするときに必要な追加設定（コード例も）
+```html
+（コード例を記入）
+```
+
+### 問5. startEvents: click が動作しないときにまず確認すべきこと
+
+---
+
+## 標準課題 2: アニメーションを追加・変更する（コード改造）
+### ① 改造後のコード全体
+```html
+（ここに animation-basic.html の改造後コードを貼り付け）
+```
+
+### ② 各改造について「どの行を変えたか」と「動きがどう変わったか」
+1. 回転する箱の dur を半分（回転速度2倍）:
+2. バウンドする球の easing を easeInOutElastic に変更:
+3. 点滅する円柱に animation__2 としてY軸回転を追加:
+4. &lt;a-cone&gt;（円錐）を追加し、左右に往復移動させる position アニメーション:
+5. &lt;a-camera&gt; + &lt;a-cursor&gt; を追加し、トーラスに startEvents: click の色変化アニメーションを追加:
+
+---
+
+## 発展課題: アニメーションシーンを作る
+### 1. テーマ（例: 太陽系 / 時計 / 遊園地 / 海の中 / ダンスフロア など）
+
+### 2. コード（animated-scene.html 全体）
+```html
+（ここに貼り付け）
+```
+
+### 3. 必須要件の自己チェック
+- [ ] 5つ以上のオブジェクトにアニメーションを設定した
+- [ ] 3種類以上のプロパティ（rotation / position / scale / color / opacity など）を使った
+- [ ] 2種類以上のイージングを使い分けた
+- [ ] 少なくとも1つのイベントトリガー（click / mouseenter）を使った
+- [ ] 少なくとも1つの複数アニメーション同時実行（animation__2）を使った
+
+### 4. 音声説明（1〜2分の音声ファイルを添付）
+- どんなテーマ・世界観のシーンを作ったか
+- 各アニメーションの意図（なぜその動きにしたか）
+- イージングの使い分けで工夫した点
+- クリック/ホバーインタラクションの意図
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-17T16:20">
   <div class="container">
@@ -1237,7 +1404,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

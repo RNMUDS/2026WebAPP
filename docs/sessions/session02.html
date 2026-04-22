@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1073,6 +1074,143 @@ app.<span class="fn">get</span>(<span class="str">'/help'</span>, <span class="k
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第2回
+
+名前:
+学籍番号:
+
+---
+
+## 例題: Expressルーティングの読み方
+### やってみよう（/test を追加した場合の予測）
+（予測した動作を1行で書く）
+
+---
+
+## トレース演習: URLとレスポンスを予測する
+| ブラウザでアクセスするURL | 返される内容（予測） | 形式（send / json） |
+|---|---|---|
+| http://localhost:3000/        |   |   |
+| http://localhost:3000/profile |   |   |
+| http://localhost:3000/greeting|   |   |
+| http://localhost:3000/api/status |   |   |
+| http://localhost:3000/contact |   |   |
+
+---
+
+## コード体験 1: 基本のExpressサーバ（server.js）
+### Q1. 3つのURLそれぞれで何が表示されたか
+- /         :
+- /about    :
+- /api/hello:
+
+### Q2. /api/hello と / の表示の違い（見た目、データ形式）
+
+### Q3. 存在しないURL（例: /contact）にアクセスするとどうなったか
+
+### やってみよう（author 追加後のJSON表示内容）
+（実際に表示されたJSONを貼り付け）
+
+---
+
+## コード体験 2: 静的ファイル配信（server2.js + public/index.html）
+### Q1. http://localhost:3000 で表示された内容（server.js のときとの違い）
+
+### Q2. /api/info にアクセスしたときの表示内容
+
+### Q3. express.static('public') の役割（自分の言葉で説明）
+
+### やってみよう（h1 を自分の名前に変えて反映されたか）
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: サーバサイドの仕組みを説明する
+### 問1. 用語の説明
+- Node.js      :
+- npm          :
+- Express      :
+- ルーティング  :
+- package.json :
+
+### 問2. /about にアクセスしたときの内部の動き（GETリクエスト・Express・ルーティング・パスマッチング・res.send() を使って3〜5文）
+
+### 問3. URLごとの結果予測
+| URL | 結果 |
+|---|---|
+| http://localhost:3000/      |   |
+| http://localhost:3000/users |   |
+| http://localhost:3000/help  |   |
+| http://localhost:3000/login |   |
+
+### 問4. res.send() と res.json() の違い
+
+---
+
+## 標準課題 2: サーバにルートを追加する（コード改造）
+### ① 改造後のコード全体
+```javascript
+（ここに server.js の改造後コードを貼り付け）
+```
+
+### ② 各改造について「追加・変更した行」と「変更理由」
+1. / のHTML変更:
+2. /menu 追加:
+3. /api/profile 追加:
+4. /api/hello への author 追加:
+5. ポート変更（3000 → 8080）:
+
+---
+
+## 発展課題: プロフィールサーバを作る
+### 1. コード（profile-server.js 全体）
+```javascript
+（ここに貼り付け）
+```
+
+### 2. 音声説明（1〜2分の音声ファイルを添付）
+- どんなルート構成にしたか
+- res.send() と res.json() をどう使い分けたか
+- 工夫した点・難しかった点
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-04-29T16:20">
   <div class="container">
@@ -1136,7 +1274,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

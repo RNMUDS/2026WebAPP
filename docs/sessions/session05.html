@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1172,6 +1173,157 @@ pre { position: relative; }
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第5回
+
+名前:
+学籍番号:
+
+---
+
+## 例題: metalness と roughness の組み合わせ効果
+### やってみよう（ゴムボールを表現する値の予測）
+- metalness:
+- roughness:
+- 予測の理由:
+
+---
+
+## トレース演習 1: material プロパティから見た目を予測する
+| ラベル | 形 | 色 | 質感・透明度の予測 |
+|---|---|---|---|
+| A |   |   |   |
+| B |   |   |   |
+| C |   |   |   |
+| D |   |   |   |
+
+---
+
+## トレース演習 2: a-assets とテクスチャの参照を追跡する
+| エンティティ | 参照している src | 対応する画像ファイル名 | 何に見えそうか |
+|---|---|---|---|
+| E1 |   |   |   |
+| E2 |   |   |   |
+| E3 |   |   |   |
+
+---
+
+## コード体験 1: マテリアルの比較（material.html）
+### Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？
+
+### Q2. A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明
+
+### Q3. E（半透明の赤い箱）の後ろにあるオブジェクトは透けて見えるか？
+
+### やってみよう（opacity 0.4 と 0.9 の見た目の違い）
+
+---
+
+## コード体験 2: テクスチャとアセット管理（texture.html）
+### Q1. テクスチャなしの茶色の箱（左）とテクスチャありの箱（右）を見比べて、リアルさの違いは？
+
+### Q2. 半透明のテクスチャ箱はどう見えるか？ テクスチャと透明度は同時に使えるか？
+
+### Q3. &lt;a-assets&gt; を使う利点は何か？ もし使わなかったらどうなるか？
+
+### やってみよう（roughness: 1.0 追加前後の壁の見た目の違い）
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: マテリアルプロパティの理解
+### 問1. プロパティの効果
+| プロパティ | 値の範囲 | 効果 |
+|---|---|---|
+| color    | 色名 / hex / rgb      |   |
+| opacity  | 0.0 〜 1.0            |   |
+| metalness| 0.0 〜 1.0            |   |
+| roughness| 0.0 〜 1.0            |   |
+| side     | front / back / double |   |
+| src      | 画像URL / セレクタ    |   |
+
+### 問2. material 設定から見た目を予測
+| material 設定 | 予測される見た目 |
+|---|---|
+| color: #FFD700; metalness: 1.0; roughness: 0.2 |   |
+| color: white; opacity: 0.2; transparent: true  |   |
+| color: #333; roughness: 1.0; metalness: 0.0    |   |
+
+### 問3. バグの原因と修正（半透明の青い球）
+- バグの原因:
+- 修正方法:
+
+### 問4. a-assets について
+- (a) &lt;a-assets&gt; はHTMLのどこに書くか:
+- (b) 登録した画像の参照方法:
+- (c) &lt;a-assets&gt; を使う利点:
+
+---
+
+## 標準課題 2: マテリアルとテクスチャを改造する（コード改造）
+### ① 改造後のコード全体
+```html
+（ここに material.html の改造後コードを貼り付け）
+```
+
+### ② 各改造について「どの行を変えたか」と「変更による見た目の変化」
+1. A を #FF6347 / roughness 0.0 に変更:
+2. E を opacity 0.7 / color green に変更:
+3. シリンダー（銅のような質感）を追加:
+4. &lt;a-assets&gt; を追加して床にテクスチャ適用:
+5. 壁（plane）を side: double で追加:
+
+---
+
+## 発展課題: テクスチャを使ったギャラリーを作る
+### 1. コード（gallery.html 全体）
+```html
+（ここに貼り付け）
+```
+
+### 2. 音声説明（1〜2分の音声ファイルを添付）
+- どんなギャラリー/展示空間をイメージしたか
+- どのテクスチャ画像をどこに使ったか
+- metalness/roughness をどのオブジェクトに使い、どんな質感を表現したか
+- 透明度をどこで使い、どんな効果を狙ったか
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-03T16:20">
   <div class="container">
@@ -1250,7 +1402,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

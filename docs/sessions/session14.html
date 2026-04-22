@@ -464,6 +464,7 @@ pre { position: relative; }
   <a href="#sec-review" class="nav-advanced">レビュー</a>
   <a href="#sec-submit-prep">提出</a>
   <a href="#sec-reference">参考</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -997,6 +998,133 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第14回
+
+名前:
+学籍番号:
+
+---
+
+## 実装チェックリスト（現在の実装状況）
+各項目について「済」「未実装」「作業中」のいずれかを記入してください。
+
+### サーバ構成
+- Node.js + Express でサーバが起動する :
+- 静的ファイル（HTML/CSS/JS）が正しく配信される :
+- Socket.IO がサーバ側で初期化されている :
+- node server.js でエラーなく起動できる :
+
+### 3Dシーン（A-Frame）
+- A-Frame 1.7.1 が読み込まれている :
+- 3Dシーンがブラウザに表示される :
+- 地面・空・照明が設定されている :
+- glTFモデルまたはプリミティブで空間が構成されている :
+- カメラ操作（WASD/マウス）が動作する :
+
+### マルチユーザ機能
+- クライアントがSocket.IOでサーバに接続できる :
+- 複数ブラウザタブで同時接続できる :
+- アバターの位置・回転が他のユーザに同期される :
+- ユーザの入室・退室が正しく処理される :
+
+### チャット機能
+- テキスト入力欄と送信ボタンがある :
+- メッセージがSocket.IO経由で他のユーザに送信される :
+- 3D空間内にチャット吹き出しが表示される :
+- 吹き出しが一定時間後に消える :
+
+### オプション機能（実装した場合）
+- アバター名前表示 :
+- 入室通知 :
+- アニメーション :
+- サウンド :
+- オブジェクト操作 :
+- データ永続化 :
+
+---
+
+## デバッグガイド: やってみよう（接続数の確認）
+サーバ側の connection イベントに console.log('接続数:', io.engine.clientsCount) を追加して確認した結果を記入してください。
+
+### 確認した接続数
+- 1つのタブを開いたとき :
+- 2つのタブを開いたとき :
+- 片方のタブを閉じたとき :
+
+### タブを閉じたときの変化（自分の言葉で）
+
+---
+
+## コードレビュー（グループ）
+### レビューしたメンバー（氏名）:
+
+### レビュー観点のチェック結果
+| # | レビュー観点 | 結果（OK/NG/一部） | コメント |
+|---|-------------|------------------|---------|
+| 1 | 動作確認（node server.js でサーバ起動、3Dシーン表示） |   |   |
+| 2 | マルチユーザ（2タブでアバター同期） |   |   |
+| 3 | チャット（メッセージ送受信と吹き出し表示） |   |   |
+| 4 | コードの可読性（変数名・コメント） |   |   |
+| 5 | ファイル構成（サーバ/クライアントの整理） |   |   |
+| 6 | エラー処理（接続エラー・入力チェック） |   |   |
+
+### フィードバック記入欄
+- 良かった点（最低1つ）:
+- 改善提案（最低1つ）:
+- 学びになった点:
+
+### レビューされた側としてのメモ
+- 相手から受けたフィードバック:
+- 次にやる修正:
+
+---
+
+## 自分の実装の進捗振り返り
+### 現在どの段階まで進んでいるか（1〜6のどこか）
+1. サーバ起動 / 2. 静的3Dシーン / 3. Socket.IO接続 / 4. アバター同期 / 5. チャット / 6. 仕上げ
+→
+
+### 今日解決したエラー・つまずき（1つ以上）
+
+### 残っているタスク（第15回までにやること）
+
+---
+
+## 最終提出準備チェック
+- ソースコード一式（server.js, public/ 内の全ファイル） :
+- package.json :
+- README.md（起動方法を記載） :
+- スクリーンショット（1〜2枚） :
+- 3Dモデルファイル（使用時のみ） :
+- node_modules を含めていない :
+- 2タブでアバター同期を確認済み :
+- チャット機能が動作することを確認済み :
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ ANSWERS (GATED) ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-29T16:20">
   <div class="container">
@@ -1023,7 +1151,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Markdown)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Markdown|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

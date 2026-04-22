@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1102,6 +1103,158 @@ pre { position: relative; }
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第8回
+
+名前:
+学籍番号:
+
+---
+
+## 説明 1.3: A-Frameでのモデル読み込み
+### やってみよう（直接指定 vs a-assets プリロードの違い）
+（読み込み方法の違いで気づいたことを1文で書く）
+
+---
+
+## 説明 1.4: モデルの位置・回転・スケール調整
+### やってみよう（scale="1 3 1" で Y軸だけ3倍にした結果）
+（不均等スケールの結果を1文で書く）
+
+---
+
+## トレース演習 1: モデル読み込みコードを読む
+| エンティティ | 何が表示されるか | 位置 (x, y, z) | 拡大率 | 回転 |
+|---|---|---|---|---|
+| 1つ目の #tree |   |   |   | なし |
+| 2つ目の #tree |   |   |   | なし |
+| #bench        |   |   | 1倍 |   |
+| <a-plane>     |   | 原点 | — |   |
+| <a-sky>       |   | — | — | — |
+
+### 追加問題: 同じモデル #tree を2回使っているが、見た目は同じか？ 違うとしたらどこが違うか。
+
+---
+
+## トレース演習 2: a-assets を使う理由を考える
+| 質問 | 回答 |
+|---|---|
+| コードAでは tree.glb を何回ダウンロードする？ |   |
+| コードBでは tree.glb を何回ダウンロードする？ |   |
+| a-assets を使うメリットは？                   |   |
+
+---
+
+## コード体験 1: GLBモデルを読み込んで配置する（index.html）
+### Q1. ブラウザに何が表示されたか（モデルの見た目）
+
+### Q2. scale="0.5 0.5 0.5" を "2 2 2" に変更するとどうなったか
+
+### Q3. position="0 0 -5" を "3 2 -8" に変更するとモデルはどこに移動したか
+
+---
+
+## コード体験 2: 複数モデル + プリミティブの組み合わせ（park.html）
+### Q1. 同じ恐竜モデルが2体表示されたか。大きさ・向きの違いを説明
+
+### Q2. 3Dモデル（恐竜）とプリミティブ（岩・木）の見た目の違い
+
+### Q3. 左の恐竜の rotation="0 45 0" を "0 180 0" に変えるとどう変わったか
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: 3Dアセットの知識を確認する
+### 問1. 3Dモデル形式の比較表
+| 形式 | 拡張子 | Web向きか？ | 理由 |
+|---|---|---|---|
+| glTF / GLB | .gltf / .glb | 最適 |   |
+| OBJ        | .obj         | 可   |   |
+| FBX        | .fbx         | 不向き |   |
+
+### 問2. .gltf 形式と .glb 形式の違い（使い分け）
+
+### 問3. <a-assets> でプリロードするメリット 2つ
+1.
+2.
+
+### 問4. パフォーマンスに関する正誤
+| # | 文 | 正誤 | 訂正（誤りの場合） |
+|---|---|---|---|
+| A | ポリゴン数が多いほどWebでの表示は速くなる |   |   |
+| B | GLBファイルはテクスチャを含む全データを1ファイルにまとめた形式である |   |   |
+| C | 同じモデルを10個配置しても、a-assets でプリロードすればダウンロードは1回で済む |   |   |
+
+---
+
+## 標準課題 2: 3Dモデルのシーンを改造する
+### ① 改造後のコード全体（index.html）
+```html
+（ここに改造後のコードを貼り付け）
+```
+
+### ② 各改造について「どの行を変えたか」と「なぜその値にしたか」
+1. position を "0 0 -8" に変更:
+2. scale を "1 1 1" に変更:
+3. rotation="0 180 0" を追加:
+4. animation 属性を追加:
+5. プリミティブで「柵」を追加:
+
+---
+
+## 発展課題: 3Dモデルとプリミティブを組み合わせたオリジナルシーン
+### 1. テーマ（例: 恐竜のいる公園 / 展示室 / 宇宙基地 など）
+
+### 2. 使用した3Dモデルと入手元URL
+
+### 3. コード（original.html 全体）
+```html
+（ここに貼り付け）
+```
+
+### 4. 音声説明（1〜2分の音声ファイルを添付）
+- どんなテーマ・シーンを作ったか
+- 使用した3Dモデルとその入手元
+- モデルとプリミティブをどのように組み合わせたか
+- scale や position の調整で工夫した点
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-17T16:20">
   <div class="container">
@@ -1178,7 +1331,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

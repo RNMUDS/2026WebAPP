@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1239,6 +1240,165 @@ socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第9回
+
+名前:
+学籍番号:
+
+---
+
+## 1.4 やってみよう（emit / on パターン）
+### io.emit と socket.broadcast.emit の違い（1文）
+
+
+---
+
+## トレース演習 1: emit/on の流れを追う
+| 順番 | 何が起きるか | 誰が受け取るか |
+|------|-------------|---------------|
+| ①   | ユーザAが emit('chat', 'hello') を実行 |   |
+| ②   | サーバの on('chat', ...) が発火、msg に（      ）が入る | サーバ |
+| ③   | サーバが io.emit('chat', msg) を実行 |   |
+| ④   | ユーザAとユーザBの on('chat', ...) が発火 |   |
+
+### 追加問題: io.emit を socket.broadcast.emit に置き換えたときの ③ の送信先
+
+
+---
+
+## トレース演習 2: サーバ起動の流れを理解する
+| コード | 何をしているか |
+|--------|----------------|
+| require('express')         |   |
+| http.createServer(app)     |   |
+| new Server(server)         |   |
+| express.static('public')   |   |
+| server.listen(3000)        |   |
+
+---
+
+## コード体験 1: Socket.IO の接続確認（最小構成）
+### Q1. ブラウザに何が表示されたか（ID も含めて記録）
+
+
+### Q2. ブラウザのタブを閉じたとき、ターミナルに出たログ
+
+
+### Q3. ブラウザのタブを2つ開いたときのログと ID（同じだったか）
+
+
+---
+
+## コード体験 2: テキストチャットアプリを作る
+### Q1. タブ1で送ったメッセージが、タブ2にも表示されたか
+
+
+### Q2. タブ2で送ったメッセージが、タブ1にも表示されたか
+
+
+### Q3. ターミナル（サーバ側）のログに出力された内容
+
+
+### Q4. 片方のタブを閉じたときのターミナルのログ
+
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+
+### Phase 2: グループメンバー（氏名）:
+
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: WebSocketとSocket.IOの知識を確認する
+### 問1. HTTPとWebSocketの比較表
+|                 | HTTP | WebSocket |
+|-----------------|------|-----------|
+| 通信方向        |      |           |
+| 接続の持続      |      |           |
+| リアルタイム性  |      |           |
+| 具体的な用途    |      |           |
+
+### 問2. emit と on の役割（それぞれ1文）
+- emit :
+- on   :
+
+### 問3. 3つの送信方法の違い（接続中: A, B, C）
+| サーバ側コード | 届くユーザ | 使い場面 |
+|---------------|-----------|---------|
+| io.emit('chat', msg)              |   |   |
+| socket.broadcast.emit('chat', msg) |   |   |
+| socket.emit('chat', msg)          |   |   |
+
+### 問4. メッセージが送信されてから相手の画面に表示されるまでの流れ（emit / on / io.emit / サーバ / 全クライアント を使って3〜5文）
+
+
+---
+
+## 標準課題 2: チャットアプリを改造する（コード改造）
+### ① 改造後の server.js のコード全体
+```javascript
+（ここに server.js の改造後コードを貼り付け）
+```
+
+### ② 各改造について「追加・変更した行」と「その処理が何をしているか」
+1. 入室通知（新しいユーザが参加したときの通知）:
+2. タイムスタンプ（[HH:MM:SS] をメッセージ先頭に付ける）:
+
+---
+
+## 発展課題: 拡張チャットアプリを作る
+### 1. コード
+#### server.js
+```javascript
+（ここに貼り付け）
+```
+
+#### public/index.html
+```html
+（ここに貼り付け）
+```
+
+### 2. 音声説明（1〜2分の音声ファイルを添付）
+- どの機能を実装したか（ユーザ名 / 接続人数 / 入退室通知）
+- emit / on のイベント設計（イベント名と送信データ）
+- 工夫した点・苦労した点
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-24T16:20">
   <div class="container">
@@ -1317,7 +1477,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

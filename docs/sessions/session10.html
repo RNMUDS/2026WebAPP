@@ -415,6 +415,7 @@ pre { position: relative; }
   <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
+  <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
 
@@ -1095,6 +1096,130 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
   </div>
 </section>
 
+<!-- ============ NOTION TEMPLATE ============ -->
+<section id="sec-notion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num" style="background:#76B900">N</div>
+      <h2>Notionテンプレート</h2>
+    </div>
+
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
+        <h3>課題ノートのテンプレート</h3>
+      </div>
+      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+
+      <pre><span class="code-label">Notion テンプレート</span>
+# Webプログラミング演習 第10回
+
+名前:
+学籍番号:
+
+---
+
+## 説明: やってみよう（アバターの色を変える）
+（変更した色と、3D空間内のアバターの見え方を1文で書く）
+
+---
+
+## コード体験 1: A-Frameページを配信し、位置データをログに表示する
+### Q1. ターミナルに表示された位置データの形式（1行分を書き写す）
+
+### Q2. WASDキーで移動すると、x, y, z のどの値が変化するか
+
+---
+
+## コード体験 2: フルアバター同期 ── 他ユーザが箱として見える
+### Q1. 2つ目のタブを開いたとき、3D空間に何が現れたか
+
+### Q2. 片方のタブで移動すると、もう片方のタブではどう見えたか
+
+### Q3. タブを閉じたとき、残ったタブで何が起きたか
+
+### Q4. サーバの socket.broadcast.emit を io.emit に変えたらどうなると思うか（理由も）
+
+---
+
+## グループ口頭試問
+### Phase 1: あなたが考えた質問
+
+### Phase 2: グループメンバー（氏名）:
+
+### 口頭試問の記録
+| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
+|---------|--------|--------|-------------|-----------|------|
+| 1       |        |        |             |           | A/B/C |
+| 2       |        |        |             |           | A/B/C |
+| 3       |        |        |             |           | A/B/C |
+
+---
+
+## 標準課題 1: アバター同期の仕組みを説明する
+### 問1. データフロー図の空欄
+| 手順 | 場所 | 処理内容 |
+|---|---|---|
+| 1 | ユーザA（ブラウザ） |   |
+| 2 | ユーザA（JavaScript） | setInterval で (　) msごとにカメラの (　) を取得して送信 |
+| 3 | サーバ | 受信した位置データを socket.(　) で (　) に転送 |
+| 4 | ユーザB（JavaScript） | 受信したデータでアバターの (　) を更新 |
+| 5 | ユーザB（A-Frame） |   |
+
+### 問2. Socket.IO イベントの役割
+- connection :
+- move       :
+- moved      :
+- userLeft   :
+- disconnect :
+
+### 問3. socket.broadcast.emit と io.emit の違い（アバター同期の文脈で）、broadcast.emit を使う理由
+
+### 問4. ユーザ切断時にクリーンアップ処理をしないとどうなるか
+
+---
+
+## 標準課題 2: アバターを改造する（コード改造）
+### ① 改造後の public/index.html のコード全体
+```html
+（ここに貼り付け）
+```
+
+### ② 各改造について「どの行を変えたか」と「なぜその値にしたか」
+1. a-box → a-sphere への変更:
+2. 送信間隔を 200 msに変更:
+3. 目印オブジェクトを2つ以上追加:
+
+### ③ 送信間隔を 200 msにしたとき、100 msのときと比べてアバターの動きはどう変わったか
+
+---
+
+## 発展課題: アバターに名前ラベルと個別カラーを付ける
+### 1. コード
+#### server.js
+```javascript
+（ここに貼り付け）
+```
+
+#### public/index.html
+```html
+（ここに貼り付け）
+```
+
+### 2. 音声説明（1〜2分の音声ファイルを添付）
+- ユーザ名の入力からアバター上への表示までのデータの流れ
+- サーバ側で追加・変更した処理
+- 工夫した点・難しかった点
+</pre>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+        <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ 7. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-01T16:20">
   <div class="container">
@@ -1144,7 +1269,7 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');
