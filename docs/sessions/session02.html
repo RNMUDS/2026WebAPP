@@ -729,6 +729,15 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
         <li><code>S:\Web_Prog</code> の中に <strong><code>Web02</code></strong> フォルダを作成する</li>
         <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web02</code> を開く</li>
         <li>VS Code の<strong>ターミナル</strong>を開く（メニュー「ターミナル」→「新しいターミナル」、または <kbd>Ctrl+`</kbd>）</li>
+        <li><strong>Node.js のバージョンを確認する:</strong> まず以下のコマンドを実行し、Node.js がインストールされているか・バージョンが新しいかを確認してください。
+          <pre><span class="code-label">Terminal</span>
+node -v</pre>
+          <p style="margin-top:0.3rem;font-size:0.9rem"><code>v20.x.x</code> や <code>v22.x.x</code> のように表示されればOKです。</p>
+          <div style="background:#2e1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:0.5rem;font-size:0.88rem;color:#FFB800">
+            <strong>&#x26A0; 古いバージョン（例: <code>v5.1.4</code>）や「コマンドが見つかりません」と表示された場合:</strong><br>
+            公式ページ <a href="https://nodejs.org/" target="_blank" rel="noopener" style="color:#93D500;text-decoration:underline">https://nodejs.org/</a> から <strong>LTS版</strong>（推奨版）をダウンロードしてインストールしてください。インストーラを実行し、画面の指示に従って「次へ」を選んでいけば完了します。インストール後は<strong>ターミナル（VS Code も一度）を閉じて開き直し</strong>、再度 <code>node -v</code> を実行してバージョンが更新されたことを確認してください。
+          </div>
+        </li>
         <li>以下のコマンドを順番に実行する:</li>
       </ol>
       <pre><span class="code-label">Terminal</span>
