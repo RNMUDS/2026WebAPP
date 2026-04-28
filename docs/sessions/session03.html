@@ -403,12 +403,28 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ ANIMATION CONTROLS ============ */
+.anim-controls {
+  display: flex; gap: 0.5rem; justify-content: center; margin: 0.8rem 0 0.3rem;
+}
+.anim-controls button {
+  background: rgba(255,255,255,0.08); border: 1px solid #444; color: #ccc;
+  border-radius: 8px; padding: 0.4rem 1rem; font-size: 0.8rem; cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s;
+}
+.anim-controls button:hover { background: #76B900; color: white; border-color: #76B900; }
+.anim-controls button.active { background: #76B900; color: white; border-color: #76B900; }
+.anim-controls .step-label {
+  color: #888; font-size: 0.8rem; display: flex; align-items: center; margin-left: 0.5rem;
+}
+
 </style>
 </head>
 <body>
 
 <!-- ============ SECTION NAV ============ -->
 <nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
+  <a href="#sec-submission">提出</a>
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
@@ -429,7 +445,7 @@ pre { position: relative; }
 </header>
 
 <!-- ============ SUBMISSION GUIDE ============ -->
-<section style="padding-top:2rem;padding-bottom:0">
+<section id="sec-submission" style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計7項目）</h3>
@@ -487,23 +503,151 @@ pre { position: relative; }
         <tr><td><strong>真偽値</strong></td><td><code>true</code> または <code>false</code></td><td><code>true</code></td></tr>
         <tr><td><strong>null</strong></td><td>値がないことを明示する</td><td><code>null</code></td></tr>
       </table>
+
+      <!-- JSON Structure Diagram -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">JSONの構造を図で理解する</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 400" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- Root object -->
+          <rect x="20" y="15" width="660" height="370" rx="12" fill="#111" stroke="#76B900" stroke-width="2"/>
+          <text x="35" y="38" fill="#76B900" font-weight="700" font-size="13">{ } オブジェクト（ルート）</text>
+          <text x="580" y="38" fill="#666" font-size="9">← 波括弧で囲む</text>
+
+          <!-- Key: "name" -->
+          <rect x="45" y="50" width="620" height="38" rx="6" fill="#141414"/>
+          <rect x="55" y="56" width="80" height="26" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="95" y="74" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600">"name"</text>
+          <text x="150" y="74" fill="#888" font-size="14">:</text>
+          <rect x="165" y="56" width="120" height="26" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1.5"/>
+          <text x="225" y="74" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600">"田中太郎"</text>
+          <text x="300" y="74" fill="#666" font-size="9">← キー: 値（文字列）</text>
+
+          <!-- Key: "age" -->
+          <rect x="45" y="95" width="620" height="38" rx="6" fill="#141414"/>
+          <rect x="55" y="101" width="80" height="26" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="95" y="119" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600">"age"</text>
+          <text x="150" y="119" fill="#888" font-size="14">:</text>
+          <rect x="165" y="101" width="50" height="26" rx="4" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="190" y="119" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="600">20</text>
+          <text x="230" y="119" fill="#666" font-size="9">← キー: 値（数値 ── クォート不要）</text>
+
+          <!-- Key: "hobbies" (array) -->
+          <rect x="45" y="140" width="620" height="75" rx="6" fill="#141414"/>
+          <rect x="55" y="146" width="100" height="26" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="105" y="164" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600">"hobbies"</text>
+          <text x="170" y="164" fill="#888" font-size="14">:</text>
+
+          <!-- Array bracket -->
+          <rect x="185" y="146" width="460" height="62" rx="6" fill="#0a0a0a" stroke="#93D500" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="195" y="161" fill="#93D500" font-weight="700" font-size="11">[ ] 配列</text>
+          <rect x="200" y="170" width="80" height="26" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="240" y="188" text-anchor="middle" fill="#76B900" font-size="10">"読書"</text>
+          <text x="288" y="188" fill="#666" font-size="10">,</text>
+          <rect x="300" y="170" width="140" height="26" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="370" y="188" text-anchor="middle" fill="#76B900" font-size="10">"プログラミング"</text>
+          <text x="448" y="188" fill="#666" font-size="10">,</text>
+          <rect x="460" y="170" width="100" height="26" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="510" y="188" text-anchor="middle" fill="#76B900" font-size="10">"カフェ巡り"</text>
+          <text x="570" y="188" fill="#666" font-size="9">← [0], [1], [2]</text>
+
+          <!-- Key: "university" (nested object) -->
+          <rect x="45" y="222" width="620" height="95" rx="6" fill="#141414"/>
+          <rect x="55" y="228" width="110" height="26" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="110" y="246" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600">"university"</text>
+          <text x="180" y="246" fill="#888" font-size="14">:</text>
+
+          <!-- Nested object -->
+          <rect x="195" y="228" width="450" height="82" rx="8" fill="#0a0a0a" stroke="#FF9800" stroke-width="1.5"/>
+          <text x="210" y="246" fill="#FF9800" font-weight="700" font-size="10">{ } 入れ子オブジェクト</text>
+
+          <rect x="215" y="255" width="80" height="22" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1"/>
+          <text x="255" y="270" text-anchor="middle" fill="#FFB800" font-size="9">"name"</text>
+          <text x="305" y="270" fill="#888" font-size="12">:</text>
+          <rect x="315" y="255" width="100" height="22" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="365" y="270" text-anchor="middle" fill="#76B900" font-size="9">"○○大学"</text>
+
+          <rect x="215" y="283" width="80" height="22" rx="4" fill="#2a1a0a" stroke="#FFB800" stroke-width="1"/>
+          <text x="255" y="298" text-anchor="middle" fill="#FFB800" font-size="9">"year"</text>
+          <text x="305" y="298" fill="#888" font-size="12">:</text>
+          <rect x="315" y="283" width="40" height="22" rx="4" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+          <text x="335" y="298" text-anchor="middle" fill="#4FC3F7" font-size="9">2</text>
+
+          <!-- Access examples -->
+          <rect x="45" y="326" width="620" height="50" rx="6" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="60" y="344" fill="#76B900" font-weight="700" font-size="10">JavaScriptからのアクセス方法:</text>
+          <text x="60" y="364" fill="#e0e0e0" font-size="9" font-family="'JetBrains Mono',monospace">data.name → "田中太郎"　　data.age → 20　　data.hobbies[0] → "読書"　　data.university.name → "○○大学"</text>
+
+          <!-- Legend -->
+          <rect x="500" y="50" width="16" height="12" rx="2" fill="#2a1a0a" stroke="#FFB800" stroke-width="1"/>
+          <text x="522" y="60" fill="#FFB800" font-size="8">キー</text>
+          <rect x="560" y="50" width="16" height="12" rx="2" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="582" y="60" fill="#76B900" font-size="8">文字列</text>
+          <rect x="620" y="50" width="16" height="12" rx="2" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+          <text x="642" y="60" fill="#4FC3F7" font-size="8">数値</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.2 Fetch API -->
     <div class="concept-box">
-      <h4>1.2 Fetch API ── ブラウザからサーバにリクエストを送る <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.2 Fetch API<span style="color:#888;font-weight:400;font-size:0.85rem">（フェッチ エーピーアイ）</span> ── ブラウザからサーバにリクエストを送る <span class="exam-alert">課題に出ます</span></h4>
       <div class="analogy">
         普段ブラウザでURLを入力してページを見るとき、ブラウザが裏で自動的にリクエストを送っています。<strong>Fetch API</strong> を使うと、<strong>JavaScriptのコードから手動でリクエストを送れる</strong>ようになります。電話（URLバー）ではなく、プログラムでメールを送るようなものです。
       </div>
+
+      <!-- Fetch 概念図: 抽象化アニメーション -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1rem 0 0.5rem">まず全体像を理解しよう ── fetch() は何をするのか？</p>
+      <div id="fetchConceptAnim" style="background:#0A0A0A;border-radius:14px;border:1px solid #333;padding:1.2rem;margin-bottom:1.5rem">
+
+        <!-- Controls -->
+        <div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.8rem;flex-wrap:wrap">
+          <button id="fcPlayBtn" style="background:#76B900;color:white;border:none;border-radius:8px;padding:0.4rem 1.2rem;font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif">▶ 自動再生</button>
+          <button id="fcPauseBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif">⏸ 停止</button>
+          <button id="fcPrevBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;cursor:pointer">◀ 前へ</button>
+          <button id="fcNextBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;cursor:pointer">次へ ▶</button>
+          <span id="fcStepLabel" style="color:#888;font-size:0.85rem;display:flex;align-items:center;margin-left:0.3rem">Step 1 / 4</span>
+        </div>
+
+        <!-- Visual area -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;min-height:160px">
+          <!-- Person (user) -->
+          <div style="text-align:center;flex-shrink:0">
+            <div style="font-size:2.5rem">🧑‍💻</div>
+            <div style="color:#76B900;font-weight:700;font-size:0.85rem;margin-top:0.2rem">あなた</div>
+            <div style="color:#666;font-size:0.75rem">（ブラウザ）</div>
+          </div>
+
+          <!-- Arrow area (dynamic) -->
+          <div id="fcArrowArea" style="flex:1;min-width:200px;max-width:400px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
+          </div>
+
+          <!-- Server -->
+          <div style="text-align:center;flex-shrink:0">
+            <div style="font-size:2.5rem">🖥️</div>
+            <div style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-top:0.2rem">サーバ</div>
+            <div style="color:#666;font-size:0.75rem">（Express）</div>
+          </div>
+        </div>
+
+        <!-- Analogy bar -->
+        <div id="fcAnalogy" style="text-align:center;margin-bottom:0.8rem;min-height:40px">
+        </div>
+
+        <!-- Explanation -->
+        <div id="fcExplain" style="border-radius:10px;padding:1rem 1.2rem;min-height:90px;transition:all 0.3s">
+        </div>
+      </div>
+
       <p><strong>Fetch API</strong> はブラウザに標準搭載されている機能で、JavaScriptからHTTPリクエストを送信し、サーバからのレスポンスを受け取ることができます。</p>
       <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// サーバの /api/data にGETリクエストを送る</span>
+<span class="cmt">// サーバの /api/data にGETリクエストを送る（データを取りに行く）</span>
 <span class="fn">fetch</span>(<span class="str">'/api/data'</span>)
-  .<span class="fn">then</span>(<span class="kw">function</span>(response) {
-    <span class="kw">return</span> response.<span class="fn">json</span>();  <span class="cmt">// レスポンスをJSONとして解析</span>
+  .<span class="fn">then</span>(<span class="kw">function</span>(response) {     <span class="cmt">// サーバから応答が返ってきたら…</span>
+    <span class="kw">return</span> response.<span class="fn">json</span>();    <span class="cmt">// JSON形式のデータをJavaScriptオブジェクトに変換する</span>
   })
-  .<span class="fn">then</span>(<span class="kw">function</span>(data) {
-    <span class="fn">console.log</span>(data);      <span class="cmt">// 受け取ったデータを使う</span>
+  .<span class="fn">then</span>(<span class="kw">function</span>(data) {         <span class="cmt">// 変換が終わったら…</span>
+    <span class="fn">console.log</span>(data);          <span class="cmt">// 受け取ったデータをコンソールに表示する</span>
   });</pre>
 
       <div class="diagram-container">
@@ -533,14 +677,132 @@ pre { position: relative; }
           </defs>
         </svg>
       </div>
+
+      <!-- Fetch API Step-by-Step Animation -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.5rem">fetch() リクエストの流れ（アニメーション）</p>
+      <div class="anim-controls" data-target="fetchAnim" data-steps="5" data-dur="8">
+        <button class="anim-play active" title="自動再生">▶ 自動再生</button>
+        <button class="anim-pause" title="一時停止">⏸ 停止</button>
+        <button class="anim-prev" title="前へ">◀</button>
+        <button class="anim-next" title="次へ">▶ 次のステップ</button>
+        <span class="step-label">Step <span class="step-num">-</span> / 4</span>
+      </div>
+      <div class="diagram-container">
+        <svg id="fetchAnim" viewBox="0 0 700 380" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- Browser box -->
+          <rect x="30" y="20" width="220" height="80" rx="12" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="140" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">ブラウザ（クライアント）</text>
+          <text x="140" y="62" text-anchor="middle" fill="#e0e0e0" font-size="10" font-family="'JetBrains Mono',monospace">fetch('/api/members')</text>
+          <text x="140" y="80" text-anchor="middle" fill="#888" font-size="9">JavaScript が実行</text>
+
+          <!-- Server box -->
+          <rect x="450" y="20" width="220" height="80" rx="12" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="560" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">Express サーバ</text>
+          <text x="560" y="62" text-anchor="middle" fill="#e0e0e0" font-size="10" font-family="'JetBrains Mono',monospace">app.get('/api/members')</text>
+          <text x="560" y="80" text-anchor="middle" fill="#888" font-size="9">res.json() で返す</text>
+
+          <!-- Step 1: Request arrow (animated) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;1;1;1;1" dur="8s" repeatCount="indefinite"/>
+            <line x1="250" y1="45" x2="450" y2="45" stroke="#76B900" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="48" to="0" dur="1s" repeatCount="indefinite"/>
+            </line>
+            <text x="350" y="38" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">① GET /api/members</text>
+          </g>
+
+          <!-- Step 2: Server processing -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1" dur="8s" repeatCount="indefinite"/>
+            <rect x="470" y="110" width="180" height="50" rx="8" fill="#0a1a2a" stroke="#4FC3F7" stroke-width="1.5"/>
+            <text x="560" y="132" text-anchor="middle" fill="#4FC3F7" font-weight="600" font-size="10">② サーバが処理</text>
+            <text x="560" y="148" text-anchor="middle" fill="#e0e0e0" font-size="9">JSONデータを組み立てる</text>
+          </g>
+
+          <!-- Step 3: Response arrow (animated) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;1;1" dur="8s" repeatCount="indefinite"/>
+            <line x1="450" y1="75" x2="250" y2="75" stroke="#4FC3F7" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="0" to="48" dur="1s" repeatCount="indefinite"/>
+            </line>
+            <text x="350" y="92" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">③ JSON レスポンス</text>
+          </g>
+
+          <!-- Step 4: DOM update -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1" dur="8s" repeatCount="indefinite"/>
+            <rect x="50" y="110" width="180" height="50" rx="8" fill="#76B900"/>
+            <text x="140" y="132" text-anchor="middle" fill="white" font-weight="700" font-size="11">④ DOMに反映</text>
+            <text x="140" y="148" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9">画面の表示を書き換える</text>
+          </g>
+
+          <!-- Step indicator boxes -->
+          <rect x="30" y="180" width="640" height="180" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="50" y="202" fill="#666" font-size="11">現在のステップ:</text>
+
+          <!-- Step 1 detail -->
+          <g opacity="0"><animate attributeName="opacity" values="1;0;0;0;0" dur="8s" repeatCount="indefinite"/>
+            <rect x="50" y="212" width="600" height="55" rx="8" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+            <text x="70" y="232" fill="#76B900" font-weight="700" font-size="13">Step 1: ブラウザ → サーバ</text>
+            <text x="70" y="254" fill="#ccc" font-size="11">fetch('/api/members') を実行し、サーバに「メンバーデータをください」とGETリクエストを送る</text>
+          </g>
+          <!-- Step 2 detail -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1;0;0;0" dur="8s" repeatCount="indefinite"/>
+            <rect x="50" y="212" width="600" height="55" rx="8" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+            <text x="70" y="232" fill="#4FC3F7" font-weight="700" font-size="13">Step 2: サーバが処理</text>
+            <text x="70" y="254" fill="#ccc" font-size="11">app.get('/api/members') のコールバックが実行され、res.json() でJSONを組み立てる</text>
+          </g>
+          <!-- Step 3 detail -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" dur="8s" repeatCount="indefinite"/>
+            <rect x="50" y="212" width="600" height="55" rx="8" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+            <text x="70" y="232" fill="#4FC3F7" font-weight="700" font-size="13">Step 3: サーバ → ブラウザ</text>
+            <text x="70" y="254" fill="#ccc" font-size="11">JSONデータ { team: "...", members: [...] } がレスポンスとしてブラウザに返される</text>
+          </g>
+          <!-- Step 4 detail -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;0;1;0" dur="8s" repeatCount="indefinite"/>
+            <rect x="50" y="212" width="600" height="55" rx="8" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+            <text x="70" y="232" fill="#76B900" font-weight="700" font-size="13">Step 4: 画面を更新</text>
+            <text x="70" y="254" fill="#ccc" font-size="11">response.json() でオブジェクトに変換 → ブラウザのJSが innerHTML でHTML要素の中身を書き換える</text>
+          </g>
+
+          <!-- Step counter circles -->
+          <g transform="translate(50, 285)">
+            <circle cx="75" cy="20" r="18" fill="#141414" stroke="#444" stroke-width="2"/>
+            <circle cx="75" cy="20" r="18" fill="#76B900" opacity="0"><animate attributeName="opacity" values="0.4;0;0;0;0" dur="8s" repeatCount="indefinite"/></circle>
+            <text x="75" y="25" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="700">1</text>
+
+            <line x1="100" y1="20" x2="170" y2="20" stroke="#333" stroke-width="2"/>
+
+            <circle cx="195" cy="20" r="18" fill="#141414" stroke="#444" stroke-width="2"/>
+            <circle cx="195" cy="20" r="18" fill="#4FC3F7" opacity="0"><animate attributeName="opacity" values="0;0.4;0;0;0" dur="8s" repeatCount="indefinite"/></circle>
+            <text x="195" y="25" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="700">2</text>
+
+            <line x1="220" y1="20" x2="290" y2="20" stroke="#333" stroke-width="2"/>
+
+            <circle cx="315" cy="20" r="18" fill="#141414" stroke="#444" stroke-width="2"/>
+            <circle cx="315" cy="20" r="18" fill="#4FC3F7" opacity="0"><animate attributeName="opacity" values="0;0;0.4;0;0" dur="8s" repeatCount="indefinite"/></circle>
+            <text x="315" y="25" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="700">3</text>
+
+            <line x1="340" y1="20" x2="410" y2="20" stroke="#333" stroke-width="2"/>
+
+            <circle cx="435" cy="20" r="18" fill="#141414" stroke="#444" stroke-width="2"/>
+            <circle cx="435" cy="20" r="18" fill="#76B900" opacity="0"><animate attributeName="opacity" values="0;0;0;0.4;0" dur="8s" repeatCount="indefinite"/></circle>
+            <text x="435" y="25" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="700">4</text>
+          </g>
+
+          <text x="350" y="370" text-anchor="middle" fill="#555" font-size="9">※ アニメーションは自動で繰り返されます</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.3 async/await 基礎 -->
     <div class="concept-box">
       <h4>1.3 async/await 基礎 <span class="exam-alert">課題に出ます</span></h4>
       <div class="analogy">
-        レストランで料理を注文すると、料理ができるまで<strong>待つ</strong>必要があります。<code>await</code> はまさにこの「待つ」を表すキーワードです。サーバからデータが届くまで待ち、届いたら次の処理を進めます。
+        レストランで料理を注文すると、料理ができるまで<strong>待つ</strong>必要があります。でも待っている間、スマホを見たり友達と話したりできますよね？<br>
+        <code>await</code> もこれと同じです。<strong>関数の中</strong>ではサーバの返答を「待つ」けど、<strong>関数の外の処理</strong>はその間も止まらず先に進みます。
       </div>
+
       <p><code>fetch()</code> はサーバとの通信を行うため、結果がすぐには返ってきません（<strong>非同期処理</strong>）。<code>async/await</code> を使うと、非同期処理を同期的（上から順番に実行されるよう）に書けます。</p>
       <pre><span class="code-label">JavaScript</span>
 <span class="cmt">// async 関数の中でのみ await が使える</span>
@@ -555,6 +817,137 @@ pre { position: relative; }
         <tr><td><code>await</code></td><td>非同期処理の完了を待つ。結果が返ってくるまで次の行に進まない</td></tr>
       </table>
       <p style="margin-top:0.5rem"><code>await</code> を使わないと、サーバの返答が届く前に次の処理が進んでしまい、<code>data</code> が <code>undefined</code>（未定義）になります。</p>
+
+      <!-- なぜ D が C より先に？ 詳しい解説 -->
+      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:12px;padding:1.2rem 1.5rem;margin:1.5rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">なぜ実行順が A → B → D → C になるのか？</p>
+
+        <p style="font-size:0.95rem;line-height:1.9;margin-bottom:1rem">
+          普通のプログラムは<strong>上から順番に</strong>実行されます。しかし <code>await</code> がある行に来ると、特別なことが起きます。<br>
+          以下のコードを例に、<strong>1行ずつ</strong>何が起きるかを追いかけてみましょう。
+        </p>
+
+        <pre><span class="code-label">JavaScript</span>
+<span class="fn">console.log</span>(<span class="str">'A: fetch開始前'</span>);       <span class="cmt">// ─── 行1</span>
+
+<span class="kw">async function</span> <span class="fn">getData</span>() {           <span class="cmt">// ─── 行2（関数を定義）</span>
+  <span class="fn">console.log</span>(<span class="str">'B: fetch実行'</span>);       <span class="cmt">// ─── 行3</span>
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/items'</span>);  <span class="cmt">// ─── 行4 ★ここがポイント</span>
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();         <span class="cmt">// ─── 行5</span>
+  <span class="fn">console.log</span>(<span class="str">'C: データ受信'</span>, data);  <span class="cmt">// ─── 行6</span>
+}
+
+<span class="fn">getData</span>();                             <span class="cmt">// ─── 行7（関数を呼び出す）</span>
+<span class="fn">console.log</span>(<span class="str">'D: fetch呼び出し後'</span>);   <span class="cmt">// ─── 行8</span></pre>
+
+        <div style="background:#111;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
+          <table style="margin:0">
+            <tr><th style="width:60px">順番</th><th style="width:100px">実行される行</th><th>何が起きるか</th></tr>
+            <tr>
+              <td><strong style="color:#76B900;font-size:1.1rem">1番目</strong></td>
+              <td>行1</td>
+              <td><code>console.log('A')</code> を実行。<strong>普通の処理</strong>なのでそのまま出力される。<br><span style="color:#76B900">→ 画面に「A: fetch開始前」と表示</span></td>
+            </tr>
+            <tr>
+              <td><strong style="color:#FFB800;font-size:1.1rem">2番目</strong></td>
+              <td>行7 → 行3</td>
+              <td><code>getData()</code> が呼ばれ、関数の中に入る。<code>console.log('B')</code> を実行。<br><span style="color:#FFB800">→ 画面に「B: fetch実行」と表示</span></td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background:#1a0a0a;border:1px solid #FF5252;border-radius:6px;padding:0.8rem">
+                <strong style="color:#FF5252;font-size:0.95rem">★ ここで特別なことが起きる（行4）</strong><br>
+                <code>await fetch('/api/items')</code> に到達。<code>await</code> は「サーバの返答が届くまで待て」という意味。<br><br>
+                でも、サーバの返答が届くには<strong>何百ミリ秒もかかる</strong>。その間ずっと止まっていたら、他の処理ができない。<br>
+                だから JavaScript は<strong>「この関数の中での実行は一旦やめて、関数の外に戻ろう」</strong>と判断する。<br><br>
+                <strong style="color:#FF5252">つまり: await に到達した瞬間、関数 getData() の実行は一時停止され、行8に飛ぶ。</strong>
+              </td>
+            </tr>
+            <tr>
+              <td><strong style="color:#4FC3F7;font-size:1.1rem">3番目</strong></td>
+              <td>行8</td>
+              <td>関数の外に戻り、<code>console.log('D')</code> を実行。<strong>サーバの返答はまだ届いていない</strong>が、外の処理は待たされない。<br><span style="color:#4FC3F7">→ 画面に「D: fetch呼び出し後」と表示</span></td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background:#0a1a0a;border:1px solid #76B900;border-radius:6px;padding:0.8rem">
+                <strong style="color:#76B900;font-size:0.95rem">⏳ 時間が経過... サーバからデータが届く</strong><br>
+                サーバが処理を終え、JSONデータがネットワークを通じて返ってくる。<br>
+                JavaScript は「あ、返答が届いた。さっき一時停止した getData() の続きを再開しよう」と判断する。
+              </td>
+            </tr>
+            <tr>
+              <td><strong style="color:#93D500;font-size:1.1rem">4番目</strong></td>
+              <td>行5 → 行6</td>
+              <td>getData() の続きが再開。<code>response.json()</code> でデータを変換し、<code>console.log('C')</code> を実行。<br><span style="color:#93D500">→ 画面に「C: データ受信 {...}」と表示</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div style="background:#0a1a0a;border:2px solid #76B900;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
+          <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.5rem">たとえ話で理解する</p>
+          <p style="font-size:0.95rem;line-height:1.9;color:#e0e0e0">
+            あなたは<strong>料理を注文</strong>（= <code>await fetch()</code>）しました。<br>
+            料理ができるまでの間、あなたは<strong>スマホを見たり友達と話したり</strong>（= <code>console.log('D')</code>）できます。<br>
+            料理が届いてから、<strong>食べ始めます</strong>（= <code>console.log('C')</code>）。<br><br>
+            注文してから料理が届くまでの間、<strong>あなたはじっと座って何もしないわけではない</strong>。<br>
+            これが <code>await</code> の仕組みです。<strong>関数の中</strong>では待つけど、<strong>関数の外の世界</strong>は止まらず動き続けます。
+          </p>
+        </div>
+
+        <div style="background:#111;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin-top:0.5rem">
+          <p style="color:#e0e0e0;font-weight:600;font-size:0.9rem;margin-bottom:0.3rem">最終的な出力順:</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.95rem">
+            <span style="color:#76B900">A: fetch開始前</span> →
+            <span style="color:#FFB800">B: fetch実行</span> →
+            <span style="color:#4FC3F7">D: fetch呼び出し後</span> →
+            <span style="color:#93D500">C: データ受信 {...}</span>
+          </p>
+          <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">コードの見た目の順番は A→B→C→D だが、<strong>実際の実行順は A→B→D→C</strong>。<code>await</code> で「待つ」間に D が先に実行されるから。</p>
+        </div>
+      </div>
+
+      <!-- async/await Timeline: JS-controlled HTML animation -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.5rem">async/await の実行タイムライン（アニメーション）</p>
+      <div style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:0.5rem;flex-wrap:wrap">
+        <button id="asyncPlayBtn" style="background:#76B900;color:white;border:none;border-radius:8px;padding:0.4rem 1.2rem;font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif">▶ 自動再生</button>
+        <button id="asyncPauseBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif">⏸ 停止</button>
+        <button id="asyncPrevBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;cursor:pointer">◀ 前へ</button>
+        <button id="asyncNextBtn" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#ccc;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;cursor:pointer">次へ ▶</button>
+        <span id="asyncStepLabel" style="color:#888;font-size:0.85rem;display:flex;align-items:center;margin-left:0.3rem">Step 1 / 5</span>
+      </div>
+
+      <div id="asyncTimeline" style="background:#0A0A0A;border-radius:14px;border:1px solid #333;padding:1.2rem;overflow-x:auto">
+        <!-- Code panel -->
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <!-- LEFT: Code with line highlights -->
+          <div style="flex:1;min-width:300px">
+            <div style="color:#666;font-size:0.8rem;margin-bottom:0.5rem">コード（実行中の行がハイライトされます）</div>
+            <div style="background:#111;border:1px solid #333;border-radius:8px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:2">
+              <div id="aL1" style="padding:2px 6px;border-radius:4px;transition:all 0.3s">console.log(<span style="color:#76B900">'A: fetch開始前'</span>);</div>
+              <div style="color:#666;padding:2px 6px">                                      </div>
+              <div id="aL2" style="padding:2px 6px;border-radius:4px;transition:all 0.3s;color:#888">async function getData() {</div>
+              <div id="aL3" style="padding:2px 6px;border-radius:4px;transition:all 0.3s;padding-left:1.5rem">console.log(<span style="color:#FFB800">'B: fetch実行'</span>);</div>
+              <div id="aL4" style="padding:2px 6px;border-radius:4px;transition:all 0.3s;padding-left:1.5rem">const response = <span style="color:#FF5252">await</span> fetch(<span style="color:#93D500">'/api/items'</span>);</div>
+              <div id="aL5" style="padding:2px 6px;border-radius:4px;transition:all 0.3s;padding-left:1.5rem;color:#888">const data = await response.json();</div>
+              <div id="aL6" style="padding:2px 6px;border-radius:4px;transition:all 0.3s;padding-left:1.5rem">console.log(<span style="color:#93D500">'C: データ受信'</span>, data);</div>
+              <div style="color:#888;padding:2px 6px">}</div>
+              <div style="color:#666;padding:2px 6px">                                      </div>
+              <div id="aL7" style="padding:2px 6px;border-radius:4px;transition:all 0.3s">getData();</div>
+              <div id="aL8" style="padding:2px 6px;border-radius:4px;transition:all 0.3s">console.log(<span style="color:#4FC3F7">'D: fetch呼び出し後'</span>);</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Console output -->
+          <div style="flex:1;min-width:280px">
+            <div style="color:#666;font-size:0.8rem;margin-bottom:0.5rem">コンソール出力</div>
+            <div id="asyncConsole" style="background:#000;border:1px solid #333;border-radius:8px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.9rem;min-height:160px;line-height:2">
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanation panel -->
+        <div id="asyncExplain" style="margin-top:1rem;border-radius:10px;padding:1rem 1.2rem;min-height:80px;transition:all 0.3s">
+        </div>
+      </div>
     </div>
 
     <!-- 1.4 GET vs POST -->
@@ -572,32 +965,195 @@ pre { position: relative; }
         <tr><td><strong>Express</strong></td><td><code>app.get()</code></td><td><code>app.post()</code></td></tr>
       </table>
       <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// サーバ側: POST リクエストを受け取るルート</span>
-app.<span class="fn">post</span>(<span class="str">'/api/messages'</span>, <span class="kw">function</span>(req, res) {
-  <span class="kw">const</span> body <span class="op">=</span> req.body;  <span class="cmt">// 送信されたデータを受け取る</span>
-  res.<span class="fn">json</span>({ status: <span class="str">'received'</span>, data: body });
+<span class="cmt">// サーバ側: /api/messages にPOSTリクエストが来たら実行されるルート</span>
+app.<span class="fn">post</span>(<span class="str">'/api/messages'</span>, <span class="kw">function</span>(req, res) {  <span class="cmt">// req=リクエスト（送られてきたもの）, res=レスポンス（返すもの）</span>
+  <span class="kw">const</span> body <span class="op">=</span> req.body;  <span class="cmt">// クライアントから送られたJSONデータを取り出す</span>
+  res.<span class="fn">json</span>({ status: <span class="str">'received'</span>, data: body });  <span class="cmt">// 「受け取りました」とJSONで応答を返す</span>
 });</pre>
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">POST で送られたデータを受け取るには <span class="exam-alert">課題に出ます</span></p>
         <p style="font-size:0.9rem">Express でPOSTリクエストのbodyを受け取るには、<strong>ミドルウェア</strong>を追加する必要があります:
         <code>app.use(express.json())</code> ── これにより <code>req.body</code> でJSONデータにアクセスできるようになります。</p>
       </div>
+
+      <!-- GET vs POST Visual Comparison -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1rem 0 0.5rem">GET と POST のデータの流れ比較（アニメーション）</p>
+      <div class="anim-controls" data-target="getpostAnim" data-steps="6" data-dur="12">
+        <button class="anim-play active" title="自動再生">▶ 自動再生</button>
+        <button class="anim-pause" title="一時停止">⏸ 停止</button>
+        <button class="anim-prev" title="前へ">◀</button>
+        <button class="anim-next" title="次へ">▶ 次のステップ</button>
+        <span class="step-label">Step <span class="step-num">-</span> / 6</span>
+      </div>
+      <div class="diagram-container">
+        <svg id="getpostAnim" viewBox="0 0 700 420" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- ═══ Static: Browser & Server boxes ═══ -->
+          <rect x="30" y="20" width="200" height="70" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="130" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">ブラウザ</text>
+          <text x="130" y="65" text-anchor="middle" fill="#888" font-size="9">JavaScript（fetch）</text>
+
+          <rect x="470" y="20" width="200" height="70" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="570" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="12">Express サーバ</text>
+          <text x="570" y="65" text-anchor="middle" fill="#888" font-size="9">app.get() / app.post()</text>
+
+          <!-- ═══ Step 1: GET request ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="1;1;0;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+            <!-- Arrow: browser → server -->
+            <line x1="230" y1="40" x2="470" y2="40" stroke="#76B900" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="48" to="0" dur="0.8s" repeatCount="indefinite"/>
+            </line>
+            <rect x="280" y="22" width="140" height="22" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+            <text x="350" y="37" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">① GET /api/members</text>
+            <!-- Explanation -->
+            <rect x="30" y="105" width="640" height="55" rx="8" fill="#0a1a0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="50" y="125" fill="#76B900" font-weight="700" font-size="13">GET ① リクエスト送信</text>
+            <text x="50" y="147" fill="#ccc" font-size="11">fetch('/api/members') → URLだけでリクエスト。body は空。「データをください」とお願いする。</text>
+          </g>
+
+          <!-- ═══ Step 2: GET response ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1;1;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+            <line x1="470" y1="70" x2="230" y2="70" stroke="#4FC3F7" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="0" to="48" dur="0.8s" repeatCount="indefinite"/>
+            </line>
+            <rect x="260" y="56" width="180" height="22" rx="4" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+            <text x="350" y="71" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">② JSON {team:"...",members:[...]}</text>
+            <rect x="30" y="105" width="640" height="55" rx="8" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1.5"/>
+            <text x="50" y="125" fill="#4FC3F7" font-weight="700" font-size="13">GET ② レスポンス受信</text>
+            <text x="50" y="147" fill="#ccc" font-size="11">サーバが res.json() で JSONデータを返す → ブラウザが受け取り、innerHTML で画面に表示する。</text>
+          </g>
+
+          <!-- ═══ Step 3: POST prepare ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0;0" dur="12s" repeatCount="indefinite"/>
+            <!-- Data being prepared in browser -->
+            <rect x="40" y="105" width="180" height="55" rx="8" fill="#1a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="130" y="125" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="12">POST ③ データ準備</text>
+            <text x="130" y="147" text-anchor="middle" fill="#ccc" font-size="9">入力欄の値を取得して…</text>
+            <rect x="240" y="105" width="200" height="55" rx="8" fill="#111" stroke="#FFB800" stroke-width="1"/>
+            <text x="340" y="122" text-anchor="middle" fill="#FFB800" font-size="9" font-weight="600">JSON.stringify() で変換</text>
+            <text x="340" y="140" text-anchor="middle" fill="#e0e0e0" font-size="10" font-family="'JetBrains Mono',monospace">{name:"田中", msg:"hello"}</text>
+            <text x="340" y="155" text-anchor="middle" fill="#888" font-size="8">↑ JavaScriptオブジェクト → JSON文字列</text>
+            <rect x="460" y="105" width="210" height="55" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="565" y="122" text-anchor="middle" fill="#888" font-size="9">ヘッダーも設定:</text>
+            <text x="565" y="140" text-anchor="middle" fill="#e0e0e0" font-size="8" font-family="'JetBrains Mono',monospace">Content-Type: application/json</text>
+            <text x="565" y="155" text-anchor="middle" fill="#888" font-size="8">「これはJSONですよ」とサーバに伝える</text>
+          </g>
+
+          <!-- ═══ Step 4: POST request ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;0;1;1;0;0" dur="12s" repeatCount="indefinite"/>
+            <line x1="230" y1="40" x2="470" y2="40" stroke="#FFB800" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="48" to="0" dur="0.8s" repeatCount="indefinite"/>
+            </line>
+            <rect x="260" y="22" width="180" height="22" rx="4" fill="#1a1a0a" stroke="#FFB800" stroke-width="1"/>
+            <text x="350" y="37" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="9">④ POST /api/message + body</text>
+            <!-- Data packet visualization -->
+            <rect x="290" y="50" width="120" height="28" rx="6" fill="#FFB800" opacity="0.2" stroke="#FFB800" stroke-width="1">
+              <animate attributeName="x" values="120;400" dur="1.2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.4;0.1" dur="1.2s" repeatCount="indefinite"/>
+            </rect>
+            <rect x="30" y="105" width="640" height="55" rx="8" fill="#1a1a0a" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="50" y="125" fill="#FFB800" font-weight="700" font-size="13">POST ④ リクエスト送信</text>
+            <text x="50" y="147" fill="#ccc" font-size="11">fetch('/api/message', {method:'POST', body: JSON文字列}) → データをbodyに添付して送る。</text>
+          </g>
+
+          <!-- ═══ Step 5: Server receives POST ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;0;0;1;1;0" dur="12s" repeatCount="indefinite"/>
+            <rect x="480" y="105" width="190" height="55" rx="8" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1.5"/>
+            <text x="575" y="122" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">⑤ サーバが受信</text>
+            <text x="575" y="140" text-anchor="middle" fill="#e0e0e0" font-size="9" font-family="'JetBrains Mono',monospace">req.body.name → "田中"</text>
+            <text x="575" y="153" text-anchor="middle" fill="#888" font-size="8">express.json() がbodyを解析</text>
+            <rect x="30" y="105" width="430" height="55" rx="8" fill="#111" stroke="#FF5252" stroke-width="1.5"/>
+            <text x="245" y="122" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="11">もし express.json() がなかったら？</text>
+            <text x="245" y="140" text-anchor="middle" fill="#FF5252" font-size="10">req.body → undefined（未定義）</text>
+            <text x="245" y="153" text-anchor="middle" fill="#888" font-size="9">→ サーバはデータを読めない！ app.use(express.json()) が必須。</text>
+          </g>
+
+          <!-- ═══ Step 6: POST response ═══ -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;0;0;0;1;1" dur="12s" repeatCount="indefinite"/>
+            <line x1="470" y1="70" x2="230" y2="70" stroke="#4FC3F7" stroke-width="3" stroke-dasharray="8,4">
+              <animate attributeName="stroke-dashoffset" from="0" to="48" dur="0.8s" repeatCount="indefinite"/>
+            </line>
+            <rect x="250" y="56" width="200" height="22" rx="4" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1"/>
+            <text x="350" y="71" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">⑥ {reply:"田中さん、受け取りました！"}</text>
+            <rect x="30" y="105" width="640" height="55" rx="8" fill="#0a0a1a" stroke="#4FC3F7" stroke-width="1.5"/>
+            <text x="50" y="125" fill="#4FC3F7" font-weight="700" font-size="13">POST ⑥ レスポンス受信</text>
+            <text x="50" y="147" fill="#ccc" font-size="11">サーバが応答を返す → ブラウザが受け取り、innerHTML で画面に表示する。</text>
+          </g>
+
+          <!-- ═══ Comparison table (always visible) ═══ -->
+          <rect x="20" y="175" width="660" height="230" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="198" text-anchor="middle" fill="#e0e0e0" font-weight="700" font-size="12">GET と POST の比較まとめ</text>
+
+          <!-- Table header -->
+          <rect x="40" y="210" width="120" height="28" rx="4" fill="#222"/>
+          <text x="100" y="229" text-anchor="middle" fill="#888" font-size="10" font-weight="600"></text>
+          <rect x="170" y="210" width="240" height="28" rx="4" fill="#0a1a0a" stroke="#76B900" stroke-width="1"/>
+          <text x="290" y="229" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">GET</text>
+          <rect x="420" y="210" width="240" height="28" rx="4" fill="#1a1a0a" stroke="#FFB800" stroke-width="1"/>
+          <text x="540" y="229" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">POST</text>
+
+          <!-- Row: 目的 -->
+          <text x="100" y="259" text-anchor="middle" fill="#ccc" font-size="10" font-weight="600">目的</text>
+          <text x="290" y="259" text-anchor="middle" fill="#e0e0e0" font-size="10">データを取得する</text>
+          <text x="540" y="259" text-anchor="middle" fill="#e0e0e0" font-size="10">データを送信する</text>
+          <line x1="40" y1="268" x2="660" y2="268" stroke="#222" stroke-width="1"/>
+
+          <!-- Row: データの場所 -->
+          <text x="100" y="287" text-anchor="middle" fill="#ccc" font-size="10" font-weight="600">データの場所</text>
+          <text x="290" y="287" text-anchor="middle" fill="#e0e0e0" font-size="10">URLに含まれる</text>
+          <text x="540" y="287" text-anchor="middle" fill="#e0e0e0" font-size="10">bodyに含まれる</text>
+          <line x1="40" y1="296" x2="660" y2="296" stroke="#222" stroke-width="1"/>
+
+          <!-- Row: fetch() -->
+          <text x="100" y="315" text-anchor="middle" fill="#ccc" font-size="10" font-weight="600">fetch()</text>
+          <text x="290" y="315" text-anchor="middle" fill="#e0e0e0" font-size="9" font-family="'JetBrains Mono',monospace">fetch('/api/xxx')</text>
+          <text x="540" y="315" text-anchor="middle" fill="#e0e0e0" font-size="8" font-family="'JetBrains Mono',monospace">fetch(url,{method:'POST',body:...})</text>
+          <line x1="40" y1="324" x2="660" y2="324" stroke="#222" stroke-width="1"/>
+
+          <!-- Row: Express -->
+          <text x="100" y="343" text-anchor="middle" fill="#ccc" font-size="10" font-weight="600">Express</text>
+          <text x="290" y="343" text-anchor="middle" fill="#e0e0e0" font-size="10" font-family="'JetBrains Mono',monospace">app.get()</text>
+          <text x="540" y="343" text-anchor="middle" fill="#e0e0e0" font-size="10" font-family="'JetBrains Mono',monospace">app.post() + express.json()</text>
+          <line x1="40" y1="352" x2="660" y2="352" stroke="#222" stroke-width="1"/>
+
+          <!-- Row: 例 -->
+          <text x="100" y="371" text-anchor="middle" fill="#ccc" font-size="10" font-weight="600">使用例</text>
+          <text x="290" y="371" text-anchor="middle" fill="#888" font-size="9">記事一覧の取得、プロフィール表示</text>
+          <text x="540" y="371" text-anchor="middle" fill="#888" font-size="9">コメント投稿、ログインフォーム送信</text>
+
+          <text x="350" y="403" text-anchor="middle" fill="#555" font-size="9">※ アニメーション上部で各ステップの詳細が表示されます</text>
+
+          <defs>
+            <marker id="gp1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="gp2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="gp2b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="gp3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.5 REST API の考え方 -->
     <div class="concept-box">
-      <h4>1.5 REST API の考え方</h4>
+      <h4>1.5 REST API<span style="color:#888;font-weight:400;font-size:0.85rem">（レスト エーピーアイ）</span> の考え方</h4>
       <div class="analogy">
         図書館の本は「ジャンル → 著者名 → タイトル」のように整理されています。REST API も同じで、データを<strong>リソース（資源）</strong>として整理し、URLで「どのデータにアクセスするか」を表現します。
       </div>
       <p><strong>REST</strong>（Representational State Transfer）は、WebAPIの設計思想です。URLでリソースを表し、HTTPメソッドで操作を表します。</p>
+
+      <div style="background:#1A1A1A;border:1px solid #4FC3F7;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">REST API は特別なライブラリではない</p>
+        <p style="font-size:0.9rem;line-height:1.8;color:#e0e0e0">REST API は<strong>URLの設計ルール（考え方）</strong>であり、追加のインストールは不要です。Express の <code>app.get()</code>, <code>app.post()</code> など標準の機能だけで作れます。<br>
+        「<code>/api/users</code> で一覧を返す」「<code>/api/users/1</code> で1件を返す」のように<strong>URLを整理するだけ</strong>で REST API になります。</p>
+      </div>
+
       <table>
-        <tr><th>HTTPメソッド</th><th>URL</th><th>意味</th></tr>
-        <tr><td><strong>GET</strong></td><td><code>/api/users</code></td><td>ユーザ一覧を取得</td></tr>
-        <tr><td><strong>GET</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを取得</td></tr>
-        <tr><td><strong>POST</strong></td><td><code>/api/users</code></td><td>新しいユーザを作成</td></tr>
-        <tr><td><strong>PUT</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを更新</td></tr>
-        <tr><td><strong>DELETE</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを削除</td></tr>
+        <tr><th>HTTPメソッド</th><th>URL</th><th>意味</th><th>Express のコード</th></tr>
+        <tr><td><strong>GET</strong></td><td><code>/api/users</code></td><td>ユーザ一覧を取得</td><td><code>app.get('/api/users', ...)</code></td></tr>
+        <tr><td><strong>GET</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを取得</td><td><code>app.get('/api/users/:id', ...)</code></td></tr>
+        <tr><td><strong>POST</strong></td><td><code>/api/users</code></td><td>新しいユーザを作成</td><td><code>app.post('/api/users', ...)</code></td></tr>
+        <tr><td><strong>PUT</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを更新</td><td><code>app.put('/api/users/:id', ...)</code></td></tr>
+        <tr><td><strong>DELETE</strong></td><td><code>/api/users/1</code></td><td>ID=1 のユーザを削除</td><td><code>app.delete('/api/users/:id', ...)</code></td></tr>
       </table>
       <p style="margin-top:0.5rem">この授業では GET と POST を主に使います。URLは「何のデータか」を表し、メソッドは「何をするか」を表すのがポイントです。</p>
     </div>
@@ -610,10 +1166,11 @@ app.<span class="fn">post</span>(<span class="str">'/api/messages'</span>, <span
       </div>
       <p>サーバから取得したデータをページに表示するには、<strong>DOM</strong>（Document Object Model）を操作してHTMLの内容を更新します。</p>
       <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// HTML: &lt;div id="result"&gt;&lt;/div&gt;</span>
+<span class="cmt">// HTML側に &lt;div id="result"&gt;&lt;/div&gt; があるとする</span>
 
-<span class="cmt">// JavaScriptでこの要素を取得し、中身を書き換える</span>
+<span class="cmt">// id="result" の HTML要素を取得する（ページの中から探す）</span>
 <span class="kw">const</span> resultDiv <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'result'</span>);
+<span class="cmt">// その要素の中身（HTML）を書き換える → 画面に反映される</span>
 resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サーバから取得したデータです&lt;/p&gt;'</span>;</pre>
       <table>
         <tr><th>メソッド / プロパティ</th><th>説明</th></tr>
@@ -622,6 +1179,257 @@ resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サー
         <tr><td><code>要素.textContent</code></td><td>要素のテキスト内容を読み書きする（HTMLタグは反映しない）</td></tr>
       </table>
       <p style="margin-top:0.5rem">Fetch API でデータを取得 → DOM操作で表示。この2つを組み合わせることで、<strong>ページを再読み込みせずにサーバのデータを画面に反映</strong>できます。</p>
+
+      <!-- DOM Operation Diagram -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">DOM操作のイメージ（HTMLの中身を書き換える）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 350" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- Title -->
+          <text x="350" y="25" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">DOM = HTMLをツリー構造で扱う仕組み</text>
+
+          <!-- HTML Tree (left) -->
+          <text x="170" y="50" text-anchor="middle" fill="#888" font-size="11" font-weight="600">HTML のツリー構造</text>
+
+          <!-- document -->
+          <rect x="120" y="60" width="100" height="28" rx="6" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="170" y="79" text-anchor="middle" fill="#76B900" font-size="10" font-weight="700">document</text>
+
+          <line x1="170" y1="88" x2="170" y2="105" stroke="#444" stroke-width="1.5"/>
+
+          <!-- body -->
+          <rect x="125" y="105" width="90" height="28" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="170" y="124" text-anchor="middle" fill="#4FC3F7" font-size="10" font-weight="600">&lt;body&gt;</text>
+
+          <line x1="140" y1="133" x2="80" y2="155" stroke="#444" stroke-width="1.5"/>
+          <line x1="200" y1="133" x2="260" y2="155" stroke="#444" stroke-width="1.5"/>
+
+          <!-- h1 -->
+          <rect x="35" y="155" width="90" height="28" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="80" y="174" text-anchor="middle" fill="#4FC3F7" font-size="10">&lt;h1&gt;</text>
+
+          <!-- div#result -->
+          <rect x="195" y="155" width="130" height="28" rx="6" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="260" y="174" text-anchor="middle" fill="#FFB800" font-size="10" font-weight="700">&lt;div id="result"&gt;</text>
+
+          <line x1="260" y1="183" x2="260" y2="200" stroke="#FFB800" stroke-width="1.5"/>
+
+          <!-- div content (before) -->
+          <rect x="190" y="200" width="140" height="28" rx="6" fill="#1a1a1a" stroke="#666" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="260" y="219" text-anchor="middle" fill="#888" font-size="9">&lt;p&gt;初期テキスト&lt;/p&gt;</text>
+
+          <!-- Arrow: getElementById -->
+          <rect x="20" y="250" width="310" height="75" rx="8" fill="#111" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="175" y="270" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">getElementById('result')</text>
+          <text x="175" y="290" text-anchor="middle" fill="#ccc" font-size="9">→ id="result" の要素を見つけて取得する</text>
+          <text x="175" y="308" text-anchor="middle" fill="#888" font-size="8">DOMツリーの中から「result」というIDの要素を探す</text>
+
+          <!-- Right side: After innerHTML -->
+          <text x="530" y="50" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600">innerHTML で書き換えた後</text>
+
+          <!-- Same tree but different content -->
+          <rect x="480" y="60" width="100" height="28" rx="6" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="530" y="79" text-anchor="middle" fill="#76B900" font-size="10" font-weight="700">document</text>
+
+          <line x1="530" y1="88" x2="530" y2="105" stroke="#444" stroke-width="1.5"/>
+
+          <rect x="485" y="105" width="90" height="28" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="530" y="124" text-anchor="middle" fill="#4FC3F7" font-size="10">&lt;body&gt;</text>
+
+          <line x1="500" y1="133" x2="440" y2="155" stroke="#444" stroke-width="1.5"/>
+          <line x1="560" y1="133" x2="620" y2="155" stroke="#444" stroke-width="1.5"/>
+
+          <rect x="395" y="155" width="90" height="28" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="440" y="174" text-anchor="middle" fill="#4FC3F7" font-size="10">&lt;h1&gt;</text>
+
+          <rect x="555" y="155" width="130" height="28" rx="6" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="620" y="174" text-anchor="middle" fill="#FFB800" font-size="10" font-weight="700">&lt;div id="result"&gt;</text>
+
+          <line x1="620" y1="183" x2="620" y2="200" stroke="#76B900" stroke-width="2"/>
+
+          <!-- New content (after) -->
+          <rect x="545" y="200" width="150" height="28" rx="6" fill="#0a1a0a" stroke="#76B900" stroke-width="2"/>
+          <text x="620" y="219" text-anchor="middle" fill="#76B900" font-size="9" font-weight="600">&lt;h2&gt;チーム名&lt;/h2&gt;...</text>
+
+          <!-- Highlight change -->
+          <rect x="540" y="195" width="160" height="38" rx="8" fill="none" stroke="#76B900" stroke-width="2" stroke-dasharray="4,3">
+            <animate attributeName="stroke-opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </rect>
+          <text x="620" y="250" text-anchor="middle" fill="#76B900" font-size="9" font-weight="600">ここだけ変わる！</text>
+
+          <!-- innerHTML code -->
+          <rect x="370" y="270" width="310" height="60" rx="8" fill="#111" stroke="#76B900" stroke-width="1.5"/>
+          <text x="525" y="290" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">innerHTML = 新しいHTML</text>
+          <text x="525" y="308" text-anchor="middle" fill="#ccc" font-size="9">→ 要素の中身を丸ごと新しいHTMLに置き換える</text>
+          <text x="525" y="322" text-anchor="middle" fill="#888" font-size="8">ページ全体は再読み込みされない（この要素だけ！）</text>
+
+          <!-- Big arrow between left and right -->
+          <text x="355" y="145" text-anchor="middle" fill="#76B900" font-size="32" font-weight="700">→</text>
+          <text x="355" y="165" text-anchor="middle" fill="#ccc" font-size="9">JS実行</text>
+        </svg>
+      </div>
+
+      <!-- DOM Interactive Exercises -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">DOM操作を体験してみよう（4問）</p>
+
+      <!-- 2つの体験方法 -->
+      <div style="background:#1A1A1A;border:1px solid #4A7A00;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
+        <p style="color:#93D500;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">体験方法（どちらでもOK）</p>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <!-- Method A: This page -->
+          <div style="flex:1;min-width:250px;background:#111;border:1px solid #76B900;border-radius:8px;padding:0.8rem">
+            <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.4rem">方法A: このページで体験（簡単）</p>
+            <p style="color:#ccc;font-size:0.85rem;line-height:1.7">下の「実行」ボタンを押すだけ。<br>結果がこのページ上のプレビューエリアに反映されます。</p>
+          </div>
+
+          <!-- Method B: VS Code -->
+          <div style="flex:1;min-width:250px;background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem">
+            <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.4rem">方法B: VS Code でHTMLファイルを作って体験（おすすめ）</p>
+            <ol style="color:#ccc;font-size:0.85rem;line-height:1.9;padding-left:1.2rem;margin:0">
+              <li><code>Web03</code> フォルダの中に <strong><code>dom-test.html</code></strong> を新規作成</li>
+              <li>以下のコードをコピーして貼り付け、保存</li>
+              <li>VS Code で <strong>右クリック →「Open with Live Server」</strong>で開く<br>
+                <span style="color:#888;font-size:0.8rem">※ Live Server 拡張機能がない場合は、ファイルをダブルクリックしてブラウザで直接開いてもOK</span></li>
+              <li>ブラウザで <strong>F12キー</strong> → <strong>「Console」タブ</strong> を開く</li>
+              <li>Console にコードを貼り付けて Enter で実行する</li>
+            </ol>
+          </div>
+        </div>
+
+        <details style="margin-top:0.8rem">
+          <summary style="color:#FFB800;cursor:pointer;font-size:0.85rem;font-weight:600">方法B 用の dom-test.html のコード（クリックで表示）</summary>
+          <pre style="margin-top:0.5rem"><span class="code-label">HTML ── dom-test.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>DOM操作テスト<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;style&gt;</span>
+    body { font-family: sans-serif; padding: <span class="num">30</span>px; background: <span class="str">#f5f5f5</span>; }
+    h2 { color: <span class="str">#76B900</span>; }
+    #result { background: <span class="str">#f0f0f0</span>; border-radius: <span class="num">8</span>px; padding: <span class="num">10</span>px; }
+  <span class="kw">&lt;/style&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h2</span> id=<span class="str">"domTitle"</span><span class="kw">&gt;</span>Fetch API Demo<span class="kw">&lt;/h2&gt;</span>
+  <span class="kw">&lt;p</span> id=<span class="str">"domMessage"</span><span class="kw">&gt;</span>ボタンを押すとデータを取得します<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;div</span> id=<span class="str">"domResult"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;span</span> id=<span class="str">"domStatus"</span><span class="kw">&gt;</span>まだデータはありません<span class="kw">&lt;/span&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="cmt">&lt;!-- F12 → Console タブで以下を試してみよう --&gt;</span>
+  <span class="cmt">&lt;!-- Q1: document.getElementById('domTitle').textContent --&gt;</span>
+  <span class="cmt">&lt;!-- Q2: document.getElementById('domResult').innerHTML = '&lt;strong&gt;成功！&lt;/strong&gt;' --&gt;</span>
+  <span class="cmt">&lt;!-- Q3: document.getElementById('domMessage').textContent = '&lt;strong&gt;テスト&lt;/strong&gt;' --&gt;</span>
+  <span class="cmt">&lt;!-- Q4: document.getElementById('domTitle').style.color = 'red' --&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+        </details>
+      </div>
+
+      <p style="font-size:0.9rem;color:#ccc;margin-bottom:1rem">下のエリアには HTML 要素が表示されています。各問の「実行」ボタンを押すと、JavaScript が DOM を操作して画面が変わります。<strong>実行前に「何が起きるか」を予想</strong>してからボタンを押してください。</p>
+
+      <div id="domLab" style="background:#0A0A0A;border-radius:14px;border:1px solid #333;padding:1.2rem;margin-bottom:1rem">
+
+        <!-- Live Preview Area -->
+        <div style="margin-bottom:1rem">
+          <div style="color:#666;font-size:0.8rem;margin-bottom:0.4rem">ブラウザの表示エリア（ここが変化します）</div>
+          <div id="domPreview" style="background:#fff;border-radius:10px;padding:1.2rem;color:#333;font-family:sans-serif;min-height:120px">
+            <h2 id="domTitle" style="color:#76B900;margin:0 0 8px">Fetch API Demo</h2>
+            <p id="domMessage" style="margin:0 0 8px;color:#666">ボタンを押すとデータを取得します</p>
+            <div id="domResult" style="background:#f0f0f0;border-radius:8px;padding:10px;margin:0">
+              <span id="domStatus" style="color:#999">まだデータはありません</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q1: getElementById + textContent -->
+        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+            <span style="background:#76B900;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">1</span>
+            <span style="color:#76B900;font-weight:700;font-size:0.95rem">要素を取得して、テキストを読み取る（getElementById + textContent）</span>
+          </div>
+          <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
+            <span style="color:#888">// id="domTitle" の要素のテキストを取得して alert で表示する</span><br>
+            <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domTitle'</span>);<br>
+            <span style="color:#76B900">alert</span>(<span style="color:#FFB800">'取得した値: '</span> + el.<span style="color:#93D500">textContent</span>);
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
+            <button onclick="var el=document.getElementById('domTitle');alert('取得した値: '+el.textContent);" style="background:#76B900;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
+            <span style="color:#888;font-size:0.85rem">予想: alert に何が表示される？ → <strong style="color:#ccc">textContent</strong> は要素の中のテキストを返す</span>
+          </div>
+        </div>
+
+        <!-- Q2: innerHTML を書き換える -->
+        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+            <span style="background:#FFB800;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">2</span>
+            <span style="color:#FFB800;font-weight:700;font-size:0.95rem">要素の中身を HTML で書き換える（innerHTML）</span>
+          </div>
+          <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
+            <span style="color:#888">// id="domResult" の中身を HTML ごと書き換える</span><br>
+            <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domResult'</span>);<br>
+            el.<span style="color:#93D500">innerHTML</span> = <span style="color:#FFB800">'&lt;strong style="color:green"&gt;データ取得成功！&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;田中（リーダー）&lt;/li&gt;&lt;li&gt;佐藤（デザイン）&lt;/li&gt;&lt;/ul&gt;'</span>;
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
+            <button onclick="document.getElementById('domResult').innerHTML='<strong style=&quot;color:green&quot;>データ取得成功！</strong><ul><li>田中（リーダー）</li><li>佐藤（デザイン）</li></ul>';" style="background:#FFB800;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
+            <span style="color:#888;font-size:0.85rem">予想: 灰色エリアの中身がどう変わる？ → <strong style="color:#ccc">innerHTML</strong> は HTML タグも反映する</span>
+          </div>
+        </div>
+
+        <!-- Q3: textContent で書き換える（HTMLタグは反映されない） -->
+        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+            <span style="background:#4FC3F7;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">3</span>
+            <span style="color:#4FC3F7;font-weight:700;font-size:0.95rem">textContent で書き換える（innerHTML との違いに注目）</span>
+          </div>
+          <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
+            <span style="color:#888">// id="domMessage" のテキストを書き換える</span><br>
+            <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domMessage'</span>);<br>
+            el.<span style="color:#93D500">textContent</span> = <span style="color:#FFB800">'&lt;strong&gt;太字になる？&lt;/strong&gt; テスト中...'</span>;
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
+            <button onclick="document.getElementById('domMessage').textContent='<strong>太字になる？</strong> テスト中...';" style="background:#4FC3F7;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
+            <span style="color:#888;font-size:0.85rem">予想: 太字になる？ならない？ → <strong style="color:#ccc">textContent</strong> は HTML タグを<strong>文字として表示</strong>する</span>
+          </div>
+        </div>
+
+        <!-- Q4: style を変更する -->
+        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+            <span style="background:#FF5252;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">4</span>
+            <span style="color:#FF5252;font-weight:700;font-size:0.95rem">見た目（スタイル）を変える（style プロパティ）</span>
+          </div>
+          <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
+            <span style="color:#888">// id="domTitle" の見た目を変える</span><br>
+            <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domTitle'</span>);<br>
+            el.<span style="color:#93D500">style</span>.color = <span style="color:#FFB800">'#FF5252'</span>;        <span style="color:#888">// 文字色を赤に</span><br>
+            el.<span style="color:#93D500">style</span>.fontSize = <span style="color:#FFB800">'2rem'</span>;       <span style="color:#888">// 文字サイズを大きく</span><br>
+            el.<span style="color:#93D500">style</span>.background = <span style="color:#FFB800">'#FFF3E0'</span>;  <span style="color:#888">// 背景色をオレンジに</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
+            <button onclick="var el=document.getElementById('domTitle');el.style.color='#FF5252';el.style.fontSize='2rem';el.style.background='#FFF3E0';" style="background:#FF5252;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
+            <span style="color:#888;font-size:0.85rem">予想: タイトルの見た目がどう変わる？ → <strong style="color:#ccc">style</strong> で CSS を直接書き換えられる</span>
+          </div>
+        </div>
+
+        <!-- Reset button -->
+        <div style="text-align:center;margin-top:0.5rem">
+          <button onclick="document.getElementById('domTitle').textContent='Fetch API Demo';document.getElementById('domTitle').style.cssText='color:#76B900;margin:0 0 8px';document.getElementById('domMessage').textContent='ボタンを押すとデータを取得します';document.getElementById('domMessage').style.cssText='margin:0 0 8px;color:#666';document.getElementById('domResult').innerHTML='<span id=&quot;domStatus&quot; style=&quot;color:#999&quot;>まだデータはありません</span>';" style="background:#333;color:#ccc;border:1px solid #555;border-radius:6px;padding:0.4rem 1.5rem;font-size:0.85rem;cursor:pointer">↻ 元に戻す（リセット）</button>
+        </div>
+
+        <!-- Summary -->
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+          <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">まとめ: 3つの DOM 操作の違い</p>
+          <table style="margin:0;font-size:0.9rem">
+            <tr><th style="width:30%">プロパティ</th><th>機能</th><th>HTMLタグ</th></tr>
+            <tr><td><code>textContent</code></td><td>テキストを読み書き</td><td>タグは<strong>文字として</strong>表示される</td></tr>
+            <tr><td><code>innerHTML</code></td><td>HTMLを読み書き</td><td>タグが<strong>HTMLとして</strong>反映される</td></tr>
+            <tr><td><code>style.xxx</code></td><td>CSSを直接変更</td><td>見た目（色・サイズなど）を変える</td></tr>
+          </table>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -643,17 +1451,17 @@ resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サー
       </div>
       <p>以下のコードがどの順番で実行されるかを確認しましょう。</p>
       <pre><span class="code-label">JavaScript</span>
-<span class="fn">console.log</span>(<span class="str">'A: fetch開始前'</span>);
+<span class="fn">console.log</span>(<span class="str">'A: fetch開始前'</span>);       <span class="cmt">// ① 最初に実行される（同期処理）</span>
 
-<span class="kw">async function</span> <span class="fn">getData</span>() {
-  <span class="fn">console.log</span>(<span class="str">'B: fetch実行'</span>);
-  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/items'</span>);
-  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
-  <span class="fn">console.log</span>(<span class="str">'C: データ受信'</span>, data);
+<span class="kw">async function</span> <span class="fn">getData</span>() {           <span class="cmt">// 非同期関数を定義する</span>
+  <span class="fn">console.log</span>(<span class="str">'B: fetch実行'</span>);       <span class="cmt">// ② getData()が呼ばれたらすぐ実行される</span>
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/items'</span>);  <span class="cmt">// サーバに問い合わせ → ここで「待つ」</span>
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();         <span class="cmt">// JSONに変換 → ここでも「待つ」</span>
+  <span class="fn">console.log</span>(<span class="str">'C: データ受信'</span>, data);  <span class="cmt">// ④ サーバから応答が届いてから実行される</span>
 }
 
-<span class="fn">getData</span>();
-<span class="fn">console.log</span>(<span class="str">'D: fetch呼び出し後'</span>);</pre>
+<span class="fn">getData</span>();                             <span class="cmt">// 関数を呼ぶ（await中は関数の外に戻る）</span>
+<span class="fn">console.log</span>(<span class="str">'D: fetch呼び出し後'</span>);   <span class="cmt">// ③ awaitで待っている間に先に実行される</span></pre>
       <table>
         <tr><th>順番</th><th>出力</th><th>理由</th></tr>
         <tr><td>1</td><td>A: fetch開始前</td><td>同期処理なのでそのまま実行される</td></tr>
@@ -762,23 +1570,31 @@ npm install express</pre>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
   <span class="kw">&lt;h1&gt;</span>Fetch API Demo<span class="kw">&lt;/h1&gt;</span>
+  <span class="cmt">&lt;!-- ボタンをクリックすると loadMembers() 関数が呼ばれる --&gt;</span>
   <span class="kw">&lt;button</span> onclick=<span class="str">"loadMembers()"</span><span class="kw">&gt;</span>メンバーを読み込む<span class="kw">&lt;/button&gt;</span>
 
+  <span class="cmt">&lt;!-- ここにサーバから取得したデータが表示される --&gt;</span>
   <span class="kw">&lt;div</span> id=<span class="str">"result"</span> class=<span class="str">"card"</span><span class="kw">&gt;</span>
     <span class="kw">&lt;p&gt;</span>ボタンを押すとサーバからデータを取得します<span class="kw">&lt;/p&gt;</span>
   <span class="kw">&lt;/div&gt;</span>
 
   <span class="kw">&lt;script&gt;</span>
+    <span class="cmt">// ボタンが押されたときに実行される関数（async = 非同期関数）</span>
     <span class="kw">async function</span> <span class="fn">loadMembers</span>() {
+      <span class="cmt">// サーバの /api/members にGETリクエストを送り、応答を待つ</span>
       <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/members'</span>);
+      <span class="cmt">// 応答のJSONデータをJavaScriptオブジェクトに変換する</span>
       <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
 
+      <span class="cmt">// data.team（チーム名）を見出しにし、リスト &lt;ul&gt; を開始する</span>
       <span class="kw">var</span> html <span class="op">=</span> <span class="str">'&lt;h2&gt;'</span> <span class="op">+</span> data.team <span class="op">+</span> <span class="str">'&lt;/h2&gt;&lt;ul&gt;'</span>;
+      <span class="cmt">// メンバー配列を1人ずつループして、名前と役割を &lt;li&gt; に追加する</span>
       <span class="kw">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> data.members.<span class="fn">length</span>; i<span class="op">++</span>) {
         html <span class="op">+=</span> <span class="str">'&lt;li&gt;'</span> <span class="op">+</span> data.members[i].name <span class="op">+</span> <span class="str">' ('</span> <span class="op">+</span> data.members[i].role <span class="op">+</span> <span class="str">')&lt;/li&gt;'</span>;
       }
-      html <span class="op">+=</span> <span class="str">'&lt;/ul&gt;'</span>;
+      html <span class="op">+=</span> <span class="str">'&lt;/ul&gt;'</span>;  <span class="cmt">// リストを閉じる</span>
 
+      <span class="cmt">// id="result" の要素の中身を、作成したHTMLで書き換える</span>
       document.<span class="fn">getElementById</span>(<span class="str">'result'</span>).innerHTML <span class="op">=</span> html;
     }
   <span class="kw">&lt;/script&gt;</span>
@@ -792,18 +1608,18 @@ npm install express</pre>
         <li>以下のコードをコピーして貼り付け、保存する</li>
       </ol>
       <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);  <span class="cmt">// Express ライブラリを読み込む</span>
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();              <span class="cmt">// Express アプリケーションを作成する</span>
 
-<span class="cmt">// 静的ファイル配信（publicフォルダ）</span>
+<span class="cmt">// publicフォルダの中身をそのまま配信する（HTMLやCSSなど）</span>
 app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
 
-<span class="cmt">// メンバー一覧API</span>
-app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span class="kw">function</span>(req, res) {
-  res.<span class="fn">json</span>({
-    team: <span class="str">'Webプログラミングチーム'</span>,
-    members: [
-      { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
+<span class="cmt">// /api/members にGETリクエストが来たら、メンバー一覧をJSONで返す</span>
+app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span class="kw">function</span>(req, res) {  <span class="cmt">// req=リクエスト, res=レスポンス</span>
+  res.<span class="fn">json</span>({                          <span class="cmt">// res.json() でJSONデータを返す</span>
+    team: <span class="str">'Webプログラミングチーム'</span>,   <span class="cmt">// チーム名（文字列）</span>
+    members: [                          <span class="cmt">// メンバーの配列（オブジェクトのリスト）</span>
+      { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },       <span class="cmt">// 各メンバーは name と role を持つ</span>
       { name: <span class="str">'佐藤'</span>, role: <span class="str">'デザイン'</span> },
       { name: <span class="str">'鈴木'</span>, role: <span class="str">'サーバ担当'</span> },
       { name: <span class="str">'高橋'</span>, role: <span class="str">'フロント担当'</span> }
@@ -811,8 +1627,8 @@ app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span c
   });
 });
 
-app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
-  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {      <span class="cmt">// ポート3000でサーバを起動する</span>
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);  <span class="cmt">// 起動成功のメッセージを表示</span>
 });</pre>
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
@@ -822,6 +1638,131 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <li>メンバー一覧がページに表示される</li>
         <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
       </ol>
+
+      <!-- Browser Mockup: Before & After -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">ブラウザ実行画面（ボタンを押す前 → 押した後）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 340" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- === Before (left) === -->
+          <text x="170" y="22" text-anchor="middle" fill="#888" font-size="11" font-weight="600">ボタンを押す前</text>
+          <!-- Browser chrome -->
+          <rect x="20" y="30" width="300" height="280" rx="10" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <rect x="20" y="30" width="300" height="28" rx="10" fill="#e8e8e8"/>
+          <rect x="20" y="48" width="300" height="10" fill="#e8e8e8"/>
+          <!-- Browser dots -->
+          <circle cx="36" cy="44" r="5" fill="#ff5f57"/><circle cx="52" cy="44" r="5" fill="#ffbd2e"/><circle cx="68" cy="44" r="5" fill="#28c840"/>
+          <!-- URL bar -->
+          <rect x="90" y="37" width="210" height="14" rx="3" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
+          <text x="100" y="48" fill="#666" font-size="7" font-family="'JetBrains Mono',monospace">localhost:3000</text>
+          <!-- Page content -->
+          <text x="170" y="85" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">Fetch API Demo</text>
+          <rect x="120" y="95" width="100" height="28" rx="6" fill="#76B900"/>
+          <text x="170" y="114" text-anchor="middle" fill="white" font-size="10" font-weight="600">メンバーを読み込む</text>
+          <rect x="70" y="135" width="200" height="40" rx="8" fill="#f8f8f8" stroke="#eee" stroke-width="1"/>
+          <text x="170" y="160" text-anchor="middle" fill="#999" font-size="9">ボタンを押すとサーバからデータを取得します</text>
+
+          <!-- Arrow -->
+          <text x="350" y="175" text-anchor="middle" fill="#76B900" font-size="28" font-weight="700">→</text>
+          <text x="350" y="195" text-anchor="middle" fill="#76B900" font-size="10" font-weight="600">クリック!</text>
+
+          <!-- === After (right) === -->
+          <text x="530" y="22" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600">ボタンを押した後</text>
+          <!-- Browser chrome -->
+          <rect x="380" y="30" width="300" height="280" rx="10" fill="#fff" stroke="#76B900" stroke-width="2"/>
+          <rect x="380" y="30" width="300" height="28" rx="10" fill="#e8e8e8"/>
+          <rect x="380" y="48" width="300" height="10" fill="#e8e8e8"/>
+          <!-- Browser dots -->
+          <circle cx="396" cy="44" r="5" fill="#ff5f57"/><circle cx="412" cy="44" r="5" fill="#ffbd2e"/><circle cx="428" cy="44" r="5" fill="#28c840"/>
+          <!-- URL bar -->
+          <rect x="450" y="37" width="210" height="14" rx="3" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
+          <text x="460" y="48" fill="#666" font-size="7" font-family="'JetBrains Mono',monospace">localhost:3000</text>
+          <!-- Page content -->
+          <text x="530" y="85" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">Fetch API Demo</text>
+          <rect x="480" y="95" width="100" height="28" rx="6" fill="#76B900"/>
+          <text x="530" y="114" text-anchor="middle" fill="white" font-size="10" font-weight="600">メンバーを読み込む</text>
+          <!-- Result card with data -->
+          <rect x="415" y="135" width="230" height="145" rx="8" fill="#f8f8f8" stroke="#eee" stroke-width="1"/>
+          <text x="530" y="157" text-anchor="middle" fill="#333" font-weight="700" font-size="12">Webプログラミングチーム</text>
+          <text x="430" y="178" fill="#333" font-size="10">• 田中 (リーダー)</text>
+          <text x="430" y="196" fill="#333" font-size="10">• 佐藤 (デザイン)</text>
+          <text x="430" y="214" fill="#333" font-size="10">• 鈴木 (サーバ担当)</text>
+          <text x="430" y="232" fill="#333" font-size="10">• 高橋 (フロント担当)</text>
+
+          <!-- Highlight annotation -->
+          <rect x="415" y="252" width="230" height="22" rx="4" fill="#76B900" opacity="0.15"/>
+          <text x="530" y="267" text-anchor="middle" fill="#76B900" font-size="9" font-weight="600">↑ ここだけ変わる（ページ再読み込みなし）</text>
+        </svg>
+      </div>
+
+      <!-- GET Data Flow Diagram -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">コード体験1のデータフロー（GETリクエスト）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 260" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- Step 1: Button click -->
+          <rect x="20" y="20" width="130" height="55" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="85" y="40" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">① ボタンクリック</text>
+          <text x="85" y="58" text-anchor="middle" fill="#e0e0e0" font-size="8" font-family="'JetBrains Mono',monospace">loadMembers()</text>
+          <text x="85" y="70" text-anchor="middle" fill="#888" font-size="7">関数が実行される</text>
+
+          <!-- Arrow 1→2 -->
+          <line x1="150" y1="47" x2="180" y2="47" stroke="#76B900" stroke-width="2" marker-end="url(#gf1)"/>
+
+          <!-- Step 2: fetch -->
+          <rect x="180" y="20" width="130" height="55" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="245" y="40" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">② fetch() 実行</text>
+          <text x="245" y="58" text-anchor="middle" fill="#e0e0e0" font-size="7" font-family="'JetBrains Mono',monospace">GET /api/members</text>
+          <text x="245" y="70" text-anchor="middle" fill="#888" font-size="7">サーバにリクエスト送信</text>
+
+          <!-- Arrow 2→3 -->
+          <line x1="310" y1="47" x2="340" y2="47" stroke="#FFB800" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#gf2)"/>
+          <text x="325" y="40" text-anchor="middle" fill="#FFB800" font-size="7">ネットワーク</text>
+
+          <!-- Step 3: Server -->
+          <rect x="340" y="20" width="150" height="55" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="415" y="40" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">③ サーバが処理</text>
+          <text x="415" y="58" text-anchor="middle" fill="#e0e0e0" font-size="7" font-family="'JetBrains Mono',monospace">app.get('/api/members')</text>
+          <text x="415" y="70" text-anchor="middle" fill="#888" font-size="7">res.json() でJSONを返す</text>
+
+          <!-- Arrow 3→4 -->
+          <line x1="490" y1="47" x2="520" y2="47" stroke="#4FC3F7" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#gf3)"/>
+
+          <!-- Step 4: Response -->
+          <rect x="520" y="20" width="160" height="55" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="600" y="40" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">④ JSON レスポンス</text>
+          <text x="600" y="56" text-anchor="middle" fill="#e0e0e0" font-size="7" font-family="'JetBrains Mono',monospace">{team:"...",members:[...]}</text>
+          <text x="600" y="70" text-anchor="middle" fill="#888" font-size="7">ブラウザが受け取る</text>
+
+          <!-- JSON data visualization -->
+          <rect x="30" y="100" width="640" height="65" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="50" y="118" fill="#FFB800" font-weight="700" font-size="10">サーバが返すJSONデータ:</text>
+          <text x="50" y="138" fill="#e0e0e0" font-size="9" font-family="'JetBrains Mono',monospace">{ team: "Webプログラミングチーム", members: [</text>
+          <text x="70" y="155" fill="#93D500" font-size="9" font-family="'JetBrains Mono',monospace">{ name: "田中", role: "リーダー" }, { name: "佐藤", role: "デザイン" }, ... ] }</text>
+
+          <!-- Step 5: DOM update -->
+          <rect x="30" y="185" width="290" height="55" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="175" y="205" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">⑤ response.json() でオブジェクトに変換</text>
+          <text x="175" y="223" text-anchor="middle" fill="#e0e0e0" font-size="8" font-family="'JetBrains Mono',monospace">const data = await response.json()</text>
+          <text x="175" y="235" text-anchor="middle" fill="#888" font-size="7">JSON文字列 → JavaScriptオブジェクト</text>
+
+          <!-- Arrow 5→6 -->
+          <line x1="320" y1="212" x2="365" y2="212" stroke="#76B900" stroke-width="2" marker-end="url(#gf1)"/>
+
+          <!-- Step 6: innerHTML -->
+          <rect x="365" y="185" width="305" height="55" rx="8" fill="#76B900"/>
+          <text x="517" y="205" text-anchor="middle" fill="white" font-weight="700" font-size="10">⑥ ブラウザのJSが innerHTML で書き換え</text>
+          <text x="517" y="223" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="8" font-family="'JetBrains Mono',monospace">document.getElementById('result').innerHTML = html</text>
+          <text x="517" y="235" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="7">→ 画面にメンバー一覧が表示される！</text>
+
+          <defs>
+            <marker id="gf1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="gf2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="gf3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
         Q1. ボタンを押す前と押した後で、画面の表示はどう変わりましたか？<br>
         Q2. ブラウザで <code>http://localhost:3000/api/members</code> に直接アクセスすると何が表示されますか？<br>
@@ -867,26 +1808,35 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
   <span class="kw">&lt;h1&gt;</span>POST Demo<span class="kw">&lt;/h1&gt;</span>
+  <span class="cmt">&lt;!-- ユーザーが名前を入力するテキストボックス --&gt;</span>
   <span class="kw">&lt;input</span> type=<span class="str">"text"</span> id=<span class="str">"nameInput"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
+  <span class="cmt">&lt;!-- ユーザーがメッセージを入力するテキストボックス --&gt;</span>
   <span class="kw">&lt;input</span> type=<span class="str">"text"</span> id=<span class="str">"msgInput"</span> placeholder=<span class="str">"メッセージを入力"</span><span class="kw">&gt;</span>
+  <span class="cmt">&lt;!-- ボタンをクリックすると sendMessage() 関数が呼ばれる --&gt;</span>
   <span class="kw">&lt;button</span> onclick=<span class="str">"sendMessage()"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
 
+  <span class="cmt">&lt;!-- サーバからの応答がここに表示される --&gt;</span>
   <span class="kw">&lt;div</span> id=<span class="str">"response"</span><span class="kw">&gt;</span>
     <span class="kw">&lt;p&gt;</span>まだ送信されていません<span class="kw">&lt;/p&gt;</span>
   <span class="kw">&lt;/div&gt;</span>
 
   <span class="kw">&lt;script&gt;</span>
+    <span class="cmt">// 送信ボタンが押されたときに実行される関数</span>
     <span class="kw">async function</span> <span class="fn">sendMessage</span>() {
+      <span class="cmt">// 入力欄から名前とメッセージの値を取得する</span>
       <span class="kw">const</span> name <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'nameInput'</span>).value;
       <span class="kw">const</span> msg  <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">'msgInput'</span>).value;
 
+      <span class="cmt">// サーバの /api/message にPOSTリクエストを送る</span>
       <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/message'</span>, {
-        method: <span class="str">'POST'</span>,
-        headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
-        body: <span class="fn">JSON.stringify</span>({ name: name, message: msg })
+        method: <span class="str">'POST'</span>,                                       <span class="cmt">// HTTPメソッドをPOSTに指定</span>
+        headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },     <span class="cmt">// 送るデータはJSON形式ですよ、とサーバに伝える</span>
+        body: <span class="fn">JSON.stringify</span>({ name: name, message: msg })   <span class="cmt">// JavaScriptオブジェクトをJSON文字列に変換して送る</span>
       });
 
+      <span class="cmt">// サーバからの応答をJSONとして受け取る</span>
       <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+      <span class="cmt">// id="response" の要素に、サーバからの返事と受信時刻を表示する</span>
       document.<span class="fn">getElementById</span>(<span class="str">'response'</span>).innerHTML <span class="op">=</span>
         <span class="str">'&lt;p&gt;サーバ応答: '</span> <span class="op">+</span> data.reply <span class="op">+</span> <span class="str">'&lt;/p&gt;'</span> <span class="op">+</span>
         <span class="str">'&lt;p&gt;受信時刻: '</span> <span class="op">+</span> data.receivedAt <span class="op">+</span> <span class="str">'&lt;/p&gt;'</span>;
@@ -901,18 +1851,19 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <li>以下のコードをコピーして貼り付け、保存する</li>
       </ol>
       <pre><span class="code-label">JavaScript ── server2.js</span>
-<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);  <span class="cmt">// Express ライブラリを読み込む</span>
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();              <span class="cmt">// Express アプリケーションを作成する</span>
 
-<span class="cmt">// JSONのPOSTデータを受け取るためのミドルウェア</span>
+<span class="cmt">// ★重要: POSTで送られたJSONデータを req.body で読めるようにする</span>
+<span class="cmt">// この行がないと req.body は undefined（未定義）になる</span>
 app.<span class="fn">use</span>(<span class="fn">express.json</span>());
 
-<span class="cmt">// 静的ファイル配信</span>
+<span class="cmt">// publicフォルダの中身をそのまま配信する（HTMLやCSSなど）</span>
 app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
 
-<span class="cmt">// GET: メンバー一覧API（コード体験1と同じ）</span>
+<span class="cmt">// GET: /api/members にアクセスされたらメンバー一覧をJSONで返す</span>
 app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span class="kw">function</span>(req, res) {
-  res.<span class="fn">json</span>({
+  res.<span class="fn">json</span>({                          <span class="cmt">// JSONデータをレスポンスとして返す</span>
     team: <span class="str">'Webプログラミングチーム'</span>,
     members: [
       { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
@@ -923,16 +1874,16 @@ app.<span class="fn">get</span>(<span class="str">'/api/members'</span>, <span c
   });
 });
 
-<span class="cmt">// POST: メッセージ受信API</span>
+<span class="cmt">// POST: /api/message にデータが送られてきたら受け取って応答する</span>
 app.<span class="fn">post</span>(<span class="str">'/api/message'</span>, <span class="kw">function</span>(req, res) {
-  <span class="fn">console.log</span>(<span class="str">'受信:'</span>, req.body);
-  res.<span class="fn">json</span>({
-    reply: req.body.name <span class="op">+</span> <span class="str">'さん、メッセージ「'</span> <span class="op">+</span> req.body.message <span class="op">+</span> <span class="str">'」を受け取りました！'</span>,
-    receivedAt: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>(<span class="str">'ja-JP'</span>)
+  <span class="fn">console.log</span>(<span class="str">'受信:'</span>, req.body);   <span class="cmt">// 受け取ったデータをターミナルに表示（デバッグ用）</span>
+  res.<span class="fn">json</span>({                          <span class="cmt">// クライアントにJSON形式で応答を返す</span>
+    reply: req.body.name <span class="op">+</span> <span class="str">'さん、メッセージ「'</span> <span class="op">+</span> req.body.message <span class="op">+</span> <span class="str">'」を受け取りました！'</span>,  <span class="cmt">// 受け取った名前とメッセージを使って返事を作る</span>
+    receivedAt: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>(<span class="str">'ja-JP'</span>)  <span class="cmt">// 現在の日時を日本語形式で追加する</span>
   });
 });
 
-app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {      <span class="cmt">// ポート3000でサーバを起動する</span>
   <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
 });</pre>
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
@@ -945,6 +1896,149 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <li>VS Code のターミナルにも <code>受信: { name: ..., message: ... }</code> と表示される</li>
         <li>確認が終わったら <kbd>Ctrl+C</kbd> でサーバを停止</li>
       </ol>
+      <!-- Browser Mockup: POST Demo -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">ブラウザ実行画面（入力して送信 → サーバが応答）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 340" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- === Before (left) === -->
+          <text x="170" y="22" text-anchor="middle" fill="#888" font-size="11" font-weight="600">入力画面</text>
+          <rect x="20" y="30" width="300" height="280" rx="10" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <rect x="20" y="30" width="300" height="28" rx="10" fill="#e8e8e8"/>
+          <rect x="20" y="48" width="300" height="10" fill="#e8e8e8"/>
+          <circle cx="36" cy="44" r="5" fill="#ff5f57"/><circle cx="52" cy="44" r="5" fill="#ffbd2e"/><circle cx="68" cy="44" r="5" fill="#28c840"/>
+          <rect x="90" y="37" width="210" height="14" rx="3" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
+          <text x="100" y="48" fill="#666" font-size="7" font-family="'JetBrains Mono',monospace">localhost:3000/post.html</text>
+          <!-- Page content -->
+          <text x="170" y="85" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">POST Demo</text>
+          <!-- Input fields -->
+          <rect x="50" y="95" width="240" height="24" rx="4" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <text x="60" y="112" fill="#333" font-size="9">田中太郎</text>
+          <rect x="50" y="125" width="240" height="24" rx="4" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <text x="60" y="142" fill="#333" font-size="9">こんにちは！</text>
+          <rect x="50" y="158" width="70" height="24" rx="6" fill="#76B900"/>
+          <text x="85" y="174" text-anchor="middle" fill="white" font-size="9" font-weight="600">送信</text>
+          <rect x="50" y="195" width="240" height="35" rx="6" fill="#f8f8f8" stroke="#eee" stroke-width="1"/>
+          <text x="170" y="217" text-anchor="middle" fill="#999" font-size="9">まだ送信されていません</text>
+
+          <!-- Arrow -->
+          <text x="350" y="175" text-anchor="middle" fill="#76B900" font-size="28" font-weight="700">→</text>
+          <text x="350" y="195" text-anchor="middle" fill="#76B900" font-size="10" font-weight="600">送信!</text>
+
+          <!-- === After (right) === -->
+          <text x="530" y="22" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600">送信後の画面</text>
+          <rect x="380" y="30" width="300" height="280" rx="10" fill="#fff" stroke="#76B900" stroke-width="2"/>
+          <rect x="380" y="30" width="300" height="28" rx="10" fill="#e8e8e8"/>
+          <rect x="380" y="48" width="300" height="10" fill="#e8e8e8"/>
+          <circle cx="396" cy="44" r="5" fill="#ff5f57"/><circle cx="412" cy="44" r="5" fill="#ffbd2e"/><circle cx="428" cy="44" r="5" fill="#28c840"/>
+          <rect x="450" y="37" width="210" height="14" rx="3" fill="#fff" stroke="#ccc" stroke-width="0.5"/>
+          <text x="460" y="48" fill="#666" font-size="7" font-family="'JetBrains Mono',monospace">localhost:3000/post.html</text>
+          <text x="530" y="85" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">POST Demo</text>
+          <rect x="410" y="95" width="240" height="24" rx="4" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <text x="420" y="112" fill="#333" font-size="9">田中太郎</text>
+          <rect x="410" y="125" width="240" height="24" rx="4" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+          <text x="420" y="142" fill="#333" font-size="9">こんにちは！</text>
+          <rect x="410" y="158" width="70" height="24" rx="6" fill="#76B900"/>
+          <text x="445" y="174" text-anchor="middle" fill="white" font-size="9" font-weight="600">送信</text>
+          <!-- Response display -->
+          <rect x="410" y="195" width="240" height="55" rx="6" fill="#f0fff0" stroke="#76B900" stroke-width="1"/>
+          <text x="420" y="213" fill="#333" font-size="9">サーバ応答: 田中太郎さん、</text>
+          <text x="420" y="227" fill="#333" font-size="9">メッセージ「こんにちは！」を受け取りました！</text>
+          <text x="420" y="243" fill="#888" font-size="8">受信時刻: 2026/5/13 14:40:00</text>
+
+          <!-- Terminal output at bottom -->
+          <rect x="380" y="260" width="300" height="40" rx="6" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+          <text x="395" y="275" fill="#4FC3F7" font-size="8" font-family="'JetBrains Mono',monospace">// VS Code ターミナル:</text>
+          <text x="395" y="290" fill="#93D500" font-size="8" font-family="'JetBrains Mono',monospace">受信: {name:"田中太郎",message:"こんにちは！"}</text>
+        </svg>
+      </div>
+
+      <!-- POST Data Flow Diagram -->
+      <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">コード体験2のデータフロー（POSTリクエスト）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 280" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+
+          <!-- Row 1: Client side -->
+          <text x="20" y="20" fill="#76B900" font-weight="700" font-size="11">クライアント（ブラウザ）側</text>
+
+          <rect x="20" y="30" width="120" height="50" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="80" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">① 入力値を取得</text>
+          <text x="80" y="66" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">getElementById</text>
+          <text x="80" y="76" text-anchor="middle" fill="#888" font-size="6">.value で値を取り出す</text>
+
+          <line x1="140" y1="55" x2="165" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#pf1)"/>
+
+          <rect x="165" y="30" width="140" height="50" rx="8" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="235" y="50" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="9">② JSON に変換</text>
+          <text x="235" y="66" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">JSON.stringify()</text>
+          <text x="235" y="76" text-anchor="middle" fill="#888" font-size="6">オブジェクト → JSON文字列</text>
+
+          <line x1="305" y1="55" x2="330" y2="55" stroke="#FFB800" stroke-width="2" marker-end="url(#pf2)"/>
+
+          <rect x="330" y="30" width="160" height="50" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="410" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">③ fetch() で POST 送信</text>
+          <text x="410" y="66" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">method:'POST', body:json</text>
+          <text x="410" y="76" text-anchor="middle" fill="#888" font-size="6">Content-Type: application/json</text>
+
+          <!-- Network arrow (animated) -->
+          <line x1="490" y1="55" x2="490" y2="110" stroke="#FFB800" stroke-width="3" stroke-dasharray="6,4">
+            <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1s" repeatCount="indefinite"/>
+          </line>
+          <text x="510" y="88" fill="#FFB800" font-size="8" font-weight="600">ネットワーク</text>
+          <text x="510" y="100" fill="#FFB800" font-size="8">↓ POST</text>
+
+          <!-- Row 2: Server side -->
+          <text x="20" y="125" fill="#4FC3F7" font-weight="700" font-size="11">サーバ（Express）側</text>
+
+          <rect x="330" y="115" width="160" height="50" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="410" y="135" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">④ サーバが受信</text>
+          <text x="410" y="151" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">app.post('/api/message')</text>
+          <text x="410" y="161" text-anchor="middle" fill="#888" font-size="6">req.body でデータにアクセス</text>
+
+          <line x1="330" y1="140" x2="305" y2="140" stroke="#4FC3F7" stroke-width="2" marker-end="url(#pf3)"/>
+
+          <rect x="145" y="115" width="160" height="50" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="225" y="135" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">⑤ 応答を組み立てる</text>
+          <text x="225" y="151" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">res.json({reply:...})</text>
+          <text x="225" y="161" text-anchor="middle" fill="#888" font-size="6">名前＋メッセージ＋時刻を返す</text>
+
+          <!-- Response arrow back (animated) -->
+          <line x1="145" y1="140" x2="80" y2="140" stroke="#4FC3F7" stroke-width="3" stroke-dasharray="6,4">
+            <animate attributeName="stroke-dashoffset" from="0" to="24" dur="1s" repeatCount="indefinite"/>
+          </line>
+          <line x1="80" y1="140" x2="80" y2="185" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="50" y="158" fill="#4FC3F7" font-size="8" font-weight="600">↓ JSON応答</text>
+
+          <!-- Row 3: Display result -->
+          <text x="20" y="200" fill="#76B900" font-weight="700" font-size="11">結果表示</text>
+
+          <rect x="20" y="210" width="200" height="50" rx="8" fill="#76B900"/>
+          <text x="120" y="230" text-anchor="middle" fill="white" font-weight="700" font-size="9">⑥ innerHTML で画面に表示</text>
+          <text x="120" y="246" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="7">サーバの応答を画面に反映する</text>
+
+          <rect x="240" y="210" width="200" height="50" rx="8" fill="#141414" stroke="#93D500" stroke-width="1.5"/>
+          <text x="340" y="230" text-anchor="middle" fill="#93D500" font-weight="700" font-size="9">⑦ ターミナルにも表示</text>
+          <text x="340" y="246" text-anchor="middle" fill="#ccc" font-size="7" font-family="'JetBrains Mono',monospace">console.log('受信:', req.body)</text>
+
+          <!-- Comparison box -->
+          <rect x="470" y="115" width="210" height="145" rx="8" fill="#111" stroke="#FFB800" stroke-width="1.5"/>
+          <text x="575" y="135" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">GET vs POST の違い</text>
+          <text x="485" y="155" fill="#76B900" font-size="9" font-weight="600">GET（体験1）:</text>
+          <text x="485" y="170" fill="#ccc" font-size="8">サーバからデータを「もらう」</text>
+          <text x="485" y="185" fill="#ccc" font-size="8">URLだけでリクエスト</text>
+          <text x="485" y="205" fill="#4FC3F7" font-size="9" font-weight="600">POST（体験2）:</text>
+          <text x="485" y="220" fill="#ccc" font-size="8">サーバにデータを「送る」</text>
+          <text x="485" y="235" fill="#ccc" font-size="8">body にJSONデータを添付</text>
+          <text x="485" y="250" fill="#ccc" font-size="8">Content-Type ヘッダーが必要</text>
+
+          <defs>
+            <marker id="pf1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="pf2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="pf3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
         Q1. 送信ボタンを押した後、画面にどんな応答が表示されましたか？<br>
         Q2. VS Code のターミナルに何が表示されましたか？（<code>console.log</code> の出力）<br>
@@ -967,7 +2061,16 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
       <div class="section-num" style="background:#4A7A00">4</div>
       <h2>グループ口頭試問</h2>
     </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+    <p style="margin-bottom:1rem">3〜4人のグループを組んで、<strong>コード体験1・2で動かしたコード</strong>を題材に、以下の2フェーズで進めてください。</p>
+
+    <div style="background:#1A1A1A;border:1px solid #4FC3F7;border-radius:10px;padding:1rem;margin-bottom:1rem;font-size:0.9rem">
+      <p style="color:#4FC3F7;font-weight:700;margin-bottom:0.3rem">題材となるコード</p>
+      <ul style="padding-left:1.5rem;color:#ccc;line-height:1.8">
+        <li><strong>コード体験1:</strong> <code>server.js</code>（GETでメンバー取得） + <code>public/index.html</code>（fetchで表示）</li>
+        <li><strong>コード体験2:</strong> <code>server2.js</code>（POSTでメッセージ受信） + <code>public/post.html</code>（データ送信）</li>
+      </ul>
+      <p style="color:#888;margin-top:0.5rem">→ 実際に動かしたコードについて「なぜ？」「変えたら？」を議論します。</p>
+    </div>
 
     <!-- Phase 1 -->
     <div class="card" style="border-left:4px solid #4FC3F7">
@@ -975,18 +2078,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <span class="tag tag-group">Phase 1</span>
         <h3>質問を考える（個人・5分）</h3>
       </div>
-      <p>コード体験で動かしたコードを元に、<strong>「この仕組みはなぜ必要？」「ここを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
+      <p>コード体験で動かしたコード（<code>server.js</code>、<code>index.html</code>、<code>server2.js</code>、<code>post.html</code>）を元に、<strong>「この仕組みはなぜ必要？」「ここを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
       <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
       <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（コード体験のコードを使って）</p>
         <table>
-          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
-          <tr><td><code>fetch('/api/members')</code> のURLを <code>'/api/xxx'</code> にする</td><td>「何が起こる？ なぜ？」</td></tr>
-          <tr><td><code>app.use(express.json())</code> の行を削除する</td><td>「POSTでデータを送るとどうなる？」</td></tr>
-          <tr><td><code>response.json()</code> の代わりに <code>response.text()</code> にする</td><td>「data にはどんな値が入る？」</td></tr>
-          <tr><td><code>method: 'POST'</code> を <code>'GET'</code> にする</td><td>「サーバは受け取れる？ なぜ？」</td></tr>
-          <tr><td>GETリクエストでデータを取得する場合とPOSTの違い</td><td>「どちらを使うべき？ その判断基準は？」</td></tr>
-          <tr><td><code>JSON.stringify()</code> を削除する</td><td>「サーバは正しくデータを受け取れる？」</td></tr>
+          <tr><th style="width:15%">対象コード</th><th style="width:35%">変更内容</th><th>質問例</th></tr>
+          <tr><td>index.html</td><td><code>fetch('/api/members')</code> のURLを <code>'/api/xxx'</code> にする</td><td>「何が起こる？ なぜ？」</td></tr>
+          <tr><td>server2.js</td><td><code>app.use(express.json())</code> の行を削除する</td><td>「POSTでデータを送るとどうなる？」</td></tr>
+          <tr><td>index.html</td><td><code>response.json()</code> の代わりに <code>response.text()</code> にする</td><td>「data にはどんな値が入る？」</td></tr>
+          <tr><td>post.html</td><td><code>method: 'POST'</code> を <code>'GET'</code> にする</td><td>「サーバは受け取れる？ なぜ？」</td></tr>
+          <tr><td>両方</td><td>GETリクエストでデータを取得する場合とPOSTの違い</td><td>「どちらを使うべき？ その判断基準は？」</td></tr>
+          <tr><td>post.html</td><td><code>JSON.stringify()</code> を削除する</td><td>「サーバは正しくデータを受け取れる？」</td></tr>
         </table>
       </div>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
@@ -1305,6 +2408,22 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
     </div>
 
     <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> やってみよう解答（console.log('E: 最後') を追加した場合）</summary>
+      <div class="answer-content">
+        <p><strong>正解の出力順: A → B → D → E → C</strong></p>
+        <table>
+          <tr><th>順番</th><th>出力</th><th>理由</th></tr>
+          <tr><td>1</td><td>A: fetch開始前</td><td>同期処理なのでそのまま実行される</td></tr>
+          <tr><td>2</td><td>B: fetch実行</td><td>getData() が呼ばれ、await の前まで実行される</td></tr>
+          <tr><td>3</td><td>D: fetch呼び出し後</td><td>await でサーバ応答を待つ間、関数の外に戻って実行される</td></tr>
+          <tr><td>4</td><td>E: 最後</td><td>D の次の行なので、そのまま続けて実行される（同期処理）</td></tr>
+          <tr><td>5</td><td>C: データ受信 ...</td><td>サーバから応答が届いた後に、getData() の続きが再開して実行される</td></tr>
+        </table>
+        <p style="margin-top:0.5rem;color:#888">E は D と同じく「関数の外の処理」なので、await 中に D → E の順に実行されます。C はサーバの応答後なので最後です。</p>
+      </div>
+    </details>
+
+    <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 解答</summary>
       <div class="answer-content">
         <table>
@@ -1340,6 +2459,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
       </div>
     </details>
 
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 やってみよう解答（空データ送信時）</summary>
+      <div class="answer-content">
+        <p><strong>空の名前・空のメッセージで送信した場合:</strong></p>
+        <ul class="point-list">
+          <li><strong>画面の表示:</strong> 「サーバ応答: さん、メッセージ「」を受け取りました！」と表示される。名前もメッセージも空文字になる。</li>
+          <li><strong>ターミナルの表示:</strong> <code>受信: { name: '', message: '' }</code>（空文字列）</li>
+        </ul>
+        <p style="margin-top:0.5rem;color:#888">入力欄が空のとき <code>.value</code> は空文字列 <code>""</code>（undefined ではない）を返します。サーバ側ではエラーにならず、空文字のまま処理されます。実際のアプリでは「名前を入力してください」などのバリデーション（入力チェック）が必要です。</p>
+      </div>
+    </details>
+
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="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"></div>
@@ -1371,6 +2502,338 @@ document.querySelectorAll('pre').forEach(function(pre) {
   });
   pre.appendChild(btn);
 });
+
+// ============ ANIMATION CONTROLS ============
+document.querySelectorAll('.anim-controls').forEach(function(ctrl) {
+  var targetId = ctrl.getAttribute('data-target');
+  var svg = document.getElementById(targetId);
+  if (!svg) return;
+  var steps = parseInt(ctrl.getAttribute('data-steps')) || 5;
+  var dur = parseFloat(ctrl.getAttribute('data-dur')) || 8;
+  var stepDur = dur / steps;
+
+  var playBtn = ctrl.querySelector('.anim-play');
+  var pauseBtn = ctrl.querySelector('.anim-pause');
+  var prevBtn = ctrl.querySelector('.anim-prev');
+  var nextBtn = ctrl.querySelector('.anim-next');
+  var stepLabel = ctrl.querySelector('.step-num');
+
+  var anims = svg.querySelectorAll('animate');
+  var isPlaying = true;
+  var currentStep = 0;
+  var manualTimer = null;
+
+  function setAutoPlay() {
+    isPlaying = true;
+    playBtn.classList.add('active');
+    pauseBtn.classList.remove('active');
+    stepLabel.textContent = '-';
+    anims.forEach(function(a) {
+      a.setAttribute('repeatCount', 'indefinite');
+      if (a.beginElement) { try { a.beginElement(); } catch(e) {} }
+    });
+    // Reset SVG to restart animations
+    svg.pauseAnimations();
+    svg.setCurrentTime(0);
+    svg.unpauseAnimations();
+    if (manualTimer) { clearInterval(manualTimer); manualTimer = null; }
+  }
+
+  function goToStep(step) {
+    isPlaying = false;
+    playBtn.classList.remove('active');
+    pauseBtn.classList.add('active');
+    currentStep = ((step % steps) + steps) % steps;
+    stepLabel.textContent = (currentStep === steps - 1) ? '4' : (currentStep + 1);
+    if (manualTimer) { clearInterval(manualTimer); manualTimer = null; }
+    // Stop animations and set time manually
+    anims.forEach(function(a) {
+      a.setAttribute('repeatCount', '1');
+    });
+    svg.setCurrentTime(currentStep * stepDur + 0.01);
+    svg.pauseAnimations();
+  }
+
+  playBtn.addEventListener('click', function() { setAutoPlay(); });
+  pauseBtn.addEventListener('click', function() {
+    if (isPlaying) {
+      isPlaying = false;
+      playBtn.classList.remove('active');
+      pauseBtn.classList.add('active');
+      svg.pauseAnimations();
+      var t = svg.getCurrentTime() % dur;
+      currentStep = Math.floor(t / stepDur);
+      stepLabel.textContent = (currentStep >= steps - 1) ? '4' : (currentStep + 1);
+    }
+  });
+  nextBtn.addEventListener('click', function() { goToStep(currentStep + 1); });
+  prevBtn.addEventListener('click', function() { goToStep(currentStep - 1); });
+});
+
+// ============ ASYNC/AWAIT TIMELINE (JS-controlled) ============
+(function() {
+  var step = 0;
+  var totalSteps = 5;
+  var autoTimer = null;
+  var lines = {
+    L1: document.getElementById('aL1'),
+    L2: document.getElementById('aL2'),
+    L3: document.getElementById('aL3'),
+    L4: document.getElementById('aL4'),
+    L5: document.getElementById('aL5'),
+    L6: document.getElementById('aL6'),
+    L7: document.getElementById('aL7'),
+    L8: document.getElementById('aL8')
+  };
+  var consoleEl = document.getElementById('asyncConsole');
+  var explainEl = document.getElementById('asyncExplain');
+  var labelEl   = document.getElementById('asyncStepLabel');
+  if (!consoleEl) return;
+
+  var steps = [
+    {
+      highlight: ['L1'],
+      highlightColor: '#76B900',
+      console: '<div style="color:#76B900"><strong>A: fetch開始前</strong></div>',
+      explainBg: '#0a1a0a', explainBorder: '#76B900',
+      explain: '<div style="color:#76B900;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 1: console.log(\'A\') を実行</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">プログラムは<strong>上から順番に</strong>実行されるので、まず1行目の <code style="color:#76B900">console.log(\'A\')</code> が実行されます。</div>'
+        + '<div style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ コンソールに「A: fetch開始前」と表示される。次は <code>getData()</code> の呼び出しに進む。</div>'
+    },
+    {
+      highlight: ['L7','L2','L3'],
+      highlightColor: '#FFB800',
+      console: '<div style="color:#76B900">A: fetch開始前</div><div style="color:#FFB800"><strong>B: fetch実行</strong></div>',
+      explainBg: '#1a1a0a', explainBorder: '#FFB800',
+      explain: '<div style="color:#FFB800;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 2: getData() が呼ばれ → 関数の中に入る → B を出力</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8"><code>getData()</code> が呼ばれて、関数の中に入ります。<code style="color:#FFB800">console.log(\'B\')</code> が実行されます。</div>'
+        + '<div style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ コンソールに「B: fetch実行」が追加される。次の行は <code style="color:#FF5252">await fetch(...)</code>... ここで大事なことが起きます！</div>'
+    },
+    {
+      highlight: ['L4'],
+      highlightColor: '#FF5252',
+      dimLines: ['L5','L6'],
+      console: '<div style="color:#76B900">A: fetch開始前</div><div style="color:#FFB800">B: fetch実行</div>'
+        + '<div style="color:#FF5252;border:1px solid #FF5252;border-radius:6px;padding:4px 8px;margin:4px 0;animation:pulse 1.5s infinite">⏳ await中... サーバにリクエスト送信済み。返答を待っている...</div>',
+      explainBg: '#1a0a0a', explainBorder: '#FF5252',
+      explain: '<div style="color:#FF5252;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 3: ★ await に到達！ 関数の中の実行が一時停止される</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8"><code style="color:#FF5252">await fetch(\'/api/items\')</code> に到達しました。サーバにリクエストを送りましたが、<strong>返答が届くには時間がかかります</strong>（数百ミリ秒）。</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8;margin-top:0.5rem">JavaScript は<strong>「この関数の中の実行は一旦やめて、関数の外に戻ろう」</strong>と判断します。<br>つまり <strong>C の行はまだ実行されません</strong>。関数 getData() は一時停止され、プログラムの実行位置は関数の外（<code>getData()</code> の次の行）に飛びます。</div>'
+        + '<div style="background:#2a0a0a;border-radius:6px;padding:0.5rem 0.8rem;margin-top:0.5rem;color:#FF5252;font-weight:600;font-size:0.9rem">💡 たとえるなら: レストランで料理を注文した直後。料理はまだ届かないけど、待っている間にスマホを見られる。</div>'
+    },
+    {
+      highlight: ['L8'],
+      highlightColor: '#4FC3F7',
+      dimLines: ['L4','L5','L6'],
+      console: '<div style="color:#76B900">A: fetch開始前</div><div style="color:#FFB800">B: fetch実行</div>'
+        + '<div style="color:#666;font-size:0.8rem;padding:2px 0">  (await中... まだサーバの返答は届いていない)</div>'
+        + '<div style="color:#4FC3F7"><strong>D: fetch呼び出し後</strong></div>',
+      explainBg: '#0a0a1a', explainBorder: '#4FC3F7',
+      explain: '<div style="color:#4FC3F7;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 4: 関数の外に戻り、console.log(\'D\') を実行</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">getData() が一時停止されたので、プログラムは<strong>関数の外に戻って</strong>次の行に進みます。<code style="color:#4FC3F7">console.log(\'D\')</code> が実行されます。</div>'
+        + '<div style="color:#FFB800;font-size:0.95rem;line-height:1.8;margin-top:0.5rem"><strong>注目！</strong> コード上は C → D の順に書かれているのに、<strong>D が先に出力されました！</strong><br>これは await でサーバの返答を待っている間、関数の外の処理が先に進んだからです。</div>'
+        + '<div style="background:#0a0a2a;border-radius:6px;padding:0.5rem 0.8rem;margin-top:0.5rem;color:#4FC3F7;font-size:0.9rem">💡 たとえるなら: 料理を待っている間にスマホを見ている（= D）。料理はまだ届いていない（= C はまだ）。</div>'
+    },
+    {
+      highlight: ['L5','L6'],
+      highlightColor: '#93D500',
+      console: '<div style="color:#76B900">A: fetch開始前</div><div style="color:#FFB800">B: fetch実行</div>'
+        + '<div style="color:#4FC3F7">D: fetch呼び出し後</div>'
+        + '<div style="color:#93D500;border:2px solid #93D500;border-radius:6px;padding:4px 8px;margin:4px 0"><strong>C: データ受信</strong> {items: [...]}</div>',
+      explainBg: '#0a1a0a', explainBorder: '#93D500',
+      explain: '<div style="color:#93D500;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 5: サーバから返答が届いた！ getData() の続きが再開 → C を出力</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">サーバからJSONデータが届きました。一時停止していた getData() の続きが再開します。<br><code>response.json()</code> でデータを変換し、最後に <code style="color:#93D500">console.log(\'C\')</code> が実行されます。</div>'
+        + '<div style="background:#0a1a0a;border:2px solid #93D500;border-radius:8px;padding:0.6rem 0.8rem;margin-top:0.8rem">'
+        + '<div style="color:#93D500;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem">最終結果: A → B → D → C</div>'
+        + '<div style="color:#e0e0e0;font-size:0.9rem">コードの見た目の順番（A→B→C→D）とは<strong>違う順番</strong>で出力されます。<br><code>await</code> でサーバの返答を待っている間に、関数の外の D が先に実行されたからです。</div>'
+        + '</div>'
+        + '<div style="background:#0a2a0a;border-radius:6px;padding:0.5rem 0.8rem;margin-top:0.5rem;color:#93D500;font-size:0.9rem">💡 たとえるなら: 料理が届いた（= C）！ スマホ（= D）はもう見終わっている。</div>'
+    }
+  ];
+
+  function render() {
+    var s = steps[step];
+    labelEl.textContent = 'Step ' + (step + 1) + ' / ' + totalSteps;
+
+    // Reset all line styles
+    Object.keys(lines).forEach(function(k) {
+      if (lines[k]) {
+        lines[k].style.background = 'none';
+        lines[k].style.border = 'none';
+        lines[k].style.opacity = '1';
+      }
+    });
+
+    // Dim lines
+    if (s.dimLines) {
+      s.dimLines.forEach(function(id) {
+        if (lines[id]) lines[id].style.opacity = '0.3';
+      });
+    }
+
+    // Highlight lines
+    s.highlight.forEach(function(id) {
+      if (lines[id]) {
+        lines[id].style.background = s.highlightColor + '18';
+        lines[id].style.border = '2px solid ' + s.highlightColor;
+        lines[id].style.opacity = '1';
+      }
+    });
+
+    // Console
+    consoleEl.innerHTML = s.console;
+
+    // Explanation
+    explainEl.style.background = s.explainBg;
+    explainEl.style.border = '2px solid ' + s.explainBorder;
+    explainEl.innerHTML = s.explain;
+  }
+
+  function goTo(n) {
+    step = ((n % totalSteps) + totalSteps) % totalSteps;
+    render();
+  }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(function() { goTo(step + 1); }, 3000);
+    document.getElementById('asyncPlayBtn').style.background = '#76B900';
+    document.getElementById('asyncPauseBtn').style.background = 'rgba(255,255,255,0.08)';
+  }
+
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    document.getElementById('asyncPlayBtn').style.background = 'rgba(255,255,255,0.08)';
+    document.getElementById('asyncPauseBtn').style.background = '#76B900';
+    document.getElementById('asyncPauseBtn').style.color = 'white';
+    document.getElementById('asyncPauseBtn').style.borderColor = '#76B900';
+  }
+
+  document.getElementById('asyncPlayBtn').addEventListener('click', startAuto);
+  document.getElementById('asyncPauseBtn').addEventListener('click', stopAuto);
+  document.getElementById('asyncNextBtn').addEventListener('click', function() { stopAuto(); goTo(step + 1); });
+  document.getElementById('asyncPrevBtn').addEventListener('click', function() { stopAuto(); goTo(step - 1); });
+
+  // Add pulse animation CSS
+  var style = document.createElement('style');
+  style.textContent = '@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}';
+  document.head.appendChild(style);
+
+  render();
+  startAuto();
+})();
+
+// ============ FETCH CONCEPT ANIMATION ============
+(function() {
+  var step = 0, totalSteps = 4, autoTimer = null;
+  var arrowEl = document.getElementById('fcArrowArea');
+  var analogyEl = document.getElementById('fcAnalogy');
+  var explainEl = document.getElementById('fcExplain');
+  var labelEl = document.getElementById('fcStepLabel');
+  if (!arrowEl) return;
+
+  var steps = [
+    {
+      arrow: '<div style="font-size:1.8rem;animation:bounceRight 1s infinite">📨</div>'
+        + '<div style="display:flex;align-items:center;gap:0.3rem">'
+        + '<div style="flex:1;height:4px;background:linear-gradient(90deg,#76B900,#FFB800);border-radius:2px;animation:growRight 1s ease-out"></div>'
+        + '<div style="color:#FFB800;font-size:1.2rem">→</div></div>'
+        + '<div style="color:#FFB800;font-weight:700;font-size:0.95rem">リクエスト送信</div>'
+        + '<div style="color:#888;font-size:0.8rem">「このデータをください」</div>',
+      analogy: '<div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.5rem 1rem;display:inline-block">'
+        + '<span style="font-size:1.1rem">🍽️</span> <span style="color:#FFB800;font-weight:600">たとえ:</span> <span style="color:#e0e0e0">レストランで「カレーください」と注文する</span></div>',
+      bg: '#0a1a0a', border: '#76B900',
+      explain: '<div style="color:#76B900;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 1: リクエストを送る</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">ブラウザの JavaScript が <code style="color:#76B900;font-size:1rem">fetch(\'/api/members\')</code> を実行すると、<strong>サーバに「このデータをください」というリクエスト（お願い）</strong>が送られます。</div>'
+        + '<div style="color:#888;font-size:0.85rem;margin-top:0.4rem">この時点では、まだデータは手元にありません。リクエストを送っただけです。</div>'
+    },
+    {
+      arrow: '<div style="font-size:1.5rem;animation:pulse 1.5s infinite">⏳</div>'
+        + '<div style="color:#FF5252;font-weight:700;font-size:0.95rem">サーバが処理中...</div>'
+        + '<div style="width:80%;height:6px;background:#222;border-radius:3px;overflow:hidden;margin-top:0.3rem">'
+        + '<div style="width:60%;height:100%;background:#FF5252;border-radius:3px;animation:loading 1.5s infinite"></div></div>'
+        + '<div style="color:#888;font-size:0.8rem;margin-top:0.3rem">ネットワーク通信には時間がかかる</div>',
+      analogy: '<div style="background:#1a0a0a;border:1px solid #FF5252;border-radius:8px;padding:0.5rem 1rem;display:inline-block">'
+        + '<span style="font-size:1.1rem">👨‍🍳</span> <span style="color:#FF5252;font-weight:600">たとえ:</span> <span style="color:#e0e0e0">キッチンで料理を作っている（待ち時間が発生）</span></div>',
+      bg: '#1a0a0a', border: '#FF5252',
+      explain: '<div style="color:#FF5252;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 2: サーバが処理する（待ち時間が発生）</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">サーバはリクエストを受け取り、データベースからデータを集めたり、JSONを組み立てたりしています。<br>ネットワークを介した通信なので、<strong>結果が届くまでに時間がかかります</strong>（数十〜数百ミリ秒）。</div>'
+        + '<div style="color:#FF5252;font-size:0.9rem;margin-top:0.4rem;font-weight:600">→ この「待ち時間」があるから、JavaScript には await（待つ）という仕組みが必要なのです。</div>'
+    },
+    {
+      arrow: '<div style="font-size:1.8rem;animation:bounceLeft 1s infinite">📦</div>'
+        + '<div style="display:flex;align-items:center;gap:0.3rem">'
+        + '<div style="color:#4FC3F7;font-size:1.2rem">←</div>'
+        + '<div style="flex:1;height:4px;background:linear-gradient(270deg,#4FC3F7,#93D500);border-radius:2px;animation:growLeft 1s ease-out"></div></div>'
+        + '<div style="color:#4FC3F7;font-weight:700;font-size:0.95rem">レスポンス（応答）</div>'
+        + '<div style="background:#0a0a1a;border:1px solid #4FC3F7;border-radius:6px;padding:0.3rem 0.6rem;margin-top:0.2rem;font-family:\'JetBrains Mono\',monospace;font-size:0.75rem;color:#4FC3F7">{team:"...", members:[...]}</div>',
+      analogy: '<div style="background:#0a0a1a;border:1px solid #4FC3F7;border-radius:8px;padding:0.5rem 1rem;display:inline-block">'
+        + '<span style="font-size:1.1rem">🍛</span> <span style="color:#4FC3F7;font-weight:600">たとえ:</span> <span style="color:#e0e0e0">料理ができて、お皿が運ばれてきた</span></div>',
+      bg: '#0a0a1a', border: '#4FC3F7',
+      explain: '<div style="color:#4FC3F7;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 3: レスポンス（応答）が届く</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">サーバが処理を終え、<strong>JSON形式のデータ</strong>がレスポンスとして返ってきます。<br><code style="color:#4FC3F7">response.json()</code> で JSON を JavaScript のオブジェクトに変換します。</div>'
+        + '<div style="color:#888;font-size:0.85rem;margin-top:0.4rem">これで、JavaScript からデータに自由にアクセスできるようになります（例: <code>data.team</code>, <code>data.members[0].name</code>）。</div>'
+    },
+    {
+      arrow: '<div style="font-size:1.8rem">✅</div>'
+        + '<div style="color:#93D500;font-weight:700;font-size:0.95rem">完了！</div>'
+        + '<div style="background:#0a1a0a;border:2px solid #93D500;border-radius:8px;padding:0.4rem 0.8rem;margin-top:0.3rem;text-align:center">'
+        + '<div style="color:#93D500;font-size:0.85rem;font-weight:600">画面に反映</div>'
+        + '<div style="color:#ccc;font-size:0.75rem">ブラウザのJSが innerHTML で書き換え</div></div>',
+      analogy: '<div style="background:#0a1a0a;border:1px solid #93D500;border-radius:8px;padding:0.5rem 1rem;display:inline-block">'
+        + '<span style="font-size:1.1rem">😋</span> <span style="color:#93D500;font-weight:600">たとえ:</span> <span style="color:#e0e0e0">料理を食べる（データを画面に表示する）</span></div>',
+      bg: '#0a1a0a', border: '#93D500',
+      explain: '<div style="color:#93D500;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem">Step 4: データを画面に表示する</div>'
+        + '<div style="color:#e0e0e0;font-size:0.95rem;line-height:1.8">受け取ったデータを使って、<strong>ブラウザ側の JavaScript</strong> が <code style="color:#93D500">innerHTML</code> でページの HTML を書き換えます。<br><strong>ページ全体を再読み込みせずに、必要な部分だけ更新</strong>できるのが Fetch API の最大の利点です。</div>'
+        + '<div style="background:#0a2a0a;border:2px solid #93D500;border-radius:8px;padding:0.6rem 0.8rem;margin-top:0.6rem">'
+        + '<div style="color:#93D500;font-weight:700;font-size:0.95rem;margin-bottom:0.2rem">fetch() の全体の流れ（まとめ）</div>'
+        + '<div style="color:#e0e0e0;font-size:0.9rem">① リクエスト送信 → ② サーバ処理（待ち時間） → ③ レスポンス受信 → ④ 画面に反映</div></div>'
+    }
+  ];
+
+  function render() {
+    var s = steps[step];
+    labelEl.textContent = 'Step ' + (step+1) + ' / ' + totalSteps;
+    arrowEl.innerHTML = s.arrow;
+    analogyEl.innerHTML = s.analogy;
+    explainEl.style.background = s.bg;
+    explainEl.style.border = '2px solid ' + s.border;
+    explainEl.innerHTML = s.explain;
+  }
+
+  function goTo(n) { step = ((n % totalSteps) + totalSteps) % totalSteps; render(); }
+  function startAuto() {
+    stopAuto(); autoTimer = setInterval(function(){ goTo(step+1); }, 4000);
+    document.getElementById('fcPlayBtn').style.background = '#76B900';
+    document.getElementById('fcPauseBtn').style.background = 'rgba(255,255,255,0.08)';
+    document.getElementById('fcPauseBtn').style.color = '#ccc';
+    document.getElementById('fcPauseBtn').style.borderColor = '#444';
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    document.getElementById('fcPlayBtn').style.background = 'rgba(255,255,255,0.08)';
+    document.getElementById('fcPauseBtn').style.background = '#76B900';
+    document.getElementById('fcPauseBtn').style.color = 'white';
+    document.getElementById('fcPauseBtn').style.borderColor = '#76B900';
+  }
+
+  document.getElementById('fcPlayBtn').addEventListener('click', startAuto);
+  document.getElementById('fcPauseBtn').addEventListener('click', stopAuto);
+  document.getElementById('fcNextBtn').addEventListener('click', function(){ stopAuto(); goTo(step+1); });
+  document.getElementById('fcPrevBtn').addEventListener('click', function(){ stopAuto(); goTo(step-1); });
+
+  // Add keyframe animations
+  var s = document.createElement('style');
+  s.textContent = '@keyframes bounceRight{0%,100%{transform:translateX(0)}50%{transform:translateX(12px)}}'
+    + '@keyframes bounceLeft{0%,100%{transform:translateX(0)}50%{transform:translateX(-12px)}}'
+    + '@keyframes growRight{from{width:0}to{width:100%}}'
+    + '@keyframes growLeft{from{width:0}to{width:100%}}'
+    + '@keyframes loading{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}';
+  document.head.appendChild(s);
+
+  render();
+  startAuto();
+})();
 </script>
 
 </body>
