@@ -16,7 +16,7 @@
 mkdir final-project
 cd final-project
 npm init -y
-npm install express socket.io better-sqlite3
+npm install express@4 socket.io better-sqlite3
 mkdir public
 ```
 

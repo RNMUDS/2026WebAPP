@@ -519,7 +519,7 @@ pre { position: relative; }
       <table>
         <tr><th>コマンド</th><th>何をするか</th></tr>
         <tr><td><code>npm init -y</code></td><td>プロジェクトを初期化し、<code>package.json</code>（設定ファイル）を自動生成する <span class="exam-alert">課題に出ます</span></td></tr>
-        <tr><td><code>npm install express</code></td><td>Express というパッケージをインストールする。<code>node_modules/</code> フォルダに保存される</td></tr>
+        <tr><td><code>npm install express@4</code></td><td>Express（v4 系）というパッケージをインストールする。<code>node_modules/</code> フォルダに保存される。<br><span style="color:#FFB800;font-size:0.85rem">※ 古い Node.js 環境でも動かすため、必ず <code>@4</code> を付ける</span></td></tr>
         <tr><td><code>package.json</code></td><td>プロジェクトの名前、バージョン、使用パッケージの一覧が記録されるファイル</td></tr>
         <tr><td><code>node_modules/</code></td><td>インストールしたパッケージの実体が入るフォルダ。手動で編集しない</td></tr>
       </table>
@@ -742,8 +742,12 @@ node -v</pre>
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express</pre>
-      <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express</code> で Express がインストールされます。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
+npm install express@4</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express@4</code> で Express（v4 系）がインストールされます。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
+      <div style="background:#2e1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.6rem;font-size:0.88rem;color:#E0E0E0">
+        <strong style="color:#FFB800">&#x26A0; なぜ <code>express@4</code>？</strong><br>
+        Express の最新版は v5 系ですが、v5 は新しい Node.js を要求します。授業では古い Node.js 環境（例: <code>v5.x</code>）でも動かせるよう、安定版の <strong>v4 系</strong>を使います。<code>npm install express</code>（バージョン指定なし）だと最新の v5 が入ってしまうため、<strong>必ず <code>@4</code> を付けてください</strong>。
+      </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:1rem 1.2rem;margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0">
         <p style="color:#93D500;font-weight:700;margin-bottom:0.6rem">&#x1F4A1; サーバの「起動」「停止」「再起動」について</p>
         <p style="margin-bottom:0.6rem">サーバプログラムは、ブラウザのように「閉じて終わり」ではありません。<strong>ターミナルの中でずっと動き続けている</strong>プログラムです。そのため、次の3つの操作を覚える必要があります。</p>

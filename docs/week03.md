@@ -144,6 +144,22 @@ function renderMessages(messages) {
 
 ページ遷移なしでメッセージの投稿・表示ができる掲示板アプリを作成する。
 
+### ステップ0: プロジェクトのセットアップ
+
+第2回と同じ流れで、新しいプロジェクトフォルダを準備する。
+
+```bash
+mkdir week03
+cd week03
+npm init -y
+npm install express@4
+mkdir public
+```
+
+> **補足:** Express は最新版（v5 系）もありますが、本授業では古い Node.js 環境でも動作する **v4 系**を使用します。`npm install express`（バージョン指定なし）だと v5 が入ってしまうため、必ず `express@4` のように `@4` を付けてください。
+
+`npm init -y` で `package.json` が生成され、`npm install express@4` で Express がインストールされます。`node_modules/` フォルダと `package-lock.json` が自動で作られます（手動で編集しない）。
+
 ### ステップ1: サーバのAPI作成（server.js）
 
 以下の2つのAPIエンドポイントを実装：

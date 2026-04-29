@@ -67,8 +67,10 @@ npm init -y
 
 ### 手順3: 必要なパッケージをインストール
 ```bash
-npm install express
+npm install express@4
 ```
+
+> **補足:** Express は最新版（v5系）もありますが、本授業では古い Node.js 環境でも動作する **v4系** を使用します。`express@4` のように `@4` を付けてインストールしてください。
 
 ### 手順4: サーバを起動
 ```bash

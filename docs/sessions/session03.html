@@ -1527,13 +1527,24 @@ app.<span class="fn">get</span>(<span class="str">'/api/user'</span>, <span clas
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li><code>S:\Web_Prog</code> の中に <strong><code>Web03</code></strong> フォルダを作成する</li>
         <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web03</code> を開く</li>
-        <li>VS Code のターミナルを開き、以下のコマンドを実行する:</li>
+        <li>VS Code の<strong>ターミナル</strong>を開く（メニュー「ターミナル」→「新しいターミナル」、または <kbd>Ctrl+`</kbd>）</li>
+        <li><strong>Node.js のバージョンを確認する:</strong> 第2回でインストールした Node.js が使えるかを念のため確認します。
+          <pre><span class="code-label">Terminal</span>
+node -v</pre>
+          <p style="margin-top:0.3rem;font-size:0.9rem"><code>v20.x.x</code> や <code>v22.x.x</code> のように表示されればOKです。古いバージョン（例: <code>v5.x</code>）の場合は、第2回の資料を見て公式サイトから <strong>LTS版</strong> を再インストールしてください。</p>
+        </li>
+        <li>以下のコマンドを順番に実行して、新しいプロジェクトをセットアップする:</li>
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express</pre>
+npm install express@4</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express@4</code> で Express（v4 系）がインストールされます。第2回と同じ流れです。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
+      <div style="background:#2e1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.6rem;font-size:0.88rem;color:#E0E0E0">
+        <strong style="color:#FFB800">&#x26A0; なぜ <code>express@4</code>？</strong><br>
+        Express の最新版は v5 系ですが、v5 は新しい Node.js を要求します。授業では古い Node.js 環境（例: <code>v5.x</code>）でも動かせるよう、安定版の <strong>v4 系</strong>を使います。<code>npm install express</code>（バージョン指定なし）だと最新の v5 が入ってしまうため、<strong>必ず <code>@4</code> を付けてください</strong>。
+      </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
-        <strong>復習:</strong> サーバの起動は <code>node ファイル名.js</code>、停止は <kbd>Ctrl+C</kbd> です。コードを修正したら、<kbd>Ctrl+C</kbd> で停止 → <code>node ファイル名.js</code> で再起動してください。
+        <strong>復習:</strong> サーバの起動は <code>node ファイル名.js</code>、停止は <kbd>Ctrl+C</kbd> です。コードを修正したら、<kbd>Ctrl+C</kbd> で停止 → <code>node ファイル名.js</code> で再起動してください。ポート3000が使用中（<code>EADDRINUSE</code>）のエラーが出た場合は、第2回資料の対処法を参照してください。
       </div>
     </div>
 

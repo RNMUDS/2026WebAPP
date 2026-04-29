@@ -47,7 +47,7 @@
 
 **サーバ側のセットアップ:**
 ```bash
-npm install express socket.io
+npm install express@4 socket.io
 ```
 
 ```javascript

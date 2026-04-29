@@ -68,8 +68,10 @@ Node.jsだけでもサーバは作れるが、Express.jsを使うと:
 mkdir week01
 cd week01
 npm init -y
-npm install express
+npm install express@4
 ```
+
+> **補足:** Express は v5 系もありますが、本授業では古い Node.js 環境でも動作する **v4 系** を使用します。必ず `express@4` のように `@4` を付けてインストールしてください。
 
 **手順2: server.js を作成**
 ```javascript
@@ -140,7 +142,7 @@ Express.jsを使って、3つのページを持つサーバを作成する。
 mkdir week01
 cd week01
 npm init -y
-npm install express
+npm install express@4
 mkdir public
 ```
 
