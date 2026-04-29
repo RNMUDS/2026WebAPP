@@ -1272,34 +1272,34 @@ resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サー
       <!-- DOM Interactive Exercises -->
       <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.8rem">DOM操作を体験してみよう（4問）</p>
 
-      <!-- 2つの体験方法 -->
-      <div style="background:#1A1A1A;border:1px solid #4A7A00;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
-        <p style="color:#93D500;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">体験方法（どちらでもOK）</p>
+      <p style="font-size:0.9rem;color:#ccc;margin-bottom:1rem">この体験は <strong>VS Code で実際にファイルを作って</strong>行います。手順どおりに進めれば、誰でも同じ画面を再現できます。各問は<strong>「予想 → 実行 → 結果を確認」</strong>の順で進めてください。</p>
 
-        <div style="display:flex;gap:1rem;flex-wrap:wrap">
-          <!-- Method A: This page -->
-          <div style="flex:1;min-width:250px;background:#111;border:1px solid #76B900;border-radius:8px;padding:0.8rem">
-            <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.4rem">方法A: このページで体験（簡単）</p>
-            <p style="color:#ccc;font-size:0.85rem;line-height:1.7">下の「実行」ボタンを押すだけ。<br>結果がこのページ上のプレビューエリアに反映されます。</p>
-          </div>
-
-          <!-- Method B: VS Code -->
-          <div style="flex:1;min-width:250px;background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem">
-            <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.4rem">方法B: VS Code でHTMLファイルを作って体験（おすすめ）</p>
-            <ol style="color:#ccc;font-size:0.85rem;line-height:1.9;padding-left:1.2rem;margin:0">
-              <li><code>Web03</code> フォルダの中に <strong><code>dom-test.html</code></strong> を新規作成</li>
-              <li>以下のコードをコピーして貼り付け、保存</li>
-              <li>VS Code で <strong>右クリック →「Open with Live Server」</strong>で開く<br>
-                <span style="color:#888;font-size:0.8rem">※ Live Server 拡張機能がない場合は、ファイルをダブルクリックしてブラウザで直接開いてもOK</span></li>
-              <li>ブラウザで <strong>F12キー</strong> → <strong>「Console」タブ</strong> を開く</li>
-              <li>Console にコードを貼り付けて Enter で実行する</li>
-            </ol>
-          </div>
+      <!-- ============ STEP 1: ファイルを作る ============ -->
+      <div style="background:#0A0A0A;border:1px solid #4A7A00;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem">
+          <span style="background:#76B900;color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700">1</span>
+          <span style="color:#76B900;font-weight:700;font-size:1rem">VS Code で新規ファイル <code>dom-test.html</code> を作成する</span>
         </div>
+        <ol style="padding-left:1.4rem;font-size:0.92rem;line-height:2;color:#e0e0e0;margin:0">
+          <li>VS Code 左側のエクスプローラで <code>Web03</code> フォルダ（前のステップで作成したフォルダ）を開く</li>
+          <li>エクスプローラ上部の <strong>「新しいファイル」アイコン</strong>（書類に + がついたマーク）をクリック</li>
+          <li>ファイル名に <strong><code>dom-test.html</code></strong> と入力して Enter を押す</li>
+          <li>下の②のコードを<strong>すべてコピー</strong>して、空の <code>dom-test.html</code> に貼り付ける</li>
+          <li><kbd>Ctrl</kbd>+<kbd>S</kbd>（Mac は <kbd>⌘</kbd>+<kbd>S</kbd>）で保存する</li>
+        </ol>
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.7rem;font-size:0.85rem;color:#93D500">
+          <strong>&#x1F4C1; この時点でのフォルダ構成:</strong> <code>Web03/</code> の中に <code>package.json</code>、<code>node_modules/</code>（既にあるもの）に加えて、新しく <strong><code>dom-test.html</code></strong> が増えていればOK。
+        </div>
+      </div>
 
-        <details style="margin-top:0.8rem">
-          <summary style="color:#FFB800;cursor:pointer;font-size:0.85rem;font-weight:600">方法B 用の dom-test.html のコード（クリックで表示）</summary>
-          <pre style="margin-top:0.5rem"><span class="code-label">HTML ── dom-test.html</span>
+      <!-- ============ STEP 2: HTMLコード ============ -->
+      <div style="background:#0A0A0A;border:1px solid #4A7A00;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem">
+          <span style="background:#76B900;color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700">2</span>
+          <span style="color:#76B900;font-weight:700;font-size:1rem"><code>dom-test.html</code> に貼り付けるコード</span>
+        </div>
+        <p style="color:#ccc;font-size:0.88rem;margin-bottom:0.5rem">このHTMLには、後で操作する3つの要素（<code>id="domTitle"</code>, <code>id="domMessage"</code>, <code>id="domResult"</code>）が書かれています。コード全体をそのままコピーして貼り付けてください。</p>
+        <pre><span class="code-label">HTML ── Web03/dom-test.html</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
@@ -1308,99 +1308,99 @@ resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サー
   <span class="kw">&lt;style&gt;</span>
     body { font-family: sans-serif; padding: <span class="num">30</span>px; background: <span class="str">#f5f5f5</span>; }
     h2 { color: <span class="str">#76B900</span>; }
-    #result { background: <span class="str">#f0f0f0</span>; border-radius: <span class="num">8</span>px; padding: <span class="num">10</span>px; }
+    #domResult { background: <span class="str">#f0f0f0</span>; border-radius: <span class="num">8</span>px; padding: <span class="num">10</span>px; }
   <span class="kw">&lt;/style&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
+  <span class="cmt">&lt;!-- ↓ Console から操作する 3 つの要素：それぞれ id を持っている --&gt;</span>
   <span class="kw">&lt;h2</span> id=<span class="str">"domTitle"</span><span class="kw">&gt;</span>Fetch API Demo<span class="kw">&lt;/h2&gt;</span>
   <span class="kw">&lt;p</span> id=<span class="str">"domMessage"</span><span class="kw">&gt;</span>ボタンを押すとデータを取得します<span class="kw">&lt;/p&gt;</span>
   <span class="kw">&lt;div</span> id=<span class="str">"domResult"</span><span class="kw">&gt;</span>
     <span class="kw">&lt;span</span> id=<span class="str">"domStatus"</span><span class="kw">&gt;</span>まだデータはありません<span class="kw">&lt;/span&gt;</span>
   <span class="kw">&lt;/div&gt;</span>
-
-  <span class="cmt">&lt;!-- F12 → Console タブで以下を試してみよう --&gt;</span>
-  <span class="cmt">&lt;!-- Q1: document.getElementById('domTitle').textContent --&gt;</span>
-  <span class="cmt">&lt;!-- Q2: document.getElementById('domResult').innerHTML = '&lt;strong&gt;成功！&lt;/strong&gt;' --&gt;</span>
-  <span class="cmt">&lt;!-- Q3: document.getElementById('domMessage').textContent = '&lt;strong&gt;テスト&lt;/strong&gt;' --&gt;</span>
-  <span class="cmt">&lt;!-- Q4: document.getElementById('domTitle').style.color = 'red' --&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
-        </details>
       </div>
 
-      <p style="font-size:0.9rem;color:#ccc;margin-bottom:1rem">下のエリアには HTML 要素が表示されています。各問の「実行」ボタンを押すと、JavaScript が DOM を操作して画面が変わります。<strong>実行前に「何が起きるか」を予想</strong>してからボタンを押してください。</p>
-
-      <div id="domLab" style="background:#0A0A0A;border-radius:14px;border:1px solid #333;padding:1.2rem;margin-bottom:1rem">
-
-        <!-- Live Preview Area -->
-        <div style="margin-bottom:1rem">
-          <div style="color:#666;font-size:0.8rem;margin-bottom:0.4rem">ブラウザの表示エリア（ここが変化します）</div>
-          <div id="domPreview" style="background:#fff;border-radius:10px;padding:1.2rem;color:#333;font-family:sans-serif;min-height:120px">
-            <h2 id="domTitle" style="color:#76B900;margin:0 0 8px">Fetch API Demo</h2>
-            <p id="domMessage" style="margin:0 0 8px;color:#666">ボタンを押すとデータを取得します</p>
-            <div id="domResult" style="background:#f0f0f0;border-radius:8px;padding:10px;margin:0">
-              <span id="domStatus" style="color:#999">まだデータはありません</span>
-            </div>
-          </div>
+      <!-- ============ STEP 3: ブラウザで開く ============ -->
+      <div style="background:#0A0A0A;border:1px solid #4A7A00;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem">
+          <span style="background:#76B900;color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700">3</span>
+          <span style="color:#76B900;font-weight:700;font-size:1rem">ブラウザで開いて、開発者ツール（Console）を起動する</span>
         </div>
+        <ol style="padding-left:1.4rem;font-size:0.92rem;line-height:2;color:#e0e0e0;margin:0">
+          <li>VS Code のエクスプローラで <code>dom-test.html</code> を<strong>右クリック</strong> → <strong>「Open with Live Server」</strong>をクリック<br>
+            <span style="color:#888;font-size:0.85rem">※ メニューに出ない場合は、VS Code の拡張機能「Live Server」をインストールするか、エクスプローラで <code>dom-test.html</code> をダブルクリックしてブラウザで直接開いてもOK。</span></li>
+          <li>ブラウザが自動で開き、「Fetch API Demo」というページが表示される</li>
+          <li>そのブラウザのウィンドウで <strong><kbd>F12</kbd> キー</strong>を押す（Mac は <kbd>⌥</kbd>+<kbd>⌘</kbd>+<kbd>I</kbd>）→ 開発者ツールが画面の右または下に現れる</li>
+          <li>開発者ツールの上部タブから <strong>「Console」</strong>（コンソール）をクリック</li>
+          <li>Console の入力欄（<code>&gt;</code> マークの右側）に、これから出てくる Q1〜Q4 のコードを<strong>1問ずつ貼り付けて Enter を押す</strong></li>
+        </ol>
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.7rem;font-size:0.85rem;color:#FFB800">
+          <strong>&#x1F4A1; ヒント:</strong> Console は「ブラウザの中で動いているJavaScriptに直接命令を出せる場所」です。<code>dom-test.html</code> がブラウザに表示されている状態で命令すると、その表示を直接書き換えられます。
+        </div>
+      </div>
 
-        <!-- Q1: getElementById + textContent -->
-        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+      <!-- ============ STEP 4: 4つの問題 ============ -->
+      <div style="background:#0A0A0A;border:1px solid #4A7A00;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem">
+          <span style="background:#76B900;color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700">4</span>
+          <span style="color:#76B900;font-weight:700;font-size:1rem">Q1〜Q4 のコードを Console に貼り付けて実行</span>
+        </div>
+        <p style="color:#ccc;font-size:0.88rem;margin-bottom:1rem">各問のコードを<strong>1つずつ</strong>コピーして Console に貼り付け、Enter で実行してください。実行する前に「何が起きるか」を予想することがポイントです。</p>
+
+        <!-- Q1 -->
+        <div style="background:#111;border:1px solid #76B900;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
           <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
             <span style="background:#76B900;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">1</span>
             <span style="color:#76B900;font-weight:700;font-size:0.95rem">要素を取得して、テキストを読み取る（getElementById + textContent）</span>
           </div>
+          <p style="color:#888;font-size:0.85rem;margin:0 0 0.4rem"><strong style="color:#FFB800">予想:</strong> alert にどんな文字が表示される？</p>
           <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
             <span style="color:#888">// id="domTitle" の要素のテキストを取得して alert で表示する</span><br>
             <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domTitle'</span>);<br>
             <span style="color:#76B900">alert</span>(<span style="color:#FFB800">'取得した値: '</span> + el.<span style="color:#93D500">textContent</span>);
           </div>
-          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
-            <button onclick="var el=document.getElementById('domTitle');alert('取得した値: '+el.textContent);" style="background:#76B900;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
-            <span style="color:#888;font-size:0.85rem">予想: alert に何が表示される？ → <strong style="color:#ccc">textContent</strong> は要素の中のテキストを返す</span>
-          </div>
+          <p style="color:#93D500;font-size:0.85rem;margin:0"><strong>結果:</strong> 「取得した値: Fetch API Demo」というアラートが表示される。<code>textContent</code> は要素の中の<strong>テキストだけ</strong>を返す（タグは含まれない）。</p>
         </div>
 
-        <!-- Q2: innerHTML を書き換える -->
-        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+        <!-- Q2 -->
+        <div style="background:#111;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
           <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
             <span style="background:#FFB800;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">2</span>
             <span style="color:#FFB800;font-weight:700;font-size:0.95rem">要素の中身を HTML で書き換える（innerHTML）</span>
           </div>
+          <p style="color:#888;font-size:0.85rem;margin:0 0 0.4rem"><strong style="color:#FFB800">予想:</strong> 灰色の枠の中身がどう変わる？ <code>&lt;strong&gt;</code> や <code>&lt;ul&gt;</code> はどう表示される？</p>
           <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
             <span style="color:#888">// id="domResult" の中身を HTML ごと書き換える</span><br>
             <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domResult'</span>);<br>
             el.<span style="color:#93D500">innerHTML</span> = <span style="color:#FFB800">'&lt;strong style="color:green"&gt;データ取得成功！&lt;/strong&gt;&lt;ul&gt;&lt;li&gt;田中（リーダー）&lt;/li&gt;&lt;li&gt;佐藤（デザイン）&lt;/li&gt;&lt;/ul&gt;'</span>;
           </div>
-          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
-            <button onclick="document.getElementById('domResult').innerHTML='<strong style=&quot;color:green&quot;>データ取得成功！</strong><ul><li>田中（リーダー）</li><li>佐藤（デザイン）</li></ul>';" style="background:#FFB800;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
-            <span style="color:#888;font-size:0.85rem">予想: 灰色エリアの中身がどう変わる？ → <strong style="color:#ccc">innerHTML</strong> は HTML タグも反映する</span>
-          </div>
+          <p style="color:#93D500;font-size:0.85rem;margin:0"><strong>結果:</strong> 灰色エリアの中身が「<strong style="color:#90EE90">データ取得成功！</strong>」という<strong>緑の太字</strong>と<strong>箇条書き</strong>に変わる。<code>innerHTML</code> は HTML タグを<strong>HTMLとして解釈</strong>して反映する。</p>
         </div>
 
-        <!-- Q3: textContent で書き換える（HTMLタグは反映されない） -->
-        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+        <!-- Q3 -->
+        <div style="background:#111;border:1px solid #4FC3F7;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
           <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
             <span style="background:#4FC3F7;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">3</span>
             <span style="color:#4FC3F7;font-weight:700;font-size:0.95rem">textContent で書き換える（innerHTML との違いに注目）</span>
           </div>
+          <p style="color:#888;font-size:0.85rem;margin:0 0 0.4rem"><strong style="color:#FFB800">予想:</strong> 「太字になる？」の部分は<strong>太字になる</strong>？それとも<strong>そのまま文字として表示される</strong>？</p>
           <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
-            <span style="color:#888">// id="domMessage" のテキストを書き換える</span><br>
+            <span style="color:#888">// id="domMessage" のテキストを書き換える（タグは文字として扱われる）</span><br>
             <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domMessage'</span>);<br>
             el.<span style="color:#93D500">textContent</span> = <span style="color:#FFB800">'&lt;strong&gt;太字になる？&lt;/strong&gt; テスト中...'</span>;
           </div>
-          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
-            <button onclick="document.getElementById('domMessage').textContent='<strong>太字になる？</strong> テスト中...';" style="background:#4FC3F7;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
-            <span style="color:#888;font-size:0.85rem">予想: 太字になる？ならない？ → <strong style="color:#ccc">textContent</strong> は HTML タグを<strong>文字として表示</strong>する</span>
-          </div>
+          <p style="color:#93D500;font-size:0.85rem;margin:0"><strong>結果:</strong> <code>&lt;strong&gt;太字になる？&lt;/strong&gt; テスト中...</code> が<strong>そのまま文字として</strong>表示される（太字にならない）。<code>textContent</code> は HTML タグを<strong>無効化して文字として扱う</strong>ため、Q2 と結果が違う。</p>
         </div>
 
-        <!-- Q4: style を変更する -->
-        <div style="background:#111;border:1px solid #333;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
+        <!-- Q4 -->
+        <div style="background:#111;border:1px solid #FF5252;border-radius:10px;padding:1rem;margin-bottom:0.8rem">
           <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
             <span style="background:#FF5252;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0">4</span>
             <span style="color:#FF5252;font-weight:700;font-size:0.95rem">見た目（スタイル）を変える（style プロパティ）</span>
           </div>
+          <p style="color:#888;font-size:0.85rem;margin:0 0 0.4rem"><strong style="color:#FFB800">予想:</strong> タイトルの色・サイズ・背景色がどう変わる？</p>
           <div style="background:#0a0a0a;border-radius:6px;padding:0.6rem 0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#e0e0e0;margin-bottom:0.5rem">
             <span style="color:#888">// id="domTitle" の見た目を変える</span><br>
             <span style="color:#4FC3F7">var</span> el = document.<span style="color:#76B900">getElementById</span>(<span style="color:#FFB800">'domTitle'</span>);<br>
@@ -1408,28 +1408,26 @@ resultDiv.innerHTML <span class="op">=</span> <span class="str">'&lt;p&gt;サー
             el.<span style="color:#93D500">style</span>.fontSize = <span style="color:#FFB800">'2rem'</span>;       <span style="color:#888">// 文字サイズを大きく</span><br>
             el.<span style="color:#93D500">style</span>.background = <span style="color:#FFB800">'#FFF3E0'</span>;  <span style="color:#888">// 背景色をオレンジに</span>
           </div>
-          <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap">
-            <button onclick="var el=document.getElementById('domTitle');el.style.color='#FF5252';el.style.fontSize='2rem';el.style.background='#FFF3E0';" style="background:#FF5252;color:white;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.85rem;cursor:pointer">実行</button>
-            <span style="color:#888;font-size:0.85rem">予想: タイトルの見た目がどう変わる？ → <strong style="color:#ccc">style</strong> で CSS を直接書き換えられる</span>
-          </div>
+          <p style="color:#93D500;font-size:0.85rem;margin:0"><strong>結果:</strong> タイトル「Fetch API Demo」が<span style="color:#FF5252">赤い太字（大きめ）</span>になり、背景がオレンジ色になる。<code>style.プロパティ名</code> で CSS を1つずつ書き換えられる（プロパティ名は <code>font-size</code> ではなく <code>fontSize</code> のように<strong>キャメルケース</strong>で書く点に注意）。</p>
         </div>
 
-        <!-- Reset button -->
-        <div style="text-align:center;margin-top:0.5rem">
-          <button onclick="document.getElementById('domTitle').textContent='Fetch API Demo';document.getElementById('domTitle').style.cssText='color:#76B900;margin:0 0 8px';document.getElementById('domMessage').textContent='ボタンを押すとデータを取得します';document.getElementById('domMessage').style.cssText='margin:0 0 8px;color:#666';document.getElementById('domResult').innerHTML='<span id=&quot;domStatus&quot; style=&quot;color:#999&quot;>まだデータはありません</span>';" style="background:#333;color:#ccc;border:1px solid #555;border-radius:6px;padding:0.4rem 1.5rem;font-size:0.85rem;cursor:pointer">↻ 元に戻す（リセット）</button>
-        </div>
-
-        <!-- Summary -->
-        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-          <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">まとめ: 3つの DOM 操作の違い</p>
-          <table style="margin:0;font-size:0.9rem">
-            <tr><th style="width:30%">プロパティ</th><th>機能</th><th>HTMLタグ</th></tr>
-            <tr><td><code>textContent</code></td><td>テキストを読み書き</td><td>タグは<strong>文字として</strong>表示される</td></tr>
-            <tr><td><code>innerHTML</code></td><td>HTMLを読み書き</td><td>タグが<strong>HTMLとして</strong>反映される</td></tr>
-            <tr><td><code>style.xxx</code></td><td>CSSを直接変更</td><td>見た目（色・サイズなど）を変える</td></tr>
-          </table>
+        <div style="background:#1a0a0a;border:1px solid #FF5252;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.7rem;font-size:0.85rem;color:#E0E0E0">
+          <strong style="color:#FF5252">&#x21BB; 元に戻したい場合:</strong> ブラウザで <kbd>F5</kbd>（再読み込み）を押すと、<code>dom-test.html</code> が最初の状態に戻ります。Q1 から順に何度でもやり直せます。
         </div>
       </div>
+
+      <!-- Summary -->
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">まとめ: 3つの DOM 操作の違い</p>
+        <table style="margin:0;font-size:0.9rem">
+          <tr><th style="width:30%">プロパティ</th><th>機能</th><th>HTMLタグ</th></tr>
+          <tr><td><code>textContent</code></td><td>テキストを読み書き</td><td>タグは<strong>文字として</strong>表示される</td></tr>
+          <tr><td><code>innerHTML</code></td><td>HTMLを読み書き</td><td>タグが<strong>HTMLとして</strong>反映される</td></tr>
+          <tr><td><code>style.xxx</code></td><td>CSSを直接変更</td><td>見た目（色・サイズなど）を変える</td></tr>
+        </table>
+      </div>
+
+      <div class="notion-submit" style="margin-top:1rem"><div><strong>Notionに記録:</strong> Q1〜Q4 を実行する前の予想と、実行後の結果を1〜2行ずつメモする。Q2 と Q3 で結果が違った理由も書いてみよう。</div></div>
     </div>
 
   </div>
