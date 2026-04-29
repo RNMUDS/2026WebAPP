@@ -818,6 +818,234 @@ pre { position: relative; }
       </table>
       <p style="margin-top:0.5rem"><code>await</code> を使わないと、サーバの返答が届く前に次の処理が進んでしまい、<code>data</code> が <code>undefined</code>（未定義）になります。</p>
 
+      <!-- ============ ABSTRACT ANIMATION: ボールで理解する ============ -->
+      <p style="color:#76B900;font-weight:700;font-size:1rem;margin:1.5rem 0 0.5rem">async/await を「1個のボール」で理解する（抽象アニメーション）</p>
+
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:12px;padding:1rem 1.2rem;margin-bottom:0.8rem">
+        <p style="font-size:0.95rem;line-height:1.9;color:#e0e0e0;margin:0">
+          JavaScript の実行は <strong style="color:#93D500">1個のボール</strong>で表せます。<br>
+          ボールは<strong>1つしかなく、同時に2か所では動けません</strong>（シングルスレッド）。<br>
+          このボールが「<span style="color:#FFB800">関数の外</span>」レーンと「<span style="color:#76B900">関数の中</span>」レーンを<strong>どう移動するか</strong>を追いかければ、<code>await</code> の動きが自然に分かります。
+        </p>
+      </div>
+
+      <div style="background:#0A0A0A;border-radius:14px;border:1px solid #333;padding:1rem;overflow-x:auto">
+        <svg viewBox="0 0 720 420" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;display:block;margin:0 auto;max-width:100%;height:auto">
+
+          <!-- ═══ Title ═══ -->
+          <text x="360" y="22" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">ボール（JS実行）が2つのレーンを行き来する</text>
+          <text x="360" y="40" text-anchor="middle" fill="#888" font-size="10">時間 →（左から右へ進む）　1ループ＝12秒</text>
+
+          <!-- ═══ Time axis ═══ -->
+          <line x1="100" y1="58" x2="600" y2="58" stroke="#444" stroke-width="1"/>
+          <text x="100" y="55" fill="#888" font-size="9">スタート</text>
+          <text x="600" y="55" fill="#888" font-size="9" text-anchor="end">終了</text>
+
+          <!-- ═══ Outer lane ═══ -->
+          <text x="20" y="100" fill="#FFB800" font-weight="700" font-size="12">関数の外</text>
+          <text x="20" y="115" fill="#888" font-size="9">（プログラム本体）</text>
+          <line x1="100" y1="110" x2="600" y2="110" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity="0.4"/>
+
+          <!-- A marker -->
+          <circle cx="140" cy="110" r="16" fill="#1a1a0a" stroke="#FFB800" stroke-width="2"/>
+          <text x="140" y="115" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">A</text>
+          <text x="140" y="145" text-anchor="middle" fill="#FFB800" font-size="9">console.log('A')</text>
+          <text x="140" y="158" text-anchor="middle" fill="#666" font-size="8">最初に実行される</text>
+
+          <!-- D marker -->
+          <circle cx="440" cy="110" r="16" fill="#1a1a0a" stroke="#FFB800" stroke-width="2"/>
+          <text x="440" y="115" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">D</text>
+          <text x="440" y="145" text-anchor="middle" fill="#FFB800" font-size="9">console.log('D')</text>
+          <text x="440" y="158" text-anchor="middle" fill="#666" font-size="8">await中に先に実行される</text>
+
+          <!-- ═══ Inner lane ═══ -->
+          <text x="20" y="265" fill="#76B900" font-weight="700" font-size="12">関数の中</text>
+          <text x="20" y="280" fill="#888" font-size="9">getData()</text>
+          <line x1="100" y1="270" x2="600" y2="270" stroke="#76B900" stroke-width="2" stroke-dasharray="4,3" opacity="0.4"/>
+
+          <!-- B marker -->
+          <circle cx="240" cy="270" r="16" fill="#0a1a0a" stroke="#76B900" stroke-width="2"/>
+          <text x="240" y="275" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">B</text>
+          <text x="240" y="305" text-anchor="middle" fill="#76B900" font-size="9">console.log('B')</text>
+          <text x="240" y="318" text-anchor="middle" fill="#666" font-size="8">関数に入ってすぐ</text>
+
+          <!-- await marker (with hourglass) -->
+          <circle cx="340" cy="270" r="18" fill="#1a0a0a" stroke="#FF5252" stroke-width="2"/>
+          <text x="340" y="276" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="14">⏸</text>
+          <text x="340" y="305" text-anchor="middle" fill="#FF5252" font-size="9">await fetch()</text>
+          <text x="340" y="318" text-anchor="middle" fill="#666" font-size="8">ここでボールは外へ脱出</text>
+
+          <!-- C marker -->
+          <circle cx="540" cy="270" r="16" fill="#0a1a0a" stroke="#76B900" stroke-width="2"/>
+          <text x="540" y="275" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">C</text>
+          <text x="540" y="305" text-anchor="middle" fill="#76B900" font-size="9">console.log('C')</text>
+          <text x="540" y="318" text-anchor="middle" fill="#666" font-size="8">レスポンス到着後に再開</text>
+
+          <!-- ═══ Server (right side) ═══ -->
+          <rect x="620" y="170" width="80" height="70" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="660" y="195" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">サーバ</text>
+          <text x="660" y="212" text-anchor="middle" fill="#888" font-size="9">処理に時間が</text>
+          <text x="660" y="225" text-anchor="middle" fill="#888" font-size="9">かかる</text>
+
+          <!-- Server "processing" pulse (visible during wait) -->
+          <circle cx="660" cy="190" r="6" fill="none" stroke="#4FC3F7" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0.8;0.8;0.8;0.8;0;0;0;0;0" keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.50;0.65;0.75;0.78;0.82;0.90;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="4;10;4" dur="0.8s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- ═══ Request arrow: await → server (during await phase) ═══ -->
+          <line x1="358" y1="260" x2="618" y2="200" stroke="#FFB800" stroke-width="2.5" stroke-dasharray="6,4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;1;1;0;0;0;0;0;0;0" keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.90;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-dashoffset" from="50" to="0" dur="0.8s" repeatCount="indefinite"/>
+          </line>
+          <text x="490" y="222" text-anchor="middle" fill="#FFB800" font-size="10" font-weight="600" opacity="0">
+            リクエスト送信 →
+            <animate attributeName="opacity" values="0;0;0;0;0;1;1;0;0;0;0;0;0;0" keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.90;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- ═══ Response arrow: server → await (when result arrives) ═══ -->
+          <line x1="618" y1="218" x2="358" y2="278" stroke="#4FC3F7" stroke-width="2.5" stroke-dasharray="6,4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;1;0;0;0" keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.90;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-dashoffset" from="0" to="50" dur="0.8s" repeatCount="indefinite"/>
+          </line>
+          <text x="490" y="252" text-anchor="middle" fill="#4FC3F7" font-size="10" font-weight="600" opacity="0">
+            ← レスポンス到着
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;1;1;0;0;0" keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.90;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- ═══ The execution ball (the JS runtime token) ═══ -->
+          <!-- Outer pulse ring -->
+          <circle cx="140" cy="110" r="14" fill="none" stroke="#93D500" stroke-width="2.5" opacity="1">
+            <animate attributeName="cx"
+                     values="140;140;140;240;240;340;440;440;440;340;540;540;140"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="cy"
+                     values="110;110;110;270;270;270;110;110;110;270;270;270;110"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="14;22;14" dur="1.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity"
+                     values="0;1;1;1;1;1;1;1;0.2;1;1;1;0"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Solid ball (token itself) -->
+          <circle cx="140" cy="110" r="11" fill="#93D500" stroke="#fff" stroke-width="2">
+            <animate attributeName="cx"
+                     values="140;140;140;240;240;340;440;440;440;340;540;540;140"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="cy"
+                     values="110;110;110;270;270;270;110;110;110;270;270;270;110"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="opacity"
+                     values="0;1;1;1;1;1;1;1;0.25;1;1;1;0"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- "JS" label on the ball -->
+          <text x="140" y="114" text-anchor="middle" fill="#0a0a0a" font-weight="800" font-size="9" pointer-events="none">
+            JS
+            <animate attributeName="x"
+                     values="140;140;140;240;240;340;440;440;440;340;540;540;140"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="y"
+                     values="114;114;114;274;274;274;114;114;114;274;274;274;114"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+            <animate attributeName="opacity"
+                     values="0;1;1;1;1;1;1;1;0.25;1;1;1;0"
+                     keyTimes="0;0.05;0.15;0.18;0.28;0.32;0.36;0.45;0.50;0.78;0.86;0.95;1.0"
+                     dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- ═══ Phase captions (only one visible at a time) ═══ -->
+          <rect x="20" y="345" width="680" height="55" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+
+          <!-- Phase 1 -->
+          <text x="360" y="368" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            ① ボールは「関数の外」レーンに登場 → A を実行
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            「A: fetch開始前」と画面に表示される
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- Phase 2 -->
+          <text x="360" y="368" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            ② getData() を呼び出し → ボールが「関数の中」レーンへジャンプ → B を実行
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            「B: fetch実行」と画面に表示される
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- Phase 3 -->
+          <text x="360" y="368" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+            ③ await に到達 → ボールは関数を脱出して外レーンに戻り、D を実行
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            関数は ⏸ で一時停止。同時にリクエストがサーバへ飛ぶ。「D: fetch呼び出し後」と表示
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- Phase 4 -->
+          <text x="360" y="368" text-anchor="middle" fill="#888" font-size="12" font-weight="700" opacity="0">
+            ④ サーバ処理中… ボールは外レーンの端で待機（実行できるコードがない）
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            この間ブラウザは他のイベント（クリック・スクロール）に反応できる ── これが非同期の利点
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- Phase 5 -->
+          <text x="360" y="368" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            ⑤ レスポンス到着 → ボールが await の地点に戻る → 関数が再開
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            await は「結果が代入された」状態で次の行に進む
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+          <!-- Phase 6 -->
+          <text x="360" y="368" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+            ⑥ C を実行 → 完了！　最終的な実行順は <tspan font-family="'JetBrains Mono',monospace">A → B → D → C</tspan>
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;1;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="386" text-anchor="middle" fill="#ccc" font-size="10" opacity="0">
+            「C: データ受信」と画面に表示される
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;1;0" keyTimes="0;0.15;0.18;0.28;0.32;0.45;0.50;0.65;0.78;0.82;0.86;0.95;1.0" dur="12s" repeatCount="indefinite"/>
+          </text>
+
+        </svg>
+      </div>
+
+      <!-- Key takeaways -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.6rem;margin-top:0.8rem">
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.8rem">
+          <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin:0 0 0.3rem">&#x1F4A1; ポイント1</p>
+          <p style="color:#e0e0e0;font-size:0.85rem;line-height:1.6;margin:0">ボール（JS実行）は<strong>1個だけ</strong>。同じ瞬間に2か所では動けない。</p>
+        </div>
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.6rem 0.8rem">
+          <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin:0 0 0.3rem">&#x1F4A1; ポイント2</p>
+          <p style="color:#e0e0e0;font-size:0.85rem;line-height:1.6;margin:0"><code>await</code> でボールは<strong>関数を脱出</strong>。関数の外（D）が先に動く。</p>
+        </div>
+        <div style="background:#0a1a1a;border:1px solid #4FC3F7;border-radius:8px;padding:0.6rem 0.8rem">
+          <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin:0 0 0.3rem">&#x1F4A1; ポイント3</p>
+          <p style="color:#e0e0e0;font-size:0.85rem;line-height:1.6;margin:0">レスポンスが届いたら、ボールが<strong>関数の中に戻って</strong> C を実行。</p>
+        </div>
+      </div>
+
       <!-- なぜ D が C より先に？ 詳しい解説 -->
       <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:12px;padding:1.2rem 1.5rem;margin:1.5rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">なぜ実行順が A → B → D → C になるのか？</p>
