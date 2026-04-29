@@ -2420,22 +2420,217 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <span class="tag tag-standard">標準課題 2</span>
         <h3>APIとクライアント表示を拡張する（コード改造）</h3>
       </div>
-      <p>コード体験1の <code>server.js</code> と <code>public/index.html</code> を以下の指示どおりに改造しなさい。</p>
+      <p>コード体験1で作った <code>server.js</code> と <code>public/index.html</code> を、以下の<strong>4つの指示</strong>どおりに改造します。<br>
+      各指示には<strong>「どこに」「何を」書くか</strong>を細かく示しています。1つずつ順番に進めてください。</p>
 
-      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td>サーバに <code>/api/schedule</code> ルートを追加し、今日の予定3件をJSON配列で返す（例: <code>[{time: "10:00", title: "数学"}, ...]</code>）</td></tr>
-          <tr><td>2</td><td><code>/api/members</code> のデータにメンバーを2人追加する</td></tr>
-          <tr><td>3</td><td><code>index.html</code> に新しいボタン「予定を表示」を追加し、<code>/api/schedule</code> からデータを取得して表示する関数を書く</td></tr>
-          <tr><td>4</td><td>メンバー表示の形式を変更: 各メンバーの役割を<strong>太字</strong>（<code>&lt;strong&gt;</code>）で表示する</td></tr>
+      <!-- 改造の全体像 -->
+      <div style="background:#0A0A0A;border:1px solid #4A7A00;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:700;font-size:0.95rem;margin-bottom:0.5rem">&#x1F4CB; 改造の全体像</p>
+        <table style="margin:0;font-size:0.9rem">
+          <tr><th style="width:60px">指示</th><th>編集するファイル</th><th>やること（一言）</th></tr>
+          <tr><td><strong>1</strong></td><td><code>server.js</code></td><td>新しいAPI <code>/api/schedule</code> を追加（予定データを返す）</td></tr>
+          <tr><td><strong>2</strong></td><td><code>server.js</code></td><td>既存の <code>/api/members</code> にメンバーを2人追加</td></tr>
+          <tr><td><strong>3</strong></td><td><code>public/index.html</code></td><td>「予定を表示」ボタンと、それを処理する関数を追加</td></tr>
+          <tr><td><strong>4</strong></td><td><code>public/index.html</code></td><td>既存の <code>loadMembers()</code> 内で役割を太字に変える</td></tr>
+        </table>
+        <p style="margin-top:0.5rem;font-size:0.85rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> <code>server.js</code> を保存しただけではサーバには反映されません。<strong>必ず <kbd>Ctrl+C</kbd> でサーバを停止 → <code>node server.js</code> で再起動</strong>してください（HTML側はブラウザの再読み込みだけでOK）。</p>
+      </div>
+
+      <!-- ============ 指示1: /api/schedule を追加 ============ -->
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin:0 0 0.6rem">指示1: <code>server.js</code> に新しいAPI <code>/api/schedule</code> を追加する</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">どこに書く？</strong></p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.7rem"><code>server.js</code> の中、<strong>既存の <code>app.get('/api/members', ...)</code> ブロックの下、<code>app.listen(3000, ...)</code> の上</strong>。<code>/api/members</code> をマネして書くと簡単です。</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">何を返す？</strong></p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem">「今日の予定3件」を JSON で返します。次のような形式:</p>
+        <pre style="margin:0 0 0.7rem"><span class="code-label">JSON 例（返すデータ）</span>
+{
+  "date": "2026-04-29",
+  "items": [
+    { "time": "10:00", "title": "数学" },
+    { "time": "13:00", "title": "Webプログラミング" },
+    { "time": "15:00", "title": "図書館で勉強" }
+  ]
+}</pre>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">コードのひな形（穴埋めで書ける）</strong></p>
+        <pre style="margin:0"><span class="code-label">JavaScript ── server.js に追加する部分</span>
+<span class="cmt">// /api/schedule にGETリクエストが来たら、予定データをJSONで返す</span>
+app.<span class="fn">get</span>(<span class="str">'/api/schedule'</span>, <span class="kw">function</span>(req, res) {
+  res.<span class="fn">json</span>({
+    date: <span class="str">'2026-04-29'</span>,         <span class="cmt">// ← 日付（自分で書き換えてOK）</span>
+    items: [                       <span class="cmt">// ← 予定の配列。3件以上書く</span>
+      { time: <span class="str">'10:00'</span>, title: <span class="str">'数学'</span> },
+      { time: <span class="str">'13:00'</span>, title: <span class="str">'Webプログラミング'</span> },
+      { time: <span class="str">'15:00'</span>, title: <span class="str">'図書館で勉強'</span> }
+    ]
+  });
+});</pre>
+
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+          <strong>&#x2705; 動作確認:</strong> サーバを<strong>再起動</strong>し（<kbd>Ctrl+C</kbd> → <code>node server.js</code>）、ブラウザのアドレスバーに直接 <code>http://localhost:3000/api/schedule</code> を入力。上の JSON が表示されればOK。
+        </div>
+      </div>
+
+      <!-- ============ 指示2: メンバー追加 ============ -->
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin:0 0 0.6rem">指示2: <code>/api/members</code> にメンバーを2人追加する</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">どこに書く？</strong></p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.7rem">既存の <code>members</code> 配列の中、<strong>最後の <code>{ name: '高橋', ... }</code> の後ろにカンマを付けて2行追加</strong>します。</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">変更前 → 変更後の比較</strong></p>
+        <pre style="margin:0"><span class="code-label">JavaScript ── server.js（変更前）</span>
+members: [
+  { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
+  { name: <span class="str">'佐藤'</span>, role: <span class="str">'デザイン'</span> },
+  { name: <span class="str">'鈴木'</span>, role: <span class="str">'サーバ担当'</span> },
+  { name: <span class="str">'高橋'</span>, role: <span class="str">'フロント担当'</span> }   <span class="cmt">// ← 最後の行（カンマなし）</span>
+]</pre>
+        <pre style="margin:0.5rem 0 0"><span class="code-label">JavaScript ── server.js（変更後）</span>
+members: [
+  { name: <span class="str">'田中'</span>, role: <span class="str">'リーダー'</span> },
+  { name: <span class="str">'佐藤'</span>, role: <span class="str">'デザイン'</span> },
+  { name: <span class="str">'鈴木'</span>, role: <span class="str">'サーバ担当'</span> },
+  { name: <span class="str">'高橋'</span>, role: <span class="str">'フロント担当'</span> }<strong style="color:#FF5252">,</strong>   <span class="cmt">// ← <strong style="color:#FF5252">カンマを追加</strong>するのを忘れずに！</span>
+  { name: <span class="str">'山田'</span>, role: <span class="str">'テスト担当'</span> },     <span class="cmt">// ← 追加（自由に名前・役割を決めてOK）</span>
+  { name: <span class="str">'伊藤'</span>, role: <span class="str">'ドキュメント担当'</span> } <span class="cmt">// ← 追加（最後の行はカンマ不要）</span>
+]</pre>
+
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.8rem;font-size:0.85rem;color:#FFB800">
+          <strong>&#x26A0; よくあるミス:</strong> 元の最後の行（<code>{ name: '高橋', ... }</code>）の後ろの<strong>カンマ忘れ</strong>。これを忘れると <code>SyntaxError</code> が出てサーバが起動しません。
+        </div>
+
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.5rem;font-size:0.85rem;color:#93D500">
+          <strong>&#x2705; 動作確認:</strong> サーバ再起動後、ブラウザで <code>http://localhost:3000/api/members</code> にアクセス。<code>members</code> 配列に6人いればOK。
+        </div>
+      </div>
+
+      <!-- ============ 指示3: 予定表示ボタン ============ -->
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin:0 0 0.6rem">指示3: <code>index.html</code> に「予定を表示」ボタンと処理関数を追加する</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.6rem">この指示は<strong>3つのパート</strong>に分かれます。</p>
+
+        <!-- Part A: ボタン追加 -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin:0.5rem 0 0.3rem">Part A: ボタンを追加する</p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong>どこに？</strong> 既存の「メンバーを読み込む」ボタンのすぐ下に、もう1つボタンを追加します。</p>
+        <pre style="margin:0"><span class="code-label">HTML ── public/index.html（追加箇所）</span>
+<span class="cmt">&lt;!-- 既存のボタン（そのまま） --&gt;</span>
+<span class="kw">&lt;button</span> onclick=<span class="str">"loadMembers()"</span><span class="kw">&gt;</span>メンバーを読み込む<span class="kw">&lt;/button&gt;</span>
+
+<span class="cmt">&lt;!-- ↓ 追加するボタン --&gt;</span>
+<span class="kw">&lt;button</span> onclick=<span class="str">"loadSchedule()"</span><span class="kw">&gt;</span>予定を表示<span class="kw">&lt;/button&gt;</span></pre>
+
+        <!-- Part B: 関数追加 -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin:1rem 0 0.3rem">Part B: <code>loadSchedule()</code> 関数を追加する</p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong>どこに？</strong> 既存の <code>loadMembers()</code> 関数の<strong>すぐ下</strong>（<code>&lt;/script&gt;</code> の直前）に書きます。<code>loadMembers</code> をマネすればOK。</p>
+        <pre style="margin:0"><span class="code-label">JavaScript ── &lt;script&gt;〜&lt;/script&gt; の中に追加</span>
+<span class="cmt">// 「予定を表示」ボタンを押すと呼ばれる関数</span>
+<span class="kw">async function</span> <span class="fn">loadSchedule</span>() {
+  <span class="cmt">// 1) サーバの /api/schedule に GETリクエストを送る</span>
+  <span class="kw">const</span> response <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api/schedule'</span>);
+  <span class="cmt">// 2) 応答の JSON を JavaScript オブジェクトに変換する</span>
+  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">await</span> response.<span class="fn">json</span>();
+
+  <span class="cmt">// 3) data.date を見出しにし、リストを開始する</span>
+  <span class="kw">var</span> html <span class="op">=</span> <span class="str">'&lt;h2&gt;'</span> <span class="op">+</span> data.date <span class="op">+</span> <span class="str">' の予定&lt;/h2&gt;&lt;ul&gt;'</span>;
+  <span class="cmt">// 4) data.items を1件ずつループして「時間 タイトル」の形式で追加</span>
+  <span class="kw">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> data.items.<span class="fn">length</span>; i<span class="op">++</span>) {
+    html <span class="op">+=</span> <span class="str">'&lt;li&gt;'</span> <span class="op">+</span> data.items[i].time <span class="op">+</span> <span class="str">' '</span> <span class="op">+</span> data.items[i].title <span class="op">+</span> <span class="str">'&lt;/li&gt;'</span>;
+  }
+  html <span class="op">+=</span> <span class="str">'&lt;/ul&gt;'</span>;
+
+  <span class="cmt">// 5) id="result" の要素の中身を、作ったHTMLで書き換える</span>
+  document.<span class="fn">getElementById</span>(<span class="str">'result'</span>).innerHTML <span class="op">=</span> html;
+}</pre>
+
+        <!-- Part C: 共有 -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin:1rem 0 0.3rem">Part C: 表示エリアは共有でOK</p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem">どちらのボタンも <code>&lt;div id="result"&gt;</code> に書き込みます。<strong>ボタンを押すたびに表示が切り替わる</strong>動作になります（後から押した方の内容で上書きされる）。これは仕様どおりなので問題ありません。</p>
+
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+          <strong>&#x2705; 動作確認:</strong> ブラウザで <code>http://localhost:3000</code> を再読み込み（<kbd>F5</kbd>）し、<strong>2つのボタン</strong>がそれぞれ動くか試す。<br>
+          ・「メンバーを読み込む」→ 6人のメンバー一覧が表示される<br>
+          ・「予定を表示」→ 日付と予定3件が表示される
+        </div>
+      </div>
+
+      <!-- ============ 指示4: 役割を太字 ============ -->
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin:0 0 0.6rem">指示4: メンバーの役割を <code>&lt;strong&gt;</code> で太字にする</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">どこを変える？</strong></p>
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.7rem">既存の <code>loadMembers()</code> の中の、メンバーを <code>&lt;li&gt;</code> に追加している<strong>1行</strong>だけ。<code>role</code> の周りに <code>&lt;strong&gt;</code>〜<code>&lt;/strong&gt;</code> を追加します。</p>
+
+        <p style="color:#ccc;font-size:0.9rem;margin:0 0 0.4rem"><strong style="color:#FFB800">変更前 → 変更後</strong></p>
+        <pre style="margin:0"><span class="code-label">JavaScript ── 変更前</span>
+html <span class="op">+=</span> <span class="str">'&lt;li&gt;'</span> <span class="op">+</span> data.members[i].name <span class="op">+</span> <span class="str">' ('</span> <span class="op">+</span> data.members[i].role <span class="op">+</span> <span class="str">')&lt;/li&gt;'</span>;</pre>
+        <pre style="margin:0.5rem 0 0"><span class="code-label">JavaScript ── 変更後（roleを&lt;strong&gt;で囲む）</span>
+html <span class="op">+=</span> <span class="str">'&lt;li&gt;'</span> <span class="op">+</span> data.members[i].name <span class="op">+</span> <span class="str">' (<strong style="color:#FF5252">&lt;strong&gt;</strong>'</span> <span class="op">+</span> data.members[i].role <span class="op">+</span> <span class="str">'<strong style="color:#FF5252">&lt;/strong&gt;</strong>)&lt;/li&gt;'</span>;</pre>
+
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.8rem;font-size:0.85rem;color:#FFB800">
+          <strong>&#x1F4A1; ヒント:</strong> 文字列の中に <code>&lt;strong&gt;</code> をそのまま書きます。<code>innerHTML</code> はタグをHTMLとして解釈するので、画面では太字で表示されます（DOM体験のQ2と同じ仕組み）。
+        </div>
+
+        <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.5rem;font-size:0.85rem;color:#93D500">
+          <strong>&#x2705; 動作確認:</strong> 「メンバーを読み込む」ボタンを押し、各メンバーの役割（リーダー、デザインなど）が<strong>太字</strong>で表示されればOK。
+        </div>
+      </div>
+
+      <!-- ============ 最終チェックリスト ============ -->
+      <div style="background:#0a1a0a;border:2px solid #4A7A00;border-radius:12px;padding:1rem 1.2rem;margin:1.5rem 0">
+        <p style="color:#93D500;font-weight:700;font-size:1rem;margin:0 0 0.6rem">&#x1F3C1; 最終チェックリスト（提出前に全部&#x2713;できるか確認）</p>
+        <ul style="padding-left:1.4rem;font-size:0.92rem;line-height:2;color:#e0e0e0;margin:0">
+          <li>サーバ起動中に <code>http://localhost:3000/api/schedule</code> で予定の JSON が見られる</li>
+          <li>サーバ起動中に <code>http://localhost:3000/api/members</code> でメンバー6人の JSON が見られる</li>
+          <li>ブラウザで <code>http://localhost:3000</code> にアクセスすると、ボタンが<strong>2つ</strong>並んでいる</li>
+          <li>「メンバーを読み込む」を押すと、6人の一覧が表示され、<strong>役割が太字</strong>になっている</li>
+          <li>「予定を表示」を押すと、日付と予定3件が表示される</li>
+          <li>2つのボタンを順番に押して、表示が切り替わる</li>
+          <li>サーバ起動時にエラーメッセージが出ていない（ターミナルに「サーバ起動: http://localhost:3000」と表示される）</li>
+        </ul>
+      </div>
+
+      <!-- ============ よくあるエラー ============ -->
+      <div style="background:#1a0a0a;border:1px solid #FF5252;border-radius:12px;padding:1rem 1.2rem;margin:1rem 0">
+        <p style="color:#FF5252;font-weight:700;font-size:1rem;margin:0 0 0.6rem">&#x1F198; よくあるエラーと対処</p>
+        <table style="margin:0;font-size:0.88rem">
+          <tr><th style="width:35%">症状</th><th style="width:35%">原因</th><th>対処</th></tr>
+          <tr>
+            <td>ボタンを押しても何も起きない</td>
+            <td><code>onclick</code> の関数名のスペルミス、または関数が <code>&lt;script&gt;</code> 内にない</td>
+            <td>F12 → Console を確認。「<code>loadSchedule is not defined</code>」と出ていたら関数名・配置を確認</td>
+          </tr>
+          <tr>
+            <td><code>node server.js</code> でエラー</td>
+            <td>カンマ忘れ、括弧の対応ミス（指示2でよく起きる）</td>
+            <td>エラーメッセージの行番号を見て、その付近のカンマ・<code>{ }</code>・<code>[ ]</code> を確認</td>
+          </tr>
+          <tr>
+            <td>「予定を表示」を押すと <code>404 Not Found</code></td>
+            <td><code>/api/schedule</code> ルートを書き忘れ、またはサーバ未再起動</td>
+            <td><kbd>Ctrl+C</kbd> でサーバ停止 → <code>node server.js</code> で再起動</td>
+          </tr>
+          <tr>
+            <td>役割が <code>&lt;strong&gt;リーダー&lt;/strong&gt;</code> のように<strong>そのまま文字</strong>で出る</td>
+            <td><code>innerHTML</code> ではなく <code>textContent</code> を使ってしまった</td>
+            <td><code>document.getElementById('result').innerHTML = html;</code> になっているか確認</td>
+          </tr>
+          <tr>
+            <td><code>EADDRINUSE: address already in use :::3000</code></td>
+            <td>前のサーバが停止していない</td>
+            <td>第2回資料の対処法を参照（前のターミナルで <kbd>Ctrl+C</kbd>）</td>
+          </tr>
         </table>
       </div>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>確認:</strong> ブラウザで両方のボタンが正しく動作することを確認してください。</p>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
         ① 改造後の <code>server.js</code> と <code>public/index.html</code> のコード全体を貼り付ける<br>
-        ② 各改造について「追加・変更した箇所」と「変更理由」を書く</div></div>
+        ② 各改造（指示1〜4）について「追加・変更した箇所」と「変更理由」を1〜2行ずつ書く<br>
+        ③ 動作確認のスクリーンショット2枚（「メンバーを読み込む」押下後、「予定を表示」押下後）</div></div>
     </div>
   </div>
 </section>
