@@ -705,6 +705,20 @@ pre { position: relative; }
   geometry=<span class="str">"primitive: box"</span>
   material=<span class="str">"color: red"</span>
   position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: a-entity + geometry + material</span>
+        </div>
+        <img src="images/session04-a-entity-redbox.png" alt="A-Frame で a-entity に geometry='primitive: box' と material='color: red' を付与した実行画面: 水色の空と緑の床の上に、原点から少し奥（position=0 1 -3）に赤い立方体が浮かんで見える。" loading="lazy">
+        <figcaption class="exec-caption">
+          上のコードを実際にブラウザで開いた結果。<strong>geometry で「箱」、material で「赤」</strong>を指定したため、空の <code>&lt;a-entity&gt;</code> が「赤い箱」として見えるようになった。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <ul class="point-list">
         <li><code>&lt;a-entity&gt;</code> だけ書いても何も見えない ―― コンポーネントが「見た目」を決める</li>
         <li>コンポーネントはHTML属性として <code>属性名="プロパティ: 値"</code> の形式で書く</li>
@@ -963,6 +977,20 @@ pre { position: relative; }
 <span class="kw">&lt;a-cylinder</span> position=<span class="str">"-1 1 -5"</span> radius=<span class="str">"0.3"</span> height=<span class="str">"2"</span> color=<span class="str">"green"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
 
 <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"8"</span> height=<span class="str">"8"</span> color=<span class="str">"#CCC"</span><span class="kw">&gt;&lt;/a-plane&gt;</span></pre>
+
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── 上のプリミティブを描画した結果</p>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: トレース演習1 ── 球+円柱+床</span>
+        </div>
+        <img src="images/session04-trace1.png" alt="A-Frame でプリミティブ a-sphere（半径0.8, 色#FF6347, 位置2 1.5 -4）, a-cylinder（半径0.3 高さ2, 色green, 位置-1 1 -5）, a-plane（幅高さ8, 色#CCC, 位置0 0 -4, 回転-90 0 0）を描画した実行画面: 灰色の床の上、左奥に縦長の緑の円柱、右やや手前に橙赤色の球、背景は水色の空。" loading="lazy">
+        <figcaption class="exec-caption">
+          灰色の床の上に、<strong>左奥に緑の円柱／右手前に橙赤色の球</strong>。床は <code>rotation="-90 0 0"</code> で水平に倒した <code>a-plane</code>。書き換え後（エンティティ・コンポーネント記法）でも、同じコンポーネント値を渡せば<strong>まったく同じ画面</strong>になります。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <p style="margin-top:0.5rem">変換後のエンティティ・コンポーネント記法を以下の形式で記入してください。</p>
       <pre><span class="code-label">HTML ── 変換後（エンティティ・コンポーネント）── 空欄を埋める</span>
 <span class="cmt">&lt;!-- 球 --&gt;</span>
@@ -1023,6 +1051,24 @@ pre { position: relative; }
     rotation=<span class="str">"-90 0 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
   <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <details style="margin:0.8rem 0">
+        <summary style="cursor:pointer;color:#FFB800;font-size:0.9rem;font-weight:700">&#x1F441; 答え合わせ用: 実行画面を見る（予測を書いてからクリック）</summary>
+        <div style="padding:0.8rem 0 0">
+          <figure class="exec-shot">
+            <div class="exec-mock-bar">
+              <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="url">A-Frame: トレース演習2 ── A/B/C の実行結果</span>
+            </div>
+            <img src="images/session04-trace2.png" alt="A-Frame でA=赤い箱(rotation 0 45 0), B=青い箱(scale 2 0.5 1), C=緑の球(scale 1 2 1)を描画した実行画面: 灰色の床の上、左にダイヤモンドのように角がカメラを向いた赤い箱、中央に横長で平たい青い箱、右に縦長に伸びた緑の楕円体。背景は水色の空。" loading="lazy">
+            <figcaption class="exec-caption">
+              <strong>A:</strong> rotation="0 45 0" で角がカメラを向く<strong>ダイヤ型</strong>／<strong>B:</strong> scale="2 0.5 1" で<strong>横長で平たい箱</strong>／<strong>C:</strong> scale="1 2 1" で<strong>縦長の楕円体</strong>。<br>
+              <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+            </figcaption>
+          </figure>
+        </div>
+      </details>
+
       <table>
         <tr><th>ラベル</th><th>形</th><th>色</th><th>見え方の予測（rotationやscaleの影響）</th></tr>
         <tr><td>A</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
@@ -1360,6 +1406,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
 
 <span class="cmt">&lt;!-- 同じ机を 1.5m 右にもう1台並べる ―― 親 position を変えるだけ --&gt;</span>
 &lt;a-entity position="0 0 -3"&gt; ... 同じ中身 ... &lt;/a-entity&gt;</pre>
+
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── 上のコードを2台分並べた結果</p>
+          <figure class="exec-shot">
+            <div class="exec-mock-bar">
+              <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="url">A-Frame: ヒント1 ── 学生用デスク2台</span>
+            </div>
+            <img src="images/session04-hint-desk.png" alt="A-Frame で天板（木目色のbox）と4本の脚（暗灰色のcylinder）をネストして組み立てた学生用デスクを2台並べた実行画面: ベージュ色の床の上、左と右にほぼ同じ形・同じ色の机が並んで配置されている。背景は水色の空。" loading="lazy">
+            <figcaption class="exec-caption">
+              天板（木目色の薄い箱）と脚4本（暗灰色の細い円柱）を<strong>1つの親 <code>&lt;a-entity&gt;</code> の中にネスト</strong>しているため、親の <code>position</code> を変えるだけで同じ机をいくつでも並べられる。
+            </figcaption>
+          </figure>
         </div>
       </details>
 
@@ -1379,6 +1437,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
     material="color: #6B4226"
     position="0 0 -0.03"&gt;&lt;/a-entity&gt;
 &lt;/a-entity&gt;</pre>
+
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+          <figure class="exec-shot">
+            <div class="exec-mock-bar">
+              <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="url">A-Frame: ヒント2 ── 教壇正面の黒板</span>
+            </div>
+            <img src="images/session04-hint-blackboard.png" alt="A-Frame で暗緑色の薄い板（黒板本体）と一回り大きい茶色の板（枠）を重ねた黒板を、ベージュ色の壁に貼り付けた実行画面: 中央に深緑の黒板が茶色の枠付きで表示されている。" loading="lazy">
+            <figcaption class="exec-caption">
+              <strong>黒板本体（深緑）</strong>の少し後ろに<strong>一回り大きい茶色の板</strong>を重ねるだけで「枠」に見える。黒板全体は親エンティティ <code>position="0 1.5 -5"</code> で壁の位置に配置。
+            </figcaption>
+          </figure>
         </div>
       </details>
 
@@ -1407,6 +1477,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
   &lt;a-entity geometry="primitive: cylinder; radius: 0.025; height: 0.45" material="color: #333"
     position=" 0.18 0.22 -0.18"&gt;&lt;/a-entity&gt;
 &lt;/a-entity&gt;</pre>
+
+          <p style="margin-top:0.8rem;font-size:0.85rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+          <figure class="exec-shot">
+            <div class="exec-mock-bar">
+              <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="url">A-Frame: ヒント3 ── 学生用の椅子</span>
+            </div>
+            <img src="images/session04-hint-chair.png" alt="A-Frame で青い座面と背もたれ、暗灰色の4本脚をネストして組み立てた学生用の椅子をベージュ色の床に1脚置いた実行画面: 青い座面の上に背もたれが立ち上がり、4本の細い脚で床に支えられている。背景は水色の空。" loading="lazy">
+            <figcaption class="exec-caption">
+              <strong>座面（box）＋背もたれ（box）＋脚（cylinder×4）</strong>を1つの親エンティティにネスト。机と同じく親の <code>position</code> を変えるだけで何脚でも並べられる。
+            </figcaption>
+          </figure>
         </div>
       </details>
     </div>
@@ -1545,6 +1627,19 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
   material="color: #CCC"
   position="0 0 -4"
   rotation="-90 0 0"&gt;&lt;/a-entity&gt;</pre>
+
+        <p style="margin-top:0.6rem;font-size:0.85rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── プリミティブ版と完全に同じ結果</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: トレース演習1 解答 ── 同じシーン</span>
+          </div>
+          <img src="images/session04-trace1.png" alt="A-Frame でエンティティ・コンポーネント記法に書き換えた球+円柱+床を描画した実行画面: 灰色の床の上、左奥に緑の円柱、右に橙赤色の球、背景は水色の空。プリミティブ版とまったく同じ表示結果になっている。" loading="lazy">
+          <figcaption class="exec-caption">
+            プリミティブで書いてもエンティティ・コンポーネントで書いても、<strong>同じコンポーネント値を渡せばまったく同じ画面</strong>になります（A-Frame はどちらの記法も内部で同じデータに変換しているため）。
+          </figcaption>
+        </figure>
+
         <ul class="point-list">
           <li>プリミティブの <code>radius</code>, <code>height</code>, <code>width</code> は <code>geometry</code> コンポーネントのプロパティになる</li>
           <li><code>color</code> は <code>material</code> コンポーネントの <code>color</code> プロパティになる</li>
@@ -1562,6 +1657,18 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
           <tr><td>B</td><td>箱</td><td>青</td><td>X方向に2倍、Y方向に0.5倍なので、横に広く縦に潰れた平たい箱になる</td></tr>
           <tr><td>C</td><td>球</td><td>緑</td><td>Y方向に2倍に引き延ばされた楕円体（卵形）になる</td></tr>
         </table>
+
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: トレース演習2 解答 ── A/B/C の実行結果</span>
+          </div>
+          <img src="images/session04-trace2.png" alt="A-Frame でA=赤い箱(rotation 0 45 0), B=青い箱(scale 2 0.5 1), C=緑の球(scale 1 2 1)を描画した実行画面: 灰色の床の上、左にダイヤモンドのように角がカメラを向いた赤い箱、中央に横長で平たい青い箱、右に縦長に伸びた緑の楕円体。背景は水色の空。" loading="lazy">
+          <figcaption class="exec-caption">
+            予測どおり、A は<strong>ダイヤ型</strong>、B は<strong>横長で平たい</strong>、C は<strong>縦長の楕円体</strong>として描画される。
+          </figcaption>
+        </figure>
       </div>
     </details>
 
