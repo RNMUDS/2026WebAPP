@@ -1513,8 +1513,42 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
           <span style="font-size:0.85em;color:#B388FF">※ <code>%</code> は剰余（割った余り）、<code>Math.floor</code> は小数点以下切り捨て。</span>
         </div>
 
-        <details style="margin:0 0 1.2rem">
-          <summary style="cursor:pointer;color:#B388FF;font-size:0.85rem;font-weight:700">&#x1F4DD; <code>i % 10</code> と <code>Math.floor(i / 10)</code> の動きを表で確認</summary>
+        <!-- ===== ステップ0: 横一列に10個（最小例） ===== -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin:0 0 0.4rem">&#x1F539; ステップ0: まずは <code>a-box</code> を<strong>横一列に10個</strong>並べてみる（一番シンプルな例）</p>
+        <p style="margin:0 0 0.6rem;font-size:0.92rem">
+          グリッドや行列を考える前に、<strong>x 座標を <code>i</code> 倍するだけ</strong>の最小コードで「ループで複数のオブジェクトを作る」感覚をつかみます。<br>
+          y（高さ）と z（奥行き）は固定で、x だけ <code>i × 間隔</code> ずつずらすので、箱は<strong>横一列</strong>に並びます。
+        </p>
+
+        <pre><span class="code-label">JavaScript ── public/boxes-row.html の &lt;script&gt; の中身（最小例）</span>
+<span class="kw">const</span> scene <span class="op">=</span> document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
+
+<span class="cmt">// 横一列に10個の箱を並べる ── 一番シンプルな for ループの使い方</span>
+<span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">10</span>; i<span class="op">++</span>) {
+  <span class="kw">const</span> box <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+  box.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${i * 1.2} 0.5 -5`</span>);  <span class="cmt">// x = i × 1.2、y と z は固定</span>
+  box.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, <span class="str">'#FF6347'</span>);
+  scene.<span class="fn">appendChild</span>(box);
+}</pre>
+
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#B388FF;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── 10個の箱が横一列に並んだ結果</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: コラム ステップ0 ── 横一列の箱10個</span>
+          </div>
+          <img src="images/session04-column-boxes-row.png" alt="A-Frame で JavaScript の単一 for ループにより 10 個のオレンジ色の a-box を横一列に並べた実行画面: ベージュ色の床の上、画面中央に左から右へオレンジの立方体が10個ずらりと並ぶ。背景は水色の空。" loading="lazy">
+          <figcaption class="exec-caption">
+            HTML側には箱を1つも書いていないのに、JSの<code>for</code>ループで <strong>10個のオレンジの箱が等間隔で横一列</strong>に並ぶ。<code>i</code> が 0, 1, 2, ..., 9 と進むにつれて、x 座標が 0.0, 1.2, 2.4, ..., 10.8 へとずれていく。
+          </figcaption>
+        </figure>
+
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.8rem;font-size:0.88rem;color:#E0D8FF">
+          <strong>&#x1F4A1; ここがポイント:</strong> <code>i &lt; 10</code> の <strong>10 を 100 に変えるだけで100個</strong>、<strong>1000 に変えるだけで1000個</strong>並べられます。HTMLで1個ずつ書くと10倍・100倍の手間ですが、JSなら<strong>1か所の数字を書き換えるだけ</strong>。これが for ループを使う最大のメリットです。
+        </div>
+
+        <details style="margin:1.2rem 0">
+          <summary style="cursor:pointer;color:#B388FF;font-size:0.85rem;font-weight:700">&#x1F4DD; <code>i % 10</code> と <code>Math.floor(i / 10)</code> の動きを表で確認（次のステップ1で使う）</summary>
           <div style="padding:0.6rem 0 0">
             <table style="font-size:0.85rem">
               <tr><th>i</th><th>i % 10（列）</th><th>Math.floor(i / 10)（行）</th></tr>
@@ -1530,10 +1564,10 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
           </div>
         </details>
 
-        <!-- ===== ステップ1: a-box を100個 ===== -->
-        <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin:0 0 0.4rem">&#x1F539; ステップ1: まずは <code>a-box</code> を100個並べる（最小例）</p>
+        <!-- ===== ステップ1: a-box を100個（グリッド） ===== -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin:0 0 0.4rem">&#x1F539; ステップ1: <code>a-box</code> を <strong>10×10 のグリッド</strong>に100個並べる</p>
         <p style="margin:0 0 0.6rem;font-size:0.92rem">
-          一番シンプルな箱（<code>a-box</code>）を10×10で100個配置してみます。新しく作る要素は<strong>1個の <code>&lt;a-box&gt;</code> だけ</strong>なので、ループの中身もたった4行です。
+          ステップ0は1列でしたが、次は<strong>奥行き方向（z軸）にも並べて</strong>10×10のマス目にします。<code>i</code> を <code>i % 10</code> と <code>Math.floor(i / 10)</code> で列番号と行番号に振り分けるのがポイントです（上の表参照）。
         </p>
 
         <pre><span class="code-label">HTML ── public/boxes100.html（抜粋: &lt;a-scene&gt; の中は床とカメラだけ。箱は下のJSで生成）</span>
