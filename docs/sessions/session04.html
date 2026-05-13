@@ -1492,10 +1492,10 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         </div>
       </details>
 
-      <!-- ============ コラム: forループで椅子を100脚作る ============ -->
+      <!-- ============ コラム: forループで100個並べる ============ -->
       <div style="background:#1A1A2A;border:2px solid #B388FF;border-radius:10px;padding:1.2rem;margin:1.5rem 0 0">
-        <p style="color:#B388FF;font-weight:700;font-size:1rem;margin:0 0 0.6rem">&#x1F4D6; コラム: 椅子を100脚並べたい！── JavaScript の <code>for</code> ループを使う</p>
-        <p style="margin:0 0 0.6rem;font-size:0.95rem">
+        <p style="color:#B388FF;font-weight:700;font-size:1rem;margin:0 0 0.6rem">&#x1F4D6; コラム: 100個並べたい！── JavaScript の <code>for</code> ループを使う</p>
+        <p style="margin:0 0 0.8rem;font-size:0.95rem">
           ヒント3の椅子をコピペで100脚並べると、HTML が <strong>700行以上</strong>になってしまい、机の位置を1cm変えたいだけでも大変です。<br>
           こんなときは <strong>HTML に書かず、JavaScript の <code>for</code> ループで動的にエンティティを生成</strong>するとシンプルになります（第3回でやった DOM 操作の応用）。
         </p>
@@ -1503,57 +1503,126 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <p style="margin-top:0.6rem;font-size:0.9rem;color:#B388FF;font-weight:700">仕組み</p>
         <ul class="point-list" style="margin:0 0 0.8rem">
           <li><code>document.querySelector('a-scene')</code> で A-Frame のシーン要素を取得</li>
-          <li><code>document.createElement('a-entity')</code> で椅子のエンティティを作る</li>
-          <li><code>setAttribute('geometry', '...')</code> でコンポーネントを付ける</li>
-          <li><code>scene.appendChild(chair)</code> でシーンに追加 ―― これを 100 回繰り返す</li>
+          <li><code>document.createElement('a-box')</code> などで新しい3Dオブジェクトを作る</li>
+          <li><code>setAttribute('position', '...')</code> や <code>setAttribute('color', '...')</code> で属性を付ける</li>
+          <li><code>scene.appendChild(box)</code> でシーンに追加 ―― これを <code>for</code> ループで 100 回繰り返す</li>
         </ul>
 
-        <pre><span class="code-label">HTML ── public/chairs100.html（抜粋: &lt;a-scene&gt; の中は床とカメラだけ。椅子は下のJSで生成）</span>
+        <div style="background:#0a0a1a;border:1px solid #B388FF;border-radius:6px;padding:0.7rem 0.9rem;margin:0 0 1rem;font-size:0.88rem;color:#E0D8FF">
+          <strong>&#x1F511; ポイント:</strong> 単一の <code>for (let i = 0; i &lt; 100; i++)</code> で 0〜99 の連番を回し、<strong><code>i % 10</code> で列番号（0〜9）</strong>、<strong><code>Math.floor(i / 10)</code> で行番号（0〜9）</strong>に変換すれば、1本のループで 10×10 のグリッド配置ができます。<br>
+          <span style="font-size:0.85em;color:#B388FF">※ <code>%</code> は剰余（割った余り）、<code>Math.floor</code> は小数点以下切り捨て。</span>
+        </div>
+
+        <details style="margin:0 0 1.2rem">
+          <summary style="cursor:pointer;color:#B388FF;font-size:0.85rem;font-weight:700">&#x1F4DD; <code>i % 10</code> と <code>Math.floor(i / 10)</code> の動きを表で確認</summary>
+          <div style="padding:0.6rem 0 0">
+            <table style="font-size:0.85rem">
+              <tr><th>i</th><th>i % 10（列）</th><th>Math.floor(i / 10)（行）</th></tr>
+              <tr><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td></tr>
+              <tr><td>9</td><td>9</td><td>0</td></tr>
+              <tr><td>10</td><td>0</td><td>1</td></tr>
+              <tr><td>11</td><td>1</td><td>1</td></tr>
+              <tr><td>50</td><td>0</td><td>5</td></tr>
+              <tr><td>99</td><td>9</td><td>9</td></tr>
+            </table>
+            <p style="margin-top:0.4rem;font-size:0.85rem;color:#ccc"><code>i</code> が 0 から 99 まで進むと、<code>col</code> は 0〜9 を 10 回繰り返し、<code>row</code> は 10 ごとに 1 増える ―― これで <strong>10×10 のすべてのマス目</strong>が漏れなく1回ずつ通る。</p>
+          </div>
+        </details>
+
+        <!-- ===== ステップ1: a-box を100個 ===== -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin:0 0 0.4rem">&#x1F539; ステップ1: まずは <code>a-box</code> を100個並べる（最小例）</p>
+        <p style="margin:0 0 0.6rem;font-size:0.92rem">
+          一番シンプルな箱（<code>a-box</code>）を10×10で100個配置してみます。新しく作る要素は<strong>1個の <code>&lt;a-box&gt;</code> だけ</strong>なので、ループの中身もたった4行です。
+        </p>
+
+        <pre><span class="code-label">HTML ── public/boxes100.html（抜粋: &lt;a-scene&gt; の中は床とカメラだけ。箱は下のJSで生成）</span>
 <span class="kw">&lt;script&gt;</span>
-  <span class="cmt">// シーン要素を取得</span>
   <span class="kw">const</span> scene <span class="op">=</span> document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
-  <span class="kw">const</span> ROWS    <span class="op">=</span> <span class="num">10</span>;   <span class="cmt">// 行数</span>
-  <span class="kw">const</span> COLS    <span class="op">=</span> <span class="num">10</span>;   <span class="cmt">// 列数（10×10 = 100脚）</span>
-  <span class="kw">const</span> SPACING <span class="op">=</span> <span class="num">0.8</span>;  <span class="cmt">// 椅子と椅子の間隔[m]</span>
+  <span class="kw">const</span> COLS    <span class="op">=</span> <span class="num">10</span>;   <span class="cmt">// 1行に並べる数</span>
+  <span class="kw">const</span> SPACING <span class="op">=</span> <span class="num">1.2</span>;  <span class="cmt">// 箱どうしの間隔[m]</span>
 
-  <span class="cmt">// 二重の for ループで 10×10 のグリッド配置</span>
-  <span class="kw">for</span> (<span class="kw">let</span> row <span class="op">=</span> <span class="num">0</span>; row <span class="op">&lt;</span> ROWS; row<span class="op">++</span>) {
-    <span class="kw">for</span> (<span class="kw">let</span> col <span class="op">=</span> <span class="num">0</span>; col <span class="op">&lt;</span> COLS; col<span class="op">++</span>) {
-      <span class="cmt">// 椅子1脚分の x, z 座標を計算</span>
-      <span class="kw">const</span> x <span class="op">=</span> (col <span class="op">-</span> COLS <span class="op">/</span> <span class="num">2</span>) <span class="op">*</span> SPACING <span class="op">+</span> SPACING <span class="op">/</span> <span class="num">2</span>;
-      <span class="kw">const</span> z <span class="op">=</span> <span class="op">-</span><span class="num">2</span> <span class="op">-</span> row <span class="op">*</span> SPACING;
+  <span class="cmt">// 単一の for ループで 100 個生成（i = 0, 1, 2, ..., 99）</span>
+  <span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">100</span>; i<span class="op">++</span>) {
+    <span class="cmt">// 通し番号 i を「列・行」に変換</span>
+    <span class="kw">const</span> col <span class="op">=</span> i <span class="op">%</span> COLS;              <span class="cmt">// 0〜9 を繰り返す（列）</span>
+    <span class="kw">const</span> row <span class="op">=</span> <span class="fn">Math.floor</span>(i <span class="op">/</span> COLS);  <span class="cmt">// 10 ごとに 1 増える（行）</span>
 
-      <span class="cmt">// 親エンティティ（椅子1脚の入れ物）を作る</span>
-      <span class="kw">const</span> chair <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
-      chair.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${x} 0 ${z}`</span>);
+    <span class="cmt">// 箱1個分の x, z 座標を計算</span>
+    <span class="kw">const</span> x <span class="op">=</span> (col <span class="op">-</span> COLS <span class="op">/</span> <span class="num">2</span>) <span class="op">*</span> SPACING <span class="op">+</span> SPACING <span class="op">/</span> <span class="num">2</span>;
+    <span class="kw">const</span> z <span class="op">=</span> <span class="op">-</span><span class="num">3</span> <span class="op">-</span> row <span class="op">*</span> SPACING;
 
-      <span class="cmt">// 座面</span>
-      <span class="kw">const</span> seat <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
-      seat.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: box; width: 0.45; height: 0.05; depth: 0.45'</span>);
-      seat.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #4A6FA5'</span>);
-      seat.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">'0 0.45 0'</span>);
-      chair.<span class="fn">appendChild</span>(seat);
+    <span class="cmt">// &lt;a-box&gt; を作って属性を付け、シーンに追加</span>
+    <span class="kw">const</span> box <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+    box.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${x} 0.5 ${z}`</span>);
+    box.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, <span class="str">'#FF6347'</span>);
+    scene.<span class="fn">appendChild</span>(box);
+  }
+<span class="kw">&lt;/script&gt;</span></pre>
 
-      <span class="cmt">// 背もたれ</span>
-      <span class="kw">const</span> back <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
-      back.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: box; width: 0.45; height: 0.5; depth: 0.05'</span>);
-      back.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #4A6FA5'</span>);
-      back.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">'0 0.75 -0.2'</span>);
-      chair.<span class="fn">appendChild</span>(back);
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#B388FF;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── オレンジの箱100個がforループだけで並んだ結果</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: コラム ステップ1 ── a-box を100個</span>
+          </div>
+          <img src="images/session04-column-boxes100.png" alt="A-Frame で JavaScript の単一 for ループにより 10×10 グリッド状に100個のオレンジ色の a-box を自動生成した実行画面: ベージュ色の床の上、奥から手前に整然と並ぶオレンジの立方体100個。背景は水色の空。" loading="lazy">
+          <figcaption class="exec-caption">
+            <strong>HTML には箱を1つも書いていない</strong>のに、JS の <code>for</code> ループだけで100個のオレンジの箱が整列している。<code>i</code> は 0〜99 の通し番号、<code>col</code> と <code>row</code> がそれぞれ 0〜9 を取って 10×10 のマス目になっている。
+          </figcaption>
+        </figure>
 
-      <span class="cmt">// 脚4本（配列でループ）</span>
-      [[<span class="op">-</span><span class="num">0.18</span>,  <span class="num">0.18</span>], [<span class="num">0.18</span>,  <span class="num">0.18</span>],
-       [<span class="op">-</span><span class="num">0.18</span>, <span class="op">-</span><span class="num">0.18</span>], [<span class="num">0.18</span>, <span class="op">-</span><span class="num">0.18</span>]].<span class="fn">forEach</span>(([lx, lz]) <span class="op">=&gt;</span> {
-        <span class="kw">const</span> leg <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
-        leg.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: cylinder; radius: 0.025; height: 0.45'</span>);
-        leg.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #333'</span>);
-        leg.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${lx} 0.22 ${lz}`</span>);
-        chair.<span class="fn">appendChild</span>(leg);
-      });
+        <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.8rem;font-size:0.88rem;color:#E0D8FF">
+          <strong>&#x1F590; やってみよう:</strong> <code>box.setAttribute('color', '#FF6347')</code> の行を <code>box.setAttribute('color', `hsl(${i * 3.6}, 70%, 60%)`)</code> に変えると、100個の箱に<strong>少しずつ違う色</strong>がついて虹色のグリッドになります（<code>i</code> が 0→99 で色相が 0→356.4 まで一周）。
+        </div>
 
-      <span class="cmt">// シーンに椅子を追加</span>
-      scene.<span class="fn">appendChild</span>(chair);
-    }
+        <!-- ===== ステップ2: ネスト構造（椅子） ===== -->
+        <p style="color:#FFB800;font-weight:700;font-size:0.95rem;margin:1.5rem 0 0.4rem">&#x1F539; ステップ2: ネスト構造（複数パーツ）でも同じやり方で並べる</p>
+        <p style="margin:0 0 0.6rem;font-size:0.92rem">
+          ステップ1の <code>a-box</code> を、ヒント3で作った<strong>椅子（座面＋背もたれ＋脚4本）のネスト</strong>に差し替えるだけで、椅子100脚に拡張できます。ループ構造（<code>i % 10</code> / <code>Math.floor(i / 10)</code>）は<strong>まったく同じ</strong>です。
+        </p>
+
+        <pre><span class="code-label">HTML ── public/chairs100.html（抜粋: 椅子100脚を生成）</span>
+<span class="kw">&lt;script&gt;</span>
+  <span class="kw">const</span> scene <span class="op">=</span> document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
+  <span class="kw">const</span> COLS    <span class="op">=</span> <span class="num">10</span>;
+  <span class="kw">const</span> SPACING <span class="op">=</span> <span class="num">0.8</span>;
+
+  <span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">100</span>; i<span class="op">++</span>) {
+    <span class="kw">const</span> col <span class="op">=</span> i <span class="op">%</span> COLS;
+    <span class="kw">const</span> row <span class="op">=</span> <span class="fn">Math.floor</span>(i <span class="op">/</span> COLS);
+    <span class="kw">const</span> x <span class="op">=</span> (col <span class="op">-</span> COLS <span class="op">/</span> <span class="num">2</span>) <span class="op">*</span> SPACING <span class="op">+</span> SPACING <span class="op">/</span> <span class="num">2</span>;
+    <span class="kw">const</span> z <span class="op">=</span> <span class="op">-</span><span class="num">2</span> <span class="op">-</span> row <span class="op">*</span> SPACING;
+
+    <span class="cmt">// 親エンティティ（椅子1脚の入れ物）─ 中身を中にネスト</span>
+    <span class="kw">const</span> chair <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
+    chair.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${x} 0 ${z}`</span>);
+
+    <span class="cmt">// 座面</span>
+    <span class="kw">const</span> seat <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
+    seat.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: box; width: 0.45; height: 0.05; depth: 0.45'</span>);
+    seat.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #4A6FA5'</span>);
+    seat.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">'0 0.45 0'</span>);
+    chair.<span class="fn">appendChild</span>(seat);
+
+    <span class="cmt">// 背もたれ</span>
+    <span class="kw">const</span> back <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
+    back.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: box; width: 0.45; height: 0.5; depth: 0.05'</span>);
+    back.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #4A6FA5'</span>);
+    back.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">'0 0.75 -0.2'</span>);
+    chair.<span class="fn">appendChild</span>(back);
+
+    <span class="cmt">// 脚4本（配列でループ）</span>
+    [[<span class="op">-</span><span class="num">0.18</span>,  <span class="num">0.18</span>], [<span class="num">0.18</span>,  <span class="num">0.18</span>],
+     [<span class="op">-</span><span class="num">0.18</span>, <span class="op">-</span><span class="num">0.18</span>], [<span class="num">0.18</span>, <span class="op">-</span><span class="num">0.18</span>]].<span class="fn">forEach</span>(([lx, lz]) <span class="op">=&gt;</span> {
+      <span class="kw">const</span> leg <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
+      leg.<span class="fn">setAttribute</span>(<span class="str">'geometry'</span>, <span class="str">'primitive: cylinder; radius: 0.025; height: 0.45'</span>);
+      leg.<span class="fn">setAttribute</span>(<span class="str">'material'</span>, <span class="str">'color: #333'</span>);
+      leg.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${lx} 0.22 ${lz}`</span>);
+      chair.<span class="fn">appendChild</span>(leg);
+    });
+
+    scene.<span class="fn">appendChild</span>(chair);
   }
 <span class="kw">&lt;/script&gt;</span></pre>
 
@@ -1561,11 +1630,11 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="k
         <figure class="exec-shot">
           <div class="exec-mock-bar">
             <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="url">A-Frame: コラム ── forループで椅子100脚</span>
+            <span class="url">A-Frame: コラム ステップ2 ── 椅子を100脚</span>
           </div>
-          <img src="images/session04-column-chairs100.png" alt="A-Frame で JavaScript の二重 for ループにより 10×10 グリッド状に100脚の青い椅子を自動生成した実行画面: ベージュ色の床の上、奥から手前に整然と並ぶ100脚の椅子。すべて同じデザイン（青い座面と背もたれ、暗灰色の脚4本）。背景は水色の空。" loading="lazy">
+          <img src="images/session04-column-chairs100.png" alt="A-Frame で JavaScript の単一 for ループにより 10×10 グリッド状に100脚の青い椅子を自動生成した実行画面: ベージュ色の床の上、奥から手前に整然と並ぶ100脚の椅子。すべて同じデザイン（青い座面と背もたれ、暗灰色の脚4本）。背景は水色の空。" loading="lazy">
           <figcaption class="exec-caption">
-            <strong>HTML には椅子を1つも書いていない</strong>のに、<code>for</code> ループの計算結果として100脚がきれいに整列している。行数・列数・間隔の3つの定数を変えるだけで「8×8で64脚」「20×5の長方形配置」など自由に変えられる。
+            ステップ1とまったく同じ <code>i % 10</code> / <code>Math.floor(i / 10)</code> の仕組みで、中身を「箱1個」から「椅子1脚（6パーツのネスト）」に差し替えただけ。100脚すべて同じ位置計算ロジックで並んでいる。
           </figcaption>
         </figure>
 
