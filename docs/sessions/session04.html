@@ -86,6 +86,30 @@ section + section { border-top: 1px solid #222; }
   padding: 0.65rem 1rem;
   font-size: 0.9rem;
   font-weight: 500;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+a.sub-item:hover, a.sub-item:focus-visible {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+  text-decoration: none;
+  outline: none;
+}
+a.sub-item::after {
+  content: '↗';
+  margin-left: auto;
+  color: #76B900;
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+a.sub-item:hover::after, a.sub-item:focus-visible::after {
+  opacity: 1;
+  transform: translateX(2px);
 }
 .sub-count {
   background: #76B900;
@@ -333,6 +357,188 @@ details summary::before {
 details[open] summary::before { transform: rotate(90deg); }
 details .answer-content { padding: 1rem 1.2rem; border-top: 1px solid #2a2a2a; }
 
+/* ============ SECTION COLLAPSIBLE (章ごとに全展開/閉じる) ============ */
+details.section-collapsible {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+  overflow: visible;
+}
+details.section-collapsible > summary {
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  list-style: none;
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  user-select: none;
+  transition: opacity 0.15s;
+}
+details.section-collapsible > summary:hover { opacity: 0.85; }
+details.section-collapsible > summary::-webkit-details-marker { display: none; }
+details.section-collapsible > summary::marker { content: ''; }
+details.section-collapsible > summary::before { content: ''; display: none; }
+details.section-collapsible > summary .section-num { flex-shrink: 0; }
+details.section-collapsible > summary h2 { flex: 1; }
+details.section-collapsible > summary .toggle-arrow {
+  margin-left: auto;
+  font-size: 1.4rem;
+  color: #76B900;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+details.section-collapsible:not([open]) > summary .toggle-arrow { transform: rotate(-90deg); }
+details.section-collapsible:not([open]) > summary { margin-bottom: 0; }
+
+/* ============ TOGGLE ALL CONTROL (全章まとめて開閉) ============ */
+.toggle-all {
+  display: flex; justify-content: flex-end; gap: 0.5rem;
+  margin: 1rem 0 0.5rem;
+}
+.toggle-all button {
+  background: #1a1a1a;
+  color: #76B900;
+  border: 1px solid #2a3a1a;
+  border-radius: 8px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-all button:hover { background: #1a2e0a; border-color: #76B900; }
+
+/* ============ EXECUTION SCREEN MOCKUP (HTML/CSSによる実行画面の図) ============ */
+.exec-mock {
+  margin: 1rem 0 1.2rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.exec-mock-bar {
+  background: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.4rem 0.7rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+.exec-mock-bar .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #FF5252;
+}
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url {
+  margin-left: 0.4rem;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem;
+  flex: 1;
+  color: #93D500;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.scene-mock {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.scene-mock.sky-green {
+  background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 62%, #7BC8A4 62%, #6BB897 100%);
+}
+.scene-mock.sky-gray {
+  background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 62%, #CCCCCC 62%, #B5B5B5 100%);
+}
+.scene-mock::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 62%;
+  height: 1px;
+  background: rgba(0,0,0,0.18);
+}
+.scene-mock .scene-label {
+  position: absolute;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 700;
+  z-index: 5;
+  white-space: nowrap;
+}
+.scene-mock .scene-divider {
+  position: absolute;
+  top: 8%; bottom: 38%;
+  left: 50%;
+  width: 1px;
+  background: rgba(0,0,0,0.15);
+  z-index: 3;
+}
+.scene-shape {
+  position: absolute;
+  z-index: 2;
+  transform-origin: center center;
+}
+.shape-box {
+  background: var(--c, #FF6347);
+  border: 1px solid rgba(0,0,0,0.3);
+  box-shadow:
+    inset -10px -10px 0 rgba(0,0,0,0.2),
+    inset 8px 8px 0 rgba(255,255,255,0.15);
+}
+.shape-sphere {
+  background: radial-gradient(circle at 32% 28%,
+    rgba(255,255,255,0.85) 0%,
+    rgba(255,255,255,0.3) 18%,
+    var(--c, #4FC3F7) 55%,
+    rgba(0,0,0,0.35) 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.shape-cyl {
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.35) 0%,
+    var(--c, #888) 28%,
+    var(--c, #888) 72%,
+    rgba(0,0,0,0.35) 100%);
+  border-radius: 6px;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.25);
+}
+.exec-caption {
+  font-size: 0.78rem;
+  color: #999;
+  text-align: center;
+  padding: 0.45rem 0.8rem 0.6rem;
+  border-top: 1px solid #2a2a2a;
+  background: #141414;
+}
+.exec-caption strong { color: #93D500; }
+
+/* Real screenshot variant — same chrome as .exec-mock but wraps an <img> */
+.exec-shot {
+  margin: 1rem 0 1.2rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.exec-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+
 /* ============ FOOTER ============ */
 footer {
   background: #0A0A0A;
@@ -412,9 +618,7 @@ pre { position: relative; }
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
-  <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
@@ -431,15 +635,21 @@ pre { position: relative; }
 <!-- ============ SUBMISSION GUIDE ============ -->
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
+    <div class="toggle-all">
+      <button id="btn-expand-all" type="button">▼ すべての章を開く</button>
+      <button id="btn-collapse-all" type="button">▶ すべての章を閉じる</button>
+    </div>
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>ECS理解 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-examples"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span><strong>理想の大学教室</strong>のコード提出</a>
       </div>
+      <p style="margin-top:0.8rem;font-size:0.85rem;color:#999;line-height:1.7">
+        この回は <strong style="color:#76B900">「理想の大学教室を作る」</strong> という1つのクリエイティブ課題に集中します。<br>
+        知識確認は「例題」「トレース演習」「コード体験」の中で行い、最後の標準課題で<strong>学んだ ECS・ネスト・rotation・scale をすべて使って自分の作品</strong>に仕上げてください。
+      </p>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
       </div>
@@ -450,10 +660,12 @@ pre { position: relative; }
 <!-- ============ 1. EXPLANATION ============ -->
 <section id="sec-explanation">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#76B900">1</div>
-      <h2>説明</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#76B900">1</div>
+        <h2>説明</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
       第1回では A-Frame の基本タグ（<code>&lt;a-box&gt;</code> など）で3D空間を作りました。<br>
@@ -523,6 +735,29 @@ pre { position: relative; }
       </div>
       <p>A-Frame は<strong>右手座標系</strong>を使います。単位は<strong>メートル</strong>です。</p>
 
+      <!-- 実機キャプチャ: A-Frame で3D軸を可視化したシーン -->
+      <p style="margin:1rem 0 0.4rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）── A-Frame で3軸を可視化したシーン</p>
+      <figure class="exec-shot coords-figure">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: 3D coordinate system (X / Y / Z)</span>
+        </div>
+        <img src="images/session04-coords.png" alt="A-Frame で X軸（赤）・Y軸（緑）・Z軸（青）の3つの直行する軸を可視化した3Dシーン。原点から右に赤い円柱（+X 軸）、上に緑の円柱（+Y 軸）、手前左に青い円柱（+Z 軸）が伸び、各先端に同じ色の立方体ラベル。半透明のオレンジ色の人型シルエットがカメラ位置 (0, 1.6, 0) に立っており、+Z 軸の方向＝カメラに向かう方向であることがわかる。" loading="lazy">
+        <figcaption class="exec-caption" style="text-align:left;padding:0.7rem 1rem">
+          <div style="display:flex;flex-wrap:wrap;gap:0.6rem 1.2rem;justify-content:center;margin-bottom:0.45rem">
+            <span><span style="display:inline-block;width:12px;height:12px;background:#FF5252;border-radius:2px;vertical-align:middle;margin-right:0.3rem"></span><strong style="color:#FF5252">+X 軸</strong>: 右がプラス（赤）</span>
+            <span><span style="display:inline-block;width:12px;height:12px;background:#76B900;border-radius:2px;vertical-align:middle;margin-right:0.3rem"></span><strong style="color:#76B900">+Y 軸</strong>: 上がプラス（緑）</span>
+            <span><span style="display:inline-block;width:12px;height:12px;background:#4FC3F7;border-radius:2px;vertical-align:middle;margin-right:0.3rem"></span><strong style="color:#4FC3F7">+Z 軸</strong>: 手前がプラス（青）</span>
+            <span><span style="display:inline-block;width:12px;height:12px;background:#FFB800;border-radius:50%;vertical-align:middle;margin-right:0.3rem"></span><strong style="color:#FFB800">カメラ</strong>: 初期位置 <code>(0, 1.6, 0)</code></span>
+          </div>
+          <div style="text-align:center">
+            原点（白い小球）から3本の軸が伸びる。半透明の<strong style="color:#FFB800">オレンジの人型</strong>がカメラ（あなた）の立ち位置。<strong style="color:#4FC3F7">+Z 軸</strong>が人型の方を指している ―― つまり <strong>Z をマイナスにすると「カメラの正面（奥）」に物が並ぶ</strong>。<br>
+            <span style="color:#888;font-size:0.85em">※ 上のシーンを A-Frame で実際にレンダリングしてキャプチャしたものです（カメラを斜め上から固定）。</span>
+          </div>
+        </figcaption>
+      </figure>
+
+      <p style="margin:0.8rem 0 0.4rem;font-size:0.85rem;color:#888">補助の概念図（軸の関係を平面で見る）:</p>
       <div class="diagram-container">
         <svg viewBox="0 0 500 300" width="500" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
           <!-- Origin -->
@@ -655,16 +890,19 @@ pre { position: relative; }
       <p style="margin-top:0.5rem"><strong>注意:</strong> scale は geometry のサイズ指定（<code>width</code>, <code>height</code>）とは異なります。geometry はオブジェクト自体の形状を定義し、scale はそのオブジェクト全体を変形させます。子エンティティがある場合、scale は子にも影響します。</p>
     </div>
 
+    </details>
   </div>
 </section>
 
 <!-- ============ 2. EXAMPLES & TRACE ============ -->
 <section id="sec-examples">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">2</div>
-      <h2>例題とトレース演習</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#4A7A00">2</div>
+        <h2>例題とトレース演習</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
 
     <!-- Example -->
     <div class="card example">
@@ -691,6 +929,19 @@ pre { position: relative; }
         <li>プリミティブの <code>width</code>, <code>height</code>, <code>depth</code> は <code>geometry</code> コンポーネントのプロパティになる</li>
         <li><code>position</code> はどちらの記法でも同じ書き方</li>
       </ul>
+
+      <p style="margin-top:1rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ・どちらの記法でも同じ結果）</p>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">Live Server: 例題のオレンジの箱</span>
+        </div>
+        <img src="images/session04-example-orange.png" alt="A-Frame で width=2, height=0.5, depth=1, color=orange の a-box を position=&quot;0 1 -3&quot; に置いた実行結果: 水色の空と緑の床の上に、横長で薄いオレンジ色の箱が中央に表示されている。" loading="lazy">
+        <figcaption class="exec-caption">
+          <code>width:2 / height:0.5 / depth:1</code> なので<strong>横長で薄い箱</strong>に見える。プリミティブで書いてもエンティティで書いても表示は同じ。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を実際にブラウザでレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
@@ -781,16 +1032,19 @@ pre { position: relative; }
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
     </div>
 
+    </details>
   </div>
 </section>
 
 <!-- ============ 3. CODE EXPERIENCE ============ -->
 <section id="sec-code-exp">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
-      <h2>コード体験</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#93D500">3</div>
+        <h2>コード体験</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
     <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
 
     <!-- Code Exp 1 -->
@@ -854,6 +1108,20 @@ pre { position: relative; }
         <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
         <li>ブラウザに3D空間が表示される</li>
       </ol>
+
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">http://127.0.0.1:5500/compare.html</span>
+        </div>
+        <img src="images/session04-compare.png" alt="compare.html を Live Server で開いた実行画面: 左にプリミティブ記法のオレンジの箱と水色の球、中央に灰色の柱、右にエンティティ・コンポーネント記法の同じオレンジの箱と水色の球が並ぶ。背景は水色の空、地面は緑の床。" loading="lazy">
+        <figcaption class="exec-caption">
+          青い空＋緑の床。左右に同じ形・同じ色のオブジェクトが並ぶ ―― <strong>プリミティブ記法</strong>と<strong>エンティティ・コンポーネント記法</strong>の表示結果は完全に同じ。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を実際にブラウザでレンダリングし、A-Frame の描画完了後にキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
         Q1. 左側（プリミティブ）と右側（エンティティ・コンポーネント）の表示結果を比べて、違いはあるか？<br>
         Q2. ブラウザの開発者ツール（F12 → Elements）で <code>&lt;a-box&gt;</code> タグをクリックして確認すると、内部的にどのような属性が付いているか？</div></div>
@@ -938,6 +1206,20 @@ pre { position: relative; }
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
       <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>transform.html</code> を右クリック → 「Open with Live Server」</p>
+
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">http://127.0.0.1:5500/transform.html</span>
+        </div>
+        <img src="images/session04-transform.png" alt="transform.html を Live Server で開いた実行画面: 左に45度回転した赤い箱、中央に横長で薄い青い箱、右に縦長に伸びた緑の球、中央奥に板・金色の球・銀色の柱からなるネストされたオブジェクト。背景は水色の空、地面は灰色の床。" loading="lazy">
+        <figcaption class="exec-caption">
+          A: 角がカメラを向く<strong>ダイヤ型</strong>（45度回転）／ B: <strong>平たい横長</strong>（X方向2倍, Y方向0.5倍）／ C: <strong>縦長の楕円体</strong>（Y方向2倍）／ D: 奥に<strong>ネスト構造のオブジェクト</strong>（板＋金色の球＋銀色の柱）<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を実際にブラウザでレンダリングし、A-Frame の描画完了後にキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
         Q1. トレース演習2の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
         Q2. D（ネストされたエンティティ）は何に見えるか？ 親エンティティの rotation="0 30 0" を "0 0 0" に変えるとどう変わるか？<br>
@@ -950,233 +1232,140 @@ pre { position: relative; }
       </div>
     </div>
 
+    </details>
   </div>
 </section>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
-    </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
-
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
-      </div>
-      <p>今回学んだ ECS・エンティティ・コンポーネント・座標系・rotation・scale の内容から、<strong>「この概念を説明できるか？」「このコードを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:45%">質問例</th><th>意図</th></tr>
-          <tr><td>ECS の E・C・S はそれぞれ何の略で、A-Frame ではどう対応するか？</td><td>ECS の理解</td></tr>
-          <tr><td><code>&lt;a-box color="red"&gt;</code> をエンティティ・コンポーネント記法に書き換えるとどうなるか？</td><td>記法の変換</td></tr>
-          <tr><td><code>scale="1 3 1"</code> をかけた球はどんな形になるか？</td><td>scale の理解</td></tr>
-          <tr><td>A-Frame の座標系で Z 軸のプラス方向はどちらか？ カメラの方？ 奥の方？</td><td>座標系の理解</td></tr>
-          <tr><td>親エンティティに <code>rotation="0 90 0"</code> を付けると、子エンティティはどうなるか？</td><td>ネストの理解</td></tr>
-          <tr><td><code>&lt;a-entity&gt;&lt;/a-entity&gt;</code> だけ書くと何が表示されるか？ なぜ？</td><td>エンティティの理解</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 5. STANDARD TASK ============ -->
+<!-- ============ 4. STANDARD TASK（クリエイティブ課題に集中） ============ -->
 <section id="sec-standard">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#76B900">5</div>
-      <h2>標準課題</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#76B900">4</div>
+        <h2>標準課題</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
 
-    <!-- 標準課題 1: 知識問題 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>ECSと座標系の理解</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>理想の大学教室を作る（クリエイティブ課題）</h3>
       </div>
-      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問1.</strong> ECS の3つの用語について、以下の表の空欄を埋めなさい。</p>
-      <table>
-        <tr><th>用語</th><th>役割（空欄を埋める）</th><th>A-Frameでの対応（空欄を埋める）</th></tr>
-        <tr><td><strong>Entity</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>Component</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>System</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> 以下のプリミティブ記法を、エンティティ・コンポーネント記法に書き換えなさい。</p>
-      <pre><span class="code-label">HTML</span>
-<span class="kw">&lt;a-box</span> position=<span class="str">"1 2 -5"</span> width=<span class="str">"3"</span> height=<span class="str">"0.5"</span> color=<span class="str">"purple"</span> rotation=<span class="str">"0 30 0"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
-
-      <p style="margin-top:1rem"><strong>問3.</strong> A-Frame の3D座標系について、以下の問いに答えなさい。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
-        (a) X軸、Y軸、Z軸はそれぞれどの方向に対応するか？<br>
-        (b) カメラのデフォルト位置は何か？ その高さは何を意味しているか？<br>
-        (c) オブジェクトを「カメラから見て奥」に配置するには、position の Z を正の値にするか、負の値にするか？
-      </div>
-
-      <p style="margin-top:1rem"><strong>問4.</strong> 以下の <code>scale</code> の値を適用した <code>&lt;a-entity geometry="primitive: box"&gt;</code>（1m四方の箱）はどのような見た目になるか、それぞれ説明しなさい。</p>
-      <table>
-        <tr><th>scale の値</th><th>見た目（空欄を埋める）</th></tr>
-        <tr><td><code>scale="2 2 2"</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>scale="3 1 1"</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>scale="1 0.1 1"</code></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
-    </div>
-
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>エンティティ・コンポーネント記法でシーンを改造する（コード改造）</h3>
-      </div>
-      <p>コード体験2の <code>transform.html</code> を以下の指示どおりに改造しなさい。<strong>すべてエンティティ・コンポーネント記法（<code>&lt;a-entity&gt;</code>）を使うこと。</strong></p>
+      <p>VS Code で <code>Web04</code> フォルダに <strong><code>classroom.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、エンティティ・コンポーネント記法で<strong>あなたが理想とする大学の教室</strong>を作ってください。<br>
+      ありきたりな教室ではなく ―― 「こんな教室で授業を受けたい！」と思える空間にしてください（例: 円形階段教室、屋外テラス付き教室、カフェ風ゼミ室、未来的なVR教室、自然光があふれる学習ラウンジ など）。</p>
+      <p style="margin-top:0.5rem;color:#93D500;font-size:0.9rem"><strong>この回はこの1課題に集中します。</strong>例題・トレース演習・コード体験で身につけた ECS／ネスト／rotation／scale を、自分の作品の中ですべて使いましょう。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td>A（赤い箱）の rotation を <code>"45 45 0"</code> に変更する（X軸とY軸の両方で回転）</td></tr>
-          <tr><td>2</td><td>B（青い箱）に <code>rotation="0 0 30"</code> を追加する（Z軸で傾ける）</td></tr>
-          <tr><td>3</td><td>C（緑の球）の scale を <code>"2 2 2"</code> に変更する（均等に拡大）</td></tr>
-          <tr><td>4</td><td>新しいエンティティを追加: <code>geometry="primitive: torus; radius: 0.8; radiusTubular: 0.1"</code>（ドーナツ型）を position <code>"0 2 -4"</code>、rotation <code>"90 0 0"</code>、好きな色で配置</td></tr>
-          <tr><td>5</td><td>D（ネストされたエンティティ）の親の position を <code>"3 1 -5"</code> に移動し、子エンティティにもう1つ sphere を追加する</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「変更による見た目の変化」を書く</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 6. ADVANCED TASK ============ -->
-<section id="sec-advanced">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#FFB800">6</div>
-      <h2>発展課題</h2>
-    </div>
-
-    <div class="card advanced">
-      <div class="card-header">
-        <span class="tag tag-advanced">発展課題</span>
-        <h3>エンティティ・コンポーネント記法で3D部屋を作る</h3>
-      </div>
-      <p>VS Code で <code>Web04</code> フォルダに <strong><code>room.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、エンティティ・コンポーネント記法で<strong>家具のある3D部屋</strong>を作ってください。</p>
-
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
         <ul class="point-list">
           <li><strong>すべてエンティティ・コンポーネント記法</strong>（<code>&lt;a-entity&gt;</code>）で書く（プリミティブ不可）</li>
-          <li>部屋の構成要素: <strong>床・壁（少なくとも2面）・天井</strong>を作る</li>
-          <li>家具を<strong>3つ以上</strong>配置する（例: テーブル、椅子、棚、ランプなど）</li>
-          <li>家具は<strong>ネスト（親子関係）</strong>を使って、複数のエンティティを組み合わせて作る</li>
+          <li>教室の構成要素: <strong>床・壁（少なくとも2面）・天井</strong>を作る</li>
+          <li>教室の備品を<strong>3種類以上</strong>配置する（例: 机／椅子／黒板またはホワイトボード／教壇／プロジェクター／スクリーン／本棚／観葉植物 など）</li>
+          <li>同じ種類の備品（例: 机や椅子）は<strong>複数並べる</strong>こと（教室らしさを出すため）</li>
+          <li>備品は<strong>ネスト（親子関係）</strong>を使って、複数のエンティティを組み合わせて作る（例: 机=天板+脚4本、椅子=座面+背もたれ+脚）</li>
           <li><code>rotation</code> と <code>scale</code> をそれぞれ<strong>1か所以上</strong>使う</li>
         </ul>
       </div>
 
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件</p>
         <table>
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
           <tr>
-            <td><strong style="color:#76B900">1. コード</strong></td>
-            <td><code>room.html</code> のコード全体をNotionノートに貼り付ける</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#76B900">2. 音声説明</strong></td>
-            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
-            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+            <td><strong style="color:#76B900">コード</strong></td>
+            <td><code>classroom.html</code> のコード全体をNotionノートに貼り付ける</td>
           </tr>
         </table>
-        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
-        <ul class="point-list" style="margin-top:0.3rem">
-          <li>どんな部屋をイメージしたか</li>
-          <li>各家具をどのようにエンティティの組み合わせで作ったか</li>
-          <li>ネスト（親子関係）をどこで使い、なぜ便利だったか</li>
-          <li>rotation・scale をどこで使い、どんな効果があったか</li>
-        </ul>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0">作品づくりに集中してください。完成した <code>classroom.html</code> のコードのみで提出完了です。</p>
       </div>
 
       <details>
-        <summary>ヒント: テーブルの作り方（参考）</summary>
+        <summary>ヒント1: 学生用デスク（机）の作り方 ── ネストの基本</summary>
         <div class="answer-content">
-          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- テーブル（天板 + 脚4本） --&gt;</span>
-&lt;a-entity position="0 0 -3"&gt;
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">机を1つのネストにしておけば、教室に並べるときは <strong>親エンティティの position</strong> を変えるだけでよくなります。</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 学生用デスク（天板 + 脚4本）── これ全体が「机」エンティティ --&gt;</span>
+&lt;a-entity position="-1.5 0 -3"&gt;
   <span class="cmt">&lt;!-- 天板 --&gt;</span>
   &lt;a-entity
-    geometry="primitive: box; width: 1.5; height: 0.08; depth: 0.8"
-    material="color: #8B4513"
-    position="0 0.7 0"&gt;&lt;/a-entity&gt;
-  <span class="cmt">&lt;!-- 脚（左前） --&gt;</span>
+    geometry="primitive: box; width: 1.2; height: 0.06; depth: 0.6"
+    material="color: #C9A26B"
+    position="0 0.72 0"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚4本 --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.72" material="color: #555"
+    position="-0.55 0.36  0.25"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.72" material="color: #555"
+    position=" 0.55 0.36  0.25"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.72" material="color: #555"
+    position="-0.55 0.36 -0.25"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.72" material="color: #555"
+    position=" 0.55 0.36 -0.25"&gt;&lt;/a-entity&gt;
+&lt;/a-entity&gt;
+
+<span class="cmt">&lt;!-- 同じ机を 1.5m 右にもう1台並べる ―― 親 position を変えるだけ --&gt;</span>
+&lt;a-entity position="0 0 -3"&gt; ... 同じ中身 ... &lt;/a-entity&gt;</pre>
+        </div>
+      </details>
+
+      <details style="margin-top:0.4rem">
+        <summary>ヒント2: 黒板（ホワイトボード）の作り方 ── rotation で壁に貼り付ける</summary>
+        <div class="answer-content">
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 教壇正面の黒板（壁に貼り付ける薄い板＋枠） --&gt;</span>
+&lt;a-entity position="0 1.5 -5"&gt;
+  <span class="cmt">&lt;!-- 黒板本体（暗い緑） --&gt;</span>
   &lt;a-entity
-    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
-    material="color: #5C3317"
-    position="-0.6 0.35 0.3"&gt;&lt;/a-entity&gt;
-  <span class="cmt">&lt;!-- 脚（右前） --&gt;</span>
+    geometry="primitive: box; width: 3; height: 1.2; depth: 0.05"
+    material="color: #1F3D2B"
+    position="0 0 0"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 枠（少し大きめの板を後ろに置く） --&gt;</span>
   &lt;a-entity
-    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
-    material="color: #5C3317"
-    position="0.6 0.35 0.3"&gt;&lt;/a-entity&gt;
-  <span class="cmt">&lt;!-- 脚（左奥） --&gt;</span>
+    geometry="primitive: box; width: 3.2; height: 1.4; depth: 0.04"
+    material="color: #6B4226"
+    position="0 0 -0.03"&gt;&lt;/a-entity&gt;
+&lt;/a-entity&gt;</pre>
+        </div>
+      </details>
+
+      <details style="margin-top:0.4rem">
+        <summary>ヒント3: 椅子の作り方 ── 座面・背もたれ・脚をネストする</summary>
+        <div class="answer-content">
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 学生用の椅子（座面 + 背もたれ + 脚4本） --&gt;</span>
+&lt;a-entity position="-1.5 0 -2.2"&gt;
+  <span class="cmt">&lt;!-- 座面 --&gt;</span>
   &lt;a-entity
-    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
-    material="color: #5C3317"
-    position="-0.6 0.35 -0.3"&gt;&lt;/a-entity&gt;
-  <span class="cmt">&lt;!-- 脚（右奥） --&gt;</span>
+    geometry="primitive: box; width: 0.45; height: 0.05; depth: 0.45"
+    material="color: #4A6FA5"
+    position="0 0.45 0"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 背もたれ --&gt;</span>
   &lt;a-entity
-    geometry="primitive: cylinder; radius: 0.04; height: 0.7"
-    material="color: #5C3317"
-    position="0.6 0.35 -0.3"&gt;&lt;/a-entity&gt;
+    geometry="primitive: box; width: 0.45; height: 0.5; depth: 0.05"
+    material="color: #4A6FA5"
+    position="0 0.75 -0.2"&gt;&lt;/a-entity&gt;
+  <span class="cmt">&lt;!-- 脚（簡略化のため2本にしてもOK） --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.025; height: 0.45" material="color: #333"
+    position="-0.18 0.22  0.18"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.025; height: 0.45" material="color: #333"
+    position=" 0.18 0.22  0.18"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.025; height: 0.45" material="color: #333"
+    position="-0.18 0.22 -0.18"&gt;&lt;/a-entity&gt;
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.025; height: 0.45" material="color: #333"
+    position=" 0.18 0.22 -0.18"&gt;&lt;/a-entity&gt;
 &lt;/a-entity&gt;</pre>
         </div>
       </details>
     </div>
+    </details>
   </div>
 </section>
 
 <!-- ============ NOTION TEMPLATE ============ -->
 <section id="sec-notion">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#76B900">N</div>
-      <h2>Notionテンプレート</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#76B900">N</div>
+        <h2>Notionテンプレート</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
 
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
@@ -1252,78 +1441,11 @@ pre { position: relative; }
 
 ---
 
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
-
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
-
----
-
-## 標準課題 1: ECSと座標系の理解
-### 問1. ECS の3つの用語
-| 用語 | 役割 | A-Frameでの対応 |
-|---|---|---|
-| Entity    |   |   |
-| Component |   |   |
-| System    |   |   |
-
-### 問2. プリミティブ記法の書き換え
-元のコード:
-```html
-&lt;a-box position="1 2 -5" width="3" height="0.5" color="purple" rotation="0 30 0"&gt;&lt;/a-box&gt;
-```
-エンティティ・コンポーネント記法:
-```html
-（ここに書き換え後のコードを貼り付け）
-```
-
-### 問3. A-Frame の3D座標系
-- (a) X軸 / Y軸 / Z軸はそれぞれどの方向か:
-- (b) カメラのデフォルト位置とその高さの意味:
-- (c) カメラから見て奥に配置するには Z を正・負どちらにするか:
-
-### 問4. scale の見た目
-| scale の値 | 見た目 |
-|---|---|
-| scale="2 2 2"   |   |
-| scale="3 1 1"   |   |
-| scale="1 0.1 1" |   |
-
----
-
-## 標準課題 2: エンティティ・コンポーネント記法でシーンを改造する
-### ① 改造後のコード全体（transform.html）
-```html
-（ここに改造後の transform.html を貼り付け）
-```
-
-### ② 各改造について「変更した行」と「見た目の変化」
-1. A（赤い箱）の rotation を "45 45 0" に変更:
-2. B（青い箱）に rotation="0 0 30" を追加:
-3. C（緑の球）の scale を "2 2 2" に変更:
-4. torus（ドーナツ）エンティティを追加（position "0 2 -4", rotation "90 0 0"）:
-5. D の親 position を "3 1 -5" に移動、子に sphere を追加:
-
----
-
-## 発展課題: エンティティ・コンポーネント記法で3D部屋を作る
-### 1. コード（room.html 全体）
+## 標準課題: 理想の大学教室を作る（クリエイティブ課題）
+### コード（classroom.html 全体）
 ```html
 （ここに貼り付け）
 ```
-
-### 2. 音声説明（1〜2分の音声ファイルを添付）
-- どんな部屋をイメージしたか
-- 各家具をどのようにエンティティの組み合わせで作ったか
-- ネスト（親子関係）をどこで使い、なぜ便利だったか
-- rotation・scale をどこで使い、どんな効果があったか
 </pre>
 
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
@@ -1331,16 +1453,19 @@ pre { position: relative; }
       </div>
     </div>
 
+    </details>
   </div>
 </section>
 
-<!-- ============ 7. ANSWERS ============ -->
+<!-- ============ 5. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-05-27T16:20">
   <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#616161">7</div>
-      <h2>解答例</h2>
-    </div>
+    <details class="section-collapsible chapter" open>
+      <summary class="section-header">
+        <div class="section-num" style="background:#616161">5</div>
+        <h2>解答例</h2>
+        <span class="toggle-arrow">▼</span>
+      </summary>
 
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
@@ -1404,9 +1529,12 @@ pre { position: relative; }
       </div>
     </details>
 
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
-    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
-    <div id="answers-encrypted" data-cipher="xz2zdoawfqUc+y7ANZP5PRuRmA2Xq++A3/RwUwMwQ9jc7jVWa3gvoIeJuGmBf1JHQ+tSWwr4IqIgK9sjAYJ/GkrGB29sN59Skg8hLzSkq758f79w1pCaq1uJvEO8Y1EyrnEAyutWQZ8G6iQJnisDZoj7JhYQaKi8/ha4/L4yhfcnS+f+x3TjnxnB/Ef/8QD+QWYVazjaNJeWB3KJhOnIFxmZ2niiFovg+FzpojEBpJX+2F0Z4463toSWzbJNVS0puxtq+hUJrU2dMIphv3xTe299se7F3rAGBxcx3HNC5oSHNKu16o0biRMf+8oDjQ+dqygAud2UC0AgkepOIY1o75JU3fvOg2S1HDwsBxv/iFux0ih6YWtH6HQlSU6Hwu+2SYEyvDml75qoxaEhag90E0vhjgrRFA8sizU7lJ/6KuB6Cf5HXDjSsoVDSJ5loYT7e/O4DjLry9on/F4yOyQz2EIX/9DroXjwZ4JRM5Lxot48C4bju5I9Hi47/fx9BTeCgZEY3FLKMRv7neG4FG18r4U/QYz/Y2dL0ijQepKbGBLaumXl1AHY5adpeymNIBIK8XlD8d9ti/Hpf1xXaO9bgoRlC+YCpHStPuECnkhOO4QqVFiHiSCyrM0e/nLsdUaHrujoZx8hXzJdADTKEVJLX40my1SCkzKUMBLB6xZACZzerL2A5C+CSU+xypbf0PiXtb3IN9o/efH+eDkEvwEvbUARey2hLZj8KOMjFkkxP9+ZNsxmNyHDhvNZnhVLgdZcUckGiY3YxGta2L4T1WdLZEZFbxPMEDJJV2V9tkN1nJCC8LrTpM8Wd4xN421rjXrQtFraIcgggSuqV9J/w0ByE13/ZFrS8yVcT7xjRN/vyn5ABTi8j2dfJrMdMEWIECUZra+pISEI2CEtvliYoB+lhESTvqcMPXvUV+/MhvBV/kViSjDZjOuuNeWzkudNHaZsf+hw6aAif0/dL4P/3o1adBW+kdkSV7RsWYQ5fp86JMgh3QNJICYJ4WBzD1I62ECem/yRQkz7E41qvZ8RLumV8zEgDv8Hfyt8XgucWDrY+hjFkf9UL3gILDA70SpdyZ9UCYLmQVjCi63UqYFGrJ2YXtk3AswXe7Reu0dXC0Lhs7ExsecI3nQfB9b4gnq+5oNGKyPr50RMwBOU6Q0HWTOKlTStmEjhv7L2rg7+O8Aln6uikgd2+erdVmiZwa6641eacp5r7r0fQtJ3kx61rg8TvPg5tZwSTnkihxj/jH80WxgL/RRRqBLblSz5bHyQB05lErs5+DG2+wtNLBASapKV4PcbV3I7j6LxOHjwAaY4zLRR/BWz0FavdxGqnY3Bf0nq1wNa1Nv7sbLWdkDuqnR/lUgRBRxq4sUZzyQJIzSDvp9Vd4jFyrl3WVrJDe+AREiGGgxFU4O+0D3QfRz7ckzQv5qCsjYIB/qfii0AfQehuSNkcZocINv3tcZ3dKeqiYpvHJcIXNq5sEPYEavPaWc7THJZpbyhsGoJ2Ug3uwomsnkmEhY9HE2g5JQfhNo/ToBrghlv1zAYymctBrotZB/tQ2iYc0VmpTS8xBgXORofyWeVE81JRc0FL9qw67RpIvnNtb6OVRfks+1PhDByhCJxKmHTzQyp9cjzoj/rvioAY+5kY+6chNAdy5WZLIcai5g0xTYlsgr7F1xumeav7raNQ9cOcROedSlT/OVTEYSoGi3cH9EOMyhfRBTpEhOvrLsB8PK731FeYK5X/KL8/3EKIBXKs8PHy6EvYF2gLJJHyd6Irl+iVA1Yt6gMbQBBgQuKTtFu2M8SbVd77fzUMLUpTBhi0RpfMFmFpm5oU9W6mt8fHAM/6gb8G/vuJeP4/tG8xLa3Ij7xUoi7XET1tdUs4s+GoFZ6FAUigWvkDdfuVvVPeih9WJujVw8N7enDfE91MPeMXDnS5UdnBR+sN2McNr+M4hj9ymYkfVzw9MMqVamtj4T/oqXAGDsyimvxFySGjtQtgvIn2dy1HPSK0MaAliXdAPWZn/KtP/jaxjjv4+SZZiS+eVOrDju3wxz3JHazdju+y/E1K2MjCu3KsPEESEO5qlleLsQ8y4emdrvbo4UQ1T2Mj4aUWArzDms1HqROUusg/wNIIBD8fKSyx+BjlCtlWb5+ERgjDnfCgFE9AvTi1bq2UChJkksh7aIk/4Qw5k1ZaMJs729Urtvxmu9w585G4pOjOPsQx/wEjzuilVz9+zBUMA7UqGsjsqvitn6tdNxTRftuTTrgHxFbJpF0apjiHgE8tFX1Q/IcK7hQrSUUGz2U3kRtobOFJnOiGQjnl0uDkhdjK7wBhoA3lyacv9+oiw7NZrtJGNrloyHMN0Qhr8cps1a/QKR+5bOio7wYy/dum+yPsPm2G/PsUWHVS4G5DY9DDMww8uia4FxqNaplz4WCYkjlCH7paZWyQwT03A3nDCrREaIzwU6srRLJPC4skBOsw7oz54wLjol7MxK2s6jIVdbUf1eUbsE60Q/MT0SHsxqMaFahEx57J41VTbppPiwmdlMgHEBIgZ2VWZqBbx77I9eDSfCZujlIt11p0vu1iERnCp167Q6GwSmT7rXAxU6dqSzne2hBPJpgWhdAYvHrkgUc/uB0TrGGNQ71muhP0toiXCC6+8m8e2kpyZVFBud4C1QW5bYFfIVvluENYwcBiUqLRWglEPKAJOrm1qsxSv4DHuHlE2w9+fCPrQ/veOnw4/Y6Cqpoeei0Lo+okj1pWHJepQmuEv2TCIFDPNaKdYvjIBwyXT6NyNod3X2vI4So1uRxh2GBDyILSgRVsBPjnSbHMFTocj7YFDh+jJMDL0+v9ShE1uhj6cwddP7DKlLSslu6ZXEn5CefDc0pk/J5I3lX+YAdk7/iCNpR+UOriscl9qzyj0AvFzBUBAuq6iHg8HagYMBLZHN1MyO2lkcHZEdWHn2RV3juEGGNRScILhH0d0I+HtvF1rmYi1KKLYjBn2UxXHaTTcgf5ihkWua7L+LJOHR8DD9n6Ks0Ci7O8jUJQrlfsHyhr3ob8pooXCNr8LZkR8vCjxbZFNbwHwx/W4xv1xs3stAZmsJVgAyTUemK9Ka6qmA6UdsNvTn+ibekB1VWHl4yBFYusRdeU94qjx3i3pCSp7nZQdLGAHYGxRgYPiggGKpw7YSPwR58IgR8/Kktjiux7VyRWL6pRk1RTJCVenVvd5FV5kWs2T+NFiK/TjRBRCaiyU89/VZ6mACc0zbl+R9yX7Q1EaKJkOD151jSFfnlDKkXFVmgdwKeSaMP/MLuxWYIAeN+27W//UWhqqCabB7lJRBYw6zvZs61of/WmqG9C6y65v9sPs3dg2cb0hf0sPooHZwuwlk4t4PNfQHZL3PX/5VA9QjSrWTe1vIm2e04Jp3Han3b3YCnSLM3EAkANGy/xzBQqWYZHoMzfAWHq3ZKKh0/gu8cVjKGN87HocAE03Q17p0ai/k9bFXpQ++/7bZVfE0rpn1Pvf2s2xT5nSh8egXcKJcuM+ZWp7oXbdJOFstMAZm58lsLaTONrUXQWB35UyGYl390TMuiJFUNpuICMRRrMLdM+TsulWA8Swyr6JcAol323BUamlxR8MYv+/OPRKTO81+gCdDEnoKDLHZSm+Dg8G1lR03MA+Rr9MHYEofX++OhPk9zns6ArtqX/TpooOiOLoUVpCSUYY9qQPFr/BBPGz3/K4ga8/vxBzw1IjStD0ankTFpOmvh8QXeQXIMVqwvR+1l4RhlgN64KW6jF/5tqatO0XWgS4Eh0uxhLRcxj/bvgKLZ31AbGwqF0NiZenEjYeyeroL1PmiD70ruQTZHPyBBuqPFSch48SodGxJj9QjYuj6jqBe4WEfM/+4Lw+qoc5bKQ7m4SKgnq3JRuOHkbZ5eZti5BbUUfSYuHLN04Ju+z/1Ys+bYBCx4AJNdDYi0is1hTcQx/zru67zJ6ktSrjTjmblABhHFIFRyGk2tgEYrpaXGtkNFJ63t7C7g6jR2E0jHk0/RfVkxPyEAsZZ1aaHp4FVV8lFUhONkXkjpfSYaykhqSxDalc9SVz1nEOaCHOdTwzBOPIN8hbkrQcKjBgFDHP8MGQM7ZrVrviN5PIScSrKB/gGVk5UYwuYcJYblP47uDKVFCv7xHpg9KS0+icxzjqoFUE7QkakjqLmktHZy5x3Jx/jw9hySMGvEhN7cOZI3Cz1kK+9FBn8bm8sU1GovQald/2i+v+9Y1a/Dopc9NA8cX1B2L8+stJY8miZGRo4PBVlTmqas7aJvgsNJ6ZLLdhUAhA8gcK+D3FhQZNXzV6SrXjCQOYpfdHURop7E2OP74+Uw5mJoKecxziEbd0EqrFMRfyPHdi8vx7sxPibEt8VWu8iFVknvFWBVQaP+UPQNJPNOKaDzf/GIQvklV/hBNpQX+6gixFcGSOnxWJ0eDXRvwY51WzwAGkE8+p1xGz7adUvp81uMw4yjKJwJvq/29vQxOaJOH/8ka+lldipDCqJVuqWtZWIU5JhGOdvrGzfmd6dNQ7HyaFIP0/wtjEhdPHlnvWpunawraqM90Mz8kQHypdRlry4gruDmI+Nsn9LxjAvbxHIqgl+OL/yLm5xO083ygXd5fTRuSAwIchGtSE/FTvxuo53eRjGHNF4w5fQ/9H5uQ9T1g0rjUhh2oPCIFHDc2ATmxRccrG8LBgm3LVm2f3cpXLINChzKoVm2BYVjPpWjbbud3wWt2pYnaScy3RMpAKZ8SB0h4FPauffhzij/yPdQFJ9/AL+rdIcbQUkWsNW+EAfTDFoQ5M6lhIz02Rc7kD6oKRB4UJouM8aR5ng+v6PKFkV9oiMwGUtwhqB76ev2F7mR4fVXhxp8hD6F9p/tUAPg3+GdPLu9LoKMAG8/qv4z0nQZ0eVl3VHsMnERkplWptLdF6Cccr8bc9INTNWG5Q2nmRHmZVfdEpBBdiIpHd2w3xknqosyFJhg4V7qwTcWAuDN+BnII4TcwfrX/GBVQF5iAnfAXZ94WwEuOM+oyp65xB9Y4ZTYQnABQyBzTExcSPRW74MivpiiKQKtZ9c07c82FA+7MDVxtwxQszHJm+hmNi4nvLowJbP2MvPMFkSGl2lpLjV+cQZdk+UKlWJ2QhHNcx24/YW9qVRIgQWmtGLFvpgz6gGBkzum8g9DuG2NOjB5AVQ2gJzuKo6R593NzYl17Z4NPvdRgdDl25MMqBoVrBZGQ0VS9GGAyn48leiNT3Yz2CxsK/zcNV3Ldr5AIHrByKYvXaTyPBu02yPCUBu0NrvfY9LZmqThRJdkeswovqJ0RLC4xTVtGzW6TTo4X7AEeMwCjj5WcezHGeRy8PeGHS7ZimS4SElrh/PkEDQ32701cqxvSSh5a6m8JVPPakSfEEHbng/z7HmK5Aa4f0zKjxMvQqOX0DfugdPbc9WGhix8uXZTeUBxrzY+ggpKSuOQHWvq6IR7GJyZScQXGlgeY/cSEynxijTcsKK6BsQnfQAh39PccVCivu3oWuZ9+HMKIAl/m8Rh7clj4m55tK+ZoeNEEMhKTFZKqvSVkfmy0z1Jq9E89jpHZ00qfZIisrNhLJj2ZgyI0Lc9Fa2HuiTBuXeDfzQvtxbNnR96d8QEFEPmtr+hdQN2lJRcdkVtqY4vwTQXFP1W1p05G8Qj9/14oUeHrO7qdG5DLldIwWroE44zLkDdztM5VND+jIDKk3hLnl7v/FucItnd/Qhsu6jogs23VhHOAOgfom7Hol8/w2vTrFuC4PjzO04SQQiGkj1sjlg0quxfa+mFJH25Jp38I24qTf/9NCmEaQvGXRlctF+ZwRvfcrP71kzqNK+HYIDzy8wvKsrQHS/+8DHYdCoSFb2qGn5lzPaktSI1kD6GV4bC+LxBxXaQwS5YaQJLAU7sdv20rXnVRDjiDq9ApTKaDbVAxYRIrtDe2ojOD3LvSWWIHjMEwcFTVxY6R69081EpeqkaaI6vSSDOrbQqgpYsTMiyczOehCe+18nAlXLjovkDoVLBYEzb0XNSImKCFNdvQ3RbV7dGQjJp60F41sLqLQas3PN7MhaG7NiZun32wp4UQFStAxS+rYvIR6mHeEn7c065lQzLShgISHFERcoRPY6G7n5V1/hDMwaMDON9TFaK7hWUEn6sJT2TicBUaXExx85mK14T3pOyQlGj0pMJMukamP4sBi7I5z3bxwdmxbBox18wyt3DKYRRrBHpIPJCN5crjuhhRmjIcA38wxy7QkBxM7pOo/wMAY9jZavrQ1s+yeYC75SzrpzF0adE2gC23I10zY1TcL8Ir/say0H1o9nAl7J9xPjZHdPyJFCxecLTuzQTuuqF4Bc7bN1VF2aRjIdgHm4yy59oMgUPR+YjbKnctzLpL/iX6Oyq7qgz2vN/l8YngEQn156vONs4uWRU3X0lScz03cFaW3dFWh2hYs5jyymywysDuBoNsYgfs0mXluvxBJZ+MRKIvpEjUopAKi8l93B3Dd0BMJP8zSzvLucyAqdtW0GDoYz2uEiywNwVFCbSBF1zTEqosa8y1wuuczB7KYQzIwWm/sJvxVywvwsoG8qowPM+FT8cMoswZ2D6U3bJ3yfM5/AF88rdPn2JIueP/Rfzxi11RhEZsF6ETueonFOLXYhiGfbSIBoEAAhrDzEe4SXofZxYtsIpNso8NG4IZ/aqkCg14Au8cO++SuxmyWmVMoHSv6k4Rf3VqTThK8C31mpZeVZ1UlumsjwbJlSjVgED6SeV1agYhtOZL3TPHOMBTFVXei0CSnwwzfrrwbhcJhLVJsyUTzJwrWgVDDTgk4/pVWO3qOekoJzKLym3BnIzS5HhDxMZZJnkOSW2FjputkuAAxlEY+G/HOwquGEWtKcXTaKaLZTR00tKW1VRuHbK2ioIU6IHvFhnT2YxCf6DRy6YIxeyhpk7q7birNwzSTvVD4ZodfM4cP8puzjPsR4Ja329ZIaSVBEF2h004hDRirNq/YJPZUZDID0wBWXWkWMN5xUiUpggjbk19ddzq3BQ2BBSLTgavIBs726zUeFUvLxFmIV8WADamgQDsmJucr1RA0sIP51s4rVY0ZczYcL3pR365ex9ZFLjkpHpGcyzhKleD57oWUn2Pgxm0kgTEi/7/DYZvrfGIOypL5mw6CSW8Xqtl2GMFs8GEL+4vd6jUqpJCpHU1d79CJpeSAeZTuRJ5Sy2CXbuyXRhog69XF/t6MZ7KgfbbNcKIQZhlVCQAyNkjXAG+Zou1wIHlAhF8ZZ4HYNYoUQ/SGZza8TRK4Ki/yZl1QrNLjU/5628o2uw7x1sbWnxE3IFtPAygEHIqfEwFuXGARRio46RRlAg8hJpOQ1SzZtu+DXKGEbbmKtYxfsaZ+w5iqgWZxFrgf4FO0dUapAp6QWBUWiNoIPHLvyFgWYNT8b255kJxdH8deCk9BdLAb7pua2E5RaXR2Mg6NZHUCSobhDPxKwkR5CaByS0p+4Mt0bPMnlpI9JxS1gArPN9DuNPj21rYtnhLYCp23cLkwnMdmSKN3I32dPYTOvzgmZ9ts+Hb5H/isOg+bR5MIbNKrQ7EqtYS6bSds1Dg2OTaC0XEOZQ03LrdDonJXscQ1ftpZp17h2qWBfaJoGQspLXoOoBmBxeT3vWRSmufrRaDIGVgCVsuXh54gdqnDm4UBMCn3S7G/Uxz6HsZw1kDVXjruJLMg06KdG06DKu/B6hGXUvOeBHcJ0Znan5zNuGlbAvmcjywT3ugPWsFlswzV5dWga73Vtwb6fKTYLzucz3b5486IKv8iYNuBqD4ZqaKxCJF7Bmj8jE+fO09vvkz+rdSjDCnlTOwMNNqDAPcEvxkoY3tjRQmEwBYU90mtsiG6aIBBQIgxroOcfj0VmVbE9s7yPTIy2iOzezEoWjFndCx+d1c8JazU/cmVDDF20vGdhbXQbbH6QsLVp5DDuD8j+TxHr8WyQXBfoHiqjxsZtxvrSJyYq8BELPElqyahtmiFGSmwb9LEgP35ngcV/FBldgSGMVgRs2gAo/wcpWN5A67ro1os9uwoX+uQrz9zqM2Mv8HsqMP0ukV5SC7I+70yJJezJxA9+tYxG6p6Wr/uVOVbiEiv+VNgMVr8GAxBvzYwV3D6FwNFWVAV0bPIl5j0Vqf60TtxinbOFeQJRN4QlJenl6tcg2nIqxiktjf7z5aLO7AnX1k6kytXSt52lqBX1Y2iREz28exhGo9YXhc8s62JKojZi/syDFFwU5ASvq0AKvi2Nyr8CbcXHxiUogshOiSOBdZEb1OIOA/THDVnS9MAwNnJZwACR4+Ofzmw9xRuTS7tF3VtLNkoNn3FFEcWI4LQ1u7ToNEhQbYXuOjol/cR3kkoCzTsh/6aXBHmCuP2XR21H/AujR9PdeGouyrqTFy7pv9liYPhxJStJtLC268DNaiCxSN3D8TsfHtbLjhrhrkle+BulPzP6jcVAAwTE6RXPhuPsIGXNa64XSnt8HWyfDZ32wZokOfk6vTZkAMggdMgtIWaPV/9rUEbIkkNW5krminCiTcLzAXKAFsFSOBRG6udmnLpBBOZSv10sue9+MIsG6sawZChdIazWKtnymTZYTALDGiocOWTm4kP0Pu7PlgeMXNW5zQCZffMyyLJzbF1nX4hMRKIcRGijjWzHClzhaVK3Eo6RVdTQaunfGUBDhCb0mm2oHBq8BpmCX6iHTKvM8c89nv+xp+TRCvMB0PYbV3QOG1ZvJ8gU5xOwF12uF/UH8ABqULWyQFKsSFsb4M5isijxoWMOlwXb0x7YMiMy1AZl9mq8G+k4Zl31r8MLtmQg92oTDlWUC+sylutDA/gfEOfks1jhiberJHkpLiMgGFwzevOH/rIj9UliWoHdIvo7Kd9vCOLK7IwlnF1gC3FPQFlekJMDnh2Gu7fBhRtTwojiaz45Uw/JS6kv58cw7Z4aXBpTOyvGurpRWhEfS1fM8hEV3w+mbejXywJgYdOBnfhMINq60122LC31Jy0bML6yO1UqTR+ZleEV7WS/dG7Dd0k6pfDdxDM7+rjqcqFsRvmp5bWcVIft+jUS5hzAKcZGUxANGEXp3egOnG+1kglUHNO6EX9FAaHVMrO4Z4rPSrlmX8QMqzdVL8Ls3Y/984B+GNU3Q+4QQjOX7CRINYHfRGzLLVgmUTw3cO7ZHKi/O57iH5U2fzfetulSbHmLe+pG9menJnEtKMbAl1LH5xQVdXgbav4AybNsvJ17wax0PVj6y3X3tv+jUGx1fgJYcgMX+Pex2V+mzaU4LUDQcovBzzARlHVScyjopy2SEJnNi/+VOiDZc34zN6eyhkLUPs1TXB+VrZqcDoK32rwWn0QfuifVK/Nteq/n0l47Bhhybaiuaz5J180WKkJ8rTYIuwzunl/cU6QzNSt8QlA7BQSSKq/0fB2R98ma2/h151X7LMDhUDU2jrGcWvSBT+Uh0E7gLUGwxCAPTgpgjicikPo2Ip+uFxrB9AcUNYm4leSN2ovbIgbQ9FtE4dUd2UxiduOgjSWcZbKoqidZpWZgsA4xJZaRT8GIVj24mtoFrlbzeNvMy7WV5dG9DcAymL0AS+IxMShSHty9OkeoiB6KVBSmzrjmRlmuaxeLddqGK9nPputBDRACEHijXtWv5A9lErwpH/PsVTJY5uQITVqVLwW+joq38j5pn8y1Y+WzuVB0HGX6ogKReTWYrpj9dt0OHkfl3ST7eOIzRU+ZnlRquMl2NA7ECdcY6yj4S7efGsI+EJY9pEzMDN0HTXUMGU2/56GaD8gpff5rNyL31R8RL00ozNlcUHvmKr35F7CRXvlv1jq+QpYsBVdhbD8qstBmM1DXZFe2Xg3z9ei62AaUlKJJifF1nEjAqgefl5p2e3aFcVhM4BKIADEwqbuDYPS2ocw30WeJK0m3alxewrjF8mDLFqf8Ms70F0ohnW5FOomqcDhi1a1iXfA43lEBtBAAQN1rNkXvlq1mSIyi+xENjoXVMWbN1xDaTFTfhepH+hbIiSXkeYKO/BY8wrWhMFRrI0NDk60CmeRsi60t+tbxN/8QkA2ru3Dw0lvi+Za72gb4S79N6vabxX3LNqwWhAj/V0zBdXW946I32H7WLAGSfPgTbEvqfngDhRS1ymUEsROrR740OOjMIEM98YAog4IlzBdZJ7gYYndQnSy8ZB0uWO8uTr2jMw6giJIQq9kS9n8Rp2TS92ZLOUv9g4VqsWAIQvOJmOYM8nnvtaS7D8kQeHDq4/qt3FeR3wbORalphnXhz+UYhKT0DK7NsrydHFPF8j/pOu+jpHPQ6AgycO7nCl3hCLC9469pMUI8HbPCzfLEYQtGaoyiUVUVbsuUViE7hg+EFswbAbvhOQ1ZX2EPTLbK4lrVKWLnqEXz9JfhL70lOGVDr4J41v+eU0xI5OTbHkyxpBYyTTMwtc6vho0Ei66rIMTjZuwAlqnzx0l8noUMLWmQlBN9oMswvyGn0p0DhZO7IjzW3XEA+N9sEdt50vGSctCSpAInl+F4iP+GTtu5VPSyURJOcuVSwKq4MvJGYnkdmH8EvPPSHf56U1s2G8erKDzVl2dU+IFxOdR+80ZRjXBNmVLH7vdnwVWrhU/siETYh762x9GZldUMOfjafYKkl7golpEJaaRIyvjET0vPN9x2o6cKjvcNo668iQBydHg8uFMVoMGYUDBmwP1JVLnWzvxPIFm2Vh/LLLb4WUpkm48CtedUWluZ1XY5eFqK3gMHnWnP/cZYT//QoE/evV41YGf2QNPS8E0QlsIM5K4yCCs9v9m075GWfFLGrkvs7OtyGZTkd7AHxnP8lYNC0DEsbcUjSgKwAIVELBFtrQE2hfqnU8wugDqZG2N976KpWXr24k9Pv45jhrV2VMuByuPOQNI96uxvNIJNSYZdCGlOA/UDNGd+IKylurFexWotaWJRaZyNS0Be/Dr3wTxa8OeZa9L1kUpzrzv9oirkw1poQNcZfttII3WpLGlJc632FlCE7vktmJusFzfE0isBYDnZSdkNLLkQA+MdV9/BcpE9cUlwgR9Vf392S7a+qq/WsOpHGK0RZ5RGs36j3f8sJd4MlHjiGwCxeXMBA8JnYHJiWlAt86Auj3OnkET/RrWOdAz+tQEVN3BFAfP1t6D9c43iDDXut2XftcnU1ClS2OZICTpL5Bmadq8PWjgLIRCFlSDd+578AL9tvlLxjB0hBNGS3jcu/BOZxhylfVYHNY95oxJGF3WO/svIbLdox+AhpyUBeTbaTNGDMKb6VZ1HnXOI/3iwR1sENsH45NBjDREdZpVDcKg4WMihkgDZdbckyeZLk1pDjfBbC5e1285/aofiy5a3jpxsg4wC2fOmoqF8lr5w6jsaugKHvo0EysVA7zbpRwMINbGfte56/FclEaWtDR1+7zz6XIALR+7N4rmma3O55NzwgUGNQ0U84WUo1M4u+C3nyRlrgceA/o/4FfejNLXAteaFQo2Ez6JRUFlZeaL+ZDt0IJcQV0brz4x4lemdoftO6ogVX9Y4s9OSfSb8AbzDovXa9QEvIA6fGdNY6VgMD1G7KApnsvGs0yik8OhvAkLId2zHckkoaCf5nR6w95yIRDLaK2LNT/ZCkE4ACvURcZVvFgLpFO+czmHTXx6nqBvgOthyBgSsnmUv5gv9W4lNKlGl/0fQ5abOdCBhXCm+oY+HcPRlQ7KWkZ3J1o5OoYTQF9Dk8aLPZ9sB3nbWrGVB23UPe8DY2dmlyylj8Q+vrdyt31NzwF5hePv7EfB77sFzNw5aRZ6GqAaIvyMC64eifquB+obaDg+uLgK3EIK2bjFNvaB71qHHvq0IyWFQd3UDVoOVElG1R9fSa7E3xs368Wcdiw3aLtjzwWCN+Vf7099Hkp/EOsGr85EBNskdv0QjZBM+MNP+YLrrAjI32XhjsHs6qsV0oddGRgEnonmfmtNvwphsV/KNsKZsDw8il8NikF/cu/14Op6iWpMydoORzDlcjYkaOCrHICBRN1cs7zLR8dIFpeF7aWy20jHGjpIifUg/s7gd9L2SNk0razfShvO5pfZMBSEizoYQafFsbCFIEuE1bSI0gag9ABFjL2q/5p2+4EwgyGekGVVmljX/6l0PYpbCaZPOcN+I/eqk9Oc1SZuVUB1iMpreHKdcx6cHxOK+TOtLVM1JpGqI8h3WxPWkCxpKupmnjhN7rLn8SNmExTipEWYJWq4zi7P3zAsg9JJWbeW2xPKQEj+R1Ii1L9qv4lYMKrGq5T4fvm1GL6EzkdmXpjfqqNPd0Hpn5r3XNTV9YqiUGchmA5+shEFZMa/QaEliJ0cxh8DLtsONCAws3BYAT6Zw0wizfc3nATTisHKbt6t6ct9QO9sYlzf4umxCibfN21brJCgqIAExUsbV6culEWR2CEU2VWo24t5KPufQzBjq69e0cdSmY/PukdionYDprZluHcFJvx7LIrmiIYPOIC6Vlpmh9sAwofH52MSflC4IWIF3dQBUpC6v/ant8J72DiZGBwzH3sC26NvLl1xEuy7z6Hli58HrS37bbgt6ESqzWP8Nr/CuJccV922mD9ZXtJC9TTkevKhbu4eKwtIuCE7APrMe5kegFDPWxTqn8gkvuEvOaRFr4nylTRbK6wyhz7gsRLTPUctZ76Noe6mi+UWHFPS1kA+Vqw4mvhR80ywcxLb+GnetBYKEPbiy34mNKLUsVqByQGotKip4Xf9o9wlpiiulvddB5XaaMP6QnOhFz4fQb7093vUugIFM/1+IOmpZZCKUdLronlndiPVkhDwCE8fRQn0F4ODWt+3FicImbQNXZJUATd630yNowZHRgfQsq22RqnRsICpyJlHWne45unCNLnuOd+A+FwD1IMMGE91NLOgb0i8W+XTBFpi954iZuIH7KnwlNa/8pgINiQ/BfpiPOP4WgOslw5fnMViZIfvxZcTo+LD/Hi7TEWcGOP58nbpD7nA=="></div>
+    <p style="color:#999;font-size:0.85rem;margin-top:1.5rem;line-height:1.7">
+      ※ 標準課題（理想の大学教室）はクリエイティブ課題のため、固定解答はありません。<br>
+      ヒントは「標準課題」セクション内の「学生用デスク／黒板／椅子の作り方」を参照してください。
+    </p>
+
+    </details>
   </div>
 </section>
 
@@ -1435,6 +1563,30 @@ document.querySelectorAll('pre').forEach(function(pre) {
   });
   pre.appendChild(btn);
 });
+
+// ============ 全章まとめて開閉 ============
+(function () {
+  var chapters = document.querySelectorAll('details.section-collapsible.chapter');
+  var btnOpen = document.getElementById('btn-expand-all');
+  var btnClose = document.getElementById('btn-collapse-all');
+  if (btnOpen) btnOpen.addEventListener('click', function () {
+    chapters.forEach(function (d) { d.open = true; });
+  });
+  if (btnClose) btnClose.addEventListener('click', function () {
+    chapters.forEach(function (d) { d.open = false; });
+  });
+
+  // ナビゲーションから #sec-xxx でジャンプした場合、その章を強制的に開く
+  function openByHash() {
+    if (!location.hash) return;
+    var target = document.querySelector(location.hash);
+    if (!target) return;
+    var det = target.querySelector('details.section-collapsible');
+    if (det) det.open = true;
+  }
+  window.addEventListener('hashchange', openByHash);
+  openByHash();
+})();
 </script>
 
 </body>
