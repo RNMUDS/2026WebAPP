@@ -934,7 +934,7 @@ pre { position: relative; }
       <figure class="exec-shot">
         <div class="exec-mock-bar">
           <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="url">Live Server: 例題のオレンジの箱</span>
+          <span class="url">ブラウザ表示: 例題のオレンジの箱</span>
         </div>
         <img src="images/session04-example-orange.png" alt="A-Frame で width=2, height=0.5, depth=1, color=orange の a-box を position=&quot;0 1 -3&quot; に置いた実行結果: 水色の空と緑の床の上に、横長で薄いオレンジ色の箱が中央に表示されている。" loading="lazy">
         <figcaption class="exec-caption">
@@ -1045,7 +1045,64 @@ pre { position: relative; }
         <h2>コード体験</h2>
         <span class="toggle-arrow">▼</span>
       </summary>
-    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
+    <p style="margin-bottom:1.5rem">第3回と同じ流れで、<strong>Node.js + Express で簡易Webサーバを立ち上げ、<code>public/</code> フォルダに置いたHTMLをブラウザから読み込みます</strong>。コード体験1〜2と標準課題で作る3つのHTMLは、すべて <code>public/</code> の中に置き、1つの <code>server.js</code> が <code>http://localhost:3000/ファイル名.html</code> として配信します。</p>
+
+    <!-- ============ 準備: Node.js プロジェクトとサーバの立ち上げ ============ -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダと Node.js プロジェクトの準備</h3>
+      </div>
+      <p style="margin-bottom:0.8rem">3つのコード体験・標準課題は<strong>同じ <code>Web04</code> フォルダ・同じ <code>server.js</code></strong> を使い回します。<strong>この準備は最初に1回だけ</strong>行えばOKです。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>Sドライブの <code>Web_Prog</code> の中に <strong><code>Web04</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web04</code> を開く</li>
+        <li>VS Code の<strong>ターミナル</strong>を開く（メニュー「ターミナル」→「新しいターミナル」、または <kbd>Ctrl+`</kbd>）</li>
+        <li><strong>Node.js のバージョンを確認する:</strong> 第2回〜第3回でインストールした Node.js が使えるかを念のため確認します。
+          <pre><span class="code-label">Terminal</span>
+node -v</pre>
+          <p style="margin-top:0.3rem;font-size:0.9rem"><code>v20.x.x</code> や <code>v22.x.x</code> のように表示されればOKです。古いバージョン（例: <code>v5.x</code>）の場合は、第2回の資料を見て公式サイトから <strong>LTS版</strong> を再インストールしてください。</p>
+        </li>
+        <li>以下のコマンドを順番に実行して、新しいプロジェクトをセットアップする:</li>
+      </ol>
+      <pre><span class="code-label">Terminal</span>
+npm init -y
+npm install express@4</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><code>npm init -y</code> で <code>package.json</code> が生成され、<code>npm install express@4</code> で Express（v4 系）がインストールされます。第3回と同じ流れです。<code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られますが、手動で編集する必要はありません。</p>
+      <div style="background:#2e1a0a;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.6rem;font-size:0.88rem;color:#E0E0E0">
+        <strong style="color:#FFB800">&#x26A0; なぜ <code>express@4</code>？</strong><br>
+        Express の最新版は v5 系ですが、v5 は新しい Node.js を要求します。授業では古い Node.js 環境（例: <code>v5.x</code>）でも動かせるよう、安定版の <strong>v4 系</strong>を使います。<code>npm install express</code>（バージョン指定なし）だと最新の v5 が入ってしまうため、<strong>必ず <code>@4</code> を付けてください</strong>。
+      </div>
+
+      <p style="margin-top:1.2rem"><strong>次に、<code>public</code> フォルダと <code>server.js</code> を作ります。</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.3rem 0">
+        <li>VS Code 左側のエクスプローラで <strong>「新しいフォルダ」アイコン</strong> → <strong><code>public</code></strong> フォルダを作成（HTMLファイルはすべてこの中に置きます）</li>
+        <li>エクスプローラの <code>Web04</code> 直下（<code>public</code> の<strong>外</strong>）で <strong>「新しいファイル」アイコン</strong> → ファイル名を <strong><code>server.js</code></strong> と入力</li>
+        <li>下のコードをコピーして貼り付け、保存する</li>
+      </ol>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express <span class="op">=</span> <span class="fn">require</span>(<span class="str">'express'</span>);  <span class="cmt">// Express ライブラリを読み込む</span>
+<span class="kw">const</span> app <span class="op">=</span> <span class="fn">express</span>();              <span class="cmt">// Express アプリケーションを作成する</span>
+
+<span class="cmt">// public フォルダの中身を、そのままブラウザに配信する</span>
+<span class="cmt">// 例: public/compare.html → http://localhost:3000/compare.html</span>
+app.<span class="fn">use</span>(<span class="fn">express.static</span>(<span class="str">'public'</span>));
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {      <span class="cmt">// ポート3000でサーバを起動する</span>
+  <span class="fn">console.log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
+});</pre>
+      <p style="margin-top:0.6rem;font-size:0.9rem"><code>app.use(express.static('public'))</code> の1行で、<code>public/</code> に置いたHTML・CSS・画像などをそのままブラウザから読み込めるようになります。今回のサーバはこれだけ ── 第3回のように <code>app.get('/api/...')</code> のJSON APIは書きません。</p>
+
+      <p style="margin-top:1rem"><strong>サーバを起動する:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.3rem 0">
+        <li>ターミナルで <code>node server.js</code> を実行</li>
+        <li><code>サーバ起動: http://localhost:3000</code> と表示されればOK</li>
+        <li>このターミナルはサーバが動いている間ずっと開いたままにする（停止は <kbd>Ctrl+C</kbd>）</li>
+      </ol>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+        <strong>&#x1F4A1; 今回のラクな点:</strong> 今回の <code>server.js</code> は静的ファイル配信だけなので、<strong>HTMLを書き換えてもサーバの再起動は不要</strong>。<code>public/</code> 内のファイルを保存してブラウザを再読み込みするだけで反映されます。ポート3000が使用中（<code>EADDRINUSE</code>）のエラーが出た場合は、第2回・第3回資料の対処法を参照してください。
+      </div>
+    </div>
 
     <!-- Code Exp 1 -->
     <div class="card code-exp">
@@ -1053,15 +1110,13 @@ pre { position: relative; }
         <span class="tag tag-code-exp">コード体験 1</span>
         <h3>プリミティブ vs エンティティ・コンポーネント ── <code>compare.html</code></h3>
       </div>
-      <p><code>S:\Web_Prog\Web04</code> フォルダを作成し、VS Code で開きます。新しいファイルを作成します。</p>
+      <p>上の<strong>「準備」</strong>で作った <code>public</code> フォルダの中に、HTMLファイルを作成します。</p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>Sドライブの <code>Web_Prog</code> 内に <strong><code>Web04</code></strong> フォルダを作成する</li>
-        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web04</code> を開く</li>
-        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>VS Code 左側のエクスプローラで <strong><code>public</code> フォルダ</strong>を選択した状態で <strong>「新しいファイル」アイコン</strong>をクリック（<code>public</code> の中に作成されることを確認）</li>
         <li>ファイル名を <strong><code>compare.html</code></strong> と入力して Enter</li>
         <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
       </ol>
-      <pre><span class="code-label">HTML ── compare.html</span>
+      <pre><span class="code-label">HTML ── public/compare.html</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
@@ -1105,17 +1160,18 @@ pre { position: relative; }
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
-        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
-        <li>ブラウザに3D空間が表示される</li>
+        <li>ターミナルで <code>node server.js</code> を実行（サーバが既に起動中ならスキップ）</li>
+        <li>ブラウザで <strong><code>http://localhost:3000/compare.html</code></strong> を開く</li>
+        <li>3D空間が表示される。修正したら<strong>ブラウザを再読み込み</strong>するだけで反映される（サーバ再起動は不要）</li>
       </ol>
 
       <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
       <figure class="exec-shot">
         <div class="exec-mock-bar">
           <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="url">http://127.0.0.1:5500/compare.html</span>
+          <span class="url">http://localhost:3000/compare.html</span>
         </div>
-        <img src="images/session04-compare.png" alt="compare.html を Live Server で開いた実行画面: 左にプリミティブ記法のオレンジの箱と水色の球、中央に灰色の柱、右にエンティティ・コンポーネント記法の同じオレンジの箱と水色の球が並ぶ。背景は水色の空、地面は緑の床。" loading="lazy">
+        <img src="images/session04-compare.png" alt="compare.html をブラウザ（http://localhost:3000/compare.html）で開いた実行画面: 左にプリミティブ記法のオレンジの箱と水色の球、中央に灰色の柱、右にエンティティ・コンポーネント記法の同じオレンジの箱と水色の球が並ぶ。背景は水色の空、地面は緑の床。" loading="lazy">
         <figcaption class="exec-caption">
           青い空＋緑の床。左右に同じ形・同じ色のオブジェクトが並ぶ ―― <strong>プリミティブ記法</strong>と<strong>エンティティ・コンポーネント記法</strong>の表示結果は完全に同じ。<br>
           <span style="color:#888;font-size:0.85em">※ 上の HTML を実際にブラウザでレンダリングし、A-Frame の描画完了後にキャプチャしたものです。</span>
@@ -1139,13 +1195,13 @@ pre { position: relative; }
         <span class="tag tag-code-exp">コード体験 2</span>
         <h3>rotation・scale・ネスト ── <code>transform.html</code></h3>
       </div>
-      <p>同じ <code>Web04</code> フォルダにもう1つファイルを作ります。</p>
+      <p>同じ <code>public</code> フォルダにもう1つファイルを作ります（<code>server.js</code> は作り直さなくてOK ── すでに <code>public/</code> 全体を配信しています）。</p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
+        <li>VS Code 左側のエクスプローラで <strong><code>public</code> フォルダ</strong>を選択した状態で <strong>「新しいファイル」アイコン</strong>をクリック</li>
         <li>ファイル名を <strong><code>transform.html</code></strong> と入力して Enter</li>
         <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
       </ol>
-      <pre><span class="code-label">HTML ── transform.html</span>
+      <pre><span class="code-label">HTML ── public/transform.html</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
@@ -1205,15 +1261,15 @@ pre { position: relative; }
   <span class="kw">&lt;/a-scene&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>transform.html</code> を右クリック → 「Open with Live Server」</p>
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong> サーバが起動中なら、ブラウザで <strong><code>http://localhost:3000/transform.html</code></strong> を開くだけ。サーバが止まっていたら、ターミナルで <code>node server.js</code> を実行してから開く。</p>
 
       <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500;font-weight:700">&#x1F4FA; 実行画面（実機キャプチャ）</p>
       <figure class="exec-shot">
         <div class="exec-mock-bar">
           <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="url">http://127.0.0.1:5500/transform.html</span>
+          <span class="url">http://localhost:3000/transform.html</span>
         </div>
-        <img src="images/session04-transform.png" alt="transform.html を Live Server で開いた実行画面: 左に45度回転した赤い箱、中央に横長で薄い青い箱、右に縦長に伸びた緑の球、中央奥に板・金色の球・銀色の柱からなるネストされたオブジェクト。背景は水色の空、地面は灰色の床。" loading="lazy">
+        <img src="images/session04-transform.png" alt="transform.html をブラウザ（http://localhost:3000/transform.html）で開いた実行画面: 左に45度回転した赤い箱、中央に横長で薄い青い箱、右に縦長に伸びた緑の球、中央奥に板・金色の球・銀色の柱からなるネストされたオブジェクト。背景は水色の空、地面は灰色の床。" loading="lazy">
         <figcaption class="exec-caption">
           A: 角がカメラを向く<strong>ダイヤ型</strong>（45度回転）／ B: <strong>平たい横長</strong>（X方向2倍, Y方向0.5倍）／ C: <strong>縦長の楕円体</strong>（Y方向2倍）／ D: 奥に<strong>ネスト構造のオブジェクト</strong>（板＋金色の球＋銀色の柱）<br>
           <span style="color:#888;font-size:0.85em">※ 上の HTML を実際にブラウザでレンダリングし、A-Frame の描画完了後にキャプチャしたものです。</span>
@@ -1251,9 +1307,10 @@ pre { position: relative; }
         <span class="tag tag-standard">標準課題</span>
         <h3>理想の大学教室を作る（クリエイティブ課題）</h3>
       </div>
-      <p>VS Code で <code>Web04</code> フォルダに <strong><code>classroom.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、エンティティ・コンポーネント記法で<strong>あなたが理想とする大学の教室</strong>を作ってください。<br>
+      <p>VS Code で <code>Web04/public</code> フォルダの中に <strong><code>classroom.html</code></strong> を新規作成し（エクスプローラで <code>public</code> を選択 → 「新しいファイル」アイコン → ファイル名入力）、エンティティ・コンポーネント記法で<strong>あなたが理想とする大学の教室</strong>を作ってください。<br>
       ありきたりな教室ではなく ―― 「こんな教室で授業を受けたい！」と思える空間にしてください（例: 円形階段教室、屋外テラス付き教室、カフェ風ゼミ室、未来的なVR教室、自然光があふれる学習ラウンジ など）。</p>
       <p style="margin-top:0.5rem;color:#93D500;font-size:0.9rem"><strong>この回はこの1課題に集中します。</strong>例題・トレース演習・コード体験で身につけた ECS／ネスト／rotation／scale を、自分の作品の中ですべて使いましょう。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><strong>確認方法:</strong> コード体験で起動した <code>server.js</code> が動いていれば、ブラウザで <strong><code>http://localhost:3000/classroom.html</code></strong> を開くだけ（保存後に再読み込み）。サーバが止まっていたら、ターミナルで <code>node server.js</code> を実行してから開く。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
