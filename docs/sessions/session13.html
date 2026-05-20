@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -448,10 +460,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計4項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span>設計ドキュメント</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>詳細設計 + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>設計プレゼン + フィードバック</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-trace">ワークシート</span>設計ワークシート記入</div>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span>設計ドキュメント</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>詳細設計 + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>設計プレゼン + フィードバック</a>
+        <a class="sub-item" href="#sec-examples"><span class="sub-count">1</span><span class="tag tag-trace">ワークシート</span>設計ワークシート記入</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -508,6 +520,10 @@ pre { position: relative; }
     <!-- 1.1 最終制作の要件 -->
     <div class="concept-box">
       <h4>1.1 最終制作の要件 <span class="exam-alert">課題に出ます</span></h4>
+      <p style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.6rem 1rem;margin-bottom:1rem;border-radius:6px;font-size:0.95rem">
+        <strong style="color:#76B900">読み方:</strong> <code>requirement</code> = <strong>リクワイアメント</strong>（「要件」「必須条件」の意。 require「必要とする」＋ -ment「名詞化」）。
+        派生語の <code>MVP</code>＝<strong>エムブイピー</strong>（Minimum Viable Product = 最小限の動作する製品）、<code>use case</code>＝<strong>ユースケース</strong>（システムの利用シーン）、<code>architecture</code>＝<strong>アーキテクチャ</strong>（ギリシャ語 arkhi-「主要な」＋ tekton「建築家」= システム全体の構造設計）。
+      </p>
       <div class="analogy">
         家を建てる前に設計図を描くように、アプリを作る前に<strong>何を作るか</strong>を明確にしておくことが重要です。<br>
         設計なしに作り始めると、途中で方向がわからなくなり、完成しないリスクが高まります。
@@ -541,6 +557,111 @@ pre { position: relative; }
           <li><strong>追加機能</strong> ── オブジェクト操作、エフェクト、音声、スコア、DB永続化など</li>
         </ul>
       </div>
+
+      <!-- 要件定義フロー アニメーション -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">要件定義フロー（必須機能 → 自由要素の順で決める）</text>
+
+          <!-- Step badge -->
+          <rect x="490" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ① 必須技術を確認
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ② 必須機能を列挙
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ③ 自由要素を追加
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ④ スコープを確定
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ⑤ 設計レビューへ
+          </text>
+
+          <!-- Layer 1: 必須技術 -->
+          <rect x="30" y="100" width="150" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="105" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">必須技術</text>
+          <text x="105" y="142" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame</text>
+          <text x="105" y="156" text-anchor="middle" fill="#E0E0E0" font-size="11">Node.js + Socket.IO</text>
+
+          <!-- Arrow 1 -->
+          <line x1="180" y1="130" x2="210" y2="130" stroke="#76B900" stroke-width="2" marker-end="url(#arrR7a)" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Layer 2: 必須機能 -->
+          <rect x="210" y="100" width="160" height="60" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;1;1;1;1;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="290" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">必須機能</text>
+          <text x="290" y="142" text-anchor="middle" fill="#E0E0E0" font-size="11">アバター同期</text>
+          <text x="290" y="156" text-anchor="middle" fill="#E0E0E0" font-size="11">吹き出しチャット</text>
+
+          <!-- Arrow 2 -->
+          <line x1="370" y1="130" x2="400" y2="130" stroke="#FFB800" stroke-width="2" marker-end="url(#arrR7b)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Layer 3: 自由要素 -->
+          <rect x="400" y="100" width="160" height="60" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;0.3;0.3;1;1;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="480" y="125" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">自由要素</text>
+          <text x="480" y="142" text-anchor="middle" fill="#E0E0E0" font-size="11">テーマ / 3Dデザイン</text>
+          <text x="480" y="156" text-anchor="middle" fill="#E0E0E0" font-size="11">追加機能</text>
+
+          <!-- Layer 4: スコープ確定 (appears at step 4) -->
+          <rect x="180" y="200" width="380" height="60" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="370" y="225" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            スコープ確定: 必須2機能 + 追加1機能以上
+          </text>
+          <text x="370" y="244" text-anchor="middle" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            90分で実装できる範囲に絞る（YAGNI原則）
+          </text>
+
+          <!-- Down arrows from layer 1-3 to scope -->
+          <line x1="105" y1="160" x2="105" y2="200" stroke="#76B900" stroke-width="1.5" stroke-dasharray="4,3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Bottom hint -->
+          <rect x="60" y="278" width="580" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="298" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            必須を先に固める → 自由要素は「やりたい」順ではなく「必要」順で追加する
+          </text>
+
+          <defs>
+            <marker id="arrR7a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrR7b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div style="background:#1a1a0a;border-radius:10px;padding:1rem 1.2rem;margin:0.75rem 0;border-left:3px solid #FFB800;font-size:0.95rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.4rem">💡 具体例 ── 要件の優先順位</p>
+        <p>例えば「VR水族館」を作る場合、優先順位は次の通り:</p>
+        <ol style="margin-left:1.2rem;margin-top:0.4rem">
+          <li><strong>必須</strong>: ダイバーアバターの同期、泡形の吹き出しチャット（これがないと「マルチユーザ3D」にならない）</li>
+          <li><strong>追加1</strong>: 魚の群れアニメーション（テーマの説得力を上げる）</li>
+          <li><strong>追加2</strong>: チャット履歴の保存（実装難度が低く効果が大きい）</li>
+          <li><strong>余力</strong>: BGM、ライティング演出（時間が余ったら）</li>
+        </ol>
+        <p style="margin-top:0.5rem;color:#aaa;font-size:0.85rem">→ 「やりたい順」ではなく「<strong>無いと困る順</strong>」で並べると、途中で時間切れになっても最低限動くアプリが残る。</p>
+      </div>
     </div>
 
     <!-- 1.2 設計の進め方 -->
@@ -559,6 +680,99 @@ pre { position: relative; }
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
           <span style="background:#FFB800;color:#111;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">5. ファイル構成</span>
         </div>
+      </div>
+
+      <!-- プロトタイプ → 詳細設計 遷移アニメーション -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">プロトタイプ → 詳細設計への遷移（粒度を段階的に上げる）</text>
+
+          <!-- Step badge -->
+          <rect x="490" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            ① 概念スケッチ
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            ② ワイヤーフレーム
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            ③ 詳細仕様
+          </text>
+          <text x="585" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            ④ 実装準備完了
+          </text>
+
+          <!-- Sketch box (Step 1) -->
+          <g>
+            <rect x="60" y="100" width="160" height="120" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2.5" opacity="0">
+              <animate attributeName="opacity" values="1;1;0.3;0.3;0.3;0.3;0.3;0.3" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            </rect>
+            <text x="140" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">①概念スケッチ</text>
+            <!-- Hand-drawn style icons -->
+            <circle cx="100" cy="160" r="14" fill="none" stroke="#aaa" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <text x="100" y="165" text-anchor="middle" fill="#aaa" font-size="11">？</text>
+            <rect x="130" y="148" width="60" height="28" fill="none" stroke="#aaa" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <text x="160" y="167" text-anchor="middle" fill="#aaa" font-size="11">空間</text>
+            <text x="140" y="200" text-anchor="middle" fill="#888" font-size="11">手描きでOK</text>
+          </g>
+
+          <!-- Arrow 1 -->
+          <line x1="225" y1="160" x2="245" y2="160" stroke="#76B900" stroke-width="2" marker-end="url(#arrR7c)"/>
+
+          <!-- Wireframe box (Step 2) -->
+          <g>
+            <rect x="250" y="100" width="160" height="120" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2.5" opacity="0">
+              <animate attributeName="opacity" values="0.3;0.3;1;1;0.3;0.3;0.3;0.3" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            </rect>
+            <text x="330" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">②ワイヤーフレーム</text>
+            <!-- Wireframe rectangles -->
+            <rect x="265" y="140" width="60" height="40" fill="none" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="295" y="163" text-anchor="middle" fill="#FFB800" font-size="11">3D空間</text>
+            <rect x="335" y="140" width="60" height="20" fill="none" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="365" y="154" text-anchor="middle" fill="#FFB800" font-size="11">UI</text>
+            <rect x="335" y="165" width="60" height="15" fill="none" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="365" y="176" text-anchor="middle" fill="#FFB800" font-size="11">入力欄</text>
+            <text x="330" y="200" text-anchor="middle" fill="#888" font-size="11">UI配置を確定</text>
+          </g>
+
+          <!-- Arrow 2 -->
+          <line x1="415" y1="160" x2="435" y2="160" stroke="#FFB800" stroke-width="2" marker-end="url(#arrR7d)"/>
+
+          <!-- Detailed spec (Step 3) -->
+          <g>
+            <rect x="440" y="100" width="200" height="120" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2.5" opacity="0">
+              <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;1;1;0.3;0.3" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            </rect>
+            <text x="540" y="125" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">③詳細仕様</text>
+            <text x="455" y="148" fill="#4FC3F7" font-size="11" font-weight="600">イベント:</text>
+            <text x="465" y="163" fill="#E0E0E0" font-size="11" font-family="JetBrains Mono">join {name}</text>
+            <text x="465" y="177" fill="#E0E0E0" font-size="11" font-family="JetBrains Mono">move {x,y,z,ry}</text>
+            <text x="465" y="191" fill="#E0E0E0" font-size="11" font-family="JetBrains Mono">chat {text}</text>
+            <text x="540" y="208" text-anchor="middle" fill="#888" font-size="11">データ構造まで決定</text>
+          </g>
+
+          <!-- Final result panel (appears at step 4) -->
+          <rect x="120" y="240" width="460" height="50" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="262" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            ✓ 実装に必要な情報がすべて揃った
+          </text>
+          <text x="350" y="280" text-anchor="middle" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.25;0.50;0.53;0.78;0.81;1" dur="14s" repeatCount="indefinite"/>
+            「何を・どこに・どんな構造で」が明確 → 第14回の実装で迷わない
+          </text>
+
+          <defs>
+            <marker id="arrR7c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrR7d" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          </defs>
+        </svg>
       </div>
 
       <table style="margin-top:1rem">
@@ -624,6 +838,115 @@ Web13/
     fish.glb         <span class="cmt">← 魚の3Dモデル</span>
     coral.glb        <span class="cmt">← サンゴの3Dモデル</span>
     ocean-sound.mp3  <span class="cmt">← BGM</span></pre>
+      </div>
+
+      <!-- システム構成図 アニメーション -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">システム構成図（マルチユーザ3Dアプリ）</text>
+
+          <!-- Step badge -->
+          <rect x="510" y="48" width="200" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="610" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ① クライアントA 起動
+          </text>
+          <text x="610" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ② サーバに join 送信
+          </text>
+          <text x="610" y="65" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ③ DB に履歴を保存
+          </text>
+          <text x="610" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ④ 全クライアントへ配信
+          </text>
+          <text x="610" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ⑤ 同期完了！
+          </text>
+
+          <!-- Client A -->
+          <rect x="40" y="120" width="140" height="80" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2.5"/>
+          <text x="110" y="145" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">クライアント A</text>
+          <text x="110" y="162" text-anchor="middle" fill="#E0E0E0" font-size="11">ブラウザ</text>
+          <text x="110" y="178" text-anchor="middle" fill="#aaa" font-size="11">A-Frame シーン</text>
+          <text x="110" y="192" text-anchor="middle" fill="#aaa" font-size="11">Socket.IO クライアント</text>
+
+          <!-- Client B -->
+          <rect x="40" y="220" width="140" height="80" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2.5"/>
+          <text x="110" y="245" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">クライアント B</text>
+          <text x="110" y="262" text-anchor="middle" fill="#E0E0E0" font-size="11">ブラウザ</text>
+          <text x="110" y="278" text-anchor="middle" fill="#aaa" font-size="11">A-Frame シーン</text>
+          <text x="110" y="292" text-anchor="middle" fill="#aaa" font-size="11">Socket.IO クライアント</text>
+
+          <!-- Server (center) -->
+          <rect x="300" y="170" width="140" height="100" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2.5"/>
+          <text x="370" y="195" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">サーバ</text>
+          <text x="370" y="213" text-anchor="middle" fill="#E0E0E0" font-size="11">Node.js + Express</text>
+          <text x="370" y="229" text-anchor="middle" fill="#E0E0E0" font-size="11">Socket.IO サーバ</text>
+          <text x="370" y="245" text-anchor="middle" fill="#aaa" font-size="11">server.js</text>
+          <text x="370" y="259" text-anchor="middle" fill="#aaa" font-size="11">イベント中継</text>
+
+          <!-- Database (right) -->
+          <rect x="540" y="180" width="140" height="80" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2.5"/>
+          <text x="610" y="205" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">データベース</text>
+          <text x="610" y="222" text-anchor="middle" fill="#E0E0E0" font-size="11">SQLite</text>
+          <text x="610" y="238" text-anchor="middle" fill="#aaa" font-size="11">aquarium.db</text>
+          <text x="610" y="252" text-anchor="middle" fill="#aaa" font-size="11">チャット履歴保存</text>
+
+          <!-- Arrow A → Server (step 2) -->
+          <line x1="180" y1="160" x2="300" y2="200" stroke="#FFB800" stroke-width="2.5" marker-end="url(#arrR7e)" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <text x="225" y="170" fill="#FFB800" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            join
+          </text>
+
+          <!-- Arrow Server → DB (step 3) -->
+          <line x1="440" y1="220" x2="540" y2="220" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#arrR7f)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <text x="490" y="212" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            INSERT
+          </text>
+
+          <!-- Arrow Server → A (step 4) -->
+          <line x1="300" y1="195" x2="180" y2="155" stroke="#FFB800" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrR7e)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <!-- Arrow Server → B (step 4) -->
+          <line x1="300" y1="245" x2="180" y2="255" stroke="#FFB800" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrR7e)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <text x="225" y="280" fill="#FFB800" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+            player-joined（全員に broadcast）
+          </text>
+
+          <!-- Success indicator (step 5) -->
+          <circle cx="110" cy="160" r="32" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="110" cy="260" r="32" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Bottom hint -->
+          <rect x="60" y="318" width="600" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="360" y="338" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            クライアント → サーバ → 全クライアント の流れが「マルチユーザ3D」の基本構成
+          </text>
+
+          <defs>
+            <marker id="arrR7e" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="arrR7f" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
       </div>
     </div>
 
@@ -700,6 +1023,93 @@ Web13/
         <li>チャットUIの位置（画面下部？ 3D空間内？）</li>
         <li>その他のUI要素（名前入力、ボタンなど）</li>
       </ul>
+
+      <!-- ユースケース図 アニメーション -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">ユースケース図（ユーザがアプリで何をするか）</text>
+
+          <!-- Step badge -->
+          <rect x="490" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ① 入室する
+          </text>
+          <text x="580" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ② 移動する
+          </text>
+          <text x="580" y="65" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ③ チャットする
+          </text>
+          <text x="580" y="65" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ④ オブジェクトを見る
+          </text>
+          <text x="580" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ⑤ 退室する
+          </text>
+
+          <!-- Actor (stick figure) at left -->
+          <g>
+            <circle cx="80" cy="170" r="15" fill="none" stroke="#76B900" stroke-width="2.5"/>
+            <line x1="80" y1="185" x2="80" y2="220" stroke="#76B900" stroke-width="2.5"/>
+            <line x1="80" y1="195" x2="60" y2="210" stroke="#76B900" stroke-width="2.5"/>
+            <line x1="80" y1="195" x2="100" y2="210" stroke="#76B900" stroke-width="2.5"/>
+            <line x1="80" y1="220" x2="65" y2="245" stroke="#76B900" stroke-width="2.5"/>
+            <line x1="80" y1="220" x2="95" y2="245" stroke="#76B900" stroke-width="2.5"/>
+            <text x="80" y="270" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">ユーザ</text>
+          </g>
+
+          <!-- System boundary -->
+          <rect x="170" y="90" width="380" height="200" rx="12" fill="none" stroke="#444" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="360" y="80" text-anchor="middle" fill="#888" font-size="12" font-weight="600">マルチユーザ3D Webアプリ</text>
+
+          <!-- Use case 1: 入室 -->
+          <ellipse cx="280" cy="115" rx="70" ry="22" fill="#1A1A1A" stroke="#76B900" stroke-width="2" opacity="0.3">
+            <animate attributeName="opacity" values="1;1;0.3;0.3;0.3;0.3;0.3;0.3;0.3;0.3" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+          <text x="280" y="120" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">入室する</text>
+          <line x1="100" y1="170" x2="210" y2="115" stroke="#76B900" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Use case 2: 移動 -->
+          <ellipse cx="440" cy="115" rx="70" ry="22" fill="#1A1A1A" stroke="#FFB800" stroke-width="2" opacity="0.3">
+            <animate attributeName="opacity" values="0.3;0.3;1;1;0.3;0.3;0.3;0.3;0.3;0.3" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+          <text x="440" y="120" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">3D空間を移動</text>
+          <line x1="100" y1="170" x2="370" y2="115" stroke="#FFB800" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Use case 3: チャット -->
+          <ellipse cx="280" cy="190" rx="70" ry="22" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2" opacity="0.3">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;1;1;0.3;0.3;0.3;0.3" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+          <text x="280" y="195" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">チャットする</text>
+          <line x1="100" y1="190" x2="210" y2="190" stroke="#4FC3F7" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Use case 4: オブジェクト操作 -->
+          <ellipse cx="440" cy="190" rx="80" ry="22" fill="#1A1A1A" stroke="#FF5252" stroke-width="2" opacity="0.3">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;0.3;0.3;1;1;0.3;0.3" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+          <text x="440" y="195" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">オブジェクトを見る</text>
+          <line x1="100" y1="190" x2="360" y2="190" stroke="#FF5252" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Use case 5: 退室 -->
+          <ellipse cx="360" cy="260" rx="70" ry="22" fill="#1A1A1A" stroke="#76B900" stroke-width="2" opacity="0.3">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;0.3;0.3;0.3;0.3;1;1" keyTimes="0;0.18;0.20;0.38;0.40;0.58;0.60;0.78;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+          <text x="360" y="265" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">退室する</text>
+          <line x1="100" y1="220" x2="290" y2="260" stroke="#76B900" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Bottom hint -->
+          <rect x="60" y="305" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="325" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            ユースケース図 = 「ユーザが何をするか」のリスト → 機能一覧の元になる
+          </text>
+        </svg>
+      </div>
+
       <div class="worksheet-field">
         <p>紙にスケッチを描いて、スマートフォンで撮影し、Notionに画像として貼り付けてください。</p>
       </div>
@@ -817,6 +1227,101 @@ Web13/
           <li>他のメンバーからもらったフィードバック（自分の設計に対するもの）</li>
           <li>フィードバックを受けて<strong>設計を修正する点</strong>があれば記入</li>
         </ul>
+      </div>
+
+      <!-- 設計レビューのサイクル アニメーション -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">設計レビューのサイクル（4ステップを繰り返す）</text>
+
+          <!-- Step badge -->
+          <rect x="480" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="570" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+            ① 設計をプレゼン
+          </text>
+          <text x="570" y="65" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+            ② 観点ごとに質問
+          </text>
+          <text x="570" y="65" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+            ③ 改善案を出す
+          </text>
+          <text x="570" y="65" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+            ④ 設計を修正
+          </text>
+          <text x="570" y="65" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+            ⤴ 次のレビューへ戻る
+          </text>
+
+          <!-- Circular layout centered at (340, 200), radius 110 -->
+          <!-- Step 1: Top (340, 95) -->
+          <rect x="270" y="95" width="140" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="1;1;0.3;0.3;0.3;0.3;0.3;0.3;1;1" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="340" y="120" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">① プレゼン</text>
+          <text x="340" y="138" text-anchor="middle" fill="#E0E0E0" font-size="11">テーマ・機能・スケッチ</text>
+          <text x="340" y="151" text-anchor="middle" fill="#aaa" font-size="11">1人2分</text>
+
+          <!-- Step 2: Right (450, 200) -->
+          <rect x="450" y="170" width="140" height="60" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;1;1;0.3;0.3;0.3;0.3;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="520" y="195" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">② 質問</text>
+          <text x="520" y="213" text-anchor="middle" fill="#E0E0E0" font-size="11">実現可能性・面白さ</text>
+          <text x="520" y="226" text-anchor="middle" fill="#aaa" font-size="11">観点ごとに</text>
+
+          <!-- Step 3: Bottom (340, 270) -->
+          <rect x="270" y="245" width="140" height="60" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;1;1;0.3;0.3;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="340" y="270" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">③ 改善案</text>
+          <text x="340" y="288" text-anchor="middle" fill="#E0E0E0" font-size="11">「こうしたら？」</text>
+          <text x="340" y="301" text-anchor="middle" fill="#aaa" font-size="11">代替案を提案</text>
+
+          <!-- Step 4: Left (230, 200) -->
+          <rect x="90" y="170" width="140" height="60" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="2.5" opacity="0">
+            <animate attributeName="opacity" values="0.3;0.3;0.3;0.3;0.3;0.3;1;1;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="160" y="195" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700">④ 修正</text>
+          <text x="160" y="213" text-anchor="middle" fill="#E0E0E0" font-size="11">設計ドキュメント更新</text>
+          <text x="160" y="226" text-anchor="middle" fill="#aaa" font-size="11">Notionに反映</text>
+
+          <!-- Arrows (curved-ish via paths) -->
+          <path d="M 410 130 Q 480 130 510 170" fill="none" stroke="#FFB800" stroke-width="2" marker-end="url(#arrR7g)" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0.3;0.3;0.3;0.3;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </path>
+          <path d="M 510 230 Q 480 270 410 280" fill="none" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arrR7h)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0.3;0.3;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </path>
+          <path d="M 270 280 Q 200 270 170 230" fill="none" stroke="#FF5252" stroke-width="2" marker-end="url(#arrR7i)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0.3;0.3" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </path>
+          <path d="M 170 170 Q 200 130 270 130" fill="none" stroke="#76B900" stroke-width="2" marker-end="url(#arrR7j)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.42;0.44;0.64;0.66;0.86;0.88;1" dur="16s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- Center label -->
+          <circle cx="340" cy="200" r="36" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+          <text x="340" y="197" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">レビュー</text>
+          <text x="340" y="213" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">サイクル</text>
+
+          <!-- Bottom hint -->
+          <rect x="60" y="325" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="345" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            1回のレビューで完璧を目指さない。サイクルを回すことで設計の質が上がる
+          </text>
+
+          <defs>
+            <marker id="arrR7g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="arrR7h" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="arrR7i" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF5252"/></marker>
+            <marker id="arrR7j" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          </defs>
+        </svg>
       </div>
     </div>
 
@@ -1107,8 +1612,60 @@ Web13/
       <h2>解答例</h2>
     </div>
 
+    <!-- ── 例題・やってみよう の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">やってみよう</span> Step 1「テーマ案の比較」 解答例</summary>
+      <div class="answer-content">
+        <p>3つのテーマ案を比較したサンプル:</p>
+        <table>
+          <tr><th>テーマ案</th><th>必須機能をどう組み込めるか</th><th>実現難度</th></tr>
+          <tr><td>① バーチャル教室</td><td>生徒アバターが座席に集まり、吹き出しで質疑応答する</td><td>低（家具配置がシンプル）</td></tr>
+          <tr><td>② 宇宙ステーション</td><td>宇宙服アバターが浮遊し、無線通信風の吹き出しで会話する</td><td>中（重力なしの演出が必要）</td></tr>
+          <tr><td>③ 美術館</td><td>来館者アバターが展示前で立ち止まり、感想を吹き出しで共有する</td><td>中（展示物の3Dアセットが必要）</td></tr>
+        </table>
+        <p style="margin-top:0.8rem"><strong>選ぶ基準:</strong> 自分が90分で実装できそうか、3Dアセットが手元にあるか、テーマに思い入れがあるか。<strong>① バーチャル教室</strong>のように基本図形（box / cylinder / plane）だけで形が成立するテーマが最も実現しやすい。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">設計レビュー</span> よくある設計の落とし穴と回避策</summary>
+      <div class="answer-content">
+        <p>過去の受講者がやりがちな設計ミスとその回避方法:</p>
+        <table>
+          <tr><th>落とし穴</th><th>何が起きるか</th><th>回避策</th></tr>
+          <tr><td>必須機能を後回しにする</td><td>追加機能に時間を使い、マルチプレイが動かないまま提出</td><td>第14回の最初の50分は<strong>必須機能のみ</strong>に集中する設計にする</td></tr>
+          <tr><td>3Dアセットを過大に見積もる</td><td>glTFモデルが多すぎて読み込みに失敗 / 重い</td><td>必須機能が動いてからアセットを追加する。box/sphereで仮実装</td></tr>
+          <tr><td>UI設計を省略する</td><td>チャット入力欄をどこに置くか決まらず実装で迷う</td><td>スケッチに<strong>UIの位置</strong>を必ず描き込む</td></tr>
+          <tr><td>イベント名を後で決める</td><td>クライアントとサーバで名前が食い違いバグになる</td><td>発展課題のイベント表を<strong>実装前に</strong>確定する</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">Q&amp;A</span> 設計に関するよくある質問</summary>
+      <div class="answer-content">
+        <p><strong>Q1. 設計途中でテーマを変えてもよい？</strong></p>
+        <p>→ 第13回の途中であれば変更OK。ただし、グループ口頭試問より前に確定させること。第14回の実装中の変更は時間切れリスクが高いので推奨しない。</p>
+
+        <p style="margin-top:1rem"><strong>Q2. 追加機能はいくつまで設計すべき？</strong></p>
+        <p>→ 標準課題は<strong>1つ以上</strong>。発展課題は1つを詳細に設計するほうが、複数を浅く設計するより評価が高い。「実装方法・ユーザ価値」まで掘り下げられる粒度を選ぶ。</p>
+
+        <p style="margin-top:1rem"><strong>Q3. スケッチは絵が下手でも大丈夫？</strong></p>
+        <p>→ 問題ない。設計レビューで伝わればよい。<strong>位置関係・サイズ感・UI配置</strong>の3点が読み取れることが重要。きれいに描く必要はなく、矢印やラベルで補足してOK。</p>
+
+        <p style="margin-top:1rem"><strong>Q4. 過去の回で学んだ技術を全部使わないとダメ？</strong></p>
+        <p>→ 必須は<strong>A-Frame / Node.js+Express / Socket.IO</strong> のみ。SQLite やアニメーションなどは追加機能で必要になったら使う。<strong>使わない技術があってOK</strong>。</p>
+
+        <p style="margin-top:1rem"><strong>Q5. Socket.IO イベントの名前ルールは？</strong></p>
+        <p>→ 動詞形（<code>join</code>, <code>move</code>, <code>chat</code>）または「主語-動詞」形（<code>player-joined</code>, <code>chat-broadcast</code>）。<strong>クライアント→サーバは命令形</strong>、<strong>サーバ→全クライアントは過去形/結果形</strong>が読みやすい。</p>
+      </div>
+    </details>
+    </div>
+
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <div id="answers-encrypted" data-cipher="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"></div>
   </div>
 </section>

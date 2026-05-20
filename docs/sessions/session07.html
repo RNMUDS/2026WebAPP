@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,10 +446,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -478,11 +490,6 @@ pre { position: relative; }
 
       <table>
         <tr><th>属性</th><th>説明</th><th>例</th></tr>
-<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem"><code>dur</code> を <code>500</code> に変えて回転速度の違いを確認し、次に <code>easing</code> を <code>easeInOutQuad</code> に変えてみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 速度と動きの違いを1文で書く</div></div>
-</div>
         <tr><td><code>property</code></td><td>変化させる対象のプロパティ <span class="exam-alert">課題に出ます</span></td><td>rotation, position, scale, color, opacity</td></tr>
         <tr><td><code>from</code></td><td>開始値（省略するとオブジェクトの現在値）</td><td><code>0 0 0</code></td></tr>
         <tr><td><code>to</code></td><td>終了値</td><td><code>0 360 0</code></td></tr>
@@ -492,38 +499,52 @@ pre { position: relative; }
         <tr><td><code>direction</code></td><td>アニメーションの方向</td><td><code>normal</code>, <code>alternate</code>, <code>reverse</code></td></tr>
         <tr><td><code>startEvents</code></td><td>アニメーション開始のトリガーイベント</td><td><code>click</code>, <code>mouseenter</code></td></tr>
       </table>
+
+      <!-- 読み方 / 具体例 / Q&A -->
+      <div style="background:#111;border:1px solid #76B900;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読み方（カタカナ）</p>
+        <table style="font-size:0.88rem">
+          <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>animation</code></td><td style="color:#ccc">アニメーション ── 動きをつける仕組み（A-Frame ではコンポーネント名）</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>property</code></td><td style="color:#ccc">プロパティ ── 「特性・属性」の意味。何を変化させるかを指定</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>dur</code> = duration</td><td style="color:#ccc">デュレーション ── 「所要時間」。ミリ秒単位（1000 = 1秒）</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">requestAnimationFrame</td><td style="color:#ccc">リクエストアニメーションフレーム ── 内部で毎フレーム値を更新する仕組み（A-Frame が肩代わりしてくれる）</td></tr>
+        </table>
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>dur: 3000</code> で「<code>from</code> の値から <code>to</code> の値まで <strong>3秒</strong>かけて変化」。<code>loop: true</code> で「<strong>無限に繰り返し</strong>」。両方を組み合わせると <strong>3秒で1周する回転がずっと続く</strong>。</p>
+      </div>
+
       <div class="diagram-container" style="margin:1.5rem 0">
         <svg viewBox="0 0 700 180" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
           <!-- Loop circle -->
           <rect x="40" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="110" y="52" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">animation 開始</text>
-          <text x="110" y="67" text-anchor="middle" fill="#999" font-size="9">from の値からスタート</text>
+          <text x="110" y="52" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">animation 開始</text>
+          <text x="110" y="67" text-anchor="middle" fill="#999" font-size="11">from の値からスタート</text>
           
           <line x1="180" y1="55" x2="230" y2="55" stroke="#76B900" stroke-width="2" marker-end="url(#an-arr)"/>
           
           <rect x="230" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-          <text x="300" y="52" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">値を補間</text>
-          <text x="300" y="67" text-anchor="middle" fill="#999" font-size="9">easing に従い変化</text>
+          <text x="300" y="52" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">値を補間</text>
+          <text x="300" y="67" text-anchor="middle" fill="#999" font-size="11">easing に従い変化</text>
           
           <line x1="370" y1="55" x2="420" y2="55" stroke="#FFB800" stroke-width="2" marker-end="url(#an-arr2)"/>
           
           <rect x="420" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="490" y="52" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">to の値に到達</text>
-          <text x="490" y="67" text-anchor="middle" fill="#999" font-size="9">dur ミリ秒後</text>
+          <text x="490" y="52" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">to の値に到達</text>
+          <text x="490" y="67" text-anchor="middle" fill="#999" font-size="11">dur ミリ秒後</text>
           
           <line x1="560" y1="55" x2="610" y2="55" stroke="#4FC3F7" stroke-width="2" marker-end="url(#an-arr3)"/>
           
           <rect x="610" y="30" width="70" height="50" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
-          <text x="645" y="52" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">loop?</text>
-          <text x="645" y="67" text-anchor="middle" fill="#999" font-size="9">繰り返し</text>
+          <text x="645" y="52" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">loop?</text>
+          <text x="645" y="67" text-anchor="middle" fill="#999" font-size="11">繰り返し</text>
           
           <!-- Loop back arrow -->
           <path d="M 645 80 L 645 120 L 110 120 L 110 80" fill="none" stroke="#93D500" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#an-arr4)"/>
-          <text x="380" y="138" text-anchor="middle" fill="#93D500" font-size="9" font-weight="600">loop: true → from に戻って再開 / direction: alternate → 逆方向に再生</text>
+          <text x="380" y="138" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">loop: true → from に戻って再開 / direction: alternate → 逆方向に再生</text>
           
           <!-- dur label -->
           <rect x="180" y="5" width="380" height="20" rx="4" fill="none" stroke="#666" stroke-width="1" stroke-dasharray="3"/>
-          <text x="370" y="18" text-anchor="middle" fill="#666" font-size="9">dur（所要時間）ミリ秒</text>
+          <text x="370" y="18" text-anchor="middle" fill="#666" font-size="11">dur（所要時間）ミリ秒</text>
           
           <defs>
             <marker id="an-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#76B900"/></marker>
@@ -532,6 +553,85 @@ pre { position: relative; }
             <marker id="an-arr4" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#93D500"/></marker>
           </defs>
         </svg>
+      </div>
+
+      <!-- R7 #1: requestAnimationFrame loop アニメーション (animated step diagram) -->
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 680 320" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">requestAnimationFrame ループ ── 毎フレーム値を更新</text>
+
+          <!-- Step badges (rotate ① → ② → ③ → ④ → ⑤) -->
+          <g>
+            <rect x="500" y="46" width="150" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="575" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ① t=0 / from
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ② フレーム更新中
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ③ easing で補間
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ④ t=dur / to に到達
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ loop で from に戻る
+            </text>
+          </g>
+
+          <!-- Time axis -->
+          <line x1="60" y1="180" x2="620" y2="180" stroke="#444" stroke-width="1.5"/>
+          <text x="60" y="200" text-anchor="middle" fill="#888" font-size="11">t=0</text>
+          <text x="340" y="200" text-anchor="middle" fill="#888" font-size="11">t=dur/2</text>
+          <text x="620" y="200" text-anchor="middle" fill="#888" font-size="11">t=dur</text>
+
+          <!-- "value" trace dots -->
+          <circle cx="60" cy="160" r="6" fill="#76B900"/>
+          <text x="60" y="148" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">from</text>
+          <circle cx="620" cy="100" r="6" fill="#4FC3F7"/>
+          <text x="620" y="92" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="700">to</text>
+
+          <!-- Animated rect that travels from from→to (highlight ring) -->
+          <g>
+            <circle cx="60" cy="160" r="14" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+              <animate attributeName="cx" values="60;200;340;480;620;620" keyTimes="0;0.20;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="160;145;130;115;100;100" keyTimes="0;0.20;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.05;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Frame ticks every "frame" -->
+          <g stroke="#FFB800" stroke-width="1.5" opacity="0.5">
+            <line x1="130" y1="176" x2="130" y2="184"/>
+            <line x1="200" y1="176" x2="200" y2="184"/>
+            <line x1="270" y1="176" x2="270" y2="184"/>
+            <line x1="340" y1="176" x2="340" y2="184"/>
+            <line x1="410" y1="176" x2="410" y2="184"/>
+            <line x1="480" y1="176" x2="480" y2="184"/>
+            <line x1="550" y1="176" x2="550" y2="184"/>
+          </g>
+          <text x="340" y="222" text-anchor="middle" fill="#FFB800" font-size="11">毎フレーム（約 60 回/秒）に requestAnimationFrame で値が更新される</text>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="252" width="560" height="50" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <circle cx="90" cy="270" r="5" fill="#76B900"/><text x="105" y="274" fill="#ccc" font-size="11">from の値</text>
+          <circle cx="190" cy="270" r="5" fill="#FFB800"/><text x="205" y="274" fill="#ccc" font-size="11">中間値（補間）</text>
+          <circle cx="320" cy="270" r="5" fill="#4FC3F7"/><text x="335" y="274" fill="#ccc" font-size="11">to の値</text>
+          <circle cx="420" cy="270" r="5" fill="#93D500"/><text x="435" y="274" fill="#ccc" font-size="11">loop で繰り返し</text>
+          <text x="340" y="293" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">A-Frame の animation は requestAnimationFrame を内部で呼び、毎フレーム from→to を補間する</text>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">🖐 やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>dur</code> を <code>500</code> に変えて回転速度の違いを確認し、次に <code>easing</code> を <code>easeInOutQuad</code> に変えてみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 速度と動きの違いを1文で書く</div></div>
       </div>
     </div>
 
@@ -552,6 +652,110 @@ pre { position: relative; }
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">opacity を使うときの注意 <span class="exam-alert">課題に出ます</span></p>
         <p style="font-size:0.9rem"><code>material.opacity</code> をアニメーションするには、オブジェクトに <code>material="transparent: true"</code> を追加する必要があります。これがないと透明度が変化しません。</p>
       </div>
+
+      <!-- 読み方 / 具体例 / Q&A -->
+      <div style="background:#111;border:1px solid #76B900;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読み方（カタカナ）</p>
+        <table style="font-size:0.88rem">
+          <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>position</code></td><td style="color:#ccc">ポジション ── 「位置」。3D空間の x y z 座標</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>rotation</code></td><td style="color:#ccc">ローテーション ── 「回転」。x y z 軸まわりの角度（度）。Three.js でいう <code>mesh.rotation</code> の更新</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>scale</code></td><td style="color:#ccc">スケール ── 「倍率」。1=等倍、2=2倍に拡大、0.5=半分に縮小</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>material.opacity</code></td><td style="color:#ccc">マテリアル ドット オパシティ ── 「材質の不透明度」。0〜1 の小数</td></tr>
+        </table>
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>property: rotation</code> + <code>to: 0 360 0</code> は「<strong>Y軸まわりに360度回す</strong>」。<code>property: scale</code> + <code>to: 2 2 2</code> は「<strong>縦横奥行きすべて2倍に拡大</strong>」。プロパティ名はドット記法でネストもできる（<code>material.color</code>, <code>material.opacity</code>）。</p>
+      </div>
+
+      <!-- R7 #2: mesh.rotation 更新の段階表示 -->
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 680 320" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">プロパティ別の変化 ── 同じオブジェクトを5通りに変化させる</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="500" y="46" width="150" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="575" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              ① position
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              ② rotation
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              ③ scale
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              ④ color
+            </text>
+            <text x="575" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              ⑤ opacity
+            </text>
+          </g>
+
+          <!-- Stage box -->
+          <rect x="60" y="90" width="380" height="180" rx="10" fill="#0d0d0d" stroke="#333" stroke-width="1"/>
+
+          <!-- The animated box (highlight ring + transformations) -->
+          <g transform="translate(250, 180)">
+            <!-- Highlight ring -->
+            <circle cx="0" cy="0" r="48" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
+            <!-- The box itself: each phase changes one thing -->
+            <rect x="-32" y="-32" width="64" height="64" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
+              <!-- position phase: slide left/right -->
+              <animate attributeName="x" values="-32;-32;-100;0;-32;-32;-32;-32;-32;-32" keyTimes="0;0.05;0.10;0.16;0.20;0.40;0.60;0.80;0.95;1" dur="18s" repeatCount="indefinite"/>
+              <!-- scale phase: width 64 → 96 -->
+              <animate attributeName="width" values="64;64;64;64;64;64;96;48;64;64" keyTimes="0;0.20;0.36;0.40;0.50;0.56;0.60;0.72;0.80;1" dur="18s" repeatCount="indefinite"/>
+              <animate attributeName="height" values="64;64;64;64;64;64;96;48;64;64" keyTimes="0;0.20;0.36;0.40;0.50;0.56;0.60;0.72;0.80;1" dur="18s" repeatCount="indefinite"/>
+              <!-- color phase -->
+              <animate attributeName="fill" values="#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#FF5252;#FF5252;#FF5252" keyTimes="0;0.10;0.20;0.30;0.40;0.50;0.60;0.70;0.80;0.90;1" dur="18s" repeatCount="indefinite"/>
+              <!-- opacity phase -->
+              <animate attributeName="opacity" values="1;1;1;1;1;1;1;1;1;0.2;1" keyTimes="0;0.10;0.20;0.30;0.40;0.50;0.60;0.70;0.80;0.90;1" dur="18s" repeatCount="indefinite"/>
+              <!-- rotation phase -->
+              <animateTransform attributeName="transform" type="rotate" values="0;0;0;180;360;0;0;0;0" keyTimes="0;0.16;0.20;0.28;0.36;0.40;0.60;0.80;1" dur="18s" repeatCount="indefinite"/>
+            </rect>
+          </g>
+
+          <!-- Property panel on right -->
+          <g>
+            <rect x="460" y="90" width="180" height="180" rx="10" fill="#0d0d0d" stroke="#76B900" stroke-width="1"/>
+            <text x="550" y="115" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">現在のプロパティ</text>
+            <text x="475" y="148" fill="#FFB800" font-size="12" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              position: -2 0 0 → 2 0 0
+            </text>
+            <text x="475" y="148" fill="#FFB800" font-size="12" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              rotation: 0 0 0 → 0 0 360
+            </text>
+            <text x="475" y="148" fill="#4FC3F7" font-size="12" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              scale: 1 1 1 → 1.5 1.5 1.5
+            </text>
+            <text x="475" y="148" fill="#FF5252" font-size="12" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              material.color: 青 → 赤
+            </text>
+            <text x="475" y="148" fill="#93D500" font-size="12" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
+              material.opacity: 1 → 0.2
+            </text>
+            <text x="475" y="200" fill="#999" font-size="11">どのプロパティも</text>
+            <text x="475" y="218" fill="#999" font-size="11">同じ仕組みで</text>
+            <text x="475" y="236" fill="#999" font-size="11">アニメーション可能</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="284" width="560" height="22" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+          <circle cx="80" cy="297" r="4" fill="#FFB800"/><text x="92" y="301" fill="#ccc" font-size="11">変位系（position/rotation）</text>
+          <circle cx="260" cy="297" r="4" fill="#4FC3F7"/><text x="272" y="301" fill="#ccc" font-size="11">スケール</text>
+          <circle cx="350" cy="297" r="4" fill="#FF5252"/><text x="362" y="301" fill="#ccc" font-size="11">色</text>
+          <circle cx="420" cy="297" r="4" fill="#93D500"/><text x="432" y="301" fill="#ccc" font-size="11">透明度</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.3 イージング -->
@@ -569,6 +773,95 @@ pre { position: relative; }
         <tr><td><code>easeInOutElastic</code></td><td>バネのように伸縮しながら動く</td><td>注目を引くUI効果</td></tr>
         <tr><td><code>easeOutBounce</code></td><td>着地時にバウンドする</td><td>ボールの落下、弾む表現</td></tr>
       </table>
+
+      <!-- 読み方 / 具体例 / Q&A -->
+      <div style="background:#111;border:1px solid #76B900;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読み方（カタカナ）</p>
+        <table style="font-size:0.88rem">
+          <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>easing</code></td><td style="color:#ccc">イージング ── 「ease=ゆるめる」から。動きのカーブのこと</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">Tween (TweenJS)</td><td style="color:#ccc">トゥイーン ── 「between=2点間」から。A-Frame の easing は内部で TweenJS の式と同じカーブを使う</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>easeIn</code> / <code>easeOut</code></td><td style="color:#ccc">イーズイン／イーズアウト ── 入り（始め）でゆっくり／出（終わり）でゆっくり</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>Quad</code> / <code>Elastic</code> / <code>Bounce</code></td><td style="color:#ccc">クアド／エラスティック／バウンス ── 2乗カーブ／伸縮（ゴム）／跳ね返り</td></tr>
+        </table>
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>linear</code> は<strong>等速</strong>（時計の秒針）、<code>easeOutBounce</code> は<strong>地面に落ちて跳ねる</strong>動き、<code>easeInOutElastic</code> は<strong>ゴムが伸び縮みする</strong>ような動き。同じ <code>dur</code>（合計時間）でも、easing が違うと「印象」が大きく変わる。</p>
+      </div>
+
+      <!-- R7 #3: Clock-based easing curve visualization -->
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Clock ベースのイージング ── 時間（t）と値（v）の対応</text>
+
+          <!-- Step badges (which easing) -->
+          <g>
+            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              ① linear（等速）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              ② easeInQuad
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              ③ easeInOutQuad
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              ④ easeOutBounce
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              ⑤ easeInOutElastic
+            </text>
+          </g>
+
+          <!-- Axes -->
+          <line x1="80" y1="240" x2="540" y2="240" stroke="#666" stroke-width="1.5"/>
+          <line x1="80" y1="100" x2="80" y2="240" stroke="#666" stroke-width="1.5"/>
+          <text x="540" y="258" text-anchor="middle" fill="#888" font-size="11">t (時間)</text>
+          <text x="68" y="100" text-anchor="end" fill="#888" font-size="11">v</text>
+          <text x="68" y="244" text-anchor="end" fill="#888" font-size="11">0</text>
+          <text x="68" y="104" text-anchor="end" fill="#888" font-size="11">1</text>
+
+          <!-- Curve area: switches between 5 easings via opacity -->
+          <!-- ① linear -->
+          <polyline points="80,240 540,100" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- ② easeInQuad (slow start) -->
+          <path d="M 80 240 Q 380 240 540 100" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+          <!-- ③ easeInOutQuad (S curve) -->
+          <path d="M 80 240 C 240 240 380 100 540 100" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+          <!-- ④ easeOutBounce -->
+          <path d="M 80 240 Q 200 100 280 120 Q 350 140 360 110 Q 380 90 420 105 Q 480 130 540 100" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+          <!-- ⑤ easeInOutElastic -->
+          <path d="M 80 240 Q 180 250 240 200 Q 280 80 320 170 Q 360 250 400 120 Q 460 60 540 100" fill="none" stroke="#93D500" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- Highlight ring on moving dot -->
+          <circle cx="80" cy="240" r="9" fill="none" stroke="#FFB800" stroke-width="2.5" opacity="0.85">
+            <animate attributeName="cx" values="80;540;80;540;80;540;80;540;80;540" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="240;100;240;100;240;100;240;100;240;100" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="294" width="560" height="32" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+          <circle cx="80" cy="310" r="5" fill="#76B900"/><text x="92" y="314" fill="#ccc" font-size="11">linear</text>
+          <circle cx="160" cy="310" r="5" fill="#FFB800"/><text x="172" y="314" fill="#ccc" font-size="11">easeInQuad</text>
+          <circle cx="270" cy="310" r="5" fill="#4FC3F7"/><text x="282" y="314" fill="#ccc" font-size="11">easeInOutQuad</text>
+          <circle cx="390" cy="310" r="5" fill="#FF5252"/><text x="402" y="314" fill="#ccc" font-size="11">easeOutBounce</text>
+          <circle cx="510" cy="310" r="5" fill="#93D500"/><text x="522" y="314" fill="#ccc" font-size="11">easeInOutElastic</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.4 複数アニメーション -->
@@ -596,6 +889,114 @@ pre { position: relative; }
         <li><code>animation__3</code>, <code>animation__4</code> ... と増やせる</li>
         <li>サフィックスの名前は自由: <code>animation__bounce</code>, <code>animation__spin</code> などもOK</li>
       </ul>
+
+      <!-- 読み方 / 具体例 / Q&A -->
+      <div style="background:#111;border:1px solid #76B900;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読み方（カタカナ）</p>
+        <table style="font-size:0.88rem">
+          <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>animation__2</code></td><td style="color:#ccc">アニメーション アンダーバー ツー ── 2つ目のアニメーション。<code>__</code> がサフィックス区切り</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">サフィックス (suffix)</td><td style="color:#ccc">語尾につける識別子。<code>__bounce</code>, <code>__color</code> など任意の名前OK</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">mixer (AnimationMixer)</td><td style="color:#ccc">ミキサー ── 「混ぜる装置」。Three.js で複数アニメーションを同時再生する仕組み。A-Frame の複数 <code>animation__N</code> は概念的に同じ</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">GLTFLoader</td><td style="color:#ccc">ジーエルティーエフ ローダー ── glTF（3Dモデル形式）の読み込み機能。モデル付属のアニメーションを mixer で再生する</td></tr>
+        </table>
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc;font-size:0.9rem">1つの箱に <code>animation</code>（回転）と <code>animation__2</code>（上下移動）を書くと、<strong>同時に両方が再生</strong>される。それぞれの <code>dur</code>, <code>easing</code>, <code>loop</code> は独立に設定できる。これは Three.js の AnimationMixer で複数 clip を <code>play()</code> するのと同じ発想。</p>
+      </div>
+
+      <!-- R7 #4: Multiple tween (AnimationMixer) layered animations -->
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">複数アニメーションの合成 ── animation__N が同時に動く</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ① animation（回転）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ② + animation__2（移動）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ③ + animation__3（拡縮）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ④ + animation__4（色）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ すべて合成
+            </text>
+          </g>
+
+          <!-- Animation tracks on left -->
+          <g>
+            <text x="80" y="100" fill="#76B900" font-size="11" font-weight="700">animation:</text>
+            <rect x="170" y="90" width="280" height="16" rx="4" fill="#1a2e0a" stroke="#76B900" stroke-width="1.2"/>
+            <text x="310" y="102" text-anchor="middle" fill="#76B900" font-size="11">property: rotation, dur: 2000, loop</text>
+
+            <text x="80" y="132" fill="#FFB800" font-size="11" font-weight="700">animation__2:</text>
+            <rect x="170" y="122" width="280" height="16" rx="4" fill="#2e2300" stroke="#FFB800" stroke-width="1.2" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </rect>
+            <text x="310" y="134" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              property: position, dur: 1500
+            </text>
+
+            <text x="80" y="164" fill="#4FC3F7" font-size="11" font-weight="700">animation__3:</text>
+            <rect x="170" y="154" width="280" height="16" rx="4" fill="#06283c" stroke="#4FC3F7" stroke-width="1.2" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </rect>
+            <text x="310" y="166" text-anchor="middle" fill="#4FC3F7" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              property: scale, dur: 1000
+            </text>
+
+            <text x="80" y="196" fill="#FF5252" font-size="11" font-weight="700">animation__4:</text>
+            <rect x="170" y="186" width="280" height="16" rx="4" fill="#3a0d0d" stroke="#FF5252" stroke-width="1.2" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </rect>
+            <text x="310" y="198" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              property: material.color, dur: 800
+            </text>
+          </g>
+
+          <!-- Mixer arrow + Output preview -->
+          <line x1="450" y1="148" x2="490" y2="148" stroke="#93D500" stroke-width="2" marker-end="url(#mix-arr)"/>
+          <text x="470" y="138" text-anchor="middle" fill="#93D500" font-size="10" font-weight="700">mixer</text>
+
+          <g transform="translate(540, 148)">
+            <!-- Highlight ring -->
+            <circle cx="0" cy="0" r="44" fill="none" stroke="#93D500" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
+            <rect x="-26" y="-26" width="52" height="52" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
+              <animateTransform attributeName="transform" type="rotate" values="0;360" dur="2s" repeatCount="indefinite" additive="sum"/>
+              <animate attributeName="x" values="-26;-26;-40;-12;-26" keyTimes="0;0.22;0.5;0.78;1" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="width" values="52;52;72;36;52" keyTimes="0;0.5;0.62;0.84;1" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="height" values="52;52;72;36;52" keyTimes="0;0.5;0.62;0.84;1" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="fill" values="#4FC3F7;#76B900;#FF5252;#FFB800;#4FC3F7" dur="4s" repeatCount="indefinite"/>
+            </rect>
+          </g>
+
+          <defs>
+            <marker id="mix-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#93D500"/></marker>
+          </defs>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="262" width="560" height="56" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="282" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700">animation, animation__2, animation__3, … は独立したトラック。すべて並列に進む（mixer 方式）</text>
+          <circle cx="80" cy="304" r="4" fill="#76B900"/><text x="92" y="308" fill="#ccc" font-size="11">回転</text>
+          <circle cx="170" cy="304" r="4" fill="#FFB800"/><text x="182" y="308" fill="#ccc" font-size="11">移動</text>
+          <circle cx="260" cy="304" r="4" fill="#4FC3F7"/><text x="272" y="308" fill="#ccc" font-size="11">拡縮</text>
+          <circle cx="340" cy="304" r="4" fill="#FF5252"/><text x="352" y="308" fill="#ccc" font-size="11">色</text>
+          <circle cx="410" cy="304" r="4" fill="#93D500"/><text x="422" y="308" fill="#ccc" font-size="11">合成済みオブジェクト</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.5 イベントトリガー -->
@@ -628,11 +1029,6 @@ pre { position: relative; }
 
       <table>
         <tr><th>イベント</th><th>発生タイミング</th></tr>
-<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem">クリックで色が変わるコードの <code>to</code> の色を好きな色に変えて試してみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した色のコードと見た目を1文で書く</div></div>
-</div>
         <tr><td><code>click</code></td><td>オブジェクトをクリック（またはカーソルの fuse で選択）したとき</td></tr>
         <tr><td><code>mouseenter</code></td><td>カーソル/マウスがオブジェクトに乗ったとき</td></tr>
         <tr><td><code>mouseleave</code></td><td>カーソル/マウスがオブジェクトから離れたとき</td></tr>
@@ -640,6 +1036,134 @@ pre { position: relative; }
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">click イベントを使うには <span class="exam-alert">課題に出ます</span></p>
         <p style="font-size:0.9rem">A-Frame の 3D空間で click イベントを発生させるには、カメラの中に <code>&lt;a-cursor&gt;</code> を配置する必要があります。第6回で学んだカーソルがここで活きてきます。</p>
+      </div>
+
+      <!-- 読み方 / 具体例 / Q&A -->
+      <div style="background:#111;border:1px solid #76B900;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読み方（カタカナ）</p>
+        <table style="font-size:0.88rem">
+          <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>startEvents</code></td><td style="color:#ccc">スタートイベンツ ── 「開始のきっかけ（複数可）」。指定したイベントが来るまでアニメは止まったまま</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>click</code> / <code>mouseenter</code></td><td style="color:#ccc">クリック／マウスエンター ── ユーザ操作。Three.js でいう <code>raycaster</code> + イベントリスナの仕組み</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600">GLTFLoader animation mixer</td><td style="color:#ccc">ジーエルティーエフローダー アニメーション ミキサー ── 外部モデルのアニメをイベントで <code>play()</code> する Three.js の仕組み。A-Frame の <code>startEvents</code> はこれを HTML 属性化したもの</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>&lt;a-cursor&gt;</code></td><td style="color:#ccc">エー カーソル ── 3D空間内で click を発生させるためのカメラ子要素</td></tr>
+        </table>
+        <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>startEvents: click</code> を書くと、アニメーションは「<strong>クリックされるまで待機</strong>」状態になる。クリックすると 1回だけ再生（<code>loop: true</code> ならその後繰り返し）。<code>mouseenter</code> と <code>mouseleave</code> をペアで使うと「ホバー中だけ大きくなる」効果が作れる。</p>
+      </div>
+
+      <!-- R7 #5: GLTFLoader animation mixer / event-driven trigger -->
+      <div class="diagram-container" style="margin:1.5rem 0">
+        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">イベントトリガー ── startEvents でアニメを「待機 → 再生」</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ① 待機中（停止）
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ② mouseenter 発火
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ③ scale up 再生
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ④ click 発火
+            </text>
+            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ rotation 再生
+            </text>
+          </g>
+
+          <!-- Cursor (camera-attached) -->
+          <g>
+            <circle cx="120" cy="170" r="8" fill="none" stroke="#FF5252" stroke-width="2"/>
+            <circle cx="120" cy="170" r="3" fill="#FF5252"/>
+            <text x="120" y="200" text-anchor="middle" fill="#FF5252" font-size="10" font-weight="700">a-cursor</text>
+            <!-- Cursor moves: hover → leave → click -->
+            <animate attributeName="cx" values="120;120;310;310;310;310;310;310;310;310" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite" attributeType="XML"
+              additive="replace"/>
+          </g>
+
+          <!-- Target box -->
+          <g transform="translate(330, 170)">
+            <!-- Highlight ring (appears when triggered) -->
+            <circle cx="0" cy="0" r="48" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <rect x="-30" y="-30" width="60" height="60" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
+              <!-- scale on mouseenter -->
+              <animate attributeName="width" values="60;60;60;90;60;60;60;60;60;60" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="height" values="60;60;60;90;60;60;60;60;60;60" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="x" values="-30;-30;-30;-45;-30;-30;-30;-30;-30;-30" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="y" values="-30;-30;-30;-45;-30;-30;-30;-30;-30;-30" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+              <!-- rotation on click -->
+              <animateTransform attributeName="transform" type="rotate" values="0;0;0;0;0;0;0;360;360;360" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </rect>
+          </g>
+
+          <!-- Event pulse animation -->
+          <g>
+            <circle cx="220" cy="170" r="0" fill="none" stroke="#FFB800" stroke-width="2" opacity="0">
+              <animate attributeName="r" values="0;0;0;30;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0;0;1;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="220" cy="170" r="0" fill="none" stroke="#FF5252" stroke-width="2" opacity="0">
+              <animate attributeName="r" values="0;0;0;0;0;0;0;30;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Event log on right -->
+          <g>
+            <rect x="430" y="90" width="220" height="160" rx="10" fill="#0d0d0d" stroke="#76B900" stroke-width="1"/>
+            <text x="540" y="115" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">イベントログ</text>
+            <text x="445" y="148" fill="#888" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              （何も起きていない）
+            </text>
+            <text x="445" y="148" fill="#FFB800" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ▶ mouseenter → animation
+            </text>
+            <text x="445" y="148" fill="#4FC3F7" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ▶ scale 1 → 1.5 を再生
+            </text>
+            <text x="445" y="148" fill="#FF5252" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ▶ click → animation__2
+            </text>
+            <text x="445" y="148" fill="#93D500" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
+              ▶ rotation 0 → 360 を再生
+            </text>
+            <text x="445" y="200" fill="#999" font-size="10">startEvents が指定されると</text>
+            <text x="445" y="216" fill="#999" font-size="10">該当イベント発火まで停止。</text>
+            <text x="445" y="232" fill="#999" font-size="10">これは GLTFLoader+mixer の</text>
+            <text x="445" y="248" fill="#999" font-size="10">action.play() と同じ動作。</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="284" width="560" height="42" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <circle cx="80" cy="298" r="4" fill="#76B900"/><text x="92" y="302" fill="#ccc" font-size="11">待機（自動再生なし）</text>
+          <circle cx="220" cy="298" r="4" fill="#FFB800"/><text x="232" y="302" fill="#ccc" font-size="11">mouseenter pulse</text>
+          <circle cx="360" cy="298" r="4" fill="#FF5252"/><text x="372" y="302" fill="#ccc" font-size="11">click pulse</text>
+          <circle cx="460" cy="298" r="4" fill="#93D500"/><text x="472" y="302" fill="#ccc" font-size="11">アニメ実行</text>
+          <text x="340" y="320" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">A-Frame の startEvents は Three.js の mixer.clipAction(clip).play() の宣言版</text>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">🖐 やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">クリックで色が変わるコードの <code>to</code> の色を好きな色に変えて試してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した色のコードと見た目を1文で書く</div></div>
       </div>
     </div>
 
@@ -710,6 +1234,31 @@ pre { position: relative; }
         <tr><td>easing</td><td>linear</td><td>等速で回転する</td></tr>
       </table>
       <p style="margin-top:0.5rem"><strong>結果:</strong> 赤い箱がY軸を中心に4秒で1周し続ける。等速で一定速度で回転。</p>
+
+      <!-- R6: 中間変数で意図を明示した書き換え版 -->
+      <div style="background:#111;border:1px solid #4FC3F7;border-radius:8px;padding:1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">読みやすい書き換え版（JavaScript で setAttribute する場合）</p>
+        <p style="color:#ccc;font-size:0.88rem;margin-bottom:0.5rem">A-Frame の属性文字列を JavaScript で組み立てるときは、<strong>1行に詰め込まず</strong>に中間変数とヘルパー関数を使うと読みやすくなる:</p>
+        <pre style="background:#0a0a0a"><span class="code-label">JavaScript</span>
+<span class="cmt">// ❌ 1行に if と式を詰め込んだ書き方（読みにくい）</span>
+box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class="str">'property: rotation; to: 0 360 0; dur: 4000; loop: true; easing: linear'</span> : <span class="str">''</span>);
+
+<span class="cmt">// ✅ 中間変数 + 関数定義で意図を明示</span>
+<span class="kw">function</span> <span class="fn">buildSpinAnimation</span>(durationMs) {
+  <span class="kw">const</span> property = <span class="str">'rotation'</span>;            <span class="cmt">// 変化させる対象</span>
+  <span class="kw">const</span> targetAngle = <span class="str">'0 360 0'</span>;         <span class="cmt">// 終了値（Y軸1周）</span>
+  <span class="kw">const</span> easingCurve = <span class="str">'linear'</span>;          <span class="cmt">// 等速</span>
+  <span class="kw">return</span> <span class="str">`property: </span>${property}<span class="str">; to: </span>${targetAngle}<span class="str">; dur: </span>${durationMs}<span class="str">; loop: true; easing: </span>${easingCurve}<span class="str">`</span>;
+}
+
+<span class="kw">if</span> (isSpinning) {
+  <span class="kw">const</span> spinConfig = <span class="fn">buildSpinAnimation</span>(<span class="num">4000</span>);
+  box.setAttribute(<span class="str">'animation'</span>, spinConfig);
+} <span class="kw">else</span> {
+  box.removeAttribute(<span class="str">'animation'</span>);
+}</pre>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.5rem"><strong>ポイント:</strong> ① 三項演算子（1行 if）を <code>if/else</code> に展開、② プロパティ・目標値・イージングを<strong>中間変数</strong>に分離、③ アニメ生成を <code>buildSpinAnimation()</code> 関数に切り出して再利用可能に。</p>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -1331,13 +1880,45 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 7. ANSWERS ============ -->
+<!-- ============ 7. ANSWERS (例題: 公開 / 課題: 暗号化) ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-17T16:20">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#616161">7</div>
       <h2>解答例</h2>
     </div>
+
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題1 やってみよう（dur / easing の変更）解答</summary>
+      <div class="answer-content">
+        <p>1.1 のサンプル <code>&lt;a-box&gt;</code>（Y軸回転、<code>dur: 3000</code>, <code>easing: linear</code>）を改造して試した結果:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">変更1: dur: 3000 → 500
+  → 1周にかかる時間が 3秒 → 0.5秒 に短縮され、回転が約6倍速くなる。
+  → ぐるぐる目が回るような高速回転になる。
+
+変更2: easing: linear → easeInOutQuad
+  → 0.5秒の各サイクルの中で、開始は遅く、中盤で加速、終盤で減速する。
+  → ただし loop: true でつなげているため、一周ごとに「ためて出る」感が出る。
+  → 等速回転(linear)と比べて「リズムのある」回転に見える。</pre>
+        <p><strong>ポイント:</strong> <code>dur</code> はミリ秒指定で、値が<strong>小さいほど速く</strong>なる（直感と逆になりやすい）。<code>easing</code> は「変化のカーブ」であり、合計時間（dur）は変えずに<strong>速度の配分</strong>を変える。回転のように「終わりがない」アニメーションは <code>linear</code> が自然で、停止や登場は <code>easeOut/easeInOut</code> 系が自然。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題2 やってみよう（クリックで色変化）解答</summary>
+      <div class="answer-content">
+        <p>1.5 のサンプル <code>&lt;a-box&gt;</code>（<code>mouseenter</code> で <code>material.color</code> を <code>#FF5252</code> に変える）の <code>to:</code> を変更:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">変更前: to: #FF5252  （赤）
+変更例: to: #FF9800  （オレンジ）
+
+見た目: ダーク（#333）の箱にカーソルを乗せると、
+        300ms かけて鮮やかなオレンジに変化し、
+        離すと黒に戻る。赤より柔らかく目を引く印象。</pre>
+        <p><strong>ポイント:</strong> <code>material.color</code> は HEX（<code>#RRGGBB</code>）や色名（<code>red</code>, <code>cyan</code>）で指定可能。アニメーションは <strong>RGB の各成分を線形補間</strong>するので、補色（例: 青 → 黄）を指定すると途中で灰色を通る。意図した色変化にするには <strong>明度・彩度が近い色同士</strong>を選ぶか、間に中継色を挟む（<code>animation__2</code> で連鎖）と良い。</p>
+      </div>
+    </details>
 
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
@@ -1385,6 +1966,9 @@ pre { position: relative; }
       </div>
     </details>
 
+    </div>
+
+    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="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"></div>

@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -108,11 +120,11 @@ section + section { border-top: 1px solid #222; }
   vertical-align: middle;
 }
 .tag-example   { background: #1a2e0a; color: #76B900; }
-.tag-trace     { background: #2e1a0a; color: #FFB800; }
-.tag-code-exp  { background: #0a1a2e; color: #4FC3F7; }
-.tag-standard  { background: #1a2e0a; color: #93D500; }
-.tag-advanced  { background: #2e1a0a; color: #FFB800; }
-.tag-group     { background: #0a1a2e; color: #4FC3F7; }
+.tag-trace     { background: #1a2e0a; color: #FFB800; }
+.tag-code-exp  { background: #1a1a1a; color: #aaa; }
+.tag-standard  { background: #1a2e0a; color: #FFB800; }
+.tag-advanced  { background: #1a2e0a; color: #FFB800; }
+.tag-group     { background: #1a1a1a; color: #aaa; }
 
 /* ============ EXAM ALERT TAG ============ */
 .exam-alert {
@@ -168,11 +180,11 @@ section + section { border-top: 1px solid #222; }
 }
 .card-header h3 { font-size: 1.1rem; font-weight: 700; }
 .card.example   { border-left: 4px solid #76B900; }
-.card.trace     { border-left: 4px solid #93D500; }
+.card.trace     { border-left: 4px solid #FFB800; }
 .card.code-exp  { border-left: 4px solid #4A7A00; }
 .card.standard  { border-left: 4px solid #76B900; }
 .card.advanced  { border-left: 4px solid #FFB800; }
-.card.group     { border-left: 4px solid #4FC3F7; }
+.card.group     { border-left: 4px solid #aaa; }
 
 /* ============ NOTION CALLOUT ============ */
 .notion-submit {
@@ -233,11 +245,11 @@ pre {
   position: relative;
 }
 pre .kw { color: #76B900; }
-pre .fn { color: #93D500; }
+pre .fn { color: #FFB800; }
 pre .str { color: #FFB800; }
 pre .cmt { color: #616161; font-style: italic; }
 pre .num { color: #FF5252; }
-pre .op { color: #4FC3F7; }
+pre .op { color: #aaa; }
 .code-label {
   position: absolute; top: 0; right: 0;
   background: rgba(255,255,255,0.08);
@@ -304,6 +316,137 @@ pre .op { color: #4FC3F7; }
   border-radius: 12px;
   padding: 1rem;
   border: 1px solid #444;
+}
+
+/* ============ EXEC MOCK (Browser-like preview frame) ============ */
+.exec-mock {
+  margin: 1rem 0 1.2rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.exec-mock-bar {
+  background: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.4rem 0.7rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+.exec-mock-bar .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #FF5252;
+}
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url {
+  margin-left: 0.4rem;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem;
+  flex: 1;
+  color: #FFB800;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.exec-caption {
+  font-size: 0.78rem;
+  color: #999;
+  text-align: center;
+  padding: 0.45rem 0.8rem 0.6rem;
+  border-top: 1px solid #2a2a2a;
+  background: #141414;
+}
+.exec-caption strong { color: #FFB800; }
+.exec-mock svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 62%, #C8B898 62%, #A89878 100%);
+}
+
+/* ============ MATERIAL GALLERY (SVG sphere cards) ============ */
+.mat-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0 1.2rem;
+}
+.mat-card {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 0.55rem 0.5rem 0.5rem;
+  text-align: center;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.mat-card:hover {
+  border-color: #76B900;
+  transform: translateY(-2px);
+}
+.mat-card .mat-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #FFB800;
+  margin: 0.3rem 0 0.15rem;
+  letter-spacing: 0.02em;
+}
+.mat-card .mat-spec {
+  font-size: 0.62rem;
+  color: #888;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.35;
+  word-break: break-all;
+}
+.mat-card svg {
+  width: 86px;
+  height: 86px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ============ COLUMN BOX (purple for-loop column) ============ */
+.column-box {
+  background: #1A1A2A;
+  border: 2px solid #76B900;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin: 1.5rem 0;
+}
+.column-box .col-title {
+  color: #76B900;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0 0 0.6rem;
+}
+.column-box .col-tip {
+  background: #0a0a1a;
+  border: 1px solid #76B900;
+  border-radius: 6px;
+  padding: 0.7rem 0.9rem;
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  color: #E0D8FF;
+}
+
+/* ============ CREATIVE TASK ACCENT ============ */
+.creative-accent {
+  background: linear-gradient(135deg, #1a1a2a 0%, #1a2e0a 50%, #1a2e0a 100%);
+  border: 2px solid #76B900;
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  margin: 1rem 0;
+}
+.creative-accent h4 {
+  color: #76B900;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 /* ============ ANSWERS (COLLAPSIBLE) ============ */
@@ -397,7 +540,7 @@ pre { position: relative; }
   white-space: nowrap;
 }
 .section-nav a:hover { color: #76B900; background: rgba(118,185,0,0.1); }
-.section-nav a.nav-assignment { color: #93D500; }
+.section-nav a.nav-assignment { color: #FFB800; }
 .section-nav a.nav-advanced { color: #FFB800; }
 
 /* ============ SCROLL TARGET OFFSET ============ */
@@ -412,9 +555,7 @@ pre { position: relative; }
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
-  <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
@@ -432,15 +573,17 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計8項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>マテリアル理解 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-examples"><span class="sub-count">2</span><span class="tag tag-trace">トレース</span>表を埋めて記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span><strong>前回の教室をマテリアルで魅力化</strong>したコード提出</a>
       </div>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+      <p style="margin-top:0.8rem;font-size:0.85rem;color:#999;line-height:1.7">
+        この回は <strong style="color:#76B900">「前回（第4回）の理想の大学教室を、マテリアルで魅力的にする」</strong> という1つのクリエイティブ課題に集中します。<br>
+        知識確認は「例題」「トレース演習」「コード体験」の中で行い、最後の標準課題で<strong>学んだ color・metalness・roughness・opacity・テクスチャ を前回作った教室に付け足して</strong>「ずっといたくなる教室」に仕上げてください。
+      </p>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#FFB800">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
       </div>
     </div>
@@ -455,57 +598,172 @@ pre { position: relative; }
       <h2>説明</h2>
     </div>
 
-    <p style="font-size:1.05rem;margin-bottom:1.5rem">
+    <p style="font-size:1.05rem;margin-bottom:1rem">
       前回は ECS アーキテクチャと座標系を学びました。<br>
       今回は<strong>material コンポーネント</strong>を深掘りし、色・質感・テクスチャ（画像）を使ってオブジェクトの<strong>見た目</strong>を自在に制御する方法を学びます。
     </p>
+
+    <!-- ▼ ECS 復習ボックス -->
+    <div class="concept-box" style="border-left:4px solid #FFB800;background:#1a1410">
+      <h4 style="color:#FFB800">前回の復習: ECS とは？</h4>
+      <p style="font-size:0.95rem">
+        <strong>ECS（Entity-Component-System / エンティティ・コンポーネント・システム）</strong>は、A-Frame / Three.js が採用している 3D オブジェクトの設計思想です。
+      </p>
+
+      <table style="margin-top:0.6rem">
+        <tr><th style="width:18%">用語</th><th style="width:25%">読み方</th><th>役割</th></tr>
+        <tr>
+          <td><strong>Entity（エンティティ）</strong></td>
+          <td>エンティティ</td>
+          <td>「<strong>モノ</strong>」の入れ物。それ自体は何の見た目も動作も持たない空の容器（<code>&lt;a-entity&gt;</code>）</td>
+        </tr>
+        <tr>
+          <td><strong>Component（コンポーネント）</strong></td>
+          <td>コンポーネント</td>
+          <td>エンティティに付ける「<strong>機能パーツ</strong>」。<code>geometry</code>（形）、<code>material</code>（見た目）、<code>position</code>（位置）など</td>
+        </tr>
+        <tr>
+          <td><strong>System（システム）</strong></td>
+          <td>システム</td>
+          <td>同じ種類のコンポーネントを一括処理する仕組み（A-Frame が裏で自動運用、初心者は直接書かなくてOK）</td>
+        </tr>
+      </table>
+
+      <p style="margin-top:0.8rem;font-size:0.95rem">
+        言い換えると ──「<strong>空の Entity</strong>に、<strong>必要な Component</strong>を組み合わせて貼り付け、3Dオブジェクトを組み立てる</strong>」しくみです。<br>
+        前回は <code>geometry</code>（形）と <code>position</code>（位置）が中心でしたが、<strong>今回は <code>material</code>（見た目）コンポーネントを深掘り</strong>します。
+      </p>
+
+      <!-- ECS 構造図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 380" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#93D500" font-weight="700" font-size="16">ECS 構造: Entity に Component を貼り付けて 3D オブジェクトを組み立てる</text>
+
+          <!-- Entity (center box) -->
+          <rect x="280" y="160" width="160" height="80" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="2.5"/>
+          <text x="360" y="190" text-anchor="middle" fill="#76B900" font-size="15" font-weight="700">Entity</text>
+          <text x="360" y="210" text-anchor="middle" fill="#aaa" font-size="13" font-family="JetBrains Mono">&lt;a-entity&gt;</text>
+          <text x="360" y="228" text-anchor="middle" fill="#888" font-size="12">空の入れ物</text>
+
+          <!-- Component: geometry (top-left) -->
+          <rect x="60" y="65" width="160" height="60" rx="10" fill="#1a1a1a" stroke="#aaa" stroke-width="2"/>
+          <text x="140" y="90" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700">geometry</text>
+          <text x="140" y="110" text-anchor="middle" fill="#aaa" font-size="12">形 (box / sphere / ...)</text>
+          <line x1="220" y1="100" x2="280" y2="175" stroke="#aaa" stroke-width="2" stroke-dasharray="4 3"/>
+
+          <!-- Component: position (top-right) -->
+          <rect x="500" y="65" width="160" height="60" rx="10" fill="#1a1a1a" stroke="#aaa" stroke-width="2"/>
+          <text x="580" y="90" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700">position</text>
+          <text x="580" y="110" text-anchor="middle" fill="#aaa" font-size="12">位置 (x y z)</text>
+          <line x1="500" y1="100" x2="440" y2="175" stroke="#aaa" stroke-width="2" stroke-dasharray="4 3"/>
+
+          <!-- Component: material (bottom-left, HIGHLIGHTED 今回学ぶ) -->
+          <rect x="40" y="275" width="200" height="80" rx="10" fill="#1a2e0a" stroke="#93D500" stroke-width="3"/>
+          <text x="140" y="298" text-anchor="middle" fill="#93D500" font-size="14" font-weight="900">material ★今回</text>
+          <text x="140" y="318" text-anchor="middle" fill="#93D500" font-size="12">color, opacity,</text>
+          <text x="140" y="333" text-anchor="middle" fill="#93D500" font-size="12">metalness, roughness, src</text>
+          <line x1="240" y1="305" x2="280" y2="230" stroke="#93D500" stroke-width="3"/>
+
+          <!-- Component: animation (bottom-right, dimmed = 次回以降) -->
+          <rect x="480" y="275" width="200" height="80" rx="10" fill="#1a1a1a" stroke="#555" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="580" y="298" text-anchor="middle" fill="#888" font-size="13" font-weight="700">animation</text>
+          <text x="580" y="318" text-anchor="middle" fill="#666" font-size="12">動き (次回以降)</text>
+          <line x1="480" y1="305" x2="440" y2="230" stroke="#555" stroke-width="2" stroke-dasharray="4 3"/>
+
+          <!-- Sub-properties of material (deeper drill-down on right side) -->
+          <rect x="300" y="295" width="160" height="60" rx="8" fill="none" stroke="#93D500" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <text x="380" y="316" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">material の中身（プロパティ）</text>
+          <text x="380" y="334" text-anchor="middle" fill="#93D500" font-size="11" font-family="JetBrains Mono">color: red; metalness: 1</text>
+
+          <!-- Bottom hint -->
+          <text x="360" y="375" text-anchor="middle" fill="#aaa" font-size="13">↑ 1つの material コンポーネントの中に、色・質感・画像など複数のプロパティが入る</text>
+        </svg>
+      </div>
+
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#FFB800"><strong>&#x1F4A1; 構造を一言で:</strong> <code>&lt;a-entity geometry="..." material="color: red; metalness: 1" position="0 1 -3"&gt;</code> ── この1行が「Entity + 3つの Component（geometry / material / position）」の組み合わせです。<strong>今回は material の中身を細かく調整</strong>します。</p>
+
+      <table style="margin-top:0.8rem">
+        <tr><th>記法</th><th>意味</th></tr>
+        <tr>
+          <td><code>&lt;a-entity geometry="..." material="..."&gt;</code></td>
+          <td>明示的に Entity + Component を分けて書く（前回学んだECS記法）</td>
+        </tr>
+        <tr>
+          <td><code>&lt;a-box color="red"&gt;</code></td>
+          <td>プリミティブ記法（実は内部で「Entity + geometry='primitive:box' + material='color:red'」に変換されている）</td>
+        </tr>
+      </table>
+
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#aaa">
+        つまり前回の <code>&lt;a-box color="red"&gt;</code> は、<strong>裏で material コンポーネントが自動的に付いていた</strong>のです。今回は <strong>material を明示的に書き、その中の color / metalness / roughness / opacity / src を細かく操作</strong>することで、同じ箱でも「金属」「ゴム」「ガラス」など多様な見た目に変えられるようになります。
+      </p>
+    </div>
+
+    <!-- ▼ 用語の読み方（R8） -->
+    <div class="concept-box" style="border-left:4px solid #aaa">
+      <h4 style="color:#aaa">用語の読み方</h4>
+      <table>
+        <tr><th>用語</th><th>読み方</th><th>意味（ひとことで）</th></tr>
+        <tr><td><strong>Three.js</strong></td><td>スリージェイエス</td><td>WebGL を使いやすくする3DライブラリのJavaScript版</td></tr>
+        <tr><td><strong>WebGL</strong></td><td>ウェブジーエル</td><td>ブラウザで3D描画を行う標準API</td></tr>
+        <tr><td><strong>A-Frame</strong></td><td>エーフレーム</td><td>Three.js を HTML タグで書けるようにしたフレームワーク</td></tr>
+        <tr><td><strong>mesh</strong></td><td>メッシュ</td><td>3Dオブジェクトの本体（形 + 見た目の組合せ）</td></tr>
+        <tr><td><strong>geometry</strong></td><td>ジオメトリ</td><td>「形」のみを定義（box, sphere, plane など）</td></tr>
+        <tr><td><strong>material</strong></td><td>マテリアル</td><td>「見た目（色・質感）」のみを定義</td></tr>
+        <tr><td><strong>texture</strong></td><td>テクスチャ</td><td>3D表面に貼る画像（壁紙のようなもの）</td></tr>
+        <tr><td><strong>UV座標</strong></td><td>ユーブイざひょう</td><td>テクスチャ画像のどこを表面に貼るかを示す2D座標 (U, V)</td></tr>
+        <tr><td><strong>opacity</strong></td><td>オパシティ</td><td>不透明度（0=完全透明, 1=完全不透明）</td></tr>
+        <tr><td><strong>metalness</strong></td><td>メタルネス</td><td>金属感（0=非金属, 1=金属）</td></tr>
+        <tr><td><strong>roughness</strong></td><td>ラフネス</td><td>表面の粗さ（0=鏡面, 1=マット）</td></tr>
+      </table>
+    </div>
 
     <!-- Material/Texture Pipeline Diagram -->
     <div class="diagram-container" style="margin-bottom:2rem">
       <svg viewBox="0 0 700 200" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
         <text x="350" y="18" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12">マテリアル・テクスチャ パイプライン</text>
         <!-- Geometry -->
-        <rect x="20" y="40" width="110" height="55" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-        <text x="75" y="60" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">geometry</text>
-        <text x="75" y="78" text-anchor="middle" fill="#888" font-size="9">形状を定義</text>
+        <rect x="20" y="40" width="110" height="55" rx="10" fill="#1A1A1A" stroke="#aaa" stroke-width="2"/>
+        <text x="75" y="60" text-anchor="middle" fill="#aaa" font-weight="700" font-size="11">geometry</text>
+        <text x="75" y="78" text-anchor="middle" fill="#888" font-size="11">形状を定義</text>
         <text x="75" y="90" text-anchor="middle" fill="#555" font-size="8">box / sphere / ...</text>
         <!-- Material -->
         <rect x="170" y="30" width="160" height="75" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-        <text x="250" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">material</text>
-        <text x="250" y="68" text-anchor="middle" fill="#E0E0E0" font-size="9">color / opacity</text>
-        <text x="250" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">metalness / roughness</text>
-        <text x="250" y="96" text-anchor="middle" fill="#E0E0E0" font-size="9">src (テクスチャ)</text>
+        <text x="250" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">material</text>
+        <text x="250" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11">color / opacity</text>
+        <text x="250" y="82" text-anchor="middle" fill="#E0E0E0" font-size="11">metalness / roughness</text>
+        <text x="250" y="96" text-anchor="middle" fill="#E0E0E0" font-size="11">src (テクスチャ)</text>
         <!-- Texture source -->
-        <rect x="170" y="125" width="160" height="45" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
-        <text x="250" y="143" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">&lt;a-assets&gt;</text>
-        <text x="250" y="160" text-anchor="middle" fill="#888" font-size="9">画像を事前読み込み</text>
-        <line x1="250" y1="125" x2="250" y2="105" stroke="#FFB800" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#s5a1)"/>
+        <rect x="170" y="125" width="160" height="45" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
+        <text x="250" y="143" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">&lt;a-assets&gt;</text>
+        <text x="250" y="160" text-anchor="middle" fill="#888" font-size="11">画像を事前読み込み</text>
+        <line x1="250" y1="125" x2="250" y2="105" stroke="#93D500" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#s5a1)"/>
         <!-- Result -->
         <rect x="380" y="40" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
-        <text x="445" y="60" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">描画結果</text>
-        <text x="445" y="78" text-anchor="middle" fill="#E0E0E0" font-size="9">形 + 色 + 質感</text>
+        <text x="445" y="60" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">描画結果</text>
+        <text x="445" y="78" text-anchor="middle" fill="#E0E0E0" font-size="11">形 + 色 + 質感</text>
         <text x="445" y="90" text-anchor="middle" fill="#888" font-size="8">= 3Dオブジェクトの見た目</text>
         <!-- Light -->
-        <rect x="555" y="40" width="120" height="55" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
-        <text x="615" y="60" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">ライト</text>
-        <text x="615" y="78" text-anchor="middle" fill="#888" font-size="9">光の当たり方で</text>
-        <text x="615" y="90" text-anchor="middle" fill="#888" font-size="9">見え方が変化</text>
+        <rect x="555" y="40" width="120" height="55" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
+        <text x="615" y="60" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">ライト</text>
+        <text x="615" y="78" text-anchor="middle" fill="#888" font-size="11">光の当たり方で</text>
+        <text x="615" y="90" text-anchor="middle" fill="#888" font-size="11">見え方が変化</text>
         <!-- Arrows -->
-        <line x1="130" y1="67" x2="170" y2="67" stroke="#4FC3F7" stroke-width="1.5" marker-end="url(#s5a2)"/>
+        <line x1="130" y1="67" x2="170" y2="67" stroke="#aaa" stroke-width="1.5" marker-end="url(#s5a2)"/>
         <line x1="330" y1="67" x2="380" y2="67" stroke="#76B900" stroke-width="2" marker-end="url(#s5a3)"/>
-        <line x1="555" y1="67" x2="510" y2="67" stroke="#FFB800" stroke-width="1.5" marker-end="url(#s5a4)"/>
+        <line x1="555" y1="67" x2="510" y2="67" stroke="#93D500" stroke-width="1.5" marker-end="url(#s5a4)"/>
         <defs>
-          <marker id="s5a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
-          <marker id="s5a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          <marker id="s5a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
+          <marker id="s5a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#aaa"/></marker>
           <marker id="s5a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-          <marker id="s5a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="s5a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
         </defs>
       </svg>
     </div>
 
     <!-- 1.1 カラー指定方法 -->
     <div class="concept-box">
-      <h4>1.1 カラー指定方法 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.1 カラー指定方法</h4>
       <div class="analogy">
         絵の具は「赤」「青」と名前で選べますが、デジタルでは色を<strong>数値</strong>で正確に指定できます。<code>#FF0000</code> は「赤255、緑0、青0」で純粋な赤を表します。
       </div>
@@ -518,14 +776,168 @@ pre { position: relative; }
       </table>
 
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">16進数カラーの読み方 <span class="exam-alert">課題に出ます</span></p>
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">16進数カラーの読み方</p>
         <p style="font-size:0.9rem"><code>#FF6347</code> を分解すると: <strong>FF</strong>（赤=255）<strong>63</strong>（緑=99）<strong>47</strong>（青=71）→ 赤が強くオレンジ寄りの色（トマト色）。<code>#000000</code> は黒、<code>#FFFFFF</code> は白、<code>#FF0000</code> は純粋な赤です。</p>
+      </div>
+
+      <!-- ▼ アニメーション図2: カラー設定 (RGB変化) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">カラー設定の動作 ── RGB と16進数の対応</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="66" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ① 赤 #FF0000
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ② 緑 #00FF00
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ③ 青 #0000FF
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ④ オレンジ #a0a0a0
+          </text>
+
+          <!-- Cube preview (changes color) -->
+          <rect x="120" y="120" width="140" height="120" rx="8" fill="#FF0000" stroke="#76B900" stroke-width="2">
+            <animate attributeName="fill" values="#FF0000;#FF0000;#00FF00;#00FF00;#0000FF;#0000FF;#a0a0a0;#a0a0a0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="190" y="270" text-anchor="middle" fill="#888" font-size="12">プレビュー</text>
+
+          <!-- RGB bars -->
+          <text x="350" y="105" fill="#888" font-size="12" font-weight="600">RGB の内訳</text>
+
+          <!-- R bar -->
+          <text x="350" y="135" fill="#FF5252" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700">R:</text>
+          <rect x="380" y="122" width="200" height="16" rx="3" fill="#1a1a1a" stroke="#333"/>
+          <rect x="380" y="122" width="200" height="16" rx="3" fill="#FF5252">
+            <animate attributeName="width" values="200;200;0;0;0;0;200;200" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="595" y="135" fill="#FF5252" font-size="12" font-family="JetBrains Mono, monospace">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            255
+          </text>
+
+          <!-- G bar -->
+          <text x="350" y="170" fill="#76B900" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700">G:</text>
+          <rect x="380" y="157" width="200" height="16" rx="3" fill="#1a1a1a" stroke="#333"/>
+          <rect x="380" y="157" width="0" height="16" rx="3" fill="#76B900">
+            <animate attributeName="width" values="0;0;200;200;0;0;78;78" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- B bar -->
+          <text x="350" y="205" fill="#aaa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700">B:</text>
+          <rect x="380" y="192" width="200" height="16" rx="3" fill="#1a1a1a" stroke="#333"/>
+          <rect x="380" y="192" width="0" height="16" rx="3" fill="#aaa">
+            <animate attributeName="width" values="0;0;0;0;200;200;56;56" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Hex display -->
+          <rect x="340" y="225" width="260" height="50" rx="8" fill="#111" stroke="#76B900" stroke-width="1"/>
+          <text x="470" y="248" text-anchor="middle" fill="#888" font-size="11">16進数表現</text>
+          <text x="470" y="268" text-anchor="middle" fill="#76B900" font-size="20" font-weight="900" font-family="JetBrains Mono, monospace">
+            <animate attributeName="textContent" values="#FF0000;#FF0000;#00FF00;#00FF00;#0000FF;#0000FF;#a0a0a0;#a0a0a0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            #FF0000
+          </text>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="320" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="340" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            各色は 0〜255 の整数。16進では 00〜FF の2桁。#RRGGBB の順で連結する。
+          </text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ▼ マテリアル・ギャラリー（実行結果の見本一覧） -->
+    <div class="concept-box" style="border-left:4px solid #76B900">
+      <h4 style="color:#76B900">&#x1F3A8; マテリアル・ギャラリー ── 設定値と見た目の対応表</h4>
+      <p>下のギャラリーは <strong>material プロパティの設定値が「実際にどんな見た目になるか」</strong>の一覧です。各カードは A-Frame で描画した球をシミュレートしています。<strong>クリエイティブ課題で色や質感を決めるとき、ここを「お品書き」のように見てください。</strong></p>
+
+      <p style="margin-top:0.8rem;color:#FFB800;font-weight:700;font-size:0.85rem">&#x1F539; パート1: カラー（16色見本）</p>
+      <div class="mat-gallery">
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-red" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#FF3030"/><stop offset="100%" stop-color="#400505"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-red)"/></svg><div class="mat-name">純粋な赤</div><div class="mat-spec">color:#FF0000</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-tom" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#a0a0a0"/><stop offset="100%" stop-color="#5A1A0A"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-tom)"/></svg><div class="mat-name">トマト</div><div class="mat-spec">color:#FF6347</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-orng" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#FFA500"/><stop offset="100%" stop-color="#5A3500"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-orng)"/></svg><div class="mat-name">オレンジ</div><div class="mat-spec">color:#FFA500</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-ylw" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#A8D650"/><stop offset="100%" stop-color="#5A4500"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-ylw)"/></svg><div class="mat-name">ゴールド</div><div class="mat-spec">color:gold</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-lim" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#76B900"/><stop offset="100%" stop-color="#1A3000"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-lim)"/></svg><div class="mat-name">ライム</div><div class="mat-spec">color:#76B900</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-grn" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#228B22"/><stop offset="100%" stop-color="#0A2A0A"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-grn)"/></svg><div class="mat-name">フォレスト</div><div class="mat-spec">color:#228B22</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-cyn" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#aaa"/><stop offset="100%" stop-color="#0A2A40"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-cyn)"/></svg><div class="mat-name">スカイ</div><div class="mat-spec">color:skyblue</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-blu" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#1E40AF"/><stop offset="100%" stop-color="#0A1030"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-blu)"/></svg><div class="mat-name">ロイヤルブルー</div><div class="mat-spec">color:#1E40AF</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-prp" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#5A8B00"/><stop offset="100%" stop-color="#2A0A40"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-prp)"/></svg><div class="mat-name">パープル</div><div class="mat-spec">color:#5A8B00</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-pnk" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.3"/><stop offset="55%" stop-color="#a0a0a0"/><stop offset="100%" stop-color="#5A1A30"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-pnk)"/></svg><div class="mat-name">ピンク</div><div class="mat-spec">color:#FF6347</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-brn" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.2"/><stop offset="55%" stop-color="#8B4513"/><stop offset="100%" stop-color="#2A1005"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-brn)"/></svg><div class="mat-name">茶</div><div class="mat-spec">color:#8B4513</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-blk" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/><stop offset="18%" stop-color="#FFFFFF" stop-opacity="0.15"/><stop offset="55%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#000000"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-blk)"/></svg><div class="mat-name">黒</div><div class="mat-spec">color:#000000</div></div>
+      </div>
+
+      <p style="margin-top:1.2rem;color:#FFB800;font-weight:700;font-size:0.85rem">&#x1F539; パート2: 質感（metalness × roughness）</p>
+      <div class="mat-gallery">
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-mat" cx="50%" cy="50%"><stop offset="0%" stop-color="#B85A40"/><stop offset="100%" stop-color="#5A2A20"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-mat)"/></svg><div class="mat-name">マット</div><div class="mat-spec">metal:0<br>rough:1.0</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-plas" cx="32%" cy="28%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/><stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.25"/><stop offset="55%" stop-color="#C04030"/><stop offset="100%" stop-color="#3A0A05"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-plas)"/></svg><div class="mat-name">プラスチック</div><div class="mat-spec">metal:0<br>rough:0.5</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-glos" cx="30%" cy="25%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/><stop offset="12%" stop-color="#FFFFFF" stop-opacity="0.6"/><stop offset="50%" stop-color="#D44030"/><stop offset="100%" stop-color="#400505"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-glos)"/><ellipse cx="38" cy="32" rx="10" ry="6" fill="#FFFFFF" opacity="0.85"/></svg><div class="mat-name">グロス</div><div class="mat-spec">metal:0<br>rough:0.0</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-brsh" cx="40%" cy="40%"><stop offset="0%" stop-color="#D0D0D0"/><stop offset="50%" stop-color="#8a8a8a"/><stop offset="100%" stop-color="#3a3a3a"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-brsh)"/></svg><div class="mat-name">曇った金属</div><div class="mat-spec">metal:1.0<br>rough:0.5</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><linearGradient id="g-mat-mir" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#bbbbbb"/><stop offset="55%" stop-color="#3A6080"/><stop offset="60%" stop-color="#8B4513"/><stop offset="100%" stop-color="#3A1F05"/></linearGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-mir)"/><ellipse cx="36" cy="28" rx="9" ry="5" fill="#FFFFFF" opacity="0.95"/></svg><div class="mat-name">鏡面金属</div><div class="mat-spec">metal:1.0<br>rough:0.0</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-gld" cx="30%" cy="25%"><stop offset="0%" stop-color="#FFF8DC"/><stop offset="15%" stop-color="#FFE066" stop-opacity="0.85"/><stop offset="55%" stop-color="#A8D650"/><stop offset="100%" stop-color="#5A4500"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-gld)"/><ellipse cx="36" cy="30" rx="9" ry="5" fill="#FFFFFF" opacity="0.85"/></svg><div class="mat-name">磨かれた金</div><div class="mat-spec">color:gold<br>metal:1.0<br>rough:0.2</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-cpr" cx="30%" cy="25%"><stop offset="0%" stop-color="#FFE0C0"/><stop offset="15%" stop-color="#E8985A" stop-opacity="0.85"/><stop offset="55%" stop-color="#B87333"/><stop offset="100%" stop-color="#3A1F05"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-cpr)"/><ellipse cx="36" cy="30" rx="8" ry="4" fill="#FFFFFF" opacity="0.7"/></svg><div class="mat-name">銅</div><div class="mat-spec">color:#B87333<br>metal:0.8<br>rough:0.4</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><defs><radialGradient id="g-mat-rub" cx="50%" cy="50%"><stop offset="0%" stop-color="#3a3a3a"/><stop offset="100%" stop-color="#0a0a0a"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g-mat-rub)"/></svg><div class="mat-name">ゴム</div><div class="mat-spec">color:#1a1a1a<br>metal:0<br>rough:0.9</div></div>
+      </div>
+
+      <p style="margin-top:1.2rem;color:#FFB800;font-weight:700;font-size:0.85rem">&#x1F539; パート3: 透明度（opacity）</p>
+      <div class="mat-gallery">
+        <div class="mat-card"><svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="6" fill="#1a1a1a" stroke="#444"/><circle cx="35" cy="55" r="22" fill="#888"/><circle cx="60" cy="48" r="22" fill="#a0a0a0" fill-opacity="1.0"/></svg><div class="mat-name">不透明</div><div class="mat-spec">opacity:1.0</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="6" fill="#1a1a1a" stroke="#444"/><circle cx="35" cy="55" r="22" fill="#888"/><circle cx="60" cy="48" r="22" fill="#a0a0a0" fill-opacity="0.8"/></svg><div class="mat-name">やや透明</div><div class="mat-spec">opacity:0.8<br>transparent:true</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="6" fill="#1a1a1a" stroke="#444"/><circle cx="35" cy="55" r="22" fill="#888"/><circle cx="60" cy="48" r="22" fill="#a0a0a0" fill-opacity="0.5"/></svg><div class="mat-name">半透明</div><div class="mat-spec">opacity:0.5<br>transparent:true</div></div>
+        <div class="mat-card"><svg viewBox="0 0 100 100"><rect x="5" y="5" width="90" height="90" rx="6" fill="#1a1a1a" stroke="#444"/><circle cx="35" cy="55" r="22" fill="#888"/><circle cx="60" cy="48" r="22" fill="#a0a0a0" fill-opacity="0.2"/></svg><div class="mat-name">ほぼ透明</div><div class="mat-spec">opacity:0.2<br>transparent:true</div></div>
+      </div>
+
+      <p style="margin-top:1.2rem;color:#FFB800;font-weight:700;font-size:0.85rem">&#x1F539; パート4: 色相環パレット（HSL）</p>
+      <p style="font-size:0.9rem">色は <strong>HSL（色相 H、彩度 S、明度 L）</strong>でも考えられます。色相 <code>H</code> を 0°〜360° に変えると、虹のように色がぐるりと一周します。テーマカラーをまとめて設計するときに便利です。</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 480 270" width="480" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+          <text x="240" y="20" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">HSL 色相環 ── 12等分（H=0°, 30°, 60°, ..., 330°）</text>
+          <g transform="translate(150,140)">
+            <!-- 12 color wedges using individual circles for clarity -->
+            <circle cx="0" cy="-90" r="22" fill="hsl(0,80%,55%)"/><text x="0" y="-58" text-anchor="middle" fill="#888" font-size="9">0°</text>
+            <circle cx="45" cy="-78" r="22" fill="hsl(30,80%,55%)"/><text x="45" y="-46" text-anchor="middle" fill="#888" font-size="9">30°</text>
+            <circle cx="78" cy="-45" r="22" fill="hsl(60,80%,55%)"/><text x="78" y="-13" text-anchor="middle" fill="#888" font-size="9">60°</text>
+            <circle cx="90" cy="0" r="22" fill="hsl(90,80%,55%)"/><text x="90" y="32" text-anchor="middle" fill="#888" font-size="9">90°</text>
+            <circle cx="78" cy="45" r="22" fill="hsl(120,80%,45%)"/><text x="78" y="77" text-anchor="middle" fill="#888" font-size="9">120°</text>
+            <circle cx="45" cy="78" r="22" fill="hsl(150,80%,45%)"/><text x="45" y="110" text-anchor="middle" fill="#888" font-size="9">150°</text>
+            <circle cx="0" cy="90" r="22" fill="hsl(180,80%,45%)"/><text x="0" y="122" text-anchor="middle" fill="#888" font-size="9">180°</text>
+            <circle cx="-45" cy="78" r="22" fill="hsl(210,80%,55%)"/><text x="-45" y="110" text-anchor="middle" fill="#888" font-size="9">210°</text>
+            <circle cx="-78" cy="45" r="22" fill="hsl(240,80%,60%)"/><text x="-78" y="77" text-anchor="middle" fill="#888" font-size="9">240°</text>
+            <circle cx="-90" cy="0" r="22" fill="hsl(270,80%,60%)"/><text x="-90" y="32" text-anchor="middle" fill="#888" font-size="9">270°</text>
+            <circle cx="-78" cy="-45" r="22" fill="hsl(300,80%,55%)"/><text x="-78" y="-13" text-anchor="middle" fill="#888" font-size="9">300°</text>
+            <circle cx="-45" cy="-78" r="22" fill="hsl(330,80%,55%)"/><text x="-45" y="-46" text-anchor="middle" fill="#888" font-size="9">330°</text>
+            <text x="0" y="3" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">H 色相</text>
+          </g>
+          <g transform="translate(310,50)">
+            <text x="0" y="0" fill="#93D500" font-size="12" font-weight="700">使い方のコツ</text>
+            <text x="0" y="22" fill="#aaa" font-size="11">・近い色相（隣同士）= 統一感</text>
+            <text x="0" y="40" fill="#aaa" font-size="11">・反対色（180°向こう）= 強調</text>
+            <text x="0" y="58" fill="#aaa" font-size="11">・3色（120°ずつ）= バランス</text>
+            <text x="0" y="80" fill="#93D500" font-size="12" font-weight="700" style="margin-top:0.5rem">CSS の書き方</text>
+            <text x="0" y="100" fill="#93D500" font-size="10" font-family="JetBrains Mono">color:hsl(120, 80%, 45%)</text>
+            <text x="0" y="118" fill="#888" font-size="10" font-family="JetBrains Mono">H=120(緑), S=80%, L=45%</text>
+            <text x="0" y="148" fill="#93D500" font-size="12" font-weight="700">テーマ例</text>
+            <text x="0" y="168" fill="#aaa" font-size="11">朝の海: H=180〜220</text>
+            <text x="0" y="186" fill="#aaa" font-size="11">夜の森: H=120〜160</text>
+            <text x="0" y="204" fill="#aaa" font-size="11">夕暮れ: H=10〜40</text>
+            <text x="0" y="222" fill="#aaa" font-size="11">宇宙: H=240〜290</text>
+          </g>
+        </svg>
       </div>
     </div>
 
     <!-- 1.2 material コンポーネント -->
     <div class="concept-box">
-      <h4>1.2 material コンポーネント <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.2 material コンポーネント</h4>
       <div class="analogy">
         同じ形のコップでも、<strong>ガラス製</strong>なら透明でツヤがあり、<strong>陶器製</strong>ならマットな質感、<strong>金属製</strong>なら光を反射します。material コンポーネントはこのような「素材の質感」をコントロールします。
       </div>
@@ -552,11 +964,84 @@ pre { position: relative; }
   geometry=<span class="str">"primitive: sphere"</span>
   material=<span class="str">"color: #C0C0C0; metalness: 0.9; roughness: 0.1"</span>
   position=<span class="str">"2 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <!-- ▼ アニメーション図1: マテリアル切替 (Basic ↔ Standard) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">マテリアル切替の動作 ── 基本マテリアル → 標準マテリアル</text>
+
+          <!-- Step badge top-right -->
+          <rect x="500" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ① color のみ指定
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ② metalness を追加
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ③ roughness を追加
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ④ 金属球が完成！
+          </text>
+
+          <!-- Sphere shape (color changes through animation) -->
+          <circle cx="200" cy="190" r="70" fill="#C0C0C0" stroke="#76B900" stroke-width="2">
+            <animate attributeName="fill" values="#C0C0C0;#C0C0C0;#C0C0C0;#C0C0C0;#B8B8B8;#B8B8B8;#D8D8D8;#D8D8D8" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Reflection highlight (only appears at step 4) -->
+          <ellipse cx="175" cy="160" rx="25" ry="14" fill="#FFFFFF" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0.2;0.2;0.85;0.85" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+
+          <!-- Diffuse glow (step 2/3) -->
+          <circle cx="200" cy="190" r="70" fill="none" stroke="#93D500" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.5;0.5;0.7;0.7;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Property panel (right side) -->
+          <rect x="370" y="100" width="270" height="180" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="385" y="125" fill="#888" font-size="12" font-weight="600">material プロパティ</text>
+
+          <!-- color always shown -->
+          <text x="385" y="155" fill="#76B900" font-size="14" font-family="JetBrains Mono, monospace">color: #C0C0C0</text>
+
+          <!-- metalness (appears step 2+) -->
+          <text x="385" y="185" fill="#93D500" font-size="14" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            metalness: 0.9
+          </text>
+
+          <!-- roughness (appears step 3+) -->
+          <text x="385" y="215" fill="#aaa" font-size="14" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            roughness: 0.1
+          </text>
+
+          <!-- Result label (step 4) -->
+          <text x="385" y="255" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            → 鏡面の金属球 (light を映し込む)
+          </text>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="320" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="340" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            color: 表面色  /  metalness: 金属感 (0=非金属, 1=金属)  /  roughness: 粗さ (0=鏡面, 1=マット)
+          </text>
+        </svg>
+      </div>
+
     </div>
 
     <!-- 1.3 テクスチャ -->
     <div class="concept-box">
-      <h4>1.3 テクスチャ ── 画像をオブジェクトの表面に貼る <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.3 テクスチャ ── 画像をオブジェクトの表面に貼る</h4>
       <div class="analogy">
         プレゼントの箱に<strong>包装紙</strong>を巻くように、3Dオブジェクトの表面に<strong>画像</strong>を貼ることができます。これをテクスチャマッピングと呼びます。
       </div>
@@ -566,12 +1051,108 @@ pre { position: relative; }
   geometry=<span class="str">"primitive: box"</span>
   material=<span class="str">"src: url(brick.jpg)"</span>
   position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <!-- ▼ アニメーション図3: テクスチャUVマッピング -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">テクスチャUVマッピング ── 2D画像を3D表面に貼る</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ① 元画像を用意
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ② UV座標で対応付け
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ③ 3D表面に転写
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ④ テクスチャ完成！
+          </text>
+
+          <!-- Left: 2D source image (UV 0~1) -->
+          <text x="130" y="95" text-anchor="middle" fill="#888" font-size="12" font-weight="600">2D 画像 (UV座標)</text>
+          <rect x="70" y="105" width="140" height="140" rx="6" fill="#93D500" stroke="#93D500" stroke-width="2"/>
+          <!-- Brick pattern stripes -->
+          <rect x="70" y="105" width="140" height="20" fill="#8B4513"/>
+          <rect x="70" y="145" width="140" height="20" fill="#8B4513"/>
+          <rect x="70" y="185" width="140" height="20" fill="#8B4513"/>
+          <rect x="70" y="225" width="140" height="20" fill="#8B4513"/>
+          <line x1="100" y1="105" x2="100" y2="245" stroke="#5D2F0A" stroke-width="2"/>
+          <line x1="140" y1="125" x2="140" y2="245" stroke="#5D2F0A" stroke-width="2"/>
+          <line x1="180" y1="105" x2="180" y2="245" stroke="#5D2F0A" stroke-width="2"/>
+          <!-- UV corner labels -->
+          <text x="65" y="100" fill="#aaa" font-size="10" font-family="JetBrains Mono">U=0,V=1</text>
+          <text x="190" y="100" fill="#aaa" font-size="10" font-family="JetBrains Mono">U=1,V=1</text>
+          <text x="65" y="260" fill="#aaa" font-size="10" font-family="JetBrains Mono">U=0,V=0</text>
+          <text x="190" y="260" fill="#aaa" font-size="10" font-family="JetBrains Mono">U=1,V=0</text>
+
+          <!-- Arrow (visible after step 2) -->
+          <line x1="225" y1="175" x2="375" y2="175" stroke="#93D500" stroke-width="3" stroke-dasharray="6,4" opacity="0" marker-end="url(#uvarrow)">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </line>
+          <defs>
+            <marker id="uvarrow" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#93D500"/></marker>
+          </defs>
+          <text x="300" y="165" text-anchor="middle" fill="#93D500" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            UV → XYZ
+          </text>
+
+          <!-- Right: 3D box (cube projection) -->
+          <text x="490" y="95" text-anchor="middle" fill="#888" font-size="12" font-weight="600">3D 立方体表面</text>
+          <!-- Cube wireframe (front face) -->
+          <polygon points="420,130 540,130 540,250 420,250" fill="#1a1a1a" stroke="#76B900" stroke-width="2"/>
+          <!-- Cube top face (perspective) -->
+          <polygon points="420,130 540,130 580,100 460,100" fill="#1a1a1a" stroke="#76B900" stroke-width="2"/>
+          <!-- Cube right face -->
+          <polygon points="540,130 540,250 580,220 580,100" fill="#1a1a1a" stroke="#76B900" stroke-width="2"/>
+
+          <!-- Texture overlay (appears step 3+) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <!-- Front face textured -->
+            <rect x="420" y="130" width="120" height="120" fill="#93D500"/>
+            <rect x="420" y="130" width="120" height="20" fill="#8B4513"/>
+            <rect x="420" y="170" width="120" height="20" fill="#8B4513"/>
+            <rect x="420" y="210" width="120" height="20" fill="#8B4513"/>
+            <line x1="450" y1="130" x2="450" y2="250" stroke="#5D2F0A" stroke-width="2"/>
+            <line x1="490" y1="150" x2="490" y2="250" stroke="#5D2F0A" stroke-width="2"/>
+            <line x1="530" y1="130" x2="530" y2="250" stroke="#5D2F0A" stroke-width="2"/>
+            <!-- Top face textured -->
+            <polygon points="420,130 540,130 580,100 460,100" fill="#93D500"/>
+            <line x1="450" y1="130" x2="490" y2="100" stroke="#8B4513" stroke-width="3"/>
+            <line x1="490" y1="130" x2="530" y2="100" stroke="#8B4513" stroke-width="3"/>
+            <line x1="530" y1="130" x2="570" y2="100" stroke="#8B4513" stroke-width="3"/>
+            <polygon points="420,130 540,130 580,100 460,100" fill="none" stroke="#76B900" stroke-width="2"/>
+            <!-- Right face textured -->
+            <polygon points="540,130 540,250 580,220 580,100" fill="#93D500"/>
+            <line x1="540" y1="150" x2="580" y2="120" stroke="#8B4513" stroke-width="3"/>
+            <line x1="540" y1="190" x2="580" y2="160" stroke="#8B4513" stroke-width="3"/>
+            <line x1="540" y1="230" x2="580" y2="200" stroke="#8B4513" stroke-width="3"/>
+            <polygon points="540,130 540,250 580,220 580,100" fill="none" stroke="#76B900" stroke-width="2"/>
+          </g>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="320" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="340" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            UV座標は (0,0)〜(1,1) の2D値。各頂点に UV を割り当てて、3Dモデル表面に画像を貼り付ける。
+          </text>
+        </svg>
+      </div>
+
       <p style="margin-top:0.5rem">ただし、この書き方では画像を<strong>毎回ダウンロード</strong>してしまいます。複数のオブジェクトで同じ画像を使う場合、次に説明する <code>&lt;a-assets&gt;</code> を使いましょう。</p>
     </div>
 
     <!-- 1.4 a-assets -->
     <div class="concept-box">
-      <h4>1.4 <code>&lt;a-assets&gt;</code> によるアセット管理 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.4 <code>&lt;a-assets&gt;</code> によるアセット管理</h4>
       <div class="analogy">
         料理を始める前に食材をまとめて準備する「下ごしらえ」と同じです。<code>&lt;a-assets&gt;</code> で画像を先に読み込んでおけば、3Dシーンの表示がスムーズになります。
       </div>
@@ -607,7 +1188,7 @@ pre { position: relative; }
 
     <!-- 1.5 透明度 -->
     <div class="concept-box">
-      <h4>1.5 透明度（opacity）<span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.5 透明度（opacity）</h4>
       <p>オブジェクトを半透明にするには、<code>opacity</code> と <code>transparent</code> の<strong>両方</strong>を設定する必要があります。</p>
       <pre><span class="code-label">HTML</span>
 <span class="cmt">&lt;!-- 50% 透明な赤い球 --&gt;</span>
@@ -618,6 +1199,19 @@ pre { position: relative; }
       <div style="background:#1A1A1A;border:1px solid #FF5252;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#FF5252;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">よくあるミス</p>
         <p style="font-size:0.9rem"><code>opacity: 0.5</code> だけ書いて <code>transparent: true</code> を付け忘れると、<strong>透明にならない</strong>ことがあります。透明効果を使うときは必ず <code>transparent: true</code> も一緒に書いてください。</p>
+      </div>
+
+      <!-- ▼ Q&A box (R8): よくある誤解 -->
+      <div class="concept-box" style="border-left:4px solid #FFB800">
+        <h4 style="color:#FFB800">Q&amp;A: 「opacity を 0.5 にしたのに透明にならない？」</h4>
+        <p><strong>Q:</strong> <code>material="opacity: 0.5"</code> と書いたのに、オブジェクトが半透明にならない。これはバグですか？</p>
+        <p style="margin-top:0.5rem"><strong>A:</strong> バグではなく仕様です。Three.js（A-Frame の内部エンジン）では、描画速度を上げるためデフォルトで「すべて不透明として扱う」最適化が入っています。<code>transparent: true</code> を明示して初めて、透明用の描画パイプラインに切り替わります。具体的には次の3パターンを覚えてください:</p>
+        <table style="margin-top:0.5rem">
+          <tr><th>書き方</th><th>結果</th></tr>
+          <tr><td><code>opacity: 0.5</code> のみ</td><td>透明にならない（不透明として描画）</td></tr>
+          <tr><td><code>transparent: true</code> のみ</td><td>変化なし（opacity デフォルト 1.0 のまま）</td></tr>
+          <tr><td><code>opacity: 0.5; transparent: true</code></td><td>正しく半透明になる</td></tr>
+        </table>
       </div>
     </div>
 
@@ -635,6 +1229,133 @@ pre { position: relative; }
         <tr><td><code>double</code></td><td>両面を描画</td><td>壁、看板など裏からも見えるもの</td></tr>
       </table>
       <p style="margin-top:0.5rem">前回の発展課題で壁を作ったとき、裏側から見ると壁が消えたかもしれません。<code>side: double</code> を付けると解決します。</p>
+    </div>
+
+    <!-- 1.7 PBR (Physically Based Rendering) - 深掘り解説 -->
+    <div class="concept-box" style="border-left:4px solid #FF6347">
+      <h4 style="color:#FF6347">1.7 PBR ── 物理ベースレンダリングとは何か</h4>
+      <div class="analogy">
+        現実の世界では、リンゴの赤や鉄のツヤは「<strong>光がどう反射するか</strong>」で決まります。PBR は「<strong>現実の物理法則どおりに光をシミュレートして、リアルな見た目を作る仕組み</strong>」のことです。3D業界の標準になっており、A-Frame の <code>metalness</code> と <code>roughness</code> も PBR の用語です。
+      </div>
+
+      <p><strong>PBR（Physically Based Rendering）</strong> は「ぶつりベース レンダリング」と読みます。映画 (Pixar/Disney) でも、ゲーム (Unreal/Unity) でも、A-Frame でも、いまや3D描画の<strong>業界標準</strong>です。覚えるべき2つの軸はとてもシンプルです:</p>
+
+      <table>
+        <tr><th>軸</th><th>意味</th><th>現実世界の例</th></tr>
+        <tr><td><strong>metalness</strong></td><td>金属か / 金属じゃないか の二択</td><td>1.0=鉄・金・銅 ／ 0.0=木・紙・プラスチック・肌</td></tr>
+        <tr><td><strong>roughness</strong></td><td>表面がツルツルか / ザラザラか</td><td>0.0=新品の鏡・ピアノの黒鍵 ／ 1.0=チョーク・古い木材</td></tr>
+      </table>
+
+      <p style="margin-top:0.8rem"><strong>覚え方:</strong> 物体は <strong>「金属かどうか」 ✕ 「ツルツルか」</strong> の<strong>2軸</strong>でだいたい表現できる、という発想です。色を決めたあと、この2つのスライダーを動かすだけでリアルな質感が作れます。</p>
+
+      <!-- ▼ 光の反射の物理モデル (SVG) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 320" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="22" text-anchor="middle" fill="#a0a0a0" font-weight="700" font-size="15">PBR の物理モデル ── 光が物体表面に当たったとき何が起きるか</text>
+
+          <!-- Panel 1: smooth surface (roughness=0) -->
+          <g transform="translate(20,50)">
+            <rect x="0" y="0" width="200" height="240" rx="10" fill="#111" stroke="#aaa" stroke-width="1.5"/>
+            <text x="100" y="22" text-anchor="middle" fill="#aaa" font-size="12" font-weight="700">① ツルツル (roughness=0)</text>
+            <!-- Light source -->
+            <circle cx="40" cy="60" r="10" fill="#93D500"/>
+            <text x="40" y="48" text-anchor="middle" fill="#93D500" font-size="9">光源</text>
+            <!-- Surface -->
+            <line x1="20" y1="180" x2="180" y2="180" stroke="#76B900" stroke-width="3"/>
+            <text x="100" y="200" text-anchor="middle" fill="#888" font-size="9">表面（鏡のように滑らか）</text>
+            <!-- Normal -->
+            <line x1="100" y1="180" x2="100" y2="150" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="106" y="155" fill="#aaa" font-size="8">法線</text>
+            <!-- Incoming ray -->
+            <line x1="48" y1="68" x2="98" y2="178" stroke="#93D500" stroke-width="2" marker-end="url(#arr1)"/>
+            <!-- Reflected ray (single, sharp) -->
+            <line x1="102" y1="178" x2="170" y2="80" stroke="#FFFFFF" stroke-width="2" marker-end="url(#arr1)"/>
+            <text x="155" y="105" fill="#FFFFFF" font-size="10" font-weight="700">鏡面反射</text>
+            <text x="100" y="225" text-anchor="middle" fill="#aaa" font-size="10">→ 光が <strong>1方向</strong> に集中</text>
+          </g>
+
+          <!-- Panel 2: rough surface (roughness=1) -->
+          <g transform="translate(240,50)">
+            <rect x="0" y="0" width="200" height="240" rx="10" fill="#111" stroke="#93D500" stroke-width="1.5"/>
+            <text x="100" y="22" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700">② ザラザラ (roughness=1)</text>
+            <!-- Light source -->
+            <circle cx="40" cy="60" r="10" fill="#93D500"/>
+            <text x="40" y="48" text-anchor="middle" fill="#93D500" font-size="9">光源</text>
+            <!-- Surface (jagged) -->
+            <path d="M 20 180 L 35 175 L 50 182 L 65 176 L 80 183 L 95 175 L 110 181 L 125 176 L 140 182 L 155 175 L 170 181 L 180 180" stroke="#76B900" stroke-width="2.5" fill="none"/>
+            <text x="100" y="200" text-anchor="middle" fill="#888" font-size="9">表面（微細な凹凸）</text>
+            <!-- Incoming ray -->
+            <line x1="48" y1="68" x2="98" y2="178" stroke="#93D500" stroke-width="2" marker-end="url(#arr1)"/>
+            <!-- Multiple scattered rays -->
+            <line x1="100" y1="178" x2="60" y2="100" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="100" y1="178" x2="100" y2="80" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="100" y1="178" x2="140" y2="95" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="100" y1="178" x2="170" y2="110" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="100" y1="178" x2="40" y2="135" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <line x1="100" y1="178" x2="178" y2="140" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.7"/>
+            <text x="145" y="125" fill="#93D500" font-size="10" font-weight="700">拡散反射</text>
+            <text x="100" y="225" text-anchor="middle" fill="#93D500" font-size="10">→ 光が <strong>全方向</strong> に散る</text>
+          </g>
+
+          <!-- Panel 3: Metalness behavior -->
+          <g transform="translate(460,50)">
+            <rect x="0" y="0" width="200" height="240" rx="10" fill="#111" stroke="#a0a0a0" stroke-width="1.5"/>
+            <text x="100" y="22" text-anchor="middle" fill="#a0a0a0" font-size="12" font-weight="700">③ 金属 vs 非金属</text>
+            <!-- Non-metal sphere -->
+            <text x="50" y="55" text-anchor="middle" fill="#aaa" font-size="10" font-weight="700">非金属</text>
+            <text x="50" y="68" text-anchor="middle" fill="#888" font-size="9">metal=0</text>
+            <circle cx="50" cy="115" r="30" fill="#C04040"/>
+            <text x="50" y="120" text-anchor="middle" fill="#FFFFFF" font-size="9" font-weight="700">自分の色</text>
+            <text x="50" y="155" text-anchor="middle" fill="#aaa" font-size="9">光を吸収・</text>
+            <text x="50" y="167" text-anchor="middle" fill="#aaa" font-size="9">一部反射</text>
+            <!-- Metal sphere -->
+            <text x="150" y="55" text-anchor="middle" fill="#aaa" font-size="10" font-weight="700">金属</text>
+            <text x="150" y="68" text-anchor="middle" fill="#888" font-size="9">metal=1</text>
+            <defs>
+              <linearGradient id="metal-pbr" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#bbbbbb"/>
+                <stop offset="55%" stop-color="#3A6080"/>
+                <stop offset="60%" stop-color="#8B4513"/>
+                <stop offset="100%" stop-color="#3A1F05"/>
+              </linearGradient>
+              <marker id="arr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFFFFF"/></marker>
+            </defs>
+            <circle cx="150" cy="115" r="30" fill="url(#metal-pbr)"/>
+            <ellipse cx="142" cy="105" rx="7" ry="4" fill="#FFFFFF" opacity="0.9"/>
+            <text x="150" y="120" text-anchor="middle" fill="#FFFFFF" font-size="9" font-weight="700">周囲を映す</text>
+            <text x="150" y="155" text-anchor="middle" fill="#aaa" font-size="9">空・地面を</text>
+            <text x="150" y="167" text-anchor="middle" fill="#aaa" font-size="9">そのまま反射</text>
+            <text x="100" y="200" text-anchor="middle" fill="#a0a0a0" font-size="10" font-weight="700">→ 物理的に異なる素材</text>
+            <text x="100" y="218" text-anchor="middle" fill="#888" font-size="8.5">金属は「自由電子が光を全反射」する</text>
+            <text x="100" y="232" text-anchor="middle" fill="#888" font-size="8.5">のに対し、非金属は「光を吸収・拡散」する</text>
+          </g>
+        </svg>
+      </div>
+
+      <p style="margin-top:0.8rem"><strong>3つの実用ルール</strong><strong>:</strong></p>
+      <ul class="point-list">
+        <li><strong>ルール1 ── metalness は 0 か 1 に振り切るのが基本。</strong> 中途半端な値（例: 0.5）は「塗装された金属」など特殊な表現用です。</li>
+        <li><strong>ルール2 ── roughness はスライダーのように 0.0〜1.0 を試す。</strong> 0=鏡、0.3=磨かれた金属、0.5=普通、0.8=布・ゴム、1.0=チョーク。</li>
+        <li><strong>ルール3 ── 金属（metalness=1）は <code>&lt;a-sky&gt;</code> と光がないと黒くなる。</strong> 周囲の何かを映すことで金属らしさが出るためです。</li>
+      </ul>
+
+      <div style="background:#1A1A1A;border:1px solid #FF6347;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#FF6347;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">&#x1F4D6; 用語の由来</p>
+        <p style="font-size:0.9rem">PBR は2010年代に映画業界（Pixar など）が確立し、ゲーム業界（Unreal Engine 4, 2014〜）で広く普及しました。<strong>Disney Principled BRDF</strong> という有名な論文が現代PBRの基礎です。「同じ素材は、どのレンダラーで描画しても同じに見える」よう、物理量で素材を表現するのが目標です。A-Frame/Three.js もこの規格に従っているため、ここで学ぶ <code>metalness</code>/<code>roughness</code> は Unity でも Unreal でも Blender でも通用します。</p>
+      </div>
+    </div>
+
+    <!-- ▼ Q&A box (R8): metalness と roughness の誤解 -->
+    <div class="concept-box" style="border-left:4px solid #FFB800">
+      <h4 style="color:#FFB800">Q&amp;A: 「metalness=1.0 にしたのに金属に見えない？」</h4>
+      <p><strong>Q:</strong> <code>metalness: 1.0</code> に設定したのに、シルバーっぽくならずに黒くなってしまいました。なぜ？</p>
+      <p style="margin-top:0.5rem"><strong>A:</strong> 金属は<strong>「自分自身で発色する」ものではなく「周囲の光や景色を映し返す」</strong>素材です。<code>metalness=1.0</code> のオブジェクトは、空が暗ければ暗く、明るい部屋なら明るく見えます。シーンに <code>&lt;a-sky&gt;</code> や十分な光源がないと、金属球は「映すものが何もない」ので黒く見えます。対処法は次の3つ:</p>
+      <ul class="point-list" style="margin-top:0.5rem">
+        <li><code>&lt;a-sky color="#87CEEB"&gt;&lt;/a-sky&gt;</code> を入れて、青空を映し込ませる</li>
+        <li>光源（<code>&lt;a-light type="directional"&gt;</code>）を追加して、ハイライトを作る</li>
+        <li><code>roughness</code> を <code>0.3〜0.5</code> にして、反射をぼかして「曇った金属」にする</li>
+      </ul>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#aaa">非金属（<code>metalness=0</code>）なら「自分の色」で光るのに、金属はなぜ違うのか？ それは現実の物理で「金属は自由電子が光をほぼ全反射する」のに対して、非金属は「光を一部吸収して自分の色を返す」性質があるためです。</p>
     </div>
 
   </div>
@@ -668,8 +1389,92 @@ pre { position: relative; }
         <li>この2つの組み合わせで「プラスチック」「ガラス」「金属」「ゴム」などさまざまな質感を表現できる</li>
       </ul>
 
+      <!-- ▼ アニメーション図4: 光源と反射 (roughness の効果) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">光源と反射の動作 ── roughness が反射に与える影響</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ① 光源から光が出る
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ② rough=0.0 鏡面反射
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ③ rough=1.0 拡散反射
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            ④ 質感の違いが完成
+          </text>
+
+          <!-- Light source (sun) -->
+          <circle cx="120" cy="120" r="22" fill="#93D500" stroke="#A8D650" stroke-width="2"/>
+          <text x="120" y="126" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="900">LIGHT</text>
+
+          <!-- Incoming light ray -->
+          <line x1="140" y1="135" x2="280" y2="220" stroke="#93D500" stroke-width="2.5">
+            <animate attributeName="stroke-opacity" values="0.5;0.5;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </line>
+          <text x="180" y="180" fill="#93D500" font-size="11">入射光</text>
+
+          <!-- Sphere (target) -->
+          <circle cx="320" cy="240" r="55" fill="#C0C0C0" stroke="#76B900" stroke-width="2"/>
+
+          <!-- Sphere shine highlight (visible step 2 - mirror reflection) -->
+          <ellipse cx="298" cy="222" rx="14" ry="8" fill="#FFFFFF" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.95;0.95;0.3;0.3;0.6;0.6" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+          </ellipse>
+
+          <!-- Mirror reflection (single sharp ray, step 2) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <line x1="298" y1="222" x2="500" y2="120" stroke="#FFFFFF" stroke-width="3"/>
+            <text x="430" y="160" fill="#aaa" font-size="12" font-weight="700">鏡面反射 (1方向)</text>
+          </g>
+
+          <!-- Diffuse reflection (multiple scattered rays, step 3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <line x1="298" y1="222" x2="430" y2="90" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <line x1="300" y1="220" x2="470" y2="130" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <line x1="302" y1="218" x2="500" y2="170" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <line x1="304" y1="216" x2="530" y2="220" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <line x1="306" y1="214" x2="550" y2="270" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <line x1="308" y1="212" x2="430" y2="320" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.7"/>
+            <text x="450" y="80" fill="#93D500" font-size="12" font-weight="700">拡散反射 (全方向)</text>
+          </g>
+
+          <!-- Property label (bottom of sphere) -->
+          <rect x="260" y="305" width="120" height="24" rx="6" fill="#1a1a1a" stroke="#333"/>
+          <text x="320" y="321" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            roughness: 0.0
+          </text>
+          <text x="320" y="321" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            roughness: 1.0
+          </text>
+          <text x="320" y="321" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            metalness と組合せ
+          </text>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="345" width="560" height="0" rx="0" fill="none"/>
+          <text x="340" y="345" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            鏡面 (roughness=0): 光は1方向に集中  ／  マット (roughness=1): 光は全方向に散る
+          </text>
+        </svg>
+      </div>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#FFB800;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">「ゴムボール」を表現するには metalness と roughness をそれぞれいくつにすればよいか、予測してみよう。</p>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した値と理由を記録する（例: metalness: 0, roughness: 0.8 → 非金属でザラザラ）</div></div>
       </div>
@@ -684,25 +1489,25 @@ pre { position: relative; }
       <p><strong>問題:</strong> 以下のエンティティの material プロパティを読み、見た目を予測して表を埋めなさい。</p>
       <pre><span class="code-label">HTML</span>
 <span class="kw">&lt;a-scene&gt;</span>
-  <span class="cmt">&lt;!-- A --&gt;</span>
+  <span class="cmt">&lt;!-- T1 --&gt;</span>
   <span class="kw">&lt;a-entity</span>
     geometry=<span class="str">"primitive: sphere"</span>
     material=<span class="str">"color: #C0C0C0; metalness: 0.9; roughness: 0.1"</span>
     position=<span class="str">"-3 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
 
-  <span class="cmt">&lt;!-- B --&gt;</span>
+  <span class="cmt">&lt;!-- T2 --&gt;</span>
   <span class="kw">&lt;a-entity</span>
     geometry=<span class="str">"primitive: box"</span>
     material=<span class="str">"color: red; opacity: 0.3; transparent: true"</span>
     position=<span class="str">"-1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
 
-  <span class="cmt">&lt;!-- C --&gt;</span>
+  <span class="cmt">&lt;!-- T3 --&gt;</span>
   <span class="kw">&lt;a-entity</span>
     geometry=<span class="str">"primitive: box"</span>
     material=<span class="str">"color: #8B4513; roughness: 1.0; metalness: 0.0"</span>
     position=<span class="str">"1 1 -4"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
 
-  <span class="cmt">&lt;!-- D --&gt;</span>
+  <span class="cmt">&lt;!-- T4 --&gt;</span>
   <span class="kw">&lt;a-entity</span>
     geometry=<span class="str">"primitive: sphere"</span>
     material=<span class="str">"color: gold; metalness: 1.0; roughness: 0.3"</span>
@@ -717,10 +1522,10 @@ pre { position: relative; }
 <span class="kw">&lt;/a-scene&gt;</span></pre>
       <table>
         <tr><th>ラベル</th><th>形</th><th>色</th><th>質感・透明度の予測</th></tr>
-        <tr><td>A</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>B</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>C</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>D</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>T1</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>T2</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>T3</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td>T4</td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
       </table>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表をコピーし、予測を記入してください。コード体験の後に実際の表示と比べます。</div></div>
     </div>
@@ -777,7 +1582,7 @@ pre { position: relative; }
 <section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
+      <div class="section-num" style="background:#FFB800">3</div>
       <h2>コード体験</h2>
     </div>
     <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
@@ -859,6 +1664,55 @@ pre { position: relative; }
   <span class="kw">&lt;/a-scene&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
+
+      <!-- ▼ 実行結果モック (Browser preview) -->
+      <p style="margin-top:1rem;font-size:0.85rem;color:#FFB800;font-weight:700">&#x1F4FA; 実行結果イメージ（ブラウザでこんな風に見えます）</p>
+      <figure class="exec-mock">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">file:///S:/Web_Prog/Web05/material.html</span>
+        </div>
+        <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- A: default sphere -->
+          <defs>
+            <radialGradient id="prv-A" cx="35%" cy="30%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/><stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.2"/><stop offset="55%" stop-color="#C0C0C0"/><stop offset="100%" stop-color="#404040"/></radialGradient>
+            <radialGradient id="prv-B" cx="30%" cy="25%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/><stop offset="15%" stop-color="#FFFFFF" stop-opacity="0.7"/><stop offset="55%" stop-color="#C0C0C0"/><stop offset="100%" stop-color="#202020"/></radialGradient>
+            <radialGradient id="prv-C" cx="40%" cy="40%"><stop offset="0%" stop-color="#A0A0A0"/><stop offset="50%" stop-color="#707070"/><stop offset="100%" stop-color="#1a1a1a"/></radialGradient>
+            <linearGradient id="prv-D" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#bbbbbb"/><stop offset="55%" stop-color="#3A6080"/><stop offset="60%" stop-color="#C8B898"/><stop offset="100%" stop-color="#5A4A2A"/></linearGradient>
+            <radialGradient id="prv-G" cx="30%" cy="25%"><stop offset="0%" stop-color="#FFF8DC"/><stop offset="15%" stop-color="#FFE066" stop-opacity="0.9"/><stop offset="55%" stop-color="#A8D650"/><stop offset="100%" stop-color="#5A4500"/></radialGradient>
+          </defs>
+          <!-- A: standard -->
+          <circle cx="80" cy="160" r="40" fill="url(#prv-A)"/>
+          <text x="80" y="220" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">A: 標準</text>
+          <!-- B: glossy -->
+          <circle cx="190" cy="160" r="40" fill="url(#prv-B)"/>
+          <ellipse cx="178" cy="148" rx="10" ry="6" fill="#FFFFFF" opacity="0.9"/>
+          <text x="190" y="220" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">B: グロス</text>
+          <!-- C: brushed metal -->
+          <circle cx="300" cy="160" r="40" fill="url(#prv-C)"/>
+          <text x="300" y="220" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">C: 曇った金属</text>
+          <!-- D: mirror metal -->
+          <circle cx="410" cy="160" r="40" fill="url(#prv-D)"/>
+          <ellipse cx="398" cy="146" rx="9" ry="5" fill="#FFFFFF" opacity="0.95"/>
+          <text x="410" y="220" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">D: 鏡面金属</text>
+          <!-- E: red transparent box -->
+          <rect x="260" y="80" width="80" height="55" fill="#FF0000" fill-opacity="0.4" stroke="#5A0505" stroke-width="1"/>
+          <text x="300" y="65" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">E: 半透明</text>
+          <!-- F: rough brown box -->
+          <rect x="40" y="100" width="60" height="60" fill="#8B4513" stroke="#3A1F05" stroke-width="1"/>
+          <text x="70" y="90" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">F: 茶</text>
+          <!-- G: gold sphere -->
+          <circle cx="540" cy="120" r="35" fill="url(#prv-G)"/>
+          <ellipse cx="528" cy="108" rx="8" ry="5" fill="#FFFFFF" opacity="0.85"/>
+          <text x="540" y="170" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">G: 金</text>
+          <!-- horizon shadow -->
+          <ellipse cx="320" cy="205" rx="280" ry="6" fill="#000000" opacity="0.18"/>
+        </svg>
+        <figcaption class="exec-caption">
+          7つのオブジェクトが床（ベージュ）と空（水色）の中に配置される。<strong>A〜D の球で metalness/roughness の違いを比較</strong>でき、<strong>E は半透明</strong>（後ろが透ける）、<strong>G は金色の球</strong>として光を映し込む。
+        </figcaption>
+      </figure>
+
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
@@ -867,12 +1721,109 @@ pre { position: relative; }
         <li>マウスで視点を動かして、各球の<strong>光の反射の違い</strong>を観察する</li>
       </ol>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
-        Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？<br>
-        Q2. A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明する<br>
+        Q1. トレース演習1（T1〜T4）で身につけた「material プロパティから見た目を予測する」スキルを、material.html のA〜Gにも当てはめてみよう。予測通りに見えたものと、想像と違ったものはどれ？<br>
+        Q2. material.html の A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明する<br>
         Q3. E（半透明の赤い箱）の後ろにあるオブジェクトは透けて見えるか？</div></div>
 
+      <!-- ▼ アニメーション図5: 環境マッピング (metalness 1.0 で周囲を映し込む) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 360" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">環境マッピング ── metalness=1.0 で周囲の景色を映し込む</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ① metalness=0 非金属
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ② metalness=0.5 半金属
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#aaa" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ③ metalness=1.0 鏡面金属
+          </text>
+          <text x="580" y="66" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            ④ 環境を完全に映す
+          </text>
+
+          <!-- Environment background (sky and ground) -->
+          <rect x="60" y="90" width="380" height="100" fill="#aaa" opacity="0.4"/>
+          <rect x="60" y="190" width="380" height="100" fill="#8B4513" opacity="0.4"/>
+          <text x="80" y="115" fill="#aaa" font-size="11">空（青）</text>
+          <text x="80" y="215" fill="#93D500" font-size="11">地面（茶）</text>
+
+          <!-- Sphere (changes appearance) -->
+          <circle cx="250" cy="200" r="65" fill="#C0C0C0" stroke="#76B900" stroke-width="2">
+            <animate attributeName="fill" values="#C0C0C0;#C0C0C0;#A0B0C0;#A0B0C0;#4080B0;#4080B0;#aaa;#aaa" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Top half of sphere reflects sky (visible at step 3+) -->
+          <path d="M 185,200 A 65,65 0 0,1 315,200 Z" fill="#aaa" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0.7;0.7;0.9;0.9" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- Bottom half reflects ground (visible at step 3+) -->
+          <path d="M 185,200 A 65,65 0 0,0 315,200 Z" fill="#8B4513" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0.5;0.5;0.7;0.7" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- Specular highlight (fixed shine) -->
+          <ellipse cx="230" cy="180" rx="15" ry="9" fill="#FFFFFF" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.3;0.3;0.7;0.7;0.95;0.95" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </ellipse>
+
+          <!-- Property panel -->
+          <rect x="460" y="100" width="200" height="200" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="475" y="125" fill="#888" font-size="12" font-weight="600">プロパティ値</text>
+
+          <text x="475" y="155" fill="#93D500" font-size="14" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            metalness: 0.0
+          </text>
+          <text x="475" y="155" fill="#93D500" font-size="14" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            metalness: 0.5
+          </text>
+          <text x="475" y="155" fill="#aaa" font-size="14" font-family="JetBrains Mono, monospace" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            metalness: 1.0
+          </text>
+
+          <text x="475" y="185" fill="#76B900" font-size="14" font-family="JetBrains Mono, monospace">
+            roughness: 0.1
+          </text>
+
+          <text x="475" y="225" fill="#888" font-size="11">見た目の変化:</text>
+          <text x="475" y="245" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            プラスチック調
+          </text>
+          <text x="475" y="245" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            塗装した金属
+          </text>
+          <text x="475" y="245" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            完全な金属
+          </text>
+          <text x="475" y="265" fill="#93D500" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            → 空と地面が映り込む
+          </text>
+
+          <!-- Bottom legend -->
+          <rect x="60" y="320" width="560" height="30" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="340" y="340" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+            metalness を上げると周囲（環境）の色を反射しはじめる。1.0 で完全な鏡面金属になる。
+          </text>
+        </svg>
+      </div>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#FFB800;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">E（半透明の赤い箱）の <code>opacity</code> を <code>0.9</code> に変更して保存し、透明度の変化を確認しよう。</p>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> opacity 0.4 と 0.9 の見た目の違いを記録する</div></div>
       </div>
@@ -889,11 +1840,30 @@ pre { position: relative; }
       <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">画像の準備</p>
         <p style="font-size:0.9rem">テクスチャ用の画像ファイルが必要です。以下のいずれかの方法で準備してください。</p>
+
+        <!-- 方法ゼロ: 即ダウンロード（推奨） -->
+        <div style="background:#0a1a0a;border:1.5px solid #76B900;border-radius:8px;padding:1rem;margin:0.8rem 0">
+          <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin-bottom:0.6rem">&#x1F539; 方法 0（おすすめ）: 用意済みの画像を直接ダウンロード</p>
+          <p style="font-size:0.88rem;color:#ccc;margin-bottom:0.7rem">下のボタンをクリックすると、<code>brick.jpg</code> と <code>wood.jpg</code> がダウンロードできます。保存先を <code>Web05</code> フォルダに指定してください。</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.7rem;margin-top:0.6rem">
+            <a href="images/brick.jpg" download="brick.jpg"
+               style="display:inline-flex;align-items:center;gap:0.5rem;background:#76B900;color:#0A0A0A;font-weight:700;text-decoration:none;padding:0.6rem 1.1rem;border-radius:8px;font-size:0.95rem">
+              &#x2B07;&#xFE0F; brick.jpg（レンガ 1024×1024）
+            </a>
+            <a href="images/wood.jpg" download="wood.jpg"
+               style="display:inline-flex;align-items:center;gap:0.5rem;background:#76B900;color:#0A0A0A;font-weight:700;text-decoration:none;padding:0.6rem 1.1rem;border-radius:8px;font-size:0.95rem">
+              &#x2B07;&#xFE0F; wood.jpg（木目 2048×1024）
+            </a>
+          </div>
+          <p style="font-size:0.8rem;color:#888;margin-top:0.7rem">※ ボタンが反応しない場合は<strong>右クリック → 「リンクを名前を付けて保存」</strong>で保存できます。<br>※ 出典: Three.js examples（MIT License）。授業・個人学習目的で自由に使用できます。</p>
+        </div>
+
+        <p style="font-size:0.9rem;margin-top:0.8rem">他の素材を試したい場合は以下の方法も使えます。</p>
         <ul class="point-list" style="margin-top:0.5rem">
           <li><strong>方法A:</strong> フリー素材サイト（<a href="https://www.textures.com/" style="color:#76B900">textures.com</a> や <a href="https://polyhaven.com/textures" style="color:#76B900">polyhaven.com</a>）からレンガ・木目などの画像をダウンロードし、<code>Web05</code> フォルダに保存</li>
           <li><strong>方法B:</strong> 自分で撮った写真や、手持ちの画像ファイル（JPG/PNG）を <code>Web05</code> フォルダにコピー</li>
         </ul>
-        <p style="font-size:0.85rem;color:#999;margin-top:0.5rem">ここでは <code>brick.jpg</code>（レンガ）、<code>wood.jpg</code>（木目）という名前で用意した前提で進めます。自分の画像のファイル名が異なる場合は、コード内のファイル名を書き換えてください。</p>
+        <p style="font-size:0.85rem;color:#999;margin-top:0.5rem">コードでは <code>brick.jpg</code>（レンガ）、<code>wood.jpg</code>（木目）という名前で参照しています。自分の画像のファイル名が異なる場合は、コード内のファイル名を書き換えてください。</p>
       </div>
 
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
@@ -952,8 +1922,58 @@ pre { position: relative; }
   <span class="kw">&lt;/a-scene&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
+
+      <!-- ▼ 実行結果モック (texture.html preview) -->
+      <p style="margin-top:1rem;font-size:0.85rem;color:#FFB800;font-weight:700">&#x1F4FA; 実行結果イメージ（テクスチャ画像が貼られた様子）</p>
+      <figure class="exec-mock">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">file:///S:/Web_Prog/Web05/texture.html</span>
+        </div>
+        <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="brick-pat" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="40" height="20" fill="#A0522D"/>
+              <rect x="0" y="0" width="40" height="2" fill="#5D2F0A"/>
+              <rect x="0" y="18" width="40" height="2" fill="#5D2F0A"/>
+              <rect x="19" y="0" width="2" height="20" fill="#5D2F0A"/>
+            </pattern>
+            <pattern id="brick-pat2" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="40" height="20" fill="#A0522D"/>
+              <rect x="0" y="0" width="40" height="2" fill="#5D2F0A"/>
+              <rect x="0" y="18" width="40" height="2" fill="#5D2F0A"/>
+              <rect x="-1" y="0" width="2" height="20" fill="#5D2F0A"/>
+              <rect x="39" y="0" width="2" height="20" fill="#5D2F0A"/>
+            </pattern>
+            <pattern id="wood-pat" x="0" y="0" width="80" height="40" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="80" height="40" fill="#C9A26B"/>
+              <path d="M 0 8 Q 20 12 40 8 T 80 8" stroke="#8B6B3A" stroke-width="1.5" fill="none"/>
+              <path d="M 0 22 Q 20 18 40 22 T 80 22" stroke="#8B6B3A" stroke-width="1.5" fill="none"/>
+              <path d="M 0 35 Q 20 32 40 35 T 80 35" stroke="#8B6B3A" stroke-width="1.5" fill="none"/>
+            </pattern>
+          </defs>
+          <!-- Wood floor (plane) - large background -->
+          <rect x="0" y="172" width="640" height="108" fill="url(#wood-pat)"/>
+          <!-- Brick wall (back) -->
+          <rect x="180" y="50" width="280" height="135" fill="url(#brick-pat)" stroke="#3A1F05" stroke-width="1.5"/>
+          <text x="320" y="40" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">レンガ壁（テクスチャ）</text>
+          <!-- Wood box (small) -->
+          <rect x="500" y="135" width="70" height="50" fill="url(#wood-pat)" stroke="#5A4020" stroke-width="1"/>
+          <text x="535" y="125" text-anchor="middle" fill="#1a1a1a" font-size="10" font-weight="700">木テクスチャ</text>
+          <!-- Brown plain box (no texture) -->
+          <rect x="60" y="135" width="60" height="50" fill="#8B4513" stroke="#3A1F05" stroke-width="1"/>
+          <text x="90" y="125" text-anchor="middle" fill="#1a1a1a" font-size="10" font-weight="700">単色（比較）</text>
+          <!-- Transparent brick box (overlay on top of wood floor) -->
+          <rect x="280" y="155" width="80" height="55" fill="url(#brick-pat2)" fill-opacity="0.5" stroke="#3A1F05" stroke-width="1" stroke-opacity="0.6"/>
+          <text x="320" y="225" text-anchor="middle" fill="#1a1a1a" font-size="10" font-weight="700">半透明レンガ</text>
+        </svg>
+        <figcaption class="exec-caption">
+          <strong>木目テクスチャの床</strong>に <strong>レンガテクスチャの壁</strong>が立ち、左に「単色の茶色い箱（比較用）」、右に「木目テクスチャの箱」、中央に「半透明のレンガ箱」が配置される。テクスチャありの箱は<strong>表面の模様まで描画</strong>されるのが分かる。
+        </figcaption>
+      </figure>
+
       <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>texture.html</code> を右クリック → 「Open with Live Server」</p>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#93D500">
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.85rem;color:#FFB800">
         <strong>画像が表示されない場合:</strong> 画像ファイル名がコード内の <code>src</code> と一致しているか確認してください。ファイル名の大文字/小文字も区別されます。
       </div>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
@@ -962,7 +1982,7 @@ pre { position: relative; }
         Q3. <code>&lt;a-assets&gt;</code> を使う利点は何か？ もし使わなかったらどうなるか？</div></div>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#FFB800;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">レンガの壁の material に <code>roughness: 1.0</code> を追加して保存し、壁の質感がどう変わるか確認しよう。</p>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> roughness 追加前後の壁の見た目の違いを記録する</div></div>
       </div>
@@ -971,204 +1991,308 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
-    </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
-
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
-      </div>
-      <p>今回学んだ カラー指定・material プロパティ・テクスチャ・a-assets の内容から、<strong>「この概念を説明できるか？」「このプロパティを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:45%">質問例</th><th>意図</th></tr>
-          <tr><td><code>#FF0000</code> は何色か？ <code>#00FF00</code> は？</td><td>16進数カラーの理解</td></tr>
-          <tr><td><code>opacity: 0.5</code> だけ書いて <code>transparent: true</code> を書き忘れるとどうなるか？</td><td>透明度の注意点</td></tr>
-          <tr><td><code>metalness: 1.0; roughness: 0.0</code> の球はどんな見た目になるか？</td><td>質感プロパティの理解</td></tr>
-          <tr><td><code>&lt;a-assets&gt;</code> を使わずに <code>material="src: url(image.jpg)"</code> と書くデメリットは？</td><td>アセット管理の理解</td></tr>
-          <tr><td><code>side: double</code> はどんなときに必要か？</td><td>両面表示の理解</td></tr>
-          <tr><td>テクスチャ画像が表示されない原因を3つ挙げられるか？</td><td>トラブルシューティング</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 5. STANDARD TASK ============ -->
+<!-- ============ 4. STANDARD TASK（クリエイティブ課題に集中） ============ -->
 <section id="sec-standard">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#76B900">5</div>
+      <div class="section-num" style="background:#76B900">4</div>
       <h2>標準課題</h2>
     </div>
 
-    <!-- 標準課題 1: 知識問題 -->
+    <!-- 標準課題: 前回の教室をマテリアルで魅力化 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>マテリアルプロパティの理解</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>前回の理想の大学教室を、マテリアルで魅力化する</h3>
       </div>
-      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
+      <p><strong>前回（第4回）の標準課題で作った <code>classroom.html</code></strong>（理想の大学教室）を、<strong>マテリアルプロパティで魅力的に進化させる</strong>のが今回の課題です。<br>
+      VS Code で <code>Web05</code> フォルダに前回のコードを <strong><code>classroom-v2.html</code></strong> としてコピーし（または前回ファイルを開き直して別名保存）、 color・opacity・metalness・roughness・テクスチャを加えて「<strong>もう一度ここに通いたい！</strong>」と思える教室に仕上げてください。</p>
 
-      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。</p>
-      <table>
-        <tr><th>プロパティ</th><th>値の範囲</th><th>効果（空欄を埋める）</th></tr>
-        <tr><td><strong>color</strong></td><td>色名 / hex / rgb</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>opacity</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>metalness</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>roughness</strong></td><td>0.0 〜 1.0</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>side</strong></td><td>front / back / double</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>src</strong></td><td>画像URL / セレクタ</td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> 以下の material 設定を読み、表示されるオブジェクトの見た目を予測しなさい。</p>
-      <table>
-        <tr><th>material 設定</th><th>予測される見た目（空欄を埋める）</th></tr>
-        <tr><td><code>material="color: #FFD700; metalness: 1.0; roughness: 0.2"</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>material="color: white; opacity: 0.2; transparent: true"</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>material="color: #333; roughness: 1.0; metalness: 0.0"</code></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問3.</strong> 以下のコードにはバグがあり、意図した表示になりません。バグの原因と修正方法を答えなさい。</p>
-      <pre><span class="code-label">HTML ── 意図: 半透明の青い球を表示する</span>
-<span class="kw">&lt;a-entity</span>
-  geometry=<span class="str">"primitive: sphere"</span>
-  material=<span class="str">"color: blue; opacity: 0.3"</span>
-  position=<span class="str">"0 1 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
-
-      <p style="margin-top:1rem"><strong>問4.</strong> <code>&lt;a-assets&gt;</code> を使ったテクスチャの適用について、以下の問いに答えなさい。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
-        (a) <code>&lt;a-assets&gt;</code> はHTMLのどこに書くか？<br>
-        (b) アセットに登録した画像をエンティティで使うとき、どのように参照するか？<br>
-        (c) <code>&lt;a-assets&gt;</code> を使う利点を1つ挙げなさい。
+      <div style="background:#0a1a0a;border:1.5px solid #76B900;border-radius:8px;padding:1rem;margin:0.8rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.95rem;margin-bottom:0.5rem">&#x1F539; 出発点: 前回の教室コードを引き継ぐ</p>
+        <ol style="padding-left:1.5rem;font-size:0.9rem;line-height:1.9;color:#ccc">
+          <li>前回作った <code>Web04/classroom.html</code> を VS Code で開く</li>
+          <li><strong>名前を付けて保存</strong>で <code>Web05/classroom-v2.html</code> として保存する（前回作品は残しておく）</li>
+          <li>今回学んだプロパティ（color / opacity / metalness / roughness / src）を、机・椅子・黒板・床・天井・壁・小物に<strong>意識的に振り分け</strong>る</li>
+          <li>ブラウザで開いて<strong>前回との Before / After を見比べる</strong></li>
+        </ol>
+        <p style="font-size:0.85rem;color:#888;margin-top:0.5rem">※ 前回のファイルが手元にない／空っぽの場合は、<strong>新規に最低限の教室（机1台+椅子1脚+黒板+床+天井）</strong>を作ってから魅力化してください。</p>
       </div>
 
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
-    </div>
+      <p style="margin-top:0.5rem;color:#76B900;font-size:0.9rem"><strong>この課題は「マテリアルプロパティを総動員する」課題です。</strong>color、metalness、roughness、opacity、テクスチャ ── すべてを<strong>1つの教室の世界観の中で</strong>使いましょう。</p>
 
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>マテリアルとテクスチャを改造する（コード改造）</h3>
-      </div>
-      <p>コード体験1の <code>material.html</code> を以下の指示どおりに改造しなさい。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><strong>確認方法:</strong> <code>classroom-v2.html</code> を右クリック → 「Open with Live Server」</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td>A（デフォルト球）の color を <code>#FF6347</code>（トマト色）に変更し、<code>roughness</code> を <code>0.0</code> にする</td></tr>
-          <tr><td>2</td><td>E（半透明の赤い箱）の <code>opacity</code> を <code>0.7</code> に変更し、色を <code>green</code> にする</td></tr>
-          <tr><td>3</td><td>新しいエンティティを追加: <code>geometry="primitive: cylinder; radius: 0.5; height: 1.5"</code> に <code>material="color: #B87333; metalness: 0.8; roughness: 0.4"</code>（銅のような質感）を設定する</td></tr>
-          <tr><td>4</td><td>画像ファイルを1枚用意し、<code>&lt;a-assets&gt;</code> を追加して、床のプレーンにテクスチャを適用する</td></tr>
-          <tr><td>5</td><td>新しく壁（plane）を追加し、<code>side: double</code> を設定して両面表示にする</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「変更による見た目の変化」を書く</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 6. ADVANCED TASK ============ -->
-<section id="sec-advanced">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#FFB800">6</div>
-      <h2>発展課題</h2>
-    </div>
-
-    <div class="card advanced">
-      <div class="card-header">
-        <span class="tag tag-advanced">発展課題</span>
-        <h3>テクスチャを使ったギャラリーを作る</h3>
-      </div>
-      <p>VS Code で <code>Web05</code> フォルダに <strong><code>gallery.html</code></strong> を新規作成し（エクスプローラの「新しいファイル」アイコン → ファイル名入力）、テクスチャとマテリアルプロパティを活用した<strong>展示ギャラリー（美術館風の部屋）</strong>を作ってください。</p>
-
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件（前回の教室に対する追加要素）</p>
         <ul class="point-list">
-          <li><strong>テクスチャ画像を3枚以上</strong>使用する（壁・床・展示物など）</li>
-          <li><code>&lt;a-assets&gt;</code> で画像をプリロードする</li>
-          <li><strong>metalness / roughness</strong> を使って異なる質感のオブジェクトを<strong>2つ以上</strong>配置する</li>
-          <li><strong>透明度（opacity + transparent）</strong>を<strong>1か所以上</strong>使う（ガラスケース、窓など）</li>
-          <li><code>side: double</code> を壁の少なくとも1面に適用する</li>
-          <li>ギャラリーの構成: 床・壁・展示台や額縁を含む空間を作る</li>
+          <li><strong>教室の「テーマ」を1つ決める</strong>（例: 朝の光が差す明るい教室／落ち着いた木目調の図書室風／未来的なメタリック教室／カフェのような教室／夜の自習室 など、自分で考えてOK）</li>
+          <li><strong>3 種類以上のマテリアル質感</strong>を使い分ける（例: 黒板はマット <code>roughness:1.0</code>、机の天板は木目テクスチャ、椅子の脚は金属 <code>metalness:1.0</code>、窓ガラスは半透明 <code>opacity:0.4</code>）</li>
+          <li>各オブジェクトに <code>color</code> を <strong>テーマに合った色設計</strong>で割り当てる（前回が原色だったなら、今回は HSL を使って統一感を出す）</li>
+          <li>テクスチャ画像を<strong>最低1枚</strong>使う（用意済みの <code>brick.jpg</code>・<code>wood.jpg</code> を使ってもOK / <code>&lt;a-assets&gt;</code> + <code>material="src: #..."</code>）</li>
+          <li><code>opacity</code> + <code>transparent: true</code> による半透明を<strong>1か所以上</strong>使う（窓、ガラス棚、ペットボトル、空気感のある間仕切り など）</li>
+          <li><code>&lt;a-sky&gt;</code> の色を時間帯・気分に合わせて変える（朝なら <code>#E8F0D8</code>、夜の自習室なら <code>#0A0E2A</code> など）</li>
+          <li><strong>前回作った什器（机・椅子・黒板）は最低限残す</strong>（全部作り直さない。マテリアルを足すのが目的）</li>
         </ul>
       </div>
 
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（4点セット）</p>
         <table>
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
           <tr>
-            <td><strong style="color:#76B900">1. コード</strong></td>
-            <td><code>gallery.html</code> のコード全体をNotionノートに貼り付ける</td>
+            <td><strong style="color:#76B900">1. テーマ宣言</strong></td>
+            <td>あなたが選んだ教室のテーマ名（1行）と、使ったカラーパレット（HSL や hex を3〜5色）</td>
           </tr>
           <tr>
-            <td><strong style="color:#76B900">2. 音声説明</strong></td>
-            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
-            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+            <td><strong style="color:#76B900">2. コード</strong></td>
+            <td><code>classroom-v2.html</code> のコード全体をNotionノートに貼り付ける</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">3. Before / After スクリーンショット</strong></td>
+            <td><strong>前回の <code>classroom.html</code></strong> と<strong>今回の <code>classroom-v2.html</code></strong> のスクリーンショットを<strong>並べて</strong>Notionに添付（Win: <code>Win+Shift+S</code> / Mac: <code>Cmd+Shift+4</code>）</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#76B900">4. 工夫した点</strong></td>
+            <td>「どのオブジェクトに、どんなプロパティを足して、なぜ魅力的になったか」を3〜5文で記述</td>
           </tr>
         </table>
-        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
-        <ul class="point-list" style="margin-top:0.3rem">
-          <li>どんなギャラリー/展示空間をイメージしたか</li>
-          <li>どのテクスチャ画像をどこに使ったか</li>
-          <li>metalness/roughness をどのオブジェクトに使い、どんな質感を表現したか</li>
-          <li>透明度をどこで使い、どんな効果を狙ったか</li>
-        </ul>
       </div>
 
       <details>
-        <summary>ヒント: ギャラリーの構成例</summary>
+        <summary>ヒント1: 朝の光が差し込む明るい教室</summary>
         <div class="answer-content">
-          <ul class="point-list">
-            <li>壁を3面設置し、各壁にテクスチャ（レンガ・コンクリートなど）を貼る</li>
-            <li>壁に「額縁」（薄い box + 画像テクスチャ）を掛ける → 絵画の展示</li>
-            <li>中央にガラスケース（半透明の box）を置き、中に金属的なオブジェクト（metalness 高め）を入れる</li>
-            <li>床には木目テクスチャ、天井は白い plane</li>
-          </ul>
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem"><strong>パレット:</strong> 空 <code>#E8F0D8</code>（朝の柔らかい光） / 床 <code>#F5E6D3</code>（明るい木目）/ 机天板 <code>#D9B382</code>（木目テクスチャ）/ 椅子 <code>#9CB8A8</code>（淡い空色）/ 黒板 <code>#2C4A3E</code>（深緑） / 窓 <code>#D8DDE0</code>（半透明）</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 朝の教室 ── 前回の什器に「朝の光」マテリアルを足す --&gt;</span>
+&lt;a-scene&gt;
+  &lt;a-sky color="#E8F0D8"&gt;&lt;/a-sky&gt;
+
+  &lt;a-assets&gt;&lt;img id="wood" src="wood.jpg"&gt;&lt;/a-assets&gt;
+
+  <span class="cmt">&lt;!-- 床（明るい木目、ザラッとした質感） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 12; height: 12"
+    material="color: #F5E6D3; roughness: 0.9"
+    position="0 0 -4" rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 机（前回作った机の天板に木目テクスチャを貼る） --&gt;</span>
+  &lt;a-entity geometry="primitive: box; width: 1.2; height: 0.05; depth: 0.7"
+    material="src: #wood; roughness: 0.6"
+    position="0 0.75 -3"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 椅子の脚（金属感を足す） --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.45"
+    material="color: #888888; metalness: 0.9; roughness: 0.3"
+    position="-0.4 0.22 -2.4"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 黒板（マットな深緑） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 3; height: 1.2"
+    material="color: #2C4A3E; roughness: 1.0"
+    position="0 1.8 -5.99"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 窓（半透明の青、光が差し込むイメージ） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 2; height: 1.5"
+    material="color: #D8DDE0; opacity: 0.4; transparent: true; metalness: 0.3; roughness: 0.1"
+    position="3.99 1.8 -3" rotation="0 -90 0"&gt;&lt;/a-entity&gt;
+&lt;/a-scene&gt;</pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:#aaa"><strong>魅力化のコツ:</strong> 前回が原色だらけだったなら、今回は <code>H=20〜40</code>（暖かいベージュ系）で統一感を出す。窓を半透明にすると「光が入ってくる」イメージが生まれる。机天板の木目テクスチャは「ずっといたい」要素の最大値。</p>
         </div>
       </details>
+
+      <details style="margin-top:0.4rem">
+        <summary>ヒント2: 落ち着いた木目調・図書室風の教室</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem"><strong>パレット:</strong> 空（天井） <code>#3D2E1F</code>（暗い木） / 床 <code>#5C3D26</code>（こげ茶） / 机 <code>#8B5A2B</code>（こげ茶木目）/ 椅子 <code>#3D2817</code>（焦げ茶革風）/ 黒板 <code>#1A1A1A</code>（黒）/ 真鍮 <code>#B8860B</code>（金属パーツ）</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 図書室風教室 ── 前回の什器を木目とアンティーク金属で統一 --&gt;</span>
+&lt;a-scene&gt;
+  &lt;a-sky color="#3D2E1F"&gt;&lt;/a-sky&gt;
+
+  &lt;a-assets&gt;
+    &lt;img id="wood" src="wood.jpg"&gt;
+    &lt;img id="brick" src="brick.jpg"&gt;
+  &lt;/a-assets&gt;
+
+  <span class="cmt">&lt;!-- 壁（レンガテクスチャでアンティーク感） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 12; height: 4"
+    material="src: #brick; color: #6B4226; roughness: 1.0"
+    position="0 2 -6"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 床（焦げ茶、適度な光沢） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 12; height: 12"
+    material="color: #5C3D26; roughness: 0.5; metalness: 0.1"
+    position="0 0 -4" rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 机の天板（深い木目、つや控えめ） --&gt;</span>
+  &lt;a-entity geometry="primitive: box; width: 1.2; height: 0.05; depth: 0.7"
+    material="src: #wood; color: #8B5A2B; roughness: 0.4"
+    position="0 0.75 -3"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 椅子の脚を真鍮（金色金属）に --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.45"
+    material="color: #B8860B; metalness: 1.0; roughness: 0.4"
+    position="-0.4 0.22 -2.4"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 黒板（暗い黒、少し光沢） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 3; height: 1.2"
+    material="color: #1A1A1A; roughness: 0.7"
+    position="0 1.8 -5.99"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 半透明のガラス棚（本棚の扉） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 2; height: 2"
+    material="color: #D4C4A8; opacity: 0.35; transparent: true; metalness: 0.5; roughness: 0.1"
+    position="-3.5 1.5 -4"&gt;&lt;/a-entity&gt;
+&lt;/a-scene&gt;</pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:#aaa"><strong>魅力化のコツ:</strong> 全体を <code>H=20〜30</code>（茶色系）に揃えて、椅子脚を<strong>真鍮金属</strong>（<code>metalness=1.0, color=#B8860B</code>）にすることでアンティーク感が一気に上がります。壁にレンガテクスチャを貼ると物質感が爆発的に増えます。</p>
+        </div>
+      </details>
+
+      <details style="margin-top:0.4rem">
+        <summary>ヒント3: 未来的なメタリック教室</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem"><strong>パレット:</strong> 空 <code>#1A1F2E</code>（深い夜青）/ 床 <code>#2A2D38</code>（鏡面ダーク） / 机 <code>#E0E0E0</code>（白光沢）/ 椅子 <code>#76B900</code>（アクセントの緑LED風）/ 黒板 <code>#0E1419</code>（黒）/ パイプ <code>#C0C0C0</code>（クロームメッキ）</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 未来教室 ── 前回の什器を金属＋発光カラーで統一 --&gt;</span>
+&lt;a-scene&gt;
+  &lt;a-sky color="#1A1F2E"&gt;&lt;/a-sky&gt;
+
+  &lt;a-assets&gt;&lt;img id="metalfloor" src="brick.jpg"&gt;&lt;/a-assets&gt;
+
+  <span class="cmt">&lt;!-- 床（暗い色＋強い光沢で「鏡面」を演出） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 12; height: 12"
+    material="color: #2A2D38; metalness: 1.0; roughness: 0.2"
+    position="0 0 -4" rotation="-90 0 0"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 机（白い光沢プラスチック） --&gt;</span>
+  &lt;a-entity geometry="primitive: box; width: 1.2; height: 0.05; depth: 0.7"
+    material="color: #E0E0E0; metalness: 0.0; roughness: 0.15"
+    position="0 0.75 -3"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 椅子の背もたれを緑のLED風アクセントに --&gt;</span>
+  &lt;a-entity geometry="primitive: box; width: 0.5; height: 0.4; depth: 0.05"
+    material="color: #76B900; opacity: 0.85; transparent: true; metalness: 0.3"
+    position="0 0.7 -2.45"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 椅子の脚はクロームメッキ --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.03; height: 0.45"
+    material="color: #C0C0C0; metalness: 1.0; roughness: 0.05"
+    position="-0.4 0.22 -2.4"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 黒板（漆黒、鏡面） --&gt;</span>
+  &lt;a-entity geometry="primitive: plane; width: 3; height: 1.2"
+    material="color: #0E1419; metalness: 0.8; roughness: 0.15"
+    position="0 1.8 -5.99"&gt;&lt;/a-entity&gt;
+
+  <span class="cmt">&lt;!-- 天井から吊るすパイプ（クローム） --&gt;</span>
+  &lt;a-entity geometry="primitive: cylinder; radius: 0.06; height: 6"
+    material="color: #C0C0C0; metalness: 1.0; roughness: 0.05"
+    position="2 2.5 -4" rotation="0 0 90"&gt;&lt;/a-entity&gt;
+&lt;/a-scene&gt;</pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:#aaa"><strong>魅力化のコツ:</strong> 床と黒板を <code>metalness=1.0 + roughness=0.2</code> 付近にすると鏡面っぽい未来感が出ます。椅子の背もたれだけ <code>#76B900</code>（緑）の半透明にすると、「ホタル」のように視線を集めるアクセントになります。</p>
+        </div>
+      </details>
+
+      <!-- ============ コラム: forループで色相環マテリアル20個 ============ -->
+      <div class="column-box">
+        <p class="col-title">&#x1F4D6; コラム: マテリアルを20個まとめて作りたい！── JavaScript の <code>for</code> ループで色相環を自動生成</p>
+        <p style="margin:0 0 0.8rem;font-size:0.95rem">
+          色相環の12〜20色を1個ずつ HTML に書くと、120行以上のコピペになって大変です。<br>
+          こんなときは <strong>JavaScript の <code>for</code> ループで「色相 <code>H</code> を 360°/20 = 18° ずつずらしたマテリアル」を動的に生成</strong>すると、わずか数行で済みます。
+        </p>
+
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#76B900;font-weight:700">仕組み</p>
+        <ul class="point-list" style="margin:0 0 0.8rem">
+          <li><code>for (let i = 0; i &lt; 20; i++)</code> で 0〜19 の連番を回す</li>
+          <li><code>const hue = i * 18;</code> で色相を 0°, 18°, 36°, ..., 342° と進める</li>
+          <li><code>document.createElement('a-sphere')</code> で球を作る</li>
+          <li><code>setAttribute('color', `hsl(${hue}, 80%, 55%)`)</code> で HSL カラーを指定</li>
+          <li>位置を弧（円周上）に配置: <code>angle = i * (2π/20)</code>、<code>x = cos(angle) * 半径</code>、<code>z = sin(angle) * 半径</code></li>
+        </ul>
+
+        <div class="col-tip">
+          <strong>&#x1F511; ポイント:</strong> HSL の <code>H</code> を <strong>等間隔（360°/個数）</strong>でずらすと、全色が美しいグラデーションでつながります。<code>S</code>（彩度）と <code>L</code>（明度）は固定にすることで、<strong>明るさ・鮮やかさを揃えた</strong>マテリアル一式が作れます。
+        </div>
+
+        <pre><span class="code-label">JavaScript ── classroom-v2.html の &lt;script&gt; の中身（最小例）</span>
+<span class="kw">const</span> scene <span class="op">=</span> document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
+<span class="kw">const</span> N <span class="op">=</span> <span class="num">20</span>;          <span class="cmt">// 20個の球</span>
+<span class="kw">const</span> radius <span class="op">=</span> <span class="num">3</span>;     <span class="cmt">// 半径3mの円周上に配置</span>
+
+<span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> N; i<span class="op">++</span>) {
+  <span class="kw">const</span> sphere <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">'a-sphere'</span>);
+
+  <span class="cmt">// 色相環: H を 0°→360° に等間隔で変化</span>
+  <span class="kw">const</span> hue <span class="op">=</span> i <span class="op">*</span> (<span class="num">360</span> <span class="op">/</span> N);    <span class="cmt">// 0, 18, 36, ..., 342</span>
+
+  <span class="cmt">// 円周上の角度（ラジアン）</span>
+  <span class="kw">const</span> angle <span class="op">=</span> i <span class="op">*</span> (<span class="num">2</span> <span class="op">*</span> Math.PI <span class="op">/</span> N);
+  <span class="kw">const</span> x <span class="op">=</span> Math.<span class="fn">cos</span>(angle) <span class="op">*</span> radius;
+  <span class="kw">const</span> z <span class="op">=</span> Math.<span class="fn">sin</span>(angle) <span class="op">*</span> radius <span class="op">-</span> <span class="num">5</span>;  <span class="cmt">// カメラから5m奥</span>
+
+  sphere.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, <span class="str">`${x} 1.5 ${z}`</span>);
+  sphere.<span class="fn">setAttribute</span>(<span class="str">'radius'</span>, <span class="str">'0.4'</span>);
+  sphere.<span class="fn">setAttribute</span>(<span class="str">'material'</span>,
+    <span class="str">`color: hsl(${hue}, 80%, 55%); metalness: 0.5; roughness: 0.4`</span>);
+
+  scene.<span class="fn">appendChild</span>(sphere);
+}</pre>
+
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#76B900;font-weight:700">&#x1F4FA; 実行結果イメージ ── 20個の異なる色相の球が弧を描く</p>
+        <figure class="exec-mock">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: コラム ── 色相環マテリアル20個 (for ループ)</span>
+          </div>
+          <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Title -->
+            <text x="320" y="22" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">20個の球が円周上に色相環として配置される</text>
+            <!-- 20 spheres arranged in arc -->
+            <g>
+              <!-- Generate 20 spheres along an arc, using hue 0..342, step 18 -->
+              <circle cx="320" cy="80" r="14" fill="hsl(0,80%,55%)"/>
+              <circle cx="376" cy="84" r="14" fill="hsl(18,80%,55%)"/>
+              <circle cx="430" cy="94" r="14" fill="hsl(36,80%,55%)"/>
+              <circle cx="478" cy="112" r="14" fill="hsl(54,80%,55%)"/>
+              <circle cx="520" cy="138" r="14" fill="hsl(72,80%,55%)"/>
+              <circle cx="551" cy="170" r="14" fill="hsl(90,80%,55%)"/>
+              <circle cx="571" cy="206" r="14" fill="hsl(108,80%,50%)"/>
+              <circle cx="578" cy="244" r="14" fill="hsl(126,80%,45%)"/>
+              <circle cx="565" cy="278" r="14" fill="hsl(144,80%,45%)"/>
+              <circle cx="263" cy="84" r="14" fill="hsl(342,80%,55%)"/>
+              <circle cx="209" cy="94" r="14" fill="hsl(324,80%,55%)"/>
+              <circle cx="161" cy="112" r="14" fill="hsl(306,80%,55%)"/>
+              <circle cx="119" cy="138" r="14" fill="hsl(288,80%,60%)"/>
+              <circle cx="88" cy="170" r="14" fill="hsl(270,80%,60%)"/>
+              <circle cx="68" cy="206" r="14" fill="hsl(252,80%,60%)"/>
+              <circle cx="61" cy="244" r="14" fill="hsl(234,80%,60%)"/>
+              <circle cx="74" cy="278" r="14" fill="hsl(216,80%,55%)"/>
+              <circle cx="180" cy="285" r="14" fill="hsl(198,80%,50%)"/>
+              <circle cx="320" cy="295" r="14" fill="hsl(180,80%,45%)"/>
+              <circle cx="460" cy="285" r="14" fill="hsl(162,80%,45%)"/>
+              <!-- highlights on each -->
+              <circle cx="316" cy="76" r="3" fill="#FFFFFF" opacity="0.7"/>
+              <circle cx="372" cy="80" r="3" fill="#FFFFFF" opacity="0.7"/>
+              <circle cx="426" cy="90" r="3" fill="#FFFFFF" opacity="0.7"/>
+            </g>
+            <!-- shadow under -->
+            <ellipse cx="320" cy="260" rx="280" ry="5" fill="#000000" opacity="0.15"/>
+          </svg>
+          <figcaption class="exec-caption">
+            HTML には <strong>1つも球を書いていない</strong>のに、JS の <code>for</code> ループで <strong>20個の色相が異なる球がカメラを取り囲むように弧</strong>を描いて並ぶ。HTML で20回コピペするより、<code>N</code> の数字を変えるだけで <strong>5個でも100個でも</strong>増やせる。
+          </figcaption>
+        </figure>
+
+        <div style="background:#0a0a1a;border:1px solid #76B900;border-radius:6px;padding:0.7rem 0.9rem;margin-top:0.8rem;font-size:0.88rem;color:#E0D8FF">
+          <strong>&#x1F4A1; 発展のヒント:</strong> <code>N = 20</code> を <code>360</code> に変えると<strong>1° おきの完全な色相環</strong>に、<code>roughness</code> も <code>i / N</code> で変化させると<strong>ツルツルからマットへの質感グラデーション</strong>になります。クリエイティブ課題で「テーマカラーをまとめて配置したい」ときの強力な武器です。
+        </div>
+      </div>
+
+      <div class="creative-accent" style="margin-top:1rem">
+        <h4>&#x1F3A8; 評価のポイント</h4>
+        <ul class="point-list" style="margin:0">
+          <li><strong>世界観の統一感:</strong> テーマと色・質感が一致しているか</li>
+          <li><strong>マテリアルプロパティの活用:</strong> color だけでなく metalness / roughness / opacity を意識して使い分けているか</li>
+          <li><strong>テクスチャの効果的な使用:</strong> なぜその場所にそのテクスチャを使ったか説明できるか</li>
+          <li><strong>独自性:</strong> 既存ヒントのコピーではなく、自分なりの工夫があるか</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -1207,10 +2331,10 @@ pre { position: relative; }
 ## トレース演習 1: material プロパティから見た目を予測する
 | ラベル | 形 | 色 | 質感・透明度の予測 |
 |---|---|---|---|
-| A |   |   |   |
-| B |   |   |   |
-| C |   |   |   |
-| D |   |   |   |
+| T1 |   |   |   |
+| T2 |   |   |   |
+| T3 |   |   |   |
+| T4 |   |   |   |
 
 ---
 
@@ -1224,9 +2348,9 @@ pre { position: relative; }
 ---
 
 ## コード体験 1: マテリアルの比較（material.html）
-### Q1. トレース演習1の予測と実際の表示を比べて、合っていたか？ 違った点は？
+### Q1. トレース演習1（T1〜T4）の予測スキルを、material.html の A〜G にも当てはめてみよう。予測通りに見えたものと、想像と違ったものはどれ？
 
-### Q2. A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明
+### Q2. material.html の A〜D の4つの球の見た目の違いを、metalness と roughness の値と関連付けて説明
 
 ### Q3. E（半透明の赤い箱）の後ろにあるオブジェクトは透けて見えるか？
 
@@ -1245,78 +2369,29 @@ pre { position: relative; }
 
 ---
 
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
+## 標準課題: 前回の理想の大学教室を、マテリアルで魅力化する
+### 1. テーマ宣言
+- 選んだ教室のテーマ（例: 朝の光が差す明るい教室 / 図書室風 / 未来的メタリック / カフェ風 / 夜の自習室 など）:
+- カラーパレット（3〜5色, hex または HSL）:
+  - 色1:
+  - 色2:
+  - 色3:
 
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
-
----
-
-## 標準課題 1: マテリアルプロパティの理解
-### 問1. プロパティの効果
-| プロパティ | 値の範囲 | 効果 |
-|---|---|---|
-| color    | 色名 / hex / rgb      |   |
-| opacity  | 0.0 〜 1.0            |   |
-| metalness| 0.0 〜 1.0            |   |
-| roughness| 0.0 〜 1.0            |   |
-| side     | front / back / double |   |
-| src      | 画像URL / セレクタ    |   |
-
-### 問2. material 設定から見た目を予測
-| material 設定 | 予測される見た目 |
-|---|---|
-| color: #FFD700; metalness: 1.0; roughness: 0.2 |   |
-| color: white; opacity: 0.2; transparent: true  |   |
-| color: #333; roughness: 1.0; metalness: 0.0    |   |
-
-### 問3. バグの原因と修正（半透明の青い球）
-- バグの原因:
-- 修正方法:
-
-### 問4. a-assets について
-- (a) &lt;a-assets&gt; はHTMLのどこに書くか:
-- (b) 登録した画像の参照方法:
-- (c) &lt;a-assets&gt; を使う利点:
-
----
-
-## 標準課題 2: マテリアルとテクスチャを改造する（コード改造）
-### ① 改造後のコード全体
-```html
-（ここに material.html の改造後コードを貼り付け）
-```
-
-### ② 各改造について「どの行を変えたか」と「変更による見た目の変化」
-1. A を #FF6347 / roughness 0.0 に変更:
-2. E を opacity 0.7 / color green に変更:
-3. シリンダー（銅のような質感）を追加:
-4. &lt;a-assets&gt; を追加して床にテクスチャ適用:
-5. 壁（plane）を side: double で追加:
-
----
-
-## 発展課題: テクスチャを使ったギャラリーを作る
-### 1. コード（gallery.html 全体）
+### 2. コード（classroom-v2.html 全体）
 ```html
 （ここに貼り付け）
 ```
 
-### 2. 音声説明（1〜2分の音声ファイルを添付）
-- どんなギャラリー/展示空間をイメージしたか
-- どのテクスチャ画像をどこに使ったか
-- metalness/roughness をどのオブジェクトに使い、どんな質感を表現したか
-- 透明度をどこで使い、どんな効果を狙ったか
+### 3. Before / After スクリーンショット
+- Before（前回の classroom.html）:（Notion に <code>/image</code> で添付）
+- After（今回の classroom-v2.html）:（Notion に <code>/image</code> で添付）
+
+### 4. 工夫した点（3〜5文）
+- どのオブジェクトに、どんなプロパティを足したか:
+- なぜ魅力的になったか（前回と比べて）:
 </pre>
 
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#FFB800">
         <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
       </div>
     </div>
@@ -1324,11 +2399,11 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 7. ANSWERS ============ -->
+<!-- ============ 5. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-03T16:20">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">7</div>
+      <div class="section-num" style="background:#616161">5</div>
       <h2>解答例</h2>
     </div>
 
@@ -1337,10 +2412,10 @@ pre { position: relative; }
       <div class="answer-content">
         <table>
           <tr><th>ラベル</th><th>形</th><th>色</th><th>質感・透明度</th></tr>
-          <tr><td>A</td><td>球</td><td>シルバー (#C0C0C0)</td><td>metalness: 0.9 で金属的に周囲を映し込む。roughness: 0.1 でほぼ鏡面。光沢のある金属球。</td></tr>
-          <tr><td>B</td><td>箱</td><td>赤</td><td>opacity: 0.3 + transparent: true で、かなり透明。後ろのオブジェクトが透けて見える赤いガラスのような箱。</td></tr>
-          <tr><td>C</td><td>箱</td><td>茶色 (#8B4513)</td><td>roughness: 1.0 で完全にマット。metalness: 0.0 で非金属。ザラザラした木材やダンボールのような質感。</td></tr>
-          <tr><td>D</td><td>球</td><td>金色 (gold)</td><td>metalness: 1.0 で完全な金属。roughness: 0.3 で少し曇りのある金属。磨かれた金のような見た目。</td></tr>
+          <tr><td>T1</td><td>球</td><td>シルバー (#C0C0C0)</td><td>metalness: 0.9 で金属的に周囲を映し込む。roughness: 0.1 でほぼ鏡面。光沢のある金属球。</td></tr>
+          <tr><td>T2</td><td>箱</td><td>赤</td><td>opacity: 0.3 + transparent: true で、かなり透明。後ろのオブジェクトが透けて見える赤いガラスのような箱。</td></tr>
+          <tr><td>T3</td><td>箱</td><td>茶色 (#8B4513)</td><td>roughness: 1.0 で完全にマット。metalness: 0.0 で非金属。ザラザラした木材やダンボールのような質感。</td></tr>
+          <tr><td>T4</td><td>球</td><td>金色 (gold)</td><td>metalness: 1.0 で完全な金属。roughness: 0.3 で少し曇りのある金属。磨かれた金のような見た目。</td></tr>
         </table>
       </div>
     </details>
@@ -1383,6 +2458,49 @@ pre { position: relative; }
       </div>
     </details>
 
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題1 やってみよう 解答（ゴムボールを表現する metalness / roughness の予測）</summary>
+      <div class="answer-content">
+        <p>ゴムボールは「金属ではない（非金属）」かつ「表面はマットでザラっとしている」素材です。したがって以下の値が妥当な予測になります。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">metalness: 0.0   ← 非金属（金属感ゼロ）
+roughness: 0.8 〜 1.0  ← 表面が粗くマット（光を拡散反射）
+
+material="color: #1a1a1a; metalness: 0.0; roughness: 0.9"</pre>
+        <p><strong>予測の理由:</strong> ゴムは光をほぼ拡散反射する素材で、鏡面反射（ハイライト）がほとんど見えません。<code>metalness</code> を <code>0</code> に近づけると非金属の挙動になり、<code>roughness</code> を <code>1.0</code> に近づけると反射がぼやけてマット感が出ます。逆に <code>roughness: 0.0</code> ではツルツル光るプラスチック調になり、ゴムらしさが失われます。「金属か？」「ツルツルか？」を独立に判断するのがコツです。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題2 やってみよう 解答（material.html: opacity 0.4 と 0.9 の比較）</summary>
+      <div class="answer-content">
+        <p><code>material.html</code> の E（半透明の赤い箱）で <code>opacity</code> を <code>0.4</code> → <code>0.9</code> に変更したときの観察結果:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">opacity: 0.4 → 後ろのオブジェクト・床がはっきり透けて見える（赤いガラス越しのような表現）
+opacity: 0.9 → ほぼ不透明な赤色。後ろのものは輪郭がうっすら分かる程度
+opacity: 1.0 → 完全に不透明（transparent: true を書いていても通常の表示と同じ）</pre>
+        <p><strong>教育的要点:</strong> <code>opacity</code> は <code>0.0</code>（完全に透明）から <code>1.0</code>（完全に不透明）までを<strong>線形</strong>に変化させます。<code>transparent: true</code> を付けないと描画パイプラインが透明扱いをしないため、<code>opacity</code> を変えても見た目が変わらないことがあります。半透明オブジェクトは描画順序（重なりの前後関係）の影響も受けるため、<code>opacity: 0.5</code> 付近では「後ろの物が透ける／後ろのオブジェクトが消える」現象が起きることもあります。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題3 やってみよう 解答（texture.html: レンガの壁に roughness: 1.0 を追加）</summary>
+      <div class="answer-content">
+        <p><code>texture.html</code> のレンガの壁に <code>roughness: 1.0</code> を追加したときの観察結果:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">追加前: material="src: #brick-tex"
+        → デフォルト roughness=0.5。レンガ表面にうっすら反射が乗り、少しテカリのある質感
+
+追加後: material="src: #brick-tex; roughness: 1.0"
+        → 完全マット。反射がなくなり、レンガが「乾いた・粗い」質感になる
+
+material="src: #brick-tex; roughness: 1.0; metalness: 0.0"
+        → さらにくっきりとマットなレンガ壁（本物のレンガに近い見た目）</pre>
+        <p><strong>教育的要点:</strong> テクスチャ画像で「色のパターン」を貼り、<code>roughness</code> / <code>metalness</code> で「質感（反射の仕方）」を制御する、という<strong>役割の分離</strong>がポイントです。同じ <code>brick.jpg</code> でも、<code>roughness: 0.0</code> にすればツルッとした「タイルのレンガ柄」に見え、<code>roughness: 1.0</code> にすれば「本物のレンガ壁」に見えます。テクスチャ ＋ マテリアルプロパティの組み合わせが3D表現のリアリティの鍵です。</p>
+      </div>
+    </details>
+    </div>
+
+    <!-- ── 標準課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="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"></div>
@@ -1402,7 +2520,18 @@ document.querySelectorAll('pre').forEach(function(pre) {
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
+    var clone = pre.cloneNode(true);
+    var copyBtns = clone.querySelectorAll(".copy-btn");
+    copyBtns.forEach(function(b) {
+      b.remove();
+    });
+    var labels = clone.querySelectorAll(".code-label");
+    labels.forEach(function(l) {
+      l.remove();
+    });
+    var rawText = clone.textContent.trim();
+    var labelPattern = /^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/;
+    var code = rawText.replace(labelPattern, '');
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

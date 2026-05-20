@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,10 +446,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -459,6 +471,74 @@ pre { position: relative; }
       今回は<strong>A-Frame の3D空間</strong>と <strong>Socket.IO のリアルタイム通信</strong>を組み合わせ、<strong>複数ユーザが同じ3D空間を共有し、互いのアバターが見える</strong>仕組みを作ります。
     </p>
 
+    <!-- ====== 読み方（用語の発音と語源） ====== -->
+    <div class="concept-box" style="border-left:4px solid #76B900;background:#0f1a05">
+      <h4 style="color:#76B900">読み方 ── アバター同期の用語ガイド</h4>
+      <p style="font-size:0.95rem;margin-bottom:0.8rem">3D空間のリアルタイム同期では、ゲーム業界・ネットワーク工学の用語が多数登場します。発音と意味を先に押さえておくと、後のコード読解がぐっと楽になります。</p>
+      <table style="font-size:0.92rem">
+        <tr><th style="width:30%">英単語</th><th style="width:24%">カタカナ読み</th><th>意味と語源</th></tr>
+        <tr><td><code>avatar</code></td><td><strong style="color:#76B900">アバター</strong></td><td>サンスクリット語「アヴァターラ（化身）」が語源。3D空間内で「自分の化身」として動くキャラクタ。</td></tr>
+        <tr><td><code>position / rotation</code></td><td><strong style="color:#76B900">ポジション / ローテーション</strong></td><td>位置 (x, y, z) と回転 (x, y, z)。両方をセットで送らないと「向き」が表現できない。</td></tr>
+        <tr><td><code>interpolation</code></td><td><strong style="color:#76B900">インターポレーション</strong>（補間）</td><td>「inter-（間に）＋ polate（差し込む）」＝ 受信した飛び飛びのデータの「間を埋める」処理。</td></tr>
+        <tr><td><code>slerp</code></td><td><strong style="color:#76B900">スラープ</strong></td><td>"Spherical Linear intERPolation"（球面線形補間）の略。回転の補間で使う。</td></tr>
+        <tr><td><code>prediction</code></td><td><strong style="color:#76B900">プレディクション</strong>（予測）</td><td>「次にデータが届くまで、今までの動きから先回りで位置を予想する」処理。</td></tr>
+        <tr><td><code>dead reckoning</code></td><td><strong style="color:#76B900">デッドレコニング</strong>（推測航法）</td><td>もとは航海用語。最後に受信した位置と速度から、その後の位置を「推測で延長」する技法。</td></tr>
+        <tr><td><code>broadcast</code></td><td><strong style="color:#76B900">ブロードキャスト</strong></td><td>「broad（広く）＋ cast（投げる）」＝ 送信者以外の全員に配信。</td></tr>
+        <tr><td><code>serialize</code></td><td><strong style="color:#76B900">シリアライズ</strong>（直列化）</td><td>オブジェクトを通信できる文字列（JSON）に変換すること。逆は <strong>デシリアライズ</strong>。</td></tr>
+      </table>
+    </div>
+
+    <!-- ====== 具体例（身近なシーンで理解する） ====== -->
+    <div class="concept-box" style="border-left:4px solid #4FC3F7;background:#0a1a22">
+      <h4 style="color:#4FC3F7">具体例 ── アバター同期がイメージできる身近な3シーン</h4>
+      <table style="font-size:0.92rem">
+        <tr><th style="width:22%">場面</th><th style="width:38%">何が同期されているか</th><th>今回の仕組みとの対応</th></tr>
+        <tr>
+          <td><strong>オンラインゲーム<br>（Fortnite / Minecraft）</strong></td>
+          <td>各プレイヤーのキャラクタの<strong>位置・向き・アクション</strong>がサーバ経由で全員に配信される。</td>
+          <td><code>socket.emit('move', {position, rotation})</code> ＋ サーバが <code>broadcast.emit</code> で他全員に転送。これを毎秒10〜60回繰り返す。</td>
+        </tr>
+        <tr>
+          <td><strong>ビデオ会議<br>（Zoom / Teams）</strong></td>
+          <td>各参加者の<strong>映像枠</strong>が画面に並び、退室すると枠が消える。</td>
+          <td>本資料では映像枠 = アバター。<code>connection</code> でアバター生成、<code>disconnect</code> でアバター削除（クリーンアップ）。</td>
+        </tr>
+        <tr>
+          <td><strong>VRChat / cluster<br>（メタバース）</strong></td>
+          <td>同じ仮想空間に集まった人のアバターが3Dで動き、しゃべると口が動く。</td>
+          <td>本資料の発展形。今回は箱 1個だが、構造はまったく同じ。<strong>position/rotation を定期送信 → 他クライアントが再描画</strong>。</td>
+        </tr>
+      </table>
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#aaa">どれも内部の仕組みは「<strong>自分の状態を周期的にサーバへ送る → サーバが他全員に配信 → 各クライアントが受信して再描画</strong>」という共通パターンで動いています。</p>
+    </div>
+
+    <!-- ====== Q&A box（よくある疑問への先回り回答） ====== -->
+    <div class="concept-box" style="border-left:4px solid #FFB800;background:#1a1404">
+      <h4 style="color:#FFB800">よくある質問 (Q&amp;A) ── アバター同期の疑問</h4>
+      <table style="font-size:0.92rem">
+        <tr>
+          <td style="width:38%;color:#FFB800;font-weight:700;vertical-align:top">Q1. 100msごとに送信したらカクカクしませんか？</td>
+          <td>はい、そのままだと毎秒10コマで動くので確かにカクつきます。実用ではクライアント側で<strong>補間（interpolation）</strong>を入れて、受信した位置の「間」を滑らかにつなぎます。本資料の発展で扱います。</td>
+        </tr>
+        <tr>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q2. 通信が遅れたらアバターはどうなる？</td>
+          <td>受信が止まると、そのアバターは止まったままになります。これを補うのが<strong>プレディクション（予測）</strong>と<strong>デッドレコニング（推測航法）</strong>です。直前の速度から「たぶんこの辺にいるはず」と推測して動かし続けます。</td>
+        </tr>
+        <tr>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q3. なぜ <code>broadcast.emit</code> で「送信者以外」に送るの？</td>
+          <td>自分の位置データは自分自身ですでに知っているからです。自分のアバターを自分の画面に出す必要もないので、サーバは「送信者本人を除いた全員」にだけ転送するのが効率的です。</td>
+        </tr>
+        <tr>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q4. position と rotation の単位は？</td>
+          <td>A-Frame では <strong>position</strong> はメートル単位の数値、<strong>rotation</strong> はオイラー角（度数法、°）です。Three.js 内部ではラジアンと四元数 (Quaternion) に変換されています。</td>
+        </tr>
+        <tr>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q5. たくさん人が入ったら通信量は爆発しない？</td>
+          <td>します。10人なら 10×10 = 100通信／秒、100人なら 100×100 = 10000通信／秒と<strong>O(n²)</strong>で増えます。実用では <strong>関心領域 (Area of Interest)</strong> や <strong>更新頻度の段階化</strong>で削減します。</td>
+        </tr>
+      </table>
+    </div>
+
     <!-- 1.1 A-Frame + Socket.IO の組み合わせ -->
     <div class="concept-box">
       <h4>1.1 A-Frame + Socket.IO の組み合わせ <span class="exam-alert">課題に出ます</span></h4>
@@ -475,44 +555,94 @@ pre { position: relative; }
       </table>
 
       <div class="diagram-container">
-        <svg viewBox="0 0 720 320" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">アバター同期のデータフロー (自分 → サーバ → 他クライアント)</text>
           <!-- Server -->
-          <rect x="260" y="20" width="200" height="60" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="360" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">Node.js + Express + Socket.IO</text>
-          <text x="360" y="62" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="13">サーバ</text>
-          <!-- Client A -->
-          <rect x="30" y="160" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="120" y="185" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">ブラウザ A</text>
-          <text x="120" y="205" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
-          <text x="120" y="220" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
+          <rect x="260" y="60" width="200" height="60" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="360" y="85" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">Node.js + Express + Socket.IO</text>
+          <text x="360" y="102" text-anchor="middle" fill="#E0E0E0" font-weight="700" font-size="13">サーバ</text>
+          <!-- Client A (自分) -->
+          <rect x="30" y="200" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="120" y="225" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="12">ブラウザ A（自分）</text>
+          <text x="120" y="245" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame 3D空間</text>
+          <text x="120" y="260" text-anchor="middle" fill="#888" font-size="11">setInterval で位置を送信</text>
           <!-- Client B -->
-          <rect x="270" y="220" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-          <text x="360" y="245" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">ブラウザ B</text>
-          <text x="360" y="265" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
-          <text x="360" y="280" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
+          <rect x="270" y="260" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="360" y="285" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="12">ブラウザ B</text>
+          <text x="360" y="305" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame 3D空間</text>
+          <text x="360" y="320" text-anchor="middle" fill="#888" font-size="11">他ユーザのアバター描画</text>
           <!-- Client C -->
-          <rect x="510" y="160" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
-          <text x="600" y="185" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">ブラウザ C</text>
-          <text x="600" y="205" text-anchor="middle" fill="#E0E0E0" font-size="10">A-Frame 3D空間</text>
-          <text x="600" y="220" text-anchor="middle" fill="#888" font-size="9">自分のカメラ位置を送信</text>
-          <!-- Arrows -->
-          <line x1="120" y1="160" x2="280" y2="80" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arw1)"/>
-          <line x1="360" y1="220" x2="360" y2="80" stroke="#FFB800" stroke-width="2" marker-end="url(#arw2)"/>
-          <line x1="600" y1="160" x2="440" y2="80" stroke="#93D500" stroke-width="2" marker-end="url(#arw3)"/>
-          <line x1="280" y1="80" x2="120" y2="160" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
-          <line x1="440" y1="80" x2="600" y2="160" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
-          <line x1="360" y1="80" x2="360" y2="220" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arw4)"/>
-          <!-- Labels -->
-          <text x="170" y="115" fill="#4FC3F7" font-size="9" font-weight="700">position送信</text>
-          <text x="530" y="115" fill="#93D500" font-size="9" font-weight="700">position送信</text>
-          <text x="200" y="135" fill="#76B900" font-size="9">他ユーザの位置を配信</text>
-          <text x="440" y="135" fill="#76B900" font-size="9">他ユーザの位置を配信</text>
-          <defs>
-            <marker id="arw1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
-            <marker id="arw2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
-            <marker id="arw3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
-            <marker id="arw4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-          </defs>
+          <rect x="510" y="200" width="180" height="70" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="600" y="225" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="12">ブラウザ C</text>
+          <text x="600" y="245" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame 3D空間</text>
+          <text x="600" y="260" text-anchor="middle" fill="#888" font-size="11">他ユーザのアバター描画</text>
+          <!-- Step badge -->
+          <g>
+            <rect x="500" y="48" width="200" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="600" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ① 自分の位置を取得
+            </text>
+            <text x="600" y="64" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ② サーバへ socket.emit('move')
+            </text>
+            <text x="600" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ broadcast で他全員に転送
+            </text>
+            <text x="600" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ アバター生成・更新
+            </text>
+          </g>
+          <!-- Highlight ring on A (step 1) -->
+          <rect x="24" y="194" width="192" height="82" rx="14" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.05;0.10;0.18;0.22;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Moving packet A→Server (step 2) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <circle r="9" fill="#FFB800" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="120;360" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="200;120" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <text font-size="9" fill="#FFB800" font-weight="700" text-anchor="middle">
+              <animate attributeName="x" values="155;325" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              <animate attributeName="y" values="178;108" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              {position, rotation}
+            </text>
+          </g>
+          <!-- Highlight ring on server (step 3) -->
+          <rect x="254" y="54" width="212" height="72" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.38;0.40;0.43;0.45;0.55;0.60;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Moving packets Server → B and Server → C (step 3-4) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.40;0.45;0.55;0.60;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <circle r="8" fill="#76B900" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="360;360" keyTimes="0;1" dur="3.5s" begin="6.3s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="120;260" keyTimes="0;1" dur="3.5s" begin="6.3s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="8" fill="#76B900" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="360;600" keyTimes="0;1" dur="3.5s" begin="6.3s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="120;200" keyTimes="0;1" dur="3.5s" begin="6.3s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+          <!-- Highlight on B and C (step 4) -->
+          <rect x="264" y="254" width="192" height="82" rx="14" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="504" y="194" width="192" height="82" rx="14" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Static connecting lines -->
+          <line x1="120" y1="200" x2="280" y2="120" stroke="#4FC3F7" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+          <line x1="360" y1="120" x2="360" y2="260" stroke="#76B900" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+          <line x1="440" y1="120" x2="600" y2="200" stroke="#76B900" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+          <!-- Bottom legend -->
+          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 青=自分 / 黄=他クライアント / 緑=サーバ転送（broadcast.emit で本人以外）</text>
         </svg>
       </div>
     </div>
@@ -546,27 +676,194 @@ pre { position: relative; }
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ定期送信なのか？ <span class="exam-alert">課題に出ます</span></p>
         <p style="font-size:0.9rem">マウスやキーボードの入力イベントは<strong>非常に高頻度</strong>で発生します。すべてのイベントで送信すると、通信量が膨大になりサーバに負荷がかかります。<strong>setInterval</strong> で一定間隔に間引くことで、滑らかさと通信効率のバランスを取ります。</p>
       </div>
+
+      <!-- Diagram 2: position/rotation シリアライズ animation -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Position / Rotation のシリアライズ（JSON 化）</text>
+          <!-- Camera object box -->
+          <rect x="40" y="80" width="200" height="200" rx="12" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="140" y="105" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">A-Frame カメラ</text>
+          <text x="60" y="135" fill="#aaa" font-size="12">position:</text>
+          <text x="80" y="153" fill="#E0E0E0" font-size="12" font-family="monospace">x: 0.12</text>
+          <text x="80" y="171" fill="#E0E0E0" font-size="12" font-family="monospace">y: 1.60</text>
+          <text x="80" y="189" fill="#E0E0E0" font-size="12" font-family="monospace">z: 2.85</text>
+          <text x="60" y="215" fill="#aaa" font-size="12">rotation:</text>
+          <text x="80" y="233" fill="#E0E0E0" font-size="12" font-family="monospace">x: 0</text>
+          <text x="80" y="251" fill="#E0E0E0" font-size="12" font-family="monospace">y: -45</text>
+          <text x="80" y="269" fill="#E0E0E0" font-size="12" font-family="monospace">z: 0</text>
+          <!-- JSON serialized -->
+          <rect x="480" y="80" width="200" height="200" rx="12" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="580" y="105" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">JSON 文字列</text>
+          <text x="495" y="135" fill="#FFB800" font-size="11" font-family="monospace">{</text>
+          <text x="510" y="153" fill="#E0E0E0" font-size="11" font-family="monospace">"position":</text>
+          <text x="510" y="171" fill="#4FC3F7" font-size="11" font-family="monospace">{x:0.12,y:1.6,z:2.85},</text>
+          <text x="510" y="195" fill="#E0E0E0" font-size="11" font-family="monospace">"rotation":</text>
+          <text x="510" y="213" fill="#4FC3F7" font-size="11" font-family="monospace">{x:0,y:-45,z:0}</text>
+          <text x="495" y="231" fill="#FFB800" font-size="11" font-family="monospace">}</text>
+          <text x="580" y="265" text-anchor="middle" fill="#888" font-size="11">→ WebSocket で送信</text>
+          <!-- Step badge -->
+          <g>
+            <rect x="280" y="50" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="360" y="66" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ① getAttribute で取得
+            </text>
+            <text x="360" y="66" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ② オブジェクト構築
+            </text>
+            <text x="360" y="66" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ JSON.stringify でシリアライズ
+            </text>
+            <text x="360" y="66" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ socket.emit('move')
+            </text>
+          </g>
+          <!-- Highlight on camera -->
+          <rect x="34" y="74" width="212" height="212" rx="14" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Moving data flow -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <rect width="120" height="36" rx="8" fill="#1a2e0a" stroke="#FFB800" stroke-width="2">
+              <animate attributeName="x" values="245;420" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              <animate attributeName="y" values="165;165" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+            </rect>
+            <text font-size="11" fill="#FFB800" font-weight="700" text-anchor="middle">
+              <animate attributeName="x" values="305;480" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              <animate attributeName="y" values="188;188" keyTimes="0;1" dur="3.1s" begin="2.5s" repeatCount="indefinite"/>
+              { position, rotation }
+            </text>
+          </g>
+          <!-- Highlight on JSON box -->
+          <rect x="474" y="74" width="212" height="212" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Outgoing arrow at step 4 -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <line x1="580" y1="285" x2="580" y2="320" stroke="#FF5252" stroke-width="3"/>
+            <polygon points="572,320 588,320 580,335" fill="#FF5252"/>
+          </g>
+          <!-- Bottom legend -->
+          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 青=A-Frame オブジェクト / 黄=送信中パケット / 緑=シリアライズ済み JSON / 赤=WebSocket</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.4 他ユーザのアバター生成 -->
     <div class="concept-box">
       <h4>1.4 他ユーザのアバター生成と更新</h4>
       <p>他のユーザから位置データを受信したとき、そのユーザのアバターがまだ存在しなければ<strong>新規生成</strong>し、存在すれば<strong>位置を更新</strong>します。</p>
-      <pre><span class="code-label">JavaScript（概念コード）</span>
-<span class="cmt">// 他ユーザの位置データを受信したとき</span>
+      <p style="font-size:0.92rem;color:#aaa;margin-bottom:0.6rem">処理を「<strong>探す</strong>」「<strong>無ければ作る</strong>」「<strong>位置を反映する</strong>」の3つの関数に分解すると、各ステップが何をしているか明確になります。</p>
+      <pre><span class="code-label">JavaScript（概念コード ── 関数に分割した版）</span>
+<span class="cmt">// ① 既存アバターを ID で探す</span>
+<span class="kw">function</span> <span class="fn">findAvatar</span>(userId) {
+  <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + userId;
+  <span class="kw">return</span> document.<span class="fn">getElementById</span>(avatarId);
+}
+
+<span class="cmt">// ② アバターが無ければ新規作成して scene に追加</span>
+<span class="kw">function</span> <span class="fn">createAvatar</span>(userId, color) {
+  <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + userId;
+  <span class="kw">var</span> avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, avatarId);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, color);
+  scene.<span class="fn">appendChild</span>(avatar);
+  <span class="kw">return</span> avatar;
+}
+
+<span class="cmt">// ③ 位置と回転を反映する</span>
+<span class="kw">function</span> <span class="fn">applyTransform</span>(avatar, position, rotation) {
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, position);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, rotation);
+}
+
+<span class="cmt">// メイン処理: 「探す → 無ければ作る → 反映する」</span>
 socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class="kw">function</span>(data) {
-  <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(<span class="str">'avatar-'</span> + data.id);
-  <span class="kw">if</span> (!avatar) {
-    <span class="cmt">// アバターがなければ新規作成</span>
-    avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
-    avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, <span class="str">'avatar-'</span> + data.id);
-    avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
-    scene.<span class="fn">appendChild</span>(avatar);
+  <span class="kw">var</span> userId = data.id;                       <span class="cmt">// 中間変数で読みやすく</span>
+  <span class="kw">var</span> position = data.position;
+  <span class="kw">var</span> rotation = data.rotation;
+  <span class="kw">var</span> color = data.color;
+
+  <span class="kw">var</span> avatar = <span class="fn">findAvatar</span>(userId);
+
+  <span class="kw">var</span> isFirstTime = !avatar;
+  <span class="kw">if</span> (isFirstTime) {
+    avatar = <span class="fn">createAvatar</span>(userId, color);
   }
-  <span class="cmt">// 位置と回転を更新</span>
-  avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
-  avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, data.rotation);
+
+  <span class="fn">applyTransform</span>(avatar, position, rotation);
 });</pre>
+
+      <!-- Diagram 3: 補間（Linear vs Slerp） animation -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">補間（Interpolation）── Linear と Slerp の違い</text>
+          <!-- Top: Linear interpolation lane -->
+          <text x="60" y="70" fill="#4FC3F7" font-weight="700" font-size="13">Linear 線形補間（位置）</text>
+          <!-- Track for linear -->
+          <line x1="100" y1="110" x2="620" y2="110" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
+          <!-- Endpoints -->
+          <circle cx="100" cy="110" r="9" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="100" y="135" text-anchor="middle" fill="#76B900" font-size="11">受信 t=0</text>
+          <circle cx="620" cy="110" r="9" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="620" y="135" text-anchor="middle" fill="#76B900" font-size="11">受信 t=100ms</text>
+          <!-- Moving box on linear -->
+          <rect width="22" height="22" rx="4" fill="#4FC3F7" stroke="#fff" stroke-width="1.5">
+            <animate attributeName="x" values="89;609;89" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="99;99;99" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Step badge top -->
+          <rect x="490" y="55" width="190" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="71" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="700">① 受信間を直線で埋める</text>
+          <!-- Middle: Slerp lane -->
+          <text x="60" y="180" fill="#FFB800" font-weight="700" font-size="13">Slerp 球面線形補間（回転）</text>
+          <!-- Arc for slerp -->
+          <path d="M 100 240 A 260 130 0 0 1 620 240" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
+          <circle cx="100" cy="240" r="9" fill="#1a1404" stroke="#FFB800" stroke-width="2"/>
+          <text x="100" y="265" text-anchor="middle" fill="#FFB800" font-size="11">回転 0°</text>
+          <circle cx="620" cy="240" r="9" fill="#1a1404" stroke="#FFB800" stroke-width="2"/>
+          <text x="620" y="265" text-anchor="middle" fill="#FFB800" font-size="11">回転 90°</text>
+          <!-- Moving rotating object along arc -->
+          <g>
+            <rect x="-11" y="-11" width="22" height="22" rx="4" fill="#FFB800" stroke="#fff" stroke-width="1.5">
+              <animateMotion path="M 100 240 A 260 130 0 0 1 620 240" dur="14s" repeatCount="indefinite" rotate="auto"/>
+            </rect>
+          </g>
+          <!-- Step badge middle -->
+          <rect x="490" y="170" width="190" height="22" rx="11" fill="#1a1404" stroke="#FFB800" stroke-width="1"/>
+          <text x="585" y="186" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">② 球面に沿って滑らかに回転</text>
+          <!-- Step badges showing keyframes -->
+          <g>
+            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ 100ms ごとの受信を 60fps（16ms）の描画に「水増し」する処理
+            </text>
+            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ Linear: 位置 = start + (end - start) × t
+            </text>
+            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ⑤ Slerp: 回転は「四元数 (Quaternion)」で球面補間
+            </text>
+            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ⑥ どちらも見た目を滑らかにする
+            </text>
+          </g>
+          <!-- Bottom legend -->
+          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 青=Linear（位置）/ 黄=Slerp（回転）/ 緑=受信点（飛び飛びデータ）</text>
+        </svg>
+      </div>
+
 <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
   <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
   <p style="color:#ccc;font-size:0.9rem">アバターの色 (<code>data.color</code>) を <code>"#FF5252"</code> から別の色に変えて、3D空間内のアバターの見た目が変わることを確認してみよう。</p>
@@ -583,6 +880,65 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
         <li>この ID を使って「誰の位置データか」「誰のアバターか」を識別する</li>
         <li>サーバ側でユーザ一覧を管理し、新規接続・切断を追跡する</li>
       </ul>
+
+      <!-- Diagram 4: 遅延補正（Prediction / Dead Reckoning） animation -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">遅延補正 ── プレディクション / デッドレコニング</text>
+          <!-- Timeline axis -->
+          <line x1="80" y1="200" x2="660" y2="200" stroke="#333" stroke-width="2"/>
+          <text x="80" y="225" fill="#888" font-size="11">t=0</text>
+          <text x="660" y="225" fill="#888" font-size="11" text-anchor="end">t=400ms</text>
+          <!-- Received packets (tick marks) -->
+          <line x1="80"  y1="195" x2="80"  y2="205" stroke="#76B900" stroke-width="3"/>
+          <line x1="225" y1="195" x2="225" y2="205" stroke="#76B900" stroke-width="3"/>
+          <line x1="370" y1="195" x2="370" y2="205" stroke="#FF5252" stroke-width="3"/>
+          <line x1="515" y1="195" x2="515" y2="205" stroke="#FF5252" stroke-width="3"/>
+          <text x="80"  y="245" text-anchor="middle" fill="#76B900" font-size="10">受信</text>
+          <text x="225" y="245" text-anchor="middle" fill="#76B900" font-size="10">受信</text>
+          <text x="370" y="245" text-anchor="middle" fill="#FF5252" font-size="10">遅延</text>
+          <text x="515" y="245" text-anchor="middle" fill="#FF5252" font-size="10">遅延</text>
+          <!-- Actual real avatar position (dashed) -->
+          <text x="60" y="100" fill="#76B900" font-size="11" font-weight="700">実際の位置</text>
+          <line x1="80" y1="120" x2="660" y2="120" stroke="#76B900" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+          <circle r="9" fill="#76B900" stroke="#fff" stroke-width="1.5">
+            <animate attributeName="cx" values="80;660;80" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="120;120;120" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Naive: stops at last received packet -->
+          <text x="60" y="160" fill="#FF5252" font-size="11" font-weight="700">何もしない</text>
+          <circle cy="160" r="8" fill="#FF5252" stroke="#fff" stroke-width="1.5">
+            <animate attributeName="cx" values="80;225;225;370;370;515;515;80" keyTimes="0;0.18;0.40;0.42;0.65;0.67;0.95;1" dur="14s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Predicted: continues at last velocity -->
+          <text x="60" y="290" fill="#4FC3F7" font-size="11" font-weight="700">プレディクション</text>
+          <circle cy="310" r="8" fill="#4FC3F7" stroke="#fff" stroke-width="1.5">
+            <animate attributeName="cx" values="80;225;370;515;660;515;370;225;80" keyTimes="0;0.18;0.40;0.60;0.50;0.70;0.85;0.95;1" dur="14s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Step badges -->
+          <g>
+            <text x="360" y="70" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ① パケットが定期到着 (100msごと) → アバターは緑のとおり動く
+            </text>
+            <text x="360" y="70" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ② パケット遅延発生 → 「何もしない」と赤いアバターが止まる
+            </text>
+            <text x="360" y="70" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ プレディクション: 直前の速度から「たぶんこの辺」と推測
+            </text>
+            <text x="360" y="70" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ 新パケット到着で正解と少しずれる → 滑らかに補正
+            </text>
+          </g>
+          <!-- Bottom legend -->
+          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 緑=実際の位置 / 赤=何もしないと停止 / 青=プレディクションで継続</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.6 ユーザ離脱時のクリーンアップ -->
@@ -598,6 +954,114 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
         <tr><td><strong>move</strong></td><td>受信した位置データを他の全員に転送</td><td>受信したデータでアバターを生成/更新</td></tr>
         <tr><td><strong>disconnect</strong></td><td>ユーザを一覧から削除、全員に通知</td><td>該当アバターをシーンから削除</td></tr>
       </table>
+
+      <!-- Diagram 5: マルチクライアント状態同期 animation -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 380" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">マルチクライアント状態同期 ── 接続・移動・離脱</text>
+          <!-- Server -->
+          <rect x="280" y="55" width="160" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="360" y="78" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">サーバ users={}</text>
+          <text x="360" y="95" text-anchor="middle" fill="#E0E0E0" font-size="11" font-weight="600">
+            <animate attributeName="opacity" values="1;1;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </text>
+          <text x="360" y="95" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            { A: red }
+          </text>
+          <text x="360" y="95" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            { A: red, B: yellow }
+          </text>
+          <text x="360" y="95" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            { A: red, B: yellow, C: green }
+          </text>
+          <text x="360" y="95" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="600" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            { A: red, C: green }（B 離脱）
+          </text>
+          <!-- Step badge -->
+          <g>
+            <rect x="40" y="55" width="200" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="140" y="71" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ① A 接続 → connection
+            </text>
+            <text x="140" y="71" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ② B 接続 → 色付与
+            </text>
+            <text x="140" y="71" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ C 接続 → 3人で同期
+            </text>
+            <text x="140" y="71" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ B 離脱 → userLeft
+            </text>
+          </g>
+          <!-- Client A (always present) -->
+          <rect x="60" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="2"/>
+          <text x="140" y="205" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">ユーザ A（赤）</text>
+          <text x="140" y="225" text-anchor="middle" fill="#888" font-size="10">表示中のアバター:</text>
+          <text x="140" y="245" text-anchor="middle" fill="#E0E0E0" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            （自分のみ）
+          </text>
+          <text x="140" y="245" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            B (黄)
+          </text>
+          <text x="140" y="245" text-anchor="middle" fill="#FFFFFF" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            B (黄), C (緑)
+          </text>
+          <text x="140" y="245" text-anchor="middle" fill="#76B900" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            C (緑) のみ
+          </text>
+          <!-- Client B (appears step 2, disappears step 4) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <rect x="280" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+            <text x="360" y="205" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">ユーザ B（黄）</text>
+            <text x="360" y="225" text-anchor="middle" fill="#888" font-size="10">表示中のアバター:</text>
+            <text x="360" y="245" text-anchor="middle" fill="#FFFFFF" font-size="11">A (赤), C (緑)</text>
+          </g>
+          <!-- Client C (appears step 3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            <rect x="500" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+            <text x="580" y="205" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">ユーザ C（緑）</text>
+            <text x="580" y="225" text-anchor="middle" fill="#888" font-size="10">表示中のアバター:</text>
+            <text x="580" y="245" text-anchor="middle" fill="#FFFFFF" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              A (赤), B (黄)
+            </text>
+            <text x="580" y="245" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              A (赤) のみ
+            </text>
+          </g>
+          <!-- Connecting lines (static) -->
+          <line x1="140" y1="180" x2="320" y2="105" stroke="#444" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="360" y1="180" x2="360" y2="105" stroke="#444" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="580" y1="180" x2="400" y2="105" stroke="#444" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- Event labels -->
+          <text x="360" y="290" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            B が io.emit('userJoined', { id: B })
+          </text>
+          <text x="360" y="290" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            disconnect → io.emit('userLeft', { id: B }) → 全員が B のアバター削除
+          </text>
+          <!-- Bottom legend -->
+          <rect x="60" y="350" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="361" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 赤=ユーザA / 黄=ユーザB / 緑=ユーザC ── サーバの users マップが状態の真実</text>
+        </svg>
+      </div>
     </div>
 
 
@@ -734,13 +1198,16 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 
     <span class="cmt">// 100msごとにカメラ位置を送信</span>
     <span class="fn">setInterval</span>(<span class="kw">function</span>() {
-      <span class="kw">if</span> (!camera) <span class="kw">return</span>;
-      <span class="kw">var</span> pos = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
-      <span class="kw">var</span> rot = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
-      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
-        position: { x: pos.x, y: pos.y, z: pos.z },
-        rotation: { x: rot.x, y: rot.y, z: rot.z }
-      });
+      <span class="kw">if</span> (!camera) {
+        <span class="kw">return</span>;
+      }
+      <span class="kw">var</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
+      <span class="kw">var</span> rotation = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
+      <span class="kw">var</span> moveData = {
+        position: { x: position.x, y: position.y, z: position.z },
+        rotation: { x: rotation.x, y: rotation.y, z: rotation.z }
+      };
+      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, moveData);
     }, <span class="num">100</span>);
   <span class="kw">&lt;/script&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
@@ -851,13 +1318,16 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 
     <span class="cmt">// 100msごとにカメラ位置を送信</span>
     <span class="fn">setInterval</span>(<span class="kw">function</span>() {
-      <span class="kw">if</span> (!camera) <span class="kw">return</span>;
-      <span class="kw">var</span> pos = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
-      <span class="kw">var</span> rot = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
-      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
-        position: { x: pos.x, y: pos.y, z: pos.z },
-        rotation: { x: rot.x, y: rot.y, z: rot.z }
-      });
+      <span class="kw">if</span> (!camera) {
+        <span class="kw">return</span>;
+      }
+      <span class="kw">var</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
+      <span class="kw">var</span> rotation = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
+      <span class="kw">var</span> moveData = {
+        position: { x: position.x, y: position.y, z: position.z },
+        rotation: { x: rotation.x, y: rotation.y, z: rotation.z }
+      };
+      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, moveData);
     }, <span class="num">100</span>);
 
     <span class="cmt">// 他ユーザの位置データを受信 → アバター生成/更新</span>
@@ -1251,6 +1721,23 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
       </div>
     </details>
 
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題1 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p>ユーザAが3D空間内で前方（z軸マイナス方向）に1単位だけ移動した場合、各手順で何が起きるかを具体的にトレースした例です。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">手順1: ユーザA がWキーを押す → カメラ position が { x:0, y:1.6, z:3 } → { x:0, y:1.6, z:2 } に変化
+手順2: setInterval が100ms後に発火 → socket.emit('move', { position:{x:0,y:1.6,z:2}, rotation:{x:0,y:0,z:0} })
+手順3: サーバが受信 → socket.broadcast.emit('moved', { id:'xK7-2abc', position:{...}, rotation:{...}, color:'#FF5252' })
+手順4: ユーザB が受信 → document.getElementById('avatar-xK7-2abc') が存在 → setAttribute('position', {x:0,y:1.6,z:2})
+手順5: A-Frame が次フレームで再描画 → 赤い箱が z=3 から z=2 に移動して見える</pre>
+        <p><strong>重要ポイント:</strong> サーバは <code>broadcast.emit</code> を使うことで「送信者本人以外の全員」に転送します。これにより、ユーザA は自分の箱を自分の視界に作る必要がなく、カメラに重なって見えなくなる問題を回避できます。また、ユーザB側ではアバター ID（<code>avatar-</code> + <code>socket.id</code>）で一意性を担保し、初回受信時のみ <code>createElement</code> で生成、それ以降は <code>setAttribute</code> で位置を更新するだけ。これにより毎秒10回（100msごと）の更新でも DOM 操作が最小限に抑えられます。</p>
+      </div>
+    </details>
+    </div>
+
+    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="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"></div>

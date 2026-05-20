@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,10 +446,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -480,20 +492,20 @@ pre { position: relative; }
           <!-- Ambient -->
           <rect x="10" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
           <text x="75" y="52" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">ambient</text>
-          <text x="75" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">環境光</text>
-          <text x="75" y="90" text-anchor="middle" fill="#999" font-size="9">全方向に均一</text>
+          <text x="75" y="70" text-anchor="middle" fill="#E0E0E0" font-size="11">環境光</text>
+          <text x="75" y="90" text-anchor="middle" fill="#999" font-size="11">全方向に均一</text>
           <text x="75" y="102" text-anchor="middle" fill="#FF5252" font-size="8">影: 不可</text>
           <!-- Directional -->
           <rect x="150" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
           <text x="215" y="52" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">directional</text>
-          <text x="215" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">平行光源</text>
+          <text x="215" y="70" text-anchor="middle" fill="#E0E0E0" font-size="11">平行光源</text>
           <line x1="180" y1="85" x2="250" y2="85" stroke="#FFB800" stroke-width="1.5" marker-end="url(#lt-arr)"/>
           <line x1="180" y1="92" x2="250" y2="92" stroke="#FFB800" stroke-width="1.5" marker-end="url(#lt-arr)"/>
           <text x="215" y="105" text-anchor="middle" fill="#76B900" font-size="8">影: 可能</text>
           <!-- Point -->
           <rect x="290" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
           <text x="355" y="52" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">point</text>
-          <text x="355" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">点光源</text>
+          <text x="355" y="70" text-anchor="middle" fill="#E0E0E0" font-size="11">点光源</text>
           <circle cx="355" cy="90" r="4" fill="#4FC3F7"/>
           <line x1="355" y1="86" x2="355" y2="78" stroke="#4FC3F7" stroke-width="1"/>
           <line x1="355" y1="94" x2="355" y2="102" stroke="#4FC3F7" stroke-width="1"/>
@@ -503,7 +515,7 @@ pre { position: relative; }
           <!-- Spot -->
           <rect x="430" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
           <text x="495" y="52" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">spot</text>
-          <text x="495" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">スポットライト</text>
+          <text x="495" y="70" text-anchor="middle" fill="#E0E0E0" font-size="11">スポットライト</text>
           <circle cx="495" cy="82" r="3" fill="#E040FB"/>
           <line x1="485" y1="85" x2="475" y2="105" stroke="#E040FB" stroke-width="1" opacity="0.5"/>
           <line x1="505" y1="85" x2="515" y2="105" stroke="#E040FB" stroke-width="1" opacity="0.5"/>
@@ -512,13 +524,13 @@ pre { position: relative; }
           <!-- Hemisphere -->
           <rect x="570" y="30" width="130" height="80" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
           <text x="635" y="52" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">hemisphere</text>
-          <text x="635" y="70" text-anchor="middle" fill="#E0E0E0" font-size="10">半球光</text>
+          <text x="635" y="70" text-anchor="middle" fill="#E0E0E0" font-size="11">半球光</text>
           <rect x="610" y="80" width="50" height="12" rx="2" fill="#87CEEB" opacity="0.3"/>
           <text x="635" y="89" text-anchor="middle" fill="#87CEEB" font-size="7">空色</text>
           <rect x="610" y="94" width="50" height="12" rx="2" fill="#5C3317" opacity="0.3"/>
           <text x="635" y="103" text-anchor="middle" fill="#A0522D" font-size="7">地面色</text>
           <!-- Label -->
-          <text x="350" y="145" text-anchor="middle" fill="#666" font-size="10">A-Frame の5種類のライト ── 用途に合わせて使い分ける</text>
+          <text x="350" y="145" text-anchor="middle" fill="#666" font-size="11">A-Frame の5種類のライト ── 用途に合わせて使い分ける</text>
           <defs>
             <marker id="lt-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#FFB800"/></marker>
           </defs>
@@ -695,42 +707,616 @@ pre { position: relative; }
       <h2>例題とトレース演習</h2>
     </div>
 
-    <!-- Example -->
+    <p style="margin-bottom:1.5rem">ライト・カメラの基本概念を <strong>5つの例題</strong> で順番に確認します。各例題には<strong>段階的に切り替わるアニメーション図</strong>と<strong>1分でできる「やってみよう」</strong>があり、最後に解答例が用意されています。</p>
+
+    <!-- ====== 例題 1: AmbientLight 追加 ====== -->
     <div class="card example">
       <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>ライトの有無による見え方の違いを読む</h3>
+        <span class="tag tag-example">例題 1</span>
+        <h3>AmbientLight（環境光）を追加する</h3>
       </div>
-      <p>以下の3パターンのコードで、同じ白い球がどう見えるか確認しましょう。</p>
+      <p><strong>背景:</strong> ライトを1つも書かないとデフォルト光が付き、自分で <code>&lt;a-light&gt;</code> を1つ追加するとデフォルトは無効化されます。ここでは <code>ambient</code>（環境光）<strong>だけ</strong>を追加し、シーン全体がどう変わるかを確認します。</p>
       <pre><span class="code-label">HTML</span>
-<span class="cmt">&lt;!-- パターンA: ライトなし（A-Frameデフォルト） --&gt;</span>
+<span class="cmt">&lt;!-- パターンA: ライト指定なし（デフォルト ambient+directional が自動追加される） --&gt;</span>
 <span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> radius=<span class="str">"1"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
   <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span>
 
-<span class="cmt">&lt;!-- パターンB: 環境光のみ --&gt;</span>
+<span class="cmt">&lt;!-- パターンB: AmbientLight だけを明示追加（デフォルトの平行光は消える） --&gt;</span>
 <span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.5"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-  <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-<span class="kw">&lt;/a-scene&gt;</span>
-
-<span class="cmt">&lt;!-- パターンC: 環境光 + 平行光源 --&gt;</span>
-<span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-  <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.8"</span>
-           position=<span class="str">"-1 2 1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+  <span class="cmt">&lt;!-- 環境光: 全方向から均一にあたる下地の光 --&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#FFFFFF"</span> intensity=<span class="str">"0.5"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> radius=<span class="str">"1"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
   <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
 
-      <table>
-        <tr><th>パターン</th><th>使用ライト</th><th>球の見え方</th></tr>
-        <tr><td>A</td><td>なし（デフォルト自動追加）</td><td>明るい部分と暗い部分ができる（デフォルトの ambient + directional）</td></tr>
-        <tr><td>B</td><td>ambient のみ</td><td>全体が均一な灰白色。立体感がなく平面的に見える。</td></tr>
-        <tr><td>C</td><td>ambient + directional</td><td>光の当たる面は明るく、反対側は暗い。立体感がある。</td></tr>
-      </table>
+      <!-- 例題1 アニメSVG: AmbientLight追加の前後 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">AmbientLight を追加すると暗い面まで明るくなる</text>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="500" y="48" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="580" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+              ① 光なし → 真っ暗
+            </text>
+            <text x="580" y="64" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+              ② デフォルト平行光のみ
+            </text>
+            <text x="580" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+              ③ Ambient 0.3 追加
+            </text>
+            <text x="580" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+              ④ Ambient 0.7 で全体明るく
+            </text>
+          </g>
+
+          <!-- Sphere with highlight ring -->
+          <circle cx="340" cy="200" r="92" fill="none" stroke="#76B900" stroke-width="3" stroke-dasharray="4 4" opacity="0.6">
+            <animate attributeName="r" values="92;96;92" dur="3s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Sphere body: brightness changes -->
+          <circle cx="340" cy="200" r="80" fill="#0A0A0A">
+            <animate attributeName="fill" values="#0A0A0A;#0A0A0A;#2a2a2a;#2a2a2a;#666666;#666666;#cccccc;#cccccc" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Top highlight (directional) -->
+          <ellipse cx="316" cy="178" rx="32" ry="28" fill="#FFFFFF" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.85;0.85;0.7;0.7;0.5;0.5" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+          </ellipse>
+
+          <!-- Directional light arrow (top-left, appears from step 2) -->
+          <g>
+            <line x1="200" y1="120" x2="270" y2="170" stroke="#FFB800" stroke-width="2.5" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0.8;0.8;0.6;0.6" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+            </line>
+            <polygon points="262,162 278,170 268,178" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0.8;0.8;0.6;0.6" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+            </polygon>
+            <text x="180" y="110" fill="#FFB800" font-size="11" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0.8;0.8;0.6;0.6" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+              directional
+            </text>
+          </g>
+
+          <!-- Ambient (rays from all sides) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.18;0.20;0.40;0.42;0.62;0.64;1" dur="14s" repeatCount="indefinite"/>
+            <line x1="450" y1="120" x2="395" y2="170" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="490" y1="200" x2="430" y2="200" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="450" y1="280" x2="395" y2="240" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="340" y1="290" x2="340" y2="290" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="220" y1="280" x2="285" y2="240" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="190" y1="200" x2="250" y2="200" stroke="#4FC3F7" stroke-width="2"/>
+            <text x="460" y="115" fill="#4FC3F7" font-size="11" font-weight="700">ambient (全方向)</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="60" y="328" width="560" height="36" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="340" y="352" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+              ambient = 全方向の下地光 / directional = 一方向の平行光 / 両方使うのが基本
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">パターンBの <code>intensity</code> を <code>"0.2"</code> → <code>"0.8"</code> → <code>"1.5"</code> と段階的に変えて、球の明るさがどう変化するか確認しよう。</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ 大きすぎる値（例: 3.0）にすると、白飛びして立体感が完全に失われることも観察してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> intensity を 0.2 / 0.8 / 1.5 にしたときの見え方の違いを1〜2文で書く</div></div>
+      </div>
+
+      <div class="concept-box" style="border-left:4px solid #FFB800;margin-top:1.5rem">
+        <h4>Q&amp;A: なぜ ambient だけだと「のっぺり」して見えるのか？</h4>
+        <p style="color:#ccc;font-size:0.9rem"><strong>読み方:</strong> ambient = アンビエント / intensity = インテンシティ（強度） / light = ライト（光）</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>具体例:</strong> 曇天の屋外を想像してみよう。太陽の位置が分からないため、影もなく、立体感も弱い。それが ambient だけの状態です。一方、晴天は太陽の方向がはっきりしているため、影と明暗で立体感が生まれます（= directional の役割）。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>結論:</strong> ambient は<strong>全方向から均一にあたる</strong>ため、面ごとの明暗差が出ない。立体感を出すには <code>directional</code> や <code>point</code> を組み合わせる必要があります。</p>
+      </div>
+    </div>
+
+    <!-- ====== 例題 2: DirectionalLight の方向変更 ====== -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題 2</span>
+        <h3>DirectionalLight（平行光源）の方向を変える</h3>
+      </div>
+      <p><strong>背景:</strong> <code>directional</code> は <code>position</code> 属性で<strong>光の到来方向</strong>を表します（座標 → 原点方向に平行光が届く）。同じシーンでも、光が左上から来るか右下から来るかで影と立体感が大きく変わります。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
+  <span class="cmt">&lt;!-- 環境光（下地）+ 平行光源（影付き） --&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+  <span class="cmt">&lt;!-- position を変えて方向を変化させる --&gt;</span>
+  <span class="cmt">&lt;!-- 左上から: position="-3 4 2" --&gt;</span>
+  <span class="cmt">&lt;!-- 真上から: position="0 5 0"  --&gt;</span>
+  <span class="cmt">&lt;!-- 右下から: position="3 1 -2" --&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.9"</span>
+           position=<span class="str">"-3 4 2"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+  <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -4"</span> color=<span class="str">"#FF5252"</span>
+         shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+  <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+           width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#CCC"</span>
+           shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <!-- 例題2 アニメSVG: DirectionalLightの方向変更 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="16">DirectionalLight の position を変えると影が動く</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="490" y="48" width="170" height="22" rx="11" fill="#2e1a0a" stroke="#FFB800" stroke-width="1"/>
+            <text x="575" y="64" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+              ① 左上 (-3,4,2)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+              ② 真上 (0,5,0)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+              ③ 右下 (3,1,-2)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+              ④ 影の向きを比較
+            </text>
+          </g>
+
+          <!-- Ground plane -->
+          <line x1="100" y1="280" x2="580" y2="280" stroke="#888" stroke-width="2"/>
+          <rect x="100" y="280" width="480" height="40" fill="#222"/>
+
+          <!-- Box (cube center) with highlight ring -->
+          <rect x="305" y="210" width="70" height="70" rx="4" fill="none" stroke="#FFB800" stroke-width="3" stroke-dasharray="4 4" opacity="0.5">
+            <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="305" y="210" width="70" height="70" fill="#FF5252" stroke="#aa3030" stroke-width="2"/>
+
+          <!-- Light source position 1: top-left -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0.4;0.4" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+            <circle cx="150" cy="100" r="10" fill="#FFEB3B" stroke="#FFB800" stroke-width="2"/>
+            <line x1="160" y1="108" x2="300" y2="210" stroke="#FFB800" stroke-width="2"/>
+            <line x1="170" y1="100" x2="310" y2="200" stroke="#FFB800" stroke-width="1.5" opacity="0.6"/>
+            <line x1="150" y1="115" x2="290" y2="220" stroke="#FFB800" stroke-width="1.5" opacity="0.6"/>
+            <text x="105" y="92" fill="#FFB800" font-size="10" font-weight="700">(-3,4,2)</text>
+          </g>
+          <!-- Shadow 1: right side -->
+          <polygon points="375,280 460,280 410,260 375,260" fill="#000" opacity="0">
+            <animate attributeName="opacity" values="0.6;0.6;0;0;0;0;0.3;0.3" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+          </polygon>
+
+          <!-- Light source position 2: top center -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0.4;0.4" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+            <circle cx="340" cy="80" r="10" fill="#FFEB3B" stroke="#FFB800" stroke-width="2"/>
+            <line x1="340" y1="92" x2="340" y2="210" stroke="#76B900" stroke-width="2"/>
+            <line x1="325" y1="92" x2="320" y2="210" stroke="#76B900" stroke-width="1.5" opacity="0.6"/>
+            <line x1="355" y1="92" x2="360" y2="210" stroke="#76B900" stroke-width="1.5" opacity="0.6"/>
+            <text x="305" y="72" fill="#76B900" font-size="10" font-weight="700">(0,5,0)</text>
+          </g>
+          <!-- Shadow 2: small directly under -->
+          <rect x="310" y="280" width="60" height="6" fill="#000" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.6;0.6;0;0;0.3;0.3" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Light source position 3: bottom-right -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0.4;0.4" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+            <circle cx="540" cy="220" r="10" fill="#FFEB3B" stroke="#FFB800" stroke-width="2"/>
+            <line x1="530" y1="220" x2="380" y2="220" stroke="#4FC3F7" stroke-width="2"/>
+            <line x1="540" y1="210" x2="380" y2="210" stroke="#4FC3F7" stroke-width="1.5" opacity="0.6"/>
+            <line x1="530" y1="235" x2="380" y2="235" stroke="#4FC3F7" stroke-width="1.5" opacity="0.6"/>
+            <text x="500" y="248" fill="#4FC3F7" font-size="10" font-weight="700">(3,1,-2)</text>
+          </g>
+          <!-- Shadow 3: long shadow to left -->
+          <polygon points="305,280 200,280 240,260 305,260" fill="#000" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0.6;0.6;0.3;0.3" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="16s" repeatCount="indefinite"/>
+          </polygon>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="60" y="328" width="560" height="36" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="340" y="352" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+              position は「光源の位置」/ 光は (position → 原点) の方向に平行に進む / 影は反対側に伸びる
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">directional light の <code>position</code> を <code>"-3 4 2"</code> → <code>"0 5 0"</code> → <code>"3 1 -2"</code> の3パターンに変えて、箱と床の影の向きと長さがどう変わるか観察しよう。</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ 真上 (0,5,0) からの光だと影は箱の真下に小さくでき、低い位置からの光だと長い影ができることに注目。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 3つの position に対する影の向き・長さの違いを表で書く（"-3 4 2" / "0 5 0" / "3 1 -2"）</div></div>
+      </div>
+
+      <div class="concept-box" style="border-left:4px solid #FFB800;margin-top:1.5rem">
+        <h4>Q&amp;A: position は「光源の位置」？ それとも「光の方向」？</h4>
+        <p style="color:#ccc;font-size:0.9rem"><strong>読み方:</strong> directional = ディレクショナル（方向性のある） / position = ポジション（位置） / cast shadow = キャストシャドウ（影を投射する）</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>具体例:</strong> 太陽の位置を考えると分かりやすい。太陽が東 (3,1,-2) にあるとき、地面の物体の影は西側に長く伸びる。お昼に太陽が真上 (0,5,0) にあるとき、影は足元に短く出る。これと同じ仕組みです。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>結論:</strong> <code>directional</code> の <code>position</code> は<strong>「光源がどこにあるか」</strong>を表します。光自体は (position → 原点) の方向に平行に進むため、position は<strong>光の到来方向を決める</strong>役割になります。</p>
+      </div>
+    </div>
+
+    <!-- ====== 例題 3: PointLight 光球の移動 ====== -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題 3</span>
+        <h3>PointLight（点光源）の光球を移動させる</h3>
+      </div>
+      <p><strong>背景:</strong> <code>point</code> は<strong>全方向に光を放つ電球</strong>のような光源で、<code>distance</code> で減衰範囲を指定します。光源そのものは見えないので、同じ位置に小さな <code>&lt;a-sphere material="shader: flat"&gt;</code> を置いて<strong>「光球」</strong>として可視化するのが定番です。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+
+  <span class="cmt">&lt;!-- 点光源（暖色の電球）+ 同位置の光球（可視化用） --&gt;</span>
+  <span class="kw">&lt;a-light</span> <span class="kw">id=</span><span class="str">"bulb"</span>
+           type=<span class="str">"point"</span> color=<span class="str">"#FFE082"</span> intensity=<span class="str">"1.2"</span>
+           distance=<span class="str">"8"</span> position=<span class="str">"-2 2 -3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+  <span class="kw">&lt;a-sphere</span> <span class="kw">id=</span><span class="str">"bulb-vis"</span>
+           position=<span class="str">"-2 2 -3"</span> radius=<span class="str">"0.15"</span>
+           color=<span class="str">"#FFE082"</span>
+           material=<span class="str">"shader: flat"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+
+  <span class="cmt">&lt;!-- 照らされる対象（白い箱） --&gt;</span>
+  <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -4"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+  <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
+           width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <!-- 例題3 アニメSVG: PointLightの光球移動 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="16">PointLight の光球を動かすと当たる面が変わる</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="490" y="48" width="170" height="22" rx="11" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="1"/>
+            <text x="575" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+              ① 左 (-3,1,-3)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FFE082" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+              ② 真上 (0,3,-3)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+              ③ 右 (3,1,-3)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+              ④ distance=8 の減衰範囲
+            </text>
+          </g>
+
+          <!-- Ground -->
+          <line x1="100" y1="290" x2="580" y2="290" stroke="#888" stroke-width="2"/>
+
+          <!-- Target box -->
+          <rect x="305" y="220" width="70" height="70" fill="#cccccc" stroke="#888" stroke-width="2">
+            <animate attributeName="fill" values="#888;#888;#cccccc;#cccccc;#888;#888;#666;#666" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Left face brightness -->
+          <rect x="305" y="220" width="20" height="70" fill="#FFE082" opacity="0">
+            <animate attributeName="opacity" values="0.85;0.85;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Top face brightness -->
+          <rect x="305" y="220" width="70" height="20" fill="#FFE082" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.85;0.85;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Right face brightness -->
+          <rect x="355" y="220" width="20" height="70" fill="#FFE082" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0.85;0.85;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Light bulb position 1: left -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="180" cy="240" r="50" fill="#FFE082" opacity="0.15"/>
+            <circle cx="180" cy="240" r="14" fill="#FFE082" stroke="#FFB800" stroke-width="2"/>
+            <text x="155" y="208" fill="#FFE082" font-size="11" font-weight="700">光球 (-3,1,-3)</text>
+          </g>
+          <!-- Light bulb position 2: top -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="340" cy="120" r="50" fill="#FFE082" opacity="0.15"/>
+            <circle cx="340" cy="120" r="14" fill="#FFE082" stroke="#FFB800" stroke-width="2"/>
+            <text x="305" y="100" fill="#FFE082" font-size="11" font-weight="700">光球 (0,3,-3)</text>
+          </g>
+          <!-- Light bulb position 3: right -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="500" cy="240" r="50" fill="#FFE082" opacity="0.15"/>
+            <circle cx="500" cy="240" r="14" fill="#FFE082" stroke="#FFB800" stroke-width="2"/>
+            <text x="465" y="208" fill="#FFE082" font-size="11" font-weight="700">光球 (3,1,-3)</text>
+          </g>
+
+          <!-- Distance range visualization (step 4) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="340" cy="200" r="14" fill="#FFE082" stroke="#FFB800" stroke-width="2"/>
+            <circle cx="340" cy="200" r="120" fill="none" stroke="#FF5252" stroke-width="2" stroke-dasharray="6 4"/>
+            <text x="340" y="80" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">distance=8 の到達範囲</text>
+            <text x="340" y="98" text-anchor="middle" fill="#aaa" font-size="11">外側では光は届かない（0 = 無限）</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="60" y="328" width="560" height="36" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="340" y="352" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+              point は全方向に光を放つ / distance で減衰範囲を制限 / 光源位置を移動すると当たる面が変わる
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">point light と光球（a-sphere）の両方の <code>position</code> を <code>"-2 2 -3"</code> → <code>"0 3 -3"</code> → <code>"2 2 -3"</code> と変えて、箱のどの面が明るくなるか確認しよう。</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ <code>distance="8"</code> を <code>"2"</code> に変更すると、距離2より遠いものは光が届かなくなることも試そう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 光球の3つの位置で、箱の「最も明るい面」がどこになったかを記録</div></div>
+      </div>
+
+      <div class="concept-box" style="border-left:4px solid #FFB800;margin-top:1.5rem">
+        <h4>Q&amp;A: なぜ「光球（可視化用の a-sphere）」が必要なのか？</h4>
+        <p style="color:#ccc;font-size:0.9rem"><strong>読み方:</strong> point light = ポイントライト（点光源） / distance = ディスタンス（距離） / shader: flat = シェーダーフラット（陰影なし）</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>具体例:</strong> 部屋の電球を想像してみよう。電球そのもの（光るガラス球）と、電球から出る光は別物。3Dシーンでも、<code>&lt;a-light&gt;</code> は光だけを発するため見えない。<code>material="shader: flat"</code> の a-sphere を同じ位置に置くと、光に影響されず常に黄色に光るガラス球として表現できます。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>結論:</strong> 光源の位置を視覚的に示すには、<strong>同じ position に flat shader の小さな球</strong>を置く。これがゲームの「ランタン」「松明」表現の基本パターン。</p>
+      </div>
+    </div>
+
+    <!-- ====== 例題 4: PerspectiveCamera vs OrthographicCamera ====== -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題 4</span>
+        <h3>PerspectiveCamera と OrthographicCamera の違い</h3>
+      </div>
+      <p><strong>背景:</strong> A-Frame のデフォルトは <strong>PerspectiveCamera（遠近法カメラ）</strong>で、遠くのものは小さく見えます。一方 <strong>OrthographicCamera（正射影カメラ）</strong>は<strong>距離に関係なく</strong>同じ大きさに見え、設計図や2Dゲーム風の表現に使えます。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- PerspectiveCamera: デフォルト。fov（視野角）で広さを調整 --&gt;</span>
+<span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 3"</span> fov=<span class="str">"80"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+
+<span class="cmt">&lt;!-- OrthographicCamera: camera コンポーネントで type を明示指定 --&gt;</span>
+<span class="cmt">&lt;!-- left/right/top/bottom で表示範囲を指定（カメラから見た範囲） --&gt;</span>
+<span class="kw">&lt;a-entity</span> camera=<span class="str">"active: true"</span>
+          position=<span class="str">"0 1.6 3"</span>
+          camera-ortho=<span class="str">"left: -4; right: 4; top: 3; bottom: -3; near: 0.1; far: 100"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- 比較用シーン: 同じ大きさの球が手前と奥に並ぶ --&gt;</span>
+<span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -2"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+<span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -5"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#4FC3F7"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+<span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -8"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span></pre>
+
+      <!-- 例題4 アニメSVG: Perspective vs Orthographic -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="16">Perspective（遠近法）vs Orthographic（正射影）</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="490" y="48" width="170" height="22" rx="11" fill="#2a0a0a" stroke="#FF5252" stroke-width="1"/>
+            <text x="575" y="64" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+              ① 同じ球を3つ並べる
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+              ② Perspective: 奥は小さい
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+              ③ Orthographic: 全部同じ大きさ
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+              ④ 視錐台 vs 直方体
+            </text>
+          </g>
+
+          <!-- Camera icon (left) -->
+          <g>
+            <rect x="60" y="180" width="40" height="30" fill="#444" stroke="#888" stroke-width="2"/>
+            <polygon points="100,185 100,205 115,200 115,190" fill="#444" stroke="#888" stroke-width="2"/>
+            <text x="80" y="170" text-anchor="middle" fill="#888" font-size="11" font-weight="700">camera</text>
+          </g>
+
+          <!-- Step 1: 3 same-size spheres -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+            <circle cx="220" cy="195" r="32" fill="#FF5252" stroke="#aa3030" stroke-width="2"/>
+            <circle cx="350" cy="195" r="32" fill="#4FC3F7" stroke="#3080a0" stroke-width="2"/>
+            <circle cx="480" cy="195" r="32" fill="#76B900" stroke="#508000" stroke-width="2"/>
+            <text x="220" y="245" text-anchor="middle" fill="#aaa" font-size="11">手前 (z=-2)</text>
+            <text x="350" y="245" text-anchor="middle" fill="#aaa" font-size="11">中央 (z=-5)</text>
+            <text x="480" y="245" text-anchor="middle" fill="#aaa" font-size="11">奥 (z=-8)</text>
+          </g>
+
+          <!-- Step 2: Perspective view (frustum + scaled spheres) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0.5;0.5" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+            <line x1="115" y1="195" x2="540" y2="120" stroke="#FFB800" stroke-width="2" stroke-dasharray="3 3"/>
+            <line x1="115" y1="195" x2="540" y2="270" stroke="#FFB800" stroke-width="2" stroke-dasharray="3 3"/>
+            <circle cx="220" cy="195" r="40" fill="#FF5252" stroke="#aa3030" stroke-width="2"/>
+            <circle cx="350" cy="195" r="28" fill="#4FC3F7" stroke="#3080a0" stroke-width="2"/>
+            <circle cx="480" cy="195" r="18" fill="#76B900" stroke="#508000" stroke-width="2"/>
+            <text x="340" y="100" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">視錐台 (frustum) フラスタム</text>
+          </g>
+
+          <!-- Step 3: Orthographic view (parallel rays + same-size spheres) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0.5;0.5" keyTimes="0;0.22;0.24;0.48;0.50;0.72;0.74;1" dur="16s" repeatCount="indefinite"/>
+            <line x1="115" y1="160" x2="540" y2="160" stroke="#4FC3F7" stroke-width="2" stroke-dasharray="3 3"/>
+            <line x1="115" y1="230" x2="540" y2="230" stroke="#4FC3F7" stroke-width="2" stroke-dasharray="3 3"/>
+            <circle cx="220" cy="195" r="32" fill="#FF5252" stroke="#aa3030" stroke-width="2"/>
+            <circle cx="350" cy="195" r="32" fill="#4FC3F7" stroke="#3080a0" stroke-width="2"/>
+            <circle cx="480" cy="195" r="32" fill="#76B900" stroke="#508000" stroke-width="2"/>
+            <text x="340" y="140" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">平行投影（直方体ビュー）</text>
+          </g>
+
+          <!-- Highlight ring on center sphere -->
+          <circle cx="350" cy="195" r="40" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4 4" opacity="0.4">
+            <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="60" y="328" width="560" height="36" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="340" y="352" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+              Perspective = 視錐台（人間の目）/ Orthographic = 直方体（設計図・2Dゲーム）
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">PerspectiveCamera の <code>fov</code> を <code>"40"</code>（望遠）と <code>"120"</code>（広角）に変えて、3つの球の大きさの差がどう変化するか観察しよう。</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ <code>fov="40"</code> では奥行きの差が圧縮されて見え、Orthographic に近づくことに注目。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> fov=40 / fov=80（デフォルト）/ fov=120 のそれぞれで、奥の球の見え方の違いを1〜2文で書く</div></div>
+      </div>
+
+      <div class="concept-box" style="border-left:4px solid #FFB800;margin-top:1.5rem">
+        <h4>Q&amp;A: いつ Orthographic カメラを使うのか？</h4>
+        <p style="color:#ccc;font-size:0.9rem"><strong>読み方:</strong> perspective = パースペクティブ（遠近法） / orthographic = オーソグラフィック（正射影） / frustum = フラスタム（視錐台） / fov = エフオーブイ（視野角）</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>具体例:</strong> 建築の設計図、ドット絵の2Dゲーム（「ファイナルファンタジータクティクス」など）、CADの正面/側面ビュー、ミニチュア風映像などに使われます。「奥行きで物の大きさを変えたくない」ときに選びます。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>結論:</strong> 一般的なVR体験では <strong>Perspective が標準</strong>。Orthographic はマップビューやUIオーバーレイなど<strong>特殊用途</strong>に使う。fov を小さくすると Perspective でも「望遠レンズ」のように奥行きが圧縮されます。</p>
+      </div>
+    </div>
+
+    <!-- ====== 例題 5: カメラ位置と注視点 ====== -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題 5</span>
+        <h3>カメラ位置と注視点（look-at）の指定</h3>
+      </div>
+      <p><strong>背景:</strong> カメラの「どこから見るか」は <code>position</code>、「どこを見るか」は <code>rotation</code> または <code>look-at</code> コンポーネントで指定します。<code>rotation</code> は角度（°）で、<code>look-at="#target"</code> は<strong>常にそのオブジェクトを向き続ける</strong>のが便利です。</p>
+      <pre><span class="code-label">HTML</span>
+<span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- 注視対象: 中央の箱 --&gt;</span>
+  <span class="kw">&lt;a-box</span> <span class="kw">id=</span><span class="str">"target"</span>
+         position=<span class="str">"0 1 -4"</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+  <span class="cmt">&lt;!-- パターンA: 真正面から (rotation で固定) --&gt;</span>
+  <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 0"</span> rotation=<span class="str">"0 0 0"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+
+  <span class="cmt">&lt;!-- パターンB: 上から見下ろし (rotation X=-45度) --&gt;</span>
+  <span class="kw">&lt;a-camera</span> position=<span class="str">"0 5 -1"</span> rotation=<span class="str">"-45 0 0"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+
+  <span class="cmt">&lt;!-- パターンC: look-at で対象を常に追跡 --&gt;</span>
+  <span class="kw">&lt;a-camera</span> position=<span class="str">"3 2 -1"</span>
+            look-at=<span class="str">"#target"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
+<span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <!-- 例題5 アニメSVG: カメラ位置と注視点 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="340" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">カメラ位置（position）と注視点（look-at）の動き</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="490" y="48" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="575" y="64" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+              ① 正面 (0,1.6,0)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+              ② 上から (0,5,-1)
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+              ③ 横から look-at
+            </text>
+            <text x="575" y="64" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+              ④ 視線は常に対象へ
+            </text>
+          </g>
+
+          <!-- Ground plane (top-down view) -->
+          <line x1="100" y1="280" x2="580" y2="280" stroke="#444" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="90" y="285" text-anchor="end" fill="#666" font-size="10">床</text>
+
+          <!-- Target box (center) with highlight ring -->
+          <rect x="320" y="220" width="40" height="40" fill="none" stroke="#FFB800" stroke-width="3" stroke-dasharray="4 4" opacity="0.6">
+            <animate attributeName="opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="320" y="220" width="40" height="40" fill="#FF5252" stroke="#aa3030" stroke-width="2"/>
+          <text x="340" y="290" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">#target (0,1,-4)</text>
+
+          <!-- Camera position 1: front, fixed rotation -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="320" y="120" width="40" height="30" fill="#444" stroke="#888" stroke-width="2"/>
+            <polygon points="360,128 360,142 375,135" fill="#444" stroke="#888" stroke-width="2"/>
+            <line x1="340" y1="150" x2="340" y2="218" stroke="#76B900" stroke-width="2.5" stroke-dasharray="4 4"/>
+            <text x="340" y="110" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">cam (0,1.6,0) rot 0,0,0</text>
+          </g>
+
+          <!-- Camera position 2: top-down -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="320" y="90" width="40" height="30" fill="#444" stroke="#888" stroke-width="2"/>
+            <polygon points="335,120 345,120 340,140" fill="#444" stroke="#888" stroke-width="2"/>
+            <line x1="340" y1="140" x2="340" y2="218" stroke="#FFB800" stroke-width="2.5" stroke-dasharray="4 4"/>
+            <text x="340" y="82" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">cam (0,5,-1) rot -45</text>
+          </g>
+
+          <!-- Camera position 3: side, look-at #target -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="510" y="180" width="40" height="30" fill="#444" stroke="#888" stroke-width="2"/>
+            <polygon points="510,188 510,202 495,195" fill="#444" stroke="#888" stroke-width="2"/>
+            <line x1="510" y1="195" x2="360" y2="240" stroke="#4FC3F7" stroke-width="2.5" stroke-dasharray="4 4"/>
+            <text x="500" y="170" fill="#4FC3F7" font-size="11" font-weight="700">cam (3,2,-1)</text>
+            <text x="500" y="225" fill="#4FC3F7" font-size="10">look-at="#target"</text>
+          </g>
+
+          <!-- Result panel: appears in step 4 -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.22;0.45;0.47;0.70;0.72;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="100" y="80" width="220" height="60" rx="8" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+            <text x="210" y="105" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">look-at の利点</text>
+            <text x="210" y="124" text-anchor="middle" fill="#aaa" font-size="11">対象が動いてもカメラは常に追従</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="60" y="328" width="560" height="36" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="340" y="352" text-anchor="middle" fill="#93D500" font-size="13" font-weight="600">
+              position = どこから見るか / rotation または look-at = どこを見るか
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">パターンC（look-at）のカメラの <code>position</code> を <code>"3 2 -1"</code> → <code>"5 1 -1"</code> → <code>"-3 3 -2"</code> と変えてみよう。カメラの視線が自動で対象を追ってくれることを確認しよう。</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ <code>look-at</code> がない場合（rotationなしのカメラ）と比較して、何が違うかを観察しよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> rotation 指定と look-at 指定の使い分け基準を、自分の言葉で1〜2文で書く</div></div>
+      </div>
+
+      <div class="concept-box" style="border-left:4px solid #FFB800;margin-top:1.5rem">
+        <h4>Q&amp;A: rotation と look-at はどう使い分けるのか？</h4>
+        <p style="color:#ccc;font-size:0.9rem"><strong>読み方:</strong> position = ポジション（位置） / rotation = ローテーション（回転） / look-at = ルックアット（注視）</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>具体例:</strong> 監視カメラを想像してみよう。固定された監視カメラ（rotation 指定）は常に同じ方向を向く。一方、警備員が容疑者を目で追う動き（look-at 指定）は、対象が動いてもずっと顔を向け続ける。後者は対象が動くシーンで便利です。</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-top:0.5rem"><strong>結論:</strong> 静的なシーン視点には <code>rotation</code>、<strong>動くオブジェクトを追跡したい</strong>ときは <code>look-at="#id"</code>。VR で「キャラクターを常に見る」演出や、「プロモーション動画のターゲット撮影」に向いています。</p>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -1331,6 +1917,76 @@ pre { position: relative; }
       </div>
     </details>
 
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題1 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p>AmbientLight の <code>intensity</code> を <code>"0.2"</code> / <code>"0.8"</code> / <code>"1.5"</code> に段階的に変えたときの見え方:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">intensity="0.2" → 球はほぼ真っ暗。輪郭がうっすら見える程度。
+intensity="0.8" → 球全体が均一に灰白色。立体感はないが視認可能。
+intensity="1.5" → 球全体が真っ白に近い（白飛び）。立体感は完全に失われる。</pre>
+        <p><code>intensity</code> は<strong>光の強さ</strong>を表す係数で、<code>0</code> = 消灯、<code>1.0</code> = 標準、<code>2.0以上</code> = 過剰。<strong>ambient だけだと値を上げても「のっぺり明るくなる」だけ</strong>で立体感は出ません。立体感は <code>directional</code> や <code>point</code> による<strong>面ごとの明暗差</strong>から生まれます。実用上は ambient 0.3〜0.5 + directional 0.6〜0.8 の組み合わせが定番です。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題2 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p>DirectionalLight の <code>position</code> を3パターンに変えたときの影の挙動:</p>
+        <table>
+          <tr><th>position</th><th>光の向き</th><th>影の向き</th><th>影の長さ</th></tr>
+          <tr><td><code>"-3 4 2"</code></td><td>左上から斜めに到達</td><td>右下方向に伸びる</td><td>中程度（標準的な太陽の角度）</td></tr>
+          <tr><td><code>"0 5 0"</code></td><td>真上から垂直に到達</td><td>箱の真下に小さく出る</td><td>非常に短い（南中時の太陽）</td></tr>
+          <tr><td><code>"3 1 -2"</code></td><td>右側から水平に近い角度</td><td>左方向に長く伸びる</td><td>非常に長い（夕日の角度）</td></tr>
+        </table>
+        <p><code>directional</code> の <code>position</code> は<strong>「光源の位置」</strong>を表します。光は <code>(position → 原点)</code> の方向に平行に進むため、影は<strong>光と反対側</strong>に伸びます。低い position（y が小さい）ほど水平に近い光になり、長い影ができます。映画やゲームでドラマチックな雰囲気を出すには、低角度の光が使われる理由はここにあります。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題3 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p>PointLight の光球を3つの位置に動かしたとき、白い箱（中央 <code>(0,1,-4)</code>）の最も明るくなる面:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">光球 (-2, 2, -3) → 箱の左側面が最も明るい
+光球 ( 0, 3, -3) → 箱の上面が最も明るい
+光球 ( 2, 2, -3) → 箱の右側面が最も明るい</pre>
+        <p>point は<strong>全方向に光を放つ電球</strong>なので、光源と面の<strong>位置関係</strong>で明るさが決まります。光源に向いている面ほど明るく、裏側の面は暗くなります。さらに <code>distance="8"</code> を <code>"2"</code> にすると、距離2より遠いオブジェクトには光が届かなくなり真っ暗になる（厳密には ambient のぶんだけ見える）ことが確認できます。<code>distance="0"</code> は<strong>「無限遠まで届く」</strong>の意味で、減衰しません。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題4 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p>PerspectiveCamera の <code>fov</code> を変えたときの、3つの同じ大きさの球の見え方:</p>
+        <table>
+          <tr><th>fov</th><th>呼び方</th><th>奥行きの見え方</th></tr>
+          <tr><td><code>"40"</code></td><td>望遠（テレフォト）</td><td>奥の球と手前の球の大きさの差が小さい。Orthographicに近い圧縮感。</td></tr>
+          <tr><td><code>"80"</code>（デフォルト）</td><td>標準</td><td>人間の視野に近い自然な遠近感。</td></tr>
+          <tr><td><code>"120"</code></td><td>広角（魚眼風）</td><td>奥の球が非常に小さく、手前の球が大きく強調される。歪みも出る。</td></tr>
+        </table>
+        <p><code>fov</code>（Field of View = 視野角）は<strong>カメラが映す範囲の角度</strong>です。値を小さくすると視野が狭まり、結果的に「遠くを近くに圧縮して見せる」効果が生まれます（=望遠レンズ）。逆に大きくすると視野が広がりますが、画面の端ほど歪み、近くのものが過剰に大きく見えます（=広角レンズ）。VRでは80〜90が標準で、これ以上大きいと酔いやすくなります。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題5 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p><code>look-at="#target"</code> をつけたカメラの <code>position</code> を変えると:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">position="3 2 -1"  → 右側から見下ろす。視線は中央の赤い箱を向く。
+position="5 1 -1"  → さらに右に離れて水平視点。視線は箱を向く。
+position="-3 3 -2" → 左上から見下ろす。視線は箱を向く。</pre>
+        <p><strong>カメラがどこに動いても、視線は常に <code>#target</code>（赤い箱）を向き続ける</strong>のが <code>look-at</code> の特徴です。<code>rotation</code> で固定指定した場合は、カメラの位置だけ動いて視線方向は変わらないため、対象を見失う可能性があります。</p>
+        <p><strong>使い分けの基準:</strong></p>
+        <ul class="point-list">
+          <li><code>rotation</code>: 視点と視線が両方とも<strong>静的</strong>なシーン（建築のショーケース、固定の風景など）</li>
+          <li><code>look-at="#id"</code>: 対象が<strong>動く</strong>、またはカメラだけが<strong>移動する</strong>シーン（追跡カメラ、プロモーション映像、キャラクター注視など）</li>
+        </ul>
+      </div>
+    </details>
+    </div>
+
+    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="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"></div>
@@ -1345,12 +2001,34 @@ pre { position: relative; }
 
 <script src="answer-gate.js"></script>
 <script>
+// pre 要素にコピー用ボタンを追加し、クリックでコード本文をクリップボードに転送する
+function stripCopyHelpers(clone) {
+  // ボタンやラベルが混入するとコピー結果が汚れるので除去する
+  var copyButtons = clone.querySelectorAll('.copy-btn');
+  copyButtons.forEach(function(button) {
+    button.remove();
+  });
+  var codeLabels = clone.querySelectorAll('.code-label');
+  codeLabels.forEach(function(label) {
+    label.remove();
+  });
+}
+
+function extractCleanCode(pre) {
+  // pre をクローンしてから装飾を除去し、先頭の言語ラベル行を落とす
+  var clone = pre.cloneNode(true);
+  stripCopyHelpers(clone);
+  var rawText = clone.textContent.trim();
+  var leadingLabelPattern = /^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/;
+  return rawText.replace(leadingLabelPattern, '');
+}
+
 document.querySelectorAll('pre').forEach(function(pre) {
   var btn = document.createElement('button');
   btn.className = 'copy-btn';
   btn.textContent = 'コピー';
   btn.addEventListener('click', function() {
-    var clone = pre.cloneNode(true); var btns = clone.querySelectorAll(".copy-btn"); btns.forEach(function(b){b.remove();}); var labels = clone.querySelectorAll(".code-label"); labels.forEach(function(l){l.remove();}); var code = clone.textContent.trim().replace(/^(Python|JavaScript|HTML|Bash|JSON|Terminal|Notion テンプレート)( ── [^\n]+)?\n/, '');
+    var code = extractCleanCode(pre);
     navigator.clipboard.writeText(code).then(function() {
       btn.textContent = 'コピーしました';
       btn.classList.add('copied');

@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,9 +446,9 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識問題 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識問題 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -463,41 +475,41 @@ pre { position: relative; }
       <svg viewBox="0 0 760 320" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
         <rect x="20" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
         <text x="120" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">クライアント（ブラウザ）</text>
-        <text x="120" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">A-Frame + Socket.IO Client</text>
+        <text x="120" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame + Socket.IO Client</text>
         <rect x="280" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
         <text x="380" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">サーバ（Node.js）</text>
-        <text x="380" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">Express + Socket.IO Server</text>
+        <text x="380" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">Express + Socket.IO Server</text>
         <rect x="540" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
         <text x="640" y="45" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">データベース（SQLite）</text>
-        <text x="640" y="63" text-anchor="middle" fill="#E0E0E0" font-size="9">better-sqlite3 / ファイル保存</text>
+        <text x="640" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">better-sqlite3 / ファイル保存</text>
         <line x1="220" y1="50" x2="280" y2="50" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr12a)"/>
         <line x1="480" y1="50" x2="540" y2="50" stroke="#76B900" stroke-width="2" marker-end="url(#arr12b)"/>
         <rect x="20" y="120" width="720" height="1" fill="#333"/>
-        <text x="100" y="110" text-anchor="middle" fill="#888" font-size="9">メッセージ送信フロー</text>
+        <text x="100" y="110" text-anchor="middle" fill="#888" font-size="11">メッセージ送信フロー</text>
         <rect x="20" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1.5"/>
-        <text x="100" y="158" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="9">1. メッセージ送信</text>
+        <text x="100" y="158" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">1. メッセージ送信</text>
         <text x="100" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('chat', data)</text>
         <rect x="210" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="290" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">2. DBに保存</text>
+        <text x="290" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">2. DBに保存</text>
         <text x="290" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">INSERT INTO messages</text>
         <rect x="400" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="480" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">3. 全員に配信</text>
+        <text x="480" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">3. 全員に配信</text>
         <text x="480" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">io.emit('chat', saved)</text>
         <rect x="590" y="140" width="150" height="45" rx="8" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
-        <text x="665" y="158" text-anchor="middle" fill="#93D500" font-weight="700" font-size="9">4. 画面に表示</text>
+        <text x="665" y="158" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">4. 画面に表示</text>
         <text x="665" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">DOM 更新</text>
         <line x1="180" y1="162" x2="210" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
         <line x1="370" y1="162" x2="400" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
         <line x1="560" y1="162" x2="590" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <text x="100" y="210" text-anchor="middle" fill="#888" font-size="9">新規ユーザ接続フロー</text>
+        <text x="100" y="210" text-anchor="middle" fill="#888" font-size="11">新規ユーザ接続フロー</text>
         <rect x="20" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#E040FB" stroke-width="1.5"/>
-        <text x="100" y="238" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="9">新規ユーザ接続</text>
+        <text x="100" y="238" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">新規ユーザ接続</text>
         <text x="100" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">connection イベント</text>
         <rect x="210" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
-        <text x="290" y="238" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="9">DBから読み込み</text>
+        <text x="290" y="238" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">DBから読み込み</text>
         <text x="290" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">SELECT * FROM messages</text>
         <rect x="400" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="480" y="238" text-anchor="middle" fill="#76B900" font-weight="700" font-size="9">履歴を送信</text>
+        <text x="480" y="238" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">履歴を送信</text>
         <text x="480" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('history', rows)</text>
         <line x1="180" y1="242" x2="210" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
         <line x1="370" y1="242" x2="400" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
@@ -523,6 +535,103 @@ pre { position: relative; }
         <tr><td><strong>メモリ（変数）</strong></td><td>高速だがプロセス終了で消える</td><td>すべてのデータが<strong>消失</strong></td></tr>
         <tr><td><strong>データベース</strong></td><td>ファイルに永続保存される</td><td>データが<strong>残る</strong></td></tr>
       </table>
+
+      <!-- Animated SVG: Memory vs DB on server restart -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 320" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">サーバ再起動時の差 ── メモリ消滅 vs DB 永続化</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="510" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="605" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ① サーバ稼働中（データ蓄積）
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ② Ctrl+C で停止
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ③ 再起動 → 結果が分岐
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+              ④ 比較完了
+            </text>
+          </g>
+
+          <!-- Memory side (top) -->
+          <rect x="40" y="100" width="320" height="80" rx="10" fill="#141414" stroke="#FF5252" stroke-width="2"/>
+          <text x="200" y="125" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700">メモリ（変数）</text>
+          <text x="200" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            messages = [太郎, 花子, 太郎]（3件）
+          </text>
+          <text x="200" y="148" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            プロセス終了でメモリ解放
+          </text>
+          <text x="200" y="148" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            messages = []（0件 ✗ 消失）
+          </text>
+          <text x="200" y="168" text-anchor="middle" fill="#888" font-size="10">サーバプロセス内</text>
+
+          <!-- DB side (bottom) -->
+          <rect x="40" y="200" width="320" height="80" rx="10" fill="#141414" stroke="#93D500" stroke-width="2"/>
+          <text x="200" y="225" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">データベース（chat.db）</text>
+          <text x="200" y="248" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            messages テーブル（3行）
+          </text>
+          <text x="200" y="248" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            messages テーブル（3行 ✓ 残存）
+          </text>
+          <text x="200" y="268" text-anchor="middle" fill="#888" font-size="10">ディスク上のファイル</text>
+
+          <!-- Highlight ring on memory at step 3 -->
+          <rect x="35" y="95" width="330" height="90" rx="11" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Highlight ring on DB at step 3 -->
+          <rect x="35" y="195" width="330" height="90" rx="11" fill="none" stroke="#93D500" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Server icon (right) -->
+          <rect x="430" y="120" width="160" height="140" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="510" y="145" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">サーバ Node.js</text>
+          <text x="510" y="170" text-anchor="middle" fill="#888" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            ● 起動中
+          </text>
+          <text x="510" y="170" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            ✗ 停止中
+          </text>
+          <text x="510" y="170" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
+            ● 再起動完了
+          </text>
+          <text x="510" y="200" text-anchor="middle" fill="#aaa" font-size="11">PID 12345 → 67890</text>
+          <text x="510" y="222" text-anchor="middle" fill="#888" font-size="10">プロセス番号が変わる</text>
+          <text x="510" y="242" text-anchor="middle" fill="#888" font-size="10">＝ メモリは新品</text>
+
+          <!-- Legend -->
+          <rect x="600" y="120" width="80" height="140" rx="10" fill="#111" stroke="#333"/>
+          <text x="640" y="140" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">揮発性</text>
+          <text x="640" y="160" text-anchor="middle" fill="#888" font-size="9">電源切れ</text>
+          <text x="640" y="172" text-anchor="middle" fill="#888" font-size="9">で消える</text>
+          <line x1="610" y1="190" x2="670" y2="190" stroke="#444"/>
+          <text x="640" y="210" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700">不揮発性</text>
+          <text x="640" y="230" text-anchor="middle" fill="#888" font-size="9">電源切れ</text>
+          <text x="640" y="242" text-anchor="middle" fill="#888" font-size="9">でも残る</text>
+        </svg>
+      </div>
+
       <p style="margin-top:0.5rem"><strong>具体的な問題:</strong></p>
       <ul class="point-list">
         <li>チャットの履歴が再起動で全部消える</li>
@@ -535,6 +644,15 @@ pre { position: relative; }
     <!-- 1.2 SQLite とは -->
     <div class="concept-box">
       <h4>1.2 SQLite とは <span class="exam-alert">課題に出ます</span></h4>
+
+      <p style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.6rem 1rem;margin-bottom:1rem;border-radius:6px;font-size:0.95rem">
+        <strong style="color:#76B900">読み方:</strong>
+        <code>SQL</code> = <strong>エスキューエル</strong>（または「シークエル」、Structured Query Language の略）。
+        <code>SQLite</code> = <strong>エスキューライト</strong>（"SQL" ＋ "lite"（軽い）。発音は「シークライト」とも）。
+        <code>better-sqlite3</code> = <strong>ベター・エスキューライト・スリー</strong>（Node.js 用パッケージ名）。
+        <code>INSERT</code> = <strong>インサート</strong>、<code>SELECT</code> = <strong>セレクト</strong>、<code>UPDATE</code> = <strong>アップデート</strong>、<code>CREATE TABLE</code> = <strong>クリエイト・テーブル</strong>、<code>AUTOINCREMENT</code> = <strong>オート・インクリメント</strong>（自動加算）、<code>PRIMARY KEY</code> = <strong>プライマリ・キー</strong>（主キー）。
+      </p>
+
       <div class="analogy">
         大きな図書館（MySQL, PostgreSQL）は管理人が常駐し、たくさんの人が同時に使えますが、設置が大変です。<br>
         <strong>SQLite</strong> は「自分だけの小さな本棚」のようなもので、設置不要ですぐに使えます。
@@ -623,6 +741,93 @@ insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span clas
 console.<span class="fn">log</span>(rows);
 <span class="cmt">// → [{ id: 1, name: '太郎', text: 'こんにちは', created_at: '2026-07-15 16:30:00' }]</span></pre>
 
+      <!-- Animated SVG: CREATE → INSERT → SELECT のステップ動作 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">SQL基本動作 ── CREATE → INSERT → SELECT のステップ</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="510" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ① CREATE TABLE
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ② INSERT 太郎
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.50;0.65;0.72;1" dur="16s" repeatCount="indefinite"/>
+              ③ INSERT 花子
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.50;0.72;0.80;1" dur="16s" repeatCount="indefinite"/>
+              ④ SELECT * 完了
+            </text>
+          </g>
+
+          <!-- Table frame -->
+          <rect x="40" y="100" width="640" height="180" rx="10" fill="#141414" stroke="#444" stroke-width="1.5"/>
+          <text x="60" y="120" fill="#76B900" font-size="13" font-weight="700">messages テーブル</text>
+
+          <!-- Column headers (appear at step 1) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <rect x="60" y="135" width="80" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="100" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">id</text>
+            <rect x="150" y="135" width="160" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="230" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">name</text>
+            <rect x="320" y="135" width="220" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="430" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">text</text>
+            <rect x="550" y="135" width="120" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="610" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">created_at</text>
+          </g>
+
+          <!-- Row 1: 太郎 (appears at step 2) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <rect x="60" y="175" width="80" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="100" y="196" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">1</text>
+            <rect x="150" y="175" width="160" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="230" y="196" text-anchor="middle" fill="#e0e0e0" font-size="13">太郎</text>
+            <rect x="320" y="175" width="220" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="430" y="196" text-anchor="middle" fill="#e0e0e0" font-size="13">こんにちは</text>
+            <rect x="550" y="175" width="120" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="610" y="196" text-anchor="middle" fill="#888" font-size="11">16:30:00</text>
+          </g>
+
+          <!-- Row 2: 花子 (appears at step 3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.50;0.65;0.72;1" dur="16s" repeatCount="indefinite"/>
+            <rect x="60" y="215" width="80" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="100" y="236" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">2</text>
+            <rect x="150" y="215" width="160" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="230" y="236" text-anchor="middle" fill="#e0e0e0" font-size="13">花子</text>
+            <rect x="320" y="215" width="220" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="430" y="236" text-anchor="middle" fill="#e0e0e0" font-size="13">やあ！</text>
+            <rect x="550" y="215" width="120" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="610" y="236" text-anchor="middle" fill="#888" font-size="11">16:30:15</text>
+          </g>
+
+          <!-- Highlight ring on SELECT (step 4) -->
+          <rect x="50" y="170" width="640" height="86" rx="10" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0.8;0.8" keyTimes="0;0.10;0.18;0.40;0.50;0.72;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Legend at bottom -->
+          <rect x="40" y="300" width="640" height="44" rx="8" fill="#111" stroke="#333"/>
+          <circle cx="60" cy="322" r="6" fill="#76B900"/>
+          <text x="74" y="326" fill="#aaa" font-size="11">CREATE: 構造を作る</text>
+          <circle cx="220" cy="322" r="6" fill="#FFB800"/>
+          <text x="234" y="326" fill="#aaa" font-size="11">INSERT: 行を追加</text>
+          <circle cx="370" cy="322" r="6" fill="#4FC3F7"/>
+          <text x="384" y="326" fill="#aaa" font-size="11">SELECT: 行を取得</text>
+          <circle cx="520" cy="322" r="6" fill="#FF5252"/>
+          <text x="534" y="326" fill="#aaa" font-size="11">id は AUTOINCREMENT</text>
+        </svg>
+      </div>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">上のコードで <code>insert.run</code> を2回実行した後、<code>SELECT * FROM messages</code> は何件返すか予測してみよう。<code>AUTOINCREMENT</code> の id 値はどうなるか。</p>
@@ -661,6 +866,123 @@ db.<span class="fn">exec</span>(<span class="str">`
 <span class="kw">function</span> <span class="fn">saveObject</span>(id, x, y, z, color) {
   upsert.<span class="fn">run</span>(id, x, y, z, color, x, y, z, color);
 }</pre>
+
+      <!-- Animated SVG: UPSERT (ON CONFLICT) のステップ動作 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">UPSERT (ON CONFLICT) ── 「なければ追加 / あれば更新」</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="510" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="605" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ① 初回 saveObject('cube1')
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ② 行が存在しない → INSERT
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+              ③ 同じ id で再 saveObject
+            </text>
+            <text x="605" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
+              ④ 競合 → UPDATE
+            </text>
+          </g>
+
+          <!-- Left: Application call -->
+          <rect x="40" y="100" width="200" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="140" y="125" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">アプリ</text>
+          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            saveObject('cube1',
+          </text>
+          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            saveObject('cube1',
+          </text>
+          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            1, 2, 3, '#FF0000')
+          </text>
+          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            5, 6, 7, '#00FF00')
+          </text>
+
+          <!-- Arrow -->
+          <line x1="240" y1="140" x2="290" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#arr12d)"/>
+          <defs>
+            <marker id="arr12d" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          </defs>
+
+          <!-- Middle: Decision diamond -->
+          <polygon points="380,100 470,140 380,180 290,140" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="380" y="135" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">obj_id 競合？</text>
+          <text x="380" y="152" text-anchor="middle" fill="#aaa" font-size="10">ON CONFLICT</text>
+
+          <!-- Right: DB rows -->
+          <rect x="510" y="100" width="180" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="600" y="120" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">objects テーブル</text>
+
+          <!-- Row state: empty -->
+          <text x="600" y="148" text-anchor="middle" fill="#888" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            (空)
+          </text>
+
+          <!-- Row state: after INSERT (red) -->
+          <text x="600" y="148" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            cube1: (1,2,3) #FF0000
+          </text>
+          <text x="600" y="164" text-anchor="middle" fill="#888" font-size="10" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            ← 行が新規作成された
+          </text>
+
+          <!-- Row state: after UPDATE (green) -->
+          <text x="600" y="148" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
+            cube1: (5,6,7) #00FF00
+          </text>
+          <text x="600" y="164" text-anchor="middle" fill="#aaa" font-size="10" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ← 既存行を上書き
+          </text>
+
+          <!-- Branches: INSERT path -->
+          <text x="380" y="220" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            ↓ NO → INSERT 実行
+          </text>
+          <!-- UPDATE path -->
+          <text x="380" y="220" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
+            ↓ YES → UPDATE SET x=?,...
+          </text>
+
+          <!-- Highlight ring on table at step 2 (INSERT) -->
+          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.9;0.9;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Highlight ring at step 4 (UPDATE) -->
+          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Legend -->
+          <rect x="40" y="290" width="640" height="56" rx="8" fill="#111" stroke="#333"/>
+          <circle cx="60" cy="312" r="6" fill="#FFB800"/>
+          <text x="74" y="316" fill="#aaa" font-size="11">INSERT: 行が無いときの動作</text>
+          <circle cx="270" cy="312" r="6" fill="#FF5252"/>
+          <text x="284" y="316" fill="#aaa" font-size="11">UPDATE: 主キー競合時に自動切替</text>
+          <text x="60" y="338" fill="#93D500" font-size="11">→ UPSERT (UP-date + in-SERT) は「リアルタイム同期する状態」を保存する定番パターン</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.6 チャット履歴の保存 -->
@@ -672,6 +994,49 @@ db.<span class="fn">exec</span>(<span class="str">`
         <li>新規接続時に <code>SELECT</code> で過去メッセージを取得して送信</li>
         <li>メッセージ数が多い場合は <code>ORDER BY ... LIMIT</code> で最新N件だけ取得</li>
       </ul>
+
+      <!-- 具体例 box -->
+      <div style="background:#0a1a2e;border-left:4px solid #4FC3F7;border-radius:8px;padding:1rem 1.2rem;margin-top:1rem">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">具体例: 16時30分から16時40分のチャットルームの流れ</p>
+        <table style="margin-top:0.3rem">
+          <tr><th>時刻</th><th>イベント</th><th>messages テーブル</th></tr>
+          <tr><td>16:30</td><td>太郎が「こんにちは」を送信</td><td>1行（太郎/こんにちは）</td></tr>
+          <tr><td>16:31</td><td>花子が「やあ！」を送信</td><td>2行</td></tr>
+          <tr><td>16:32</td><td>サーバが Ctrl+C で停止</td><td>2行のまま（ファイルに残る）</td></tr>
+          <tr><td>16:35</td><td>サーバを再起動</td><td>2行（消えていない）</td></tr>
+          <tr><td>16:36</td><td>花子のブラウザがリロード</td><td>SELECT で 2行取得 → 画面に「過去のメッセージ」として表示</td></tr>
+          <tr><td>16:40</td><td>次郎が初参加で接続</td><td>SELECT で 2行取得 → 次郎の画面にも過去2件が表示される</td></tr>
+        </table>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#ccc">メモリだけに保存していた前回までと違い、<strong>サーバ停止 → 再起動</strong> や <strong>新規参加者の途中合流</strong> でも、全員が同じ履歴を見られるのが永続化の威力です。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:10px;padding:1rem 1.2rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">Q&amp;A よくある質問</p>
+        <table>
+          <tr><th style="width:42%">質問</th><th>答え</th></tr>
+          <tr>
+            <td><strong>Q1.</strong> <code>chat.db</code> はどこに作られる？</td>
+            <td><code>node server.js</code> を実行したカレントディレクトリ（プロジェクトフォルダ直下）に作られる。VS Code の左ペインで確認できる。</td>
+          </tr>
+          <tr>
+            <td><strong>Q2.</strong> <code>chat.db</code> を消すとどうなる？</td>
+            <td>履歴がすべて消える。次回起動時に <code>CREATE TABLE IF NOT EXISTS</code> が再実行され、空のテーブルから始まる。</td>
+          </tr>
+          <tr>
+            <td><strong>Q3.</strong> メモリだけではダメな場面は？</td>
+            <td>サーバを再起動する／クラッシュする／別のマシンに移す ── これらすべてでデータが消える。長期保存したい情報は必ず DB へ。</td>
+          </tr>
+          <tr>
+            <td><strong>Q4.</strong> 10000件たまったら遅くなる？</td>
+            <td>そのまま <code>SELECT *</code> すると遅い。<code>ORDER BY id DESC LIMIT 50</code> で<strong>最新N件だけ</strong>を取れば軽い。 さらに大きくなる場合はインデックスや古い行の削除を検討。</td>
+          </tr>
+          <tr>
+            <td><strong>Q5.</strong> <code>?</code> プレースホルダを使わず <code>'</code> ＋ 値 ＋ <code>'</code> で組み立てたら？</td>
+            <td>SQLインジェクション攻撃の入口になる。ユーザが <code>'); DROP TABLE messages;--</code> を送ると、テーブルごと消える可能性がある。必ず <code>prepare(...)</code> ＋ <code>run(値)</code> を使う。</td>
+          </tr>
+        </table>
+      </div>
     </div>
 
     <!-- 1.7 新規接続時のデータ復元 -->
@@ -690,6 +1055,105 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
   ).<span class="fn">all</span>().<span class="fn">reverse</span>();
   socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, messages);
 });</pre>
+
+      <!-- Animated SVG: 新規接続時のデータ復元フロー -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">新規接続時のデータ復元 ── 途中参加でも過去状態を再現</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="500" y="48" width="200" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="600" y="65" text-anchor="middle" fill="#E040FB" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ① 新規ユーザが接続
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ② サーバが SELECT 実行
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.18;0.40;0.50;0.70;0.75;1" dur="18s" repeatCount="indefinite"/>
+              ③ DB → 履歴を返却
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.18;0.40;0.50;0.75;0.85;1" dur="18s" repeatCount="indefinite"/>
+              ④ クライアントで描画
+            </text>
+          </g>
+
+          <!-- Client box -->
+          <rect x="40" y="100" width="160" height="80" rx="10" fill="#141414" stroke="#E040FB" stroke-width="2"/>
+          <text x="120" y="125" text-anchor="middle" fill="#E040FB" font-size="13" font-weight="700">新規クライアント</text>
+          <text x="120" y="145" text-anchor="middle" fill="#aaa" font-size="11">socket.connect()</text>
+          <text x="120" y="163" text-anchor="middle" fill="#888" font-size="10">画面は空</text>
+
+          <!-- Server box -->
+          <rect x="280" y="100" width="160" height="80" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="360" y="125" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">サーバ</text>
+          <text x="360" y="145" text-anchor="middle" fill="#aaa" font-size="11">io.on('connection')</text>
+          <text x="360" y="163" text-anchor="middle" fill="#888" font-size="10">SELECT 発行</text>
+
+          <!-- DB cylinder -->
+          <ellipse cx="600" cy="108" rx="60" ry="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <rect x="540" y="108" width="120" height="60" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <ellipse cx="600" cy="168" rx="60" ry="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <line x1="540" y1="108" x2="540" y2="168" stroke="#FFB800" stroke-width="2"/>
+          <line x1="660" y1="108" x2="660" y2="168" stroke="#FFB800" stroke-width="2"/>
+          <text x="600" y="140" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">SQLite</text>
+          <text x="600" y="158" text-anchor="middle" fill="#aaa" font-size="10">messages × N</text>
+
+          <!-- Arrow 1: Client → Server (step 1) -->
+          <line x1="200" y1="140" x2="280" y2="140" stroke="#E040FB" stroke-width="3" opacity="0" marker-end="url(#arr12e)">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.05;0.12;0.30;0.40;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <!-- Arrow 2: Server → DB (step 2) -->
+          <line x1="440" y1="140" x2="535" y2="140" stroke="#76B900" stroke-width="3" opacity="0" marker-end="url(#arr12f)">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.40;0.45;0.65;0.72;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <!-- Arrow 3: DB → Server (step 3) -->
+          <line x1="535" y1="165" x2="440" y2="165" stroke="#FFB800" stroke-width="3" opacity="0" marker-end="url(#arr12g)">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.50;0.60;0.65;0.72;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <!-- Arrow 4: Server → Client (step 4) -->
+          <line x1="280" y1="165" x2="200" y2="165" stroke="#4FC3F7" stroke-width="3" opacity="0" marker-end="url(#arr12h)">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+
+          <defs>
+            <marker id="arr12e" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#E040FB"/></marker>
+            <marker id="arr12f" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arr12g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="arr12h" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+
+          <!-- Highlight rings -->
+          <rect x="35" y="95" width="170" height="90" rx="11" fill="none" stroke="#E040FB" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.05;0.12;0.30;0.40;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="535" y="100" width="130" height="76" rx="11" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.50;0.60;0.65;0.72;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="35" y="95" width="170" height="90" rx="11" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Result panel at step 4: client shows messages -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="100" y="220" width="520" height="60" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+            <text x="360" y="245" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">--- 過去のメッセージ ---</text>
+            <text x="360" y="265" text-anchor="middle" fill="#aaa" font-size="11">太郎: こんにちは | 花子: やあ！ | 太郎: 元気？</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="300" width="640" height="44" rx="8" fill="#111" stroke="#333"/>
+          <text x="60" y="320" fill="#93D500" font-size="11" font-weight="600">ポイント:</text>
+          <text x="130" y="320" fill="#aaa" font-size="11">サーバ再起動後の接続でも DB に履歴が残っているため、画面は前回と同じ状態に復元される</text>
+          <text x="60" y="336" fill="#888" font-size="11">→ <tspan fill="#FFB800">ORDER BY id DESC LIMIT 50</tspan> で最新N件だけを取得し、<tspan fill="#4FC3F7">.reverse()</tspan> で時系列に戻す</text>
+        </svg>
+      </div>
+
       <p style="margin-top:0.5rem">これにより、途中から参加したユーザも過去の状態を確認できるようになります。</p>
     </div>
 
@@ -729,6 +1193,112 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 
 <span class="cmt">-- 4. box1 の色を yellow に更新</span>
 <span class="kw">UPDATE</span> items <span class="kw">SET</span> color = <span class="str">'yellow'</span> <span class="kw">WHERE</span> name = <span class="str">'box1'</span>;</pre>
+
+      <!-- Animated SVG: CRUD のタイムライン -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">items テーブルの変化 ── 4手順タイムライン</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="510" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+              ① CREATE TABLE
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+              ② INSERT × 3
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+              ③ SELECT *
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+              ④ UPDATE box1
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+              ⑤ 完了
+            </text>
+          </g>
+
+          <!-- Table frame -->
+          <rect x="60" y="90" width="600" height="180" rx="10" fill="#141414" stroke="#444" stroke-width="1.5"/>
+          <text x="80" y="110" fill="#76B900" font-size="13" font-weight="700">items テーブル</text>
+
+          <!-- Headers (appear at step 1) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="80" y="125" width="60" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="110" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">id</text>
+            <rect x="150" y="125" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="240" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">name</text>
+            <rect x="340" y="125" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="430" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">color</text>
+          </g>
+
+          <!-- Row 1: box1 / red → yellow -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="80" y="160" width="60" height="30" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="110" y="180" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">1</text>
+            <rect x="150" y="160" width="180" height="30" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
+            <text x="240" y="180" text-anchor="middle" fill="#e0e0e0" font-size="12">box1</text>
+          </g>
+          <!-- Color cell: red (steps 2-3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="340" y="160" width="180" height="30" rx="6" fill="#3a1414" stroke="#FF5252" stroke-width="1.5"/>
+            <text x="430" y="180" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">red</text>
+          </g>
+          <!-- Color cell: yellow (after UPDATE) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="340" y="160" width="180" height="30" rx="6" fill="#3a2e0a" stroke="#FFB800" stroke-width="2"/>
+            <text x="430" y="180" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">yellow ← UPDATE</text>
+          </g>
+
+          <!-- Row 2: sphere1 / blue -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="80" y="195" width="60" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
+            <text x="110" y="215" text-anchor="middle" fill="#aaa" font-size="12">2</text>
+            <rect x="150" y="195" width="180" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
+            <text x="240" y="215" text-anchor="middle" fill="#aaa" font-size="12">sphere1</text>
+            <rect x="340" y="195" width="180" height="30" rx="6" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="1.5"/>
+            <text x="430" y="215" text-anchor="middle" fill="#4FC3F7" font-size="12">blue</text>
+          </g>
+
+          <!-- Row 3: cylinder1 / green -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+            <rect x="80" y="230" width="60" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
+            <text x="110" y="250" text-anchor="middle" fill="#aaa" font-size="12">3</text>
+            <rect x="150" y="230" width="180" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
+            <text x="240" y="250" text-anchor="middle" fill="#aaa" font-size="12">cylinder1</text>
+            <rect x="340" y="230" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
+            <text x="430" y="250" text-anchor="middle" fill="#76B900" font-size="12">green</text>
+          </g>
+
+          <!-- Highlight ring on row 1 at UPDATE step -->
+          <rect x="75" y="155" width="450" height="40" rx="8" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Legend -->
+          <rect x="60" y="290" width="600" height="50" rx="8" fill="#111" stroke="#333"/>
+          <text x="80" y="312" fill="#93D500" font-size="11" font-weight="600">CRUD のうち今回扱った3操作:</text>
+          <circle cx="80" cy="328" r="5" fill="#FFB800"/>
+          <text x="92" y="332" fill="#aaa" font-size="11">Create (INSERT)</text>
+          <circle cx="220" cy="328" r="5" fill="#4FC3F7"/>
+          <text x="232" y="332" fill="#aaa" font-size="11">Read (SELECT)</text>
+          <circle cx="340" cy="328" r="5" fill="#FF5252"/>
+          <text x="352" y="332" fill="#aaa" font-size="11">Update (UPDATE)</text>
+          <text x="460" y="332" fill="#888" font-size="11">第4の Delete (DELETE) は次回以降</text>
+        </svg>
+      </div>
 
       <table>
         <tr><th>手順</th><th>操作</th><th>テーブルの状態</th></tr>
@@ -838,6 +1408,89 @@ console.<span class="fn">log</span>(<span class="str">'更新後:'</span>, updat
 
 db.<span class="fn">close</span>();
 console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);</pre>
+
+      <!-- Animated SVG: プリペアドステートメントと安全性 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 380" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">プリペアドステートメント ── ? に値を差し込んで安全に実行</text>
+
+          <!-- Step badges -->
+          <g>
+            <rect x="500" y="48" width="200" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ① prepare() でテンプレ作成
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ② run('りんご', 150)
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ③ ? が値に置換
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ④ DB に行が追加
+            </text>
+            <text x="600" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+              ⑤ SQL注入を防げる
+            </text>
+          </g>
+
+          <!-- Template box -->
+          <rect x="40" y="100" width="640" height="60" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="60" y="125" fill="#76B900" font-size="12" font-weight="700">テンプレート (prepare):</text>
+          <text x="60" y="148" fill="#e0e0e0" font-size="13" font-family="JetBrains Mono,monospace">INSERT INTO fruits (name, price) VALUES (?, ?)</text>
+
+          <!-- Highlight on ? placeholders at step 1 -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="468" cy="148" r="11" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+            <circle cx="492" cy="148" r="11" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+          </g>
+
+          <!-- Values box (step 2) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="180" y="180" width="160" height="40" rx="8" fill="#2e1a0a" stroke="#FFB800" stroke-width="2"/>
+            <text x="260" y="205" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">'りんご', 150</text>
+            <line x1="260" y1="180" x2="260" y2="170" stroke="#FFB800" stroke-width="2" marker-end="url(#arr12i)"/>
+          </g>
+
+          <!-- After substitution -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="40" y="235" width="640" height="60" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+            <text x="60" y="260" fill="#4FC3F7" font-size="12" font-weight="700">確定された SQL:</text>
+            <text x="60" y="283" fill="#e0e0e0" font-size="13" font-family="JetBrains Mono,monospace">INSERT INTO fruits (name, price) VALUES (<tspan fill="#FFB800" font-weight="700">'りんご'</tspan>, <tspan fill="#FFB800" font-weight="700">150</tspan>)</text>
+          </g>
+
+          <defs>
+            <marker id="arr12i" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          </defs>
+
+          <!-- Result panel at step 4 (DB row added) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="180" y="310" width="360" height="40" rx="8" fill="#1a2e0a" stroke="#93D500" stroke-width="2"/>
+            <text x="360" y="335" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">fruits テーブルに 1行追加（id=1）</text>
+          </g>
+
+          <!-- Warning panel at step 5 -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="40" y="310" width="120" height="40" rx="8" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
+            <text x="100" y="328" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">SQL注入</text>
+            <text x="100" y="343" text-anchor="middle" fill="#FF5252" font-size="11">防止 ✓</text>
+            <rect x="560" y="310" width="120" height="40" rx="8" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
+            <text x="620" y="328" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">再利用で</text>
+            <text x="620" y="343" text-anchor="middle" fill="#FF5252" font-size="11">高速化 ✓</text>
+          </g>
+        </svg>
+      </div>
+
       <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
@@ -975,9 +1628,12 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 
     <span class="cmt">// 過去の履歴を受信して表示</span>
     socket.<span class="fn">on</span>(<span class="str">'chat-history'</span>, (messages) => {
-      <span class="kw">if</span> (messages.length > <span class="num">0</span>) {
+      <span class="kw">const</span> hasHistory = messages.length > <span class="num">0</span>;
+      <span class="kw">if</span> (hasHistory) {
         chatLog.innerHTML = <span class="str">'&lt;div class="history-label"&gt;--- 過去のメッセージ ---&lt;/div&gt;'</span>;
-        messages.<span class="fn">forEach</span>((msg) => <span class="fn">addMessage</span>(msg));
+        messages.<span class="fn">forEach</span>((msg) => {
+          <span class="fn">addMessage</span>(msg);
+        });
       }
     });
 
@@ -997,15 +1653,26 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
     }
 
     <span class="kw">function</span> <span class="fn">send</span>() {
-      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>).value || <span class="str">'ゲスト'</span>;
-      <span class="kw">const</span> text = document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value;
-      <span class="kw">if</span> (!text) <span class="kw">return</span>;
-      socket.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, { name, text });
-      document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value = <span class="str">''</span>;
+      <span class="cmt">// 中間変数で送信内容を組み立てる</span>
+      <span class="kw">const</span> nameInput = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>);
+      <span class="kw">const</span> textInput = document.<span class="fn">getElementById</span>(<span class="str">'text'</span>);
+      <span class="kw">const</span> name = nameInput.value || <span class="str">'ゲスト'</span>;
+      <span class="kw">const</span> text = textInput.value;
+
+      <span class="cmt">// 空文字列なら送信しない</span>
+      <span class="kw">if</span> (!text) {
+        <span class="kw">return</span>;
+      }
+
+      socket.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, { name: name, text: text });
+      textInput.value = <span class="str">''</span>;
     }
 
+    <span class="cmt">// Enter キーで送信できるようにする</span>
     document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) => {
-      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) <span class="fn">send</span>();
+      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) {
+        <span class="fn">send</span>();
+      }
     });
   <span class="kw">&lt;/script&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
@@ -1431,6 +2098,41 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
         </ul>
       </div>
     </details>
+
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 SQLの基本操作を読む 解答</summary>
+      <div class="answer-content">
+        <p>SQL文を順に実行したときのテーブルの状態:</p>
+        <table>
+          <tr><th>手順</th><th>テーブル状態</th></tr>
+          <tr><td>1. CREATE TABLE</td><td>空のテーブル <code>items</code>（id, name, color の3列）が作成される</td></tr>
+          <tr><td>2. INSERT × 3</td><td>id=1: (box1, red), id=2: (sphere1, blue), id=3: (cylinder1, green)</td></tr>
+          <tr><td>3. SELECT *</td><td>3行とも取得される。<code>AUTOINCREMENT</code> により id は 1, 2, 3 と自動付与される</td></tr>
+          <tr><td>4. UPDATE</td><td>id=1（box1）の color が <code>red</code> から <code>yellow</code> に変わる。他の行は変更なし</td></tr>
+        </table>
+        <p style="margin-top:0.6rem">ポイント: <code>WHERE</code> 句がない UPDATE は<strong>全行</strong>が更新対象になる。今回は <code>WHERE name = 'box1'</code> があるため1行だけ更新される。<code>DEFAULT 'white'</code> は INSERT で color が省略された場合に使われる値で、今回はすべて指定したため発動しない。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 1.4 やってみよう（insert.run を2回実行）解答</summary>
+      <div class="answer-content">
+        <p><code>insert.run('太郎', 'こんにちは')</code> をコード例の通り実行した後、もう一度同じ <code>insert.run('太郎', 'こんにちは')</code> を実行した場合:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">SELECT * FROM messages の結果（2件）
+[
+  { id: 1, name: '太郎', text: 'こんにちは', created_at: '...' },
+  { id: 2, name: '太郎', text: 'こんにちは', created_at: '...' }
+]</pre>
+        <ul class="point-list" style="margin-top:0.5rem">
+          <li>件数は <strong>2件</strong>（同じ内容でも別行として追加される）</li>
+          <li>id は <code>AUTOINCREMENT</code> により <strong>1, 2</strong> と自動で割り振られる</li>
+          <li>仮にもう1回追加すれば id=3 になる。一度発行された id は<strong>再利用されない</strong>（行を DELETE しても次の INSERT で空き番号は使われない）</li>
+        </ul>
+      </div>
+    </details>
+    </div>
 
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>

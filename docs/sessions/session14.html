@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -483,8 +495,8 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計2項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">実装進捗</span>進捗レポート</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">ピアレビュー</span>レビュー記録</div>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">実装進捗</span>進捗レポート</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">ピアレビュー</span>レビュー記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -510,36 +522,36 @@ pre { position: relative; }
     <div class="diagram-container">
       <svg viewBox="0 0 760 180" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
         <rect x="10" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-        <text x="65" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">1. サーバ起動</text>
+        <text x="65" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">1. サーバ起動</text>
         <text x="65" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">Express + Socket.IO</text>
         <line x1="120" y1="52" x2="140" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
 
         <rect x="140" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-        <text x="195" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">2. 3Dシーン</text>
+        <text x="195" y="42" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">2. 3Dシーン</text>
         <text x="195" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">A-Frame 静的構築</text>
         <line x1="250" y1="52" x2="270" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
 
         <rect x="270" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-        <text x="325" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">3. 接続確認</text>
+        <text x="325" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">3. 接続確認</text>
         <text x="325" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">Socket.IO 疎通</text>
         <line x1="380" y1="52" x2="400" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
 
         <rect x="400" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-        <text x="455" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">4. アバター同期</text>
+        <text x="455" y="42" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">4. アバター同期</text>
         <text x="455" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">位置・回転の送受信</text>
         <line x1="510" y1="52" x2="530" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
 
         <rect x="530" y="20" width="110" height="65" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-        <text x="585" y="42" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">5. チャット</text>
+        <text x="585" y="42" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">5. チャット</text>
         <text x="585" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">吹き出し表示</text>
         <line x1="640" y1="52" x2="660" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arr14)"/>
 
         <rect x="660" y="20" width="90" height="65" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
-        <text x="705" y="42" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="10">6. 仕上げ</text>
+        <text x="705" y="42" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">6. 仕上げ</text>
         <text x="705" y="60" text-anchor="middle" fill="#E0E0E0" font-size="8">UI・デザイン調整</text>
 
         <text x="380" y="120" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">各段階が動いてから次に進む</text>
-        <text x="380" y="145" text-anchor="middle" fill="#888" font-size="10">一度に全部作ろうとせず、段階的に動作確認しながら実装する</text>
+        <text x="380" y="145" text-anchor="middle" fill="#888" font-size="11">一度に全部作ろうとせず、段階的に動作確認しながら実装する</text>
 
         <defs>
           <marker id="arr14" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555"/></marker>
@@ -615,6 +627,50 @@ pre { position: relative; }
       実装中によく遭遇するエラーとその解決方法をまとめました。<br>
       エラーが出たら、まず<strong>ブラウザのコンソール（F12）</strong>と<strong>ターミナル（サーバ側）</strong>を確認してください。
     </p>
+
+    <!-- Q&A box: よくある質問 (R8) -->
+    <div class="concept-box" style="border-left:4px solid #FFB800">
+      <h4>❓ デバッグでよくある疑問</h4>
+      <table>
+        <tr><th style="width:42%">よくある質問</th><th>答え</th></tr>
+        <tr>
+          <td><strong>エラーが出ているのにどこを直せばいいか分からない</strong></td>
+          <td>エラーメッセージの<strong>1行目</strong>と<strong>ファイル名:行番号</strong>を読む。原因は大抵その位置か、その近くで定義した変数にある。</td>
+        </tr>
+        <tr>
+          <td><strong>console.log を入れたのに何も表示されない</strong></td>
+          <td>そもそもその行に処理が到達していない。<code>console.log('A')</code>, <code>console.log('B')</code> のように複数入れて、どこまで実行されるか確認する。</td>
+        </tr>
+        <tr>
+          <td><strong>2タブで試したらアバターが2つ表示される（自分のも見える）</strong></td>
+          <td>サーバが <code>io.emit</code> を使っている。<code>socket.broadcast.emit</code> に変えると「送信者以外」に配信される。</td>
+        </tr>
+        <tr>
+          <td><strong>「動いていたコード」が動かなくなった</strong></td>
+          <td><code>git diff</code> で直近の変更を確認するか、最後に動いた時点との差分を見る。「動く状態に戻してから1つずつ追加」が最速。</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 具体例: typical error trace walkthrough (R8) -->
+    <div class="concept-box">
+      <h4>💡 具体例: エラーから原因にたどり着く流れ</h4>
+      <p style="font-size:0.95rem;margin-bottom:0.6rem">
+        ブラウザに次のエラーが表示されたとします:
+      </p>
+      <pre style="margin:0.5rem 0"><span class="code-label">Console</span>
+<span class="num">Uncaught TypeError</span>: Cannot read properties of <span class="kw">undefined</span> (reading <span class="str">'position'</span>)
+    at app.js:<span class="num">42</span>:<span class="num">18</span></pre>
+      <p style="font-size:0.95rem;margin-top:0.6rem"><strong>読み解き方:</strong></p>
+      <ol style="padding-left:1.4rem;font-size:0.95rem;line-height:1.9">
+        <li><code>app.js</code> の<strong>42行目</strong>で問題が起きている</li>
+        <li><code>undefined.position</code> を読もうとしている → 何かのオブジェクトが <code>undefined</code></li>
+        <li>該当行を見ると <code>data.position</code> と書いてある → <strong><code>data</code> が undefined</strong></li>
+        <li>送信側で <code>socket.emit('move', posData)</code> を確認 → <code>posData</code> がそもそも空だった</li>
+        <li>修正: 送信前に <code>if (posData) { ... }</code> を入れる or 送信ロジックを直す</li>
+      </ol>
+      <p style="font-size:0.9rem;color:#93D500;margin-top:0.6rem">→ <strong>「エラーメッセージから5分以内に原因の行を特定する」</strong>のがデバッグの基本リズム。</p>
+    </div>
 
     <div class="card" style="border-left:4px solid #FF5252">
       <div class="card-header"><h3>エラー1: CORS エラー</h3></div>
@@ -702,6 +758,101 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) => {
   <span class="cmt">// ここでA-Frameエンティティを更新</span>
 });</pre>
 
+      <!-- Animated diagram: デバッグ手順 (送信→受信→反映の追跡) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">デバッグ手順: console.log でデータの流れを追跡する</text>
+
+          <!-- Step badge (top right) -->
+          <rect x="510" y="50" width="170" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            ① 送信側でlog
+          </text>
+          <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            ② サーバ到達を確認
+          </text>
+          <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            ③ broadcast.emit
+          </text>
+          <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            ④ 受信側でlog
+          </text>
+          <text x="595" y="67" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            ⑤ 3D空間に反映！
+          </text>
+
+          <!-- Three columns: Client A / Server / Client B -->
+          <g>
+            <!-- Client A (sender) -->
+            <rect x="40" y="100" width="170" height="100" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+            <text x="125" y="125" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">Client A (送信)</text>
+            <text x="125" y="148" text-anchor="middle" fill="#aaa" font-size="11">socket.emit('move', pos)</text>
+            <text x="125" y="166" text-anchor="middle" fill="#888" font-size="10" font-style="italic">console.log('送信:', pos)</text>
+            <text x="125" y="186" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="600">F12 → Console</text>
+
+            <!-- Server -->
+            <rect x="265" y="100" width="170" height="100" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+            <text x="350" y="125" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13">Server</text>
+            <text x="350" y="148" text-anchor="middle" fill="#aaa" font-size="11">io.on('move', ...)</text>
+            <text x="350" y="166" text-anchor="middle" fill="#888" font-size="10" font-style="italic">socket.broadcast.emit(...)</text>
+            <text x="350" y="186" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="600">Terminal log</text>
+
+            <!-- Client B (receiver) -->
+            <rect x="490" y="100" width="170" height="100" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+            <text x="575" y="125" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">Client B (受信)</text>
+            <text x="575" y="148" text-anchor="middle" fill="#aaa" font-size="11">socket.on('moved', ...)</text>
+            <text x="575" y="166" text-anchor="middle" fill="#888" font-size="10" font-style="italic">console.log('受信:', data)</text>
+            <text x="575" y="186" text-anchor="middle" fill="#76B900" font-size="11" font-weight="600">F12 → Console</text>
+          </g>
+
+          <!-- Moving data packet -->
+          <circle r="10" fill="#FFB800" opacity="0">
+            <animate attributeName="opacity" values="0;1;1;1;1;1;1;1;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="125;125;220;350;350;480;575;575;575;575" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="200;200;150;150;150;150;150;150;200;200" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            <animate attributeName="fill" values="#FFB800;#FFB800;#FFB800;#4FC3F7;#4FC3F7;#4FC3F7;#76B900;#76B900;#76B900;#76B900" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Arrows between blocks -->
+          <line x1="210" y1="150" x2="265" y2="150" stroke="#555" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="435" y1="150" x2="490" y2="150" stroke="#555" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+          <!-- Current action text -->
+          <text x="350" y="232" text-anchor="middle" fill="#FFB800" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            送信ログが出ない → クライアント側のイベントハンドラを疑う
+          </text>
+          <text x="350" y="232" text-anchor="middle" fill="#4FC3F7" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            サーバログが出ない → io.on() の登録漏れを疑う
+          </text>
+          <text x="350" y="232" text-anchor="middle" fill="#4FC3F7" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            io.emit と broadcast.emit を間違えていないか？
+          </text>
+          <text x="350" y="232" text-anchor="middle" fill="#FFB800" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            受信ログが出ない → イベント名（'moved'）が一致しているか確認
+          </text>
+          <text x="350" y="232" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.18;0.35;0.42;0.58;0.65;0.82;0.90;1" dur="16s" repeatCount="indefinite"/>
+            全ログが正しく出ればOK！ A-Frameの座標反映へ
+          </text>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="40" y="260" width="620" height="44" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="350" y="282" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">エラーの位置を「送信側／サーバ／受信側」の3点で切り分ける</text>
+            <text x="350" y="298" text-anchor="middle" fill="#aaa" font-size="12">どこでログが止まったか = どこにバグがあるか</text>
+          </g>
+        </svg>
+      </div>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（2分）</p>
         <p style="color:#ccc;font-size:0.9rem">自分のプロジェクトで、サーバ側の <code>connection</code> イベント内に <code>console.log('接続数:', io.engine.clientsCount)</code> を追加し、2つのタブを開いたときの接続数を確認してみよう。</p>
@@ -745,6 +896,170 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) => {
       まだ実装が完了していない人は、以下の順番で進めてください。<br>
       <strong>1つの段階が動いてから次に進む</strong>のがポイントです。一度に全部作ろうとしないでください。
     </p>
+
+    <!-- Reading guide for implementation vocabulary (R8) -->
+    <div class="concept-box" style="border-left:4px solid #4FC3F7">
+      <h4>📖 用語の読み方</h4>
+      <p style="font-size:0.95rem;margin-bottom:0.6rem">この回でよく出る用語の発音と意味を整理します。</p>
+      <table>
+        <tr><th>用語</th><th>読み方</th><th>意味</th></tr>
+        <tr><td><code>branch</code></td><td><strong>ブランチ</strong></td><td>「枝」。並行作業のための分岐線</td></tr>
+        <tr><td><code>merge</code></td><td><strong>マージ</strong></td><td>分岐したブランチを統合すること</td></tr>
+        <tr><td>integration</td><td><strong>インテグレーション</strong></td><td>分割実装した機能を1つに統合する作業</td></tr>
+        <tr><td>refactoring</td><td><strong>リファクタリング</strong></td><td>動作を変えずにコードを整理・改善すること</td></tr>
+        <tr><td><code>commit</code> / <code>push</code></td><td><strong>コミット</strong> / <strong>プッシュ</strong></td><td>変更を記録 / リモートへ反映</td></tr>
+      </table>
+    </div>
+
+    <!-- Animated diagram: Git ワークフロー (commit → push → PR → merge) -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 280" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="350" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">Git ワークフロー: commit → push → PR → merge</text>
+
+        <!-- Step badge -->
+        <rect x="510" y="50" width="170" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          ① 編集
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          ② git commit
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          ③ git push
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          ④ Pull Request
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          ⑤ merge 完了！
+        </text>
+
+        <!-- Four phase boxes -->
+        <g>
+          <rect x="30" y="100" width="140" height="70" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="100" y="125" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">作業ディレクトリ</text>
+          <text x="100" y="146" text-anchor="middle" fill="#aaa" font-size="11">ファイル編集</text>
+          <text x="100" y="162" text-anchor="middle" fill="#666" font-size="10" font-style="italic">git add</text>
+
+          <rect x="190" y="100" width="140" height="70" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="260" y="125" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">ローカル commit</text>
+          <text x="260" y="146" text-anchor="middle" fill="#aaa" font-size="11">履歴に記録</text>
+          <text x="260" y="162" text-anchor="middle" fill="#666" font-size="10" font-style="italic">git commit -m</text>
+
+          <rect x="350" y="100" width="140" height="70" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="420" y="125" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13">リモート (GitHub)</text>
+          <text x="420" y="146" text-anchor="middle" fill="#aaa" font-size="11">共有リポジトリ</text>
+          <text x="420" y="162" text-anchor="middle" fill="#666" font-size="10" font-style="italic">git push</text>
+
+          <rect x="510" y="100" width="160" height="70" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="590" y="125" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">main ブランチ</text>
+          <text x="590" y="146" text-anchor="middle" fill="#aaa" font-size="11">レビュー後マージ</text>
+          <text x="590" y="162" text-anchor="middle" fill="#666" font-size="10" font-style="italic">PR → merge</text>
+        </g>
+
+        <!-- Arrows -->
+        <line x1="170" y1="135" x2="190" y2="135" stroke="#555" stroke-width="1.5" marker-end="url(#git-arr)"/>
+        <line x1="330" y1="135" x2="350" y2="135" stroke="#555" stroke-width="1.5" marker-end="url(#git-arr)"/>
+        <line x1="490" y1="135" x2="510" y2="135" stroke="#555" stroke-width="1.5" marker-end="url(#git-arr)"/>
+
+        <!-- Moving commit dot -->
+        <circle r="10" fill="#FFB800" opacity="0">
+          <animate attributeName="opacity" values="0;1;1;1;1;1;1;1;1;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="100;100;180;260;345;420;505;590;590;590" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="180;180;180;180;180;180;180;180;180;180" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="fill" values="#FFB800;#FFB800;#FFB800;#FFB800;#4FC3F7;#4FC3F7;#4FC3F7;#76B900;#76B900;#76B900" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Bottom legend -->
+        <g>
+          <rect x="30" y="218" width="640" height="44" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="240" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">小さく commit → こまめに push → PR でレビュー → main にマージ</text>
+          <text x="350" y="256" text-anchor="middle" fill="#aaa" font-size="12">グループ作業では、お互いの変更が衝突しないようブランチを分けて並列に作業する</text>
+        </g>
+
+        <defs>
+          <marker id="git-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Animated diagram: 機能分割と並列実装 -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="350" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">機能分割と並列実装: 役割を分けて同時進行する</text>
+
+        <!-- Step badge -->
+        <rect x="510" y="50" width="170" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          ① 機能を分割
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          ② 各自が並列実装
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          ③ 別ブランチでコミット
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          ④ main に統合
+        </text>
+
+        <!-- Single feature box -->
+        <rect x="280" y="90" width="140" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+        <text x="350" y="115" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">最終制作アプリ</text>
+        <text x="350" y="135" text-anchor="middle" fill="#aaa" font-size="11">3D + 同期 + チャット</text>
+
+        <!-- Split lines -->
+        <line x1="280" y1="150" x2="120" y2="180" stroke="#555" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <line x1="350" y1="150" x2="350" y2="180" stroke="#555" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <line x1="420" y1="150" x2="580" y2="180" stroke="#555" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+        <!-- 3 sub-modules: parallel work -->
+        <g>
+          <rect x="40" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="120" y="205" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="12">担当A: 3Dシーン</text>
+          <text x="120" y="224" text-anchor="middle" fill="#aaa" font-size="11">A-Frame</text>
+          <text x="120" y="240" text-anchor="middle" fill="#aaa" font-size="11">地面・空・照明</text>
+          <text x="120" y="256" text-anchor="middle" fill="#666" font-size="10" font-style="italic">branch: scene</text>
+
+          <rect x="270" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="350" y="205" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="12">担当B: 同期</text>
+          <text x="350" y="224" text-anchor="middle" fill="#aaa" font-size="11">Socket.IO</text>
+          <text x="350" y="240" text-anchor="middle" fill="#aaa" font-size="11">アバター位置</text>
+          <text x="350" y="256" text-anchor="middle" fill="#666" font-size="10" font-style="italic">branch: sync</text>
+
+          <rect x="500" y="180" width="160" height="80" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="2"/>
+          <text x="580" y="205" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="12">担当C: チャット</text>
+          <text x="580" y="224" text-anchor="middle" fill="#aaa" font-size="11">入力 / 吹き出し</text>
+          <text x="580" y="240" text-anchor="middle" fill="#aaa" font-size="11">UI</text>
+          <text x="580" y="256" text-anchor="middle" fill="#666" font-size="10" font-style="italic">branch: chat</text>
+        </g>
+
+        <!-- Highlight ring moves through phases -->
+        <rect width="170" height="90" rx="10" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+          <animate attributeName="opacity" values="0;1;1;1;1;1;1;0" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="x" values="35;35;35;265;265;495;495;495" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="y" values="175;175;175;175;175;175;175;175" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="#FFB800;#FFB800;#FFB800;#4FC3F7;#4FC3F7;#FF5252;#76B900;#76B900" keyTimes="0;0.18;0.22;0.45;0.50;0.78;0.82;1" dur="16s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- Bottom message -->
+        <g>
+          <rect x="40" y="278" width="620" height="32" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="298" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">機能を分けて担当を決めると、3人で3倍速く実装できる</text>
+        </g>
+      </svg>
+    </div>
 
     <div class="step-card">
       <div class="step-num">1</div>
@@ -835,6 +1150,83 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
       </div>
     </div>
 
+    <!-- Animated diagram: 段階的統合 (動作するもの→次の機能を足す) -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 300" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="350" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">段階的統合: 動くものを土台に機能を1つずつ追加</text>
+
+        <!-- Step badge -->
+        <rect x="510" y="50" width="170" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          ① サーバが動く
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          ② 3Dシーンを足す
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          ③ Socket接続
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          ④ アバター同期
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          ⑤ チャット完成！
+        </text>
+
+        <!-- Stacked layers (built incrementally bottom-up) -->
+        <g>
+          <!-- Layer 1: server (always present) -->
+          <rect x="100" y="240" width="500" height="40" rx="8" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="350" y="265" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">① Node.js + Express サーバ</text>
+
+          <!-- Layer 2: 3D scene -->
+          <rect x="100" y="195" width="500" height="40" rx="8" fill="#1a2e0a" stroke="#76B900" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="220" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ② A-Frame 3Dシーン
+          </text>
+
+          <!-- Layer 3: socket -->
+          <rect x="100" y="150" width="500" height="40" rx="8" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="175" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ③ Socket.IO 接続
+          </text>
+
+          <!-- Layer 4: avatar -->
+          <rect x="100" y="105" width="500" height="40" rx="8" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="130" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ④ アバター同期
+          </text>
+
+          <!-- Layer 5: chat (top) -->
+          <rect x="100" y="85" width="500" height="22" rx="8" fill="#1a2e0a" stroke="#76B900" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="100" text-anchor="middle" fill="#76B900" font-weight="700" font-size="12" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.35;0.40;0.55;0.60;0.75;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ⑤ チャット機能
+          </text>
+        </g>
+
+        <!-- Down arrow on right side indicating direction of build -->
+        <line x1="640" y1="105" x2="640" y2="270" stroke="#FFB800" stroke-width="2" stroke-dasharray="3 3" opacity="0.6"/>
+        <text x="660" y="180" fill="#FFB800" font-size="11" font-weight="600" text-anchor="middle" transform="rotate(90 660 180)">追加方向</text>
+      </svg>
+    </div>
+
     <div class="step-card" style="border: 1px solid #FFB800;">
       <div class="step-num" style="background:#FFB800">6</div>
       <div class="step-body">
@@ -848,6 +1240,93 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
           <li>発表のデモを想定して動作を最終確認する</li>
         </ul>
       </div>
+    </div>
+
+    <!-- Animated diagram: リファクタリング (動作を変えず構造を整える) -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 300" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="350" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">リファクタリング: 動作を変えずに構造を整える</text>
+
+        <!-- Step badge -->
+        <rect x="510" y="50" width="170" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+        <text x="595" y="67" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          ① 動くが汚いコード
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          ② 関数を抽出
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          ③ 名前を改善
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          ④ console.log 削除
+        </text>
+        <text x="595" y="67" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          ⑤ 同じ動作・綺麗な構造！
+        </text>
+
+        <!-- Before/After columns -->
+        <g>
+          <!-- BEFORE -->
+          <rect x="30" y="95" width="290" height="155" rx="10" fill="#1A1A1A" stroke="#FF5252" stroke-width="2"/>
+          <text x="175" y="118" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="13">BEFORE（動くが汚い）</text>
+
+          <text x="48" y="142" fill="#aaa" font-size="11" font-family="JetBrains Mono">socket.on('m', (d) =&gt; {</text>
+          <text x="48" y="158" fill="#aaa" font-size="11" font-family="JetBrains Mono">  console.log('debug1', d);</text>
+          <text x="48" y="174" fill="#aaa" font-size="11" font-family="JetBrains Mono">  const e = document.querySelector(</text>
+          <text x="48" y="190" fill="#aaa" font-size="11" font-family="JetBrains Mono">    '#a-' + d.id);</text>
+          <text x="48" y="206" fill="#aaa" font-size="11" font-family="JetBrains Mono">  if(!e){...{大きなブロック}...}</text>
+          <text x="48" y="222" fill="#aaa" font-size="11" font-family="JetBrains Mono">  e.setAttribute('position', d.p);</text>
+          <text x="48" y="238" fill="#aaa" font-size="11" font-family="JetBrains Mono">});</text>
+
+          <!-- Arrow -->
+          <line x1="330" y1="170" x2="370" y2="170" stroke="#FFB800" stroke-width="3" marker-end="url(#refac-arr)"/>
+          <text x="350" y="190" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">改善</text>
+
+          <!-- AFTER -->
+          <rect x="380" y="95" width="290" height="155" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="525" y="118" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+            AFTER（同じ動作・整理済み）
+          </text>
+
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+            <text x="398" y="142" fill="#aaa" font-size="11" font-family="JetBrains Mono">function updateAvatar(data) {</text>
+            <text x="398" y="158" fill="#aaa" font-size="11" font-family="JetBrains Mono">  const avatar = getOrCreate(data.id);</text>
+            <text x="398" y="174" fill="#aaa" font-size="11" font-family="JetBrains Mono">  avatar.setAttribute(</text>
+            <text x="398" y="190" fill="#aaa" font-size="11" font-family="JetBrains Mono">    'position', data.position);</text>
+            <text x="398" y="206" fill="#aaa" font-size="11" font-family="JetBrains Mono">}</text>
+            <text x="398" y="226" fill="#76B900" font-size="11" font-family="JetBrains Mono">socket.on('moved', updateAvatar);</text>
+          </g>
+
+          <!-- BEFORE issue badges -->
+          <text x="48" y="262" fill="#FF5252" font-size="11" opacity="0.8">変数1文字 / コピペ / debug残り</text>
+          <text x="398" y="244" fill="#76B900" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0.85;0.85" keyTimes="0;0.15;0.20;0.40;0.45;0.65;0.70;0.85;0.90;1" dur="18s" repeatCount="indefinite"/>
+            関数化 / 命名改善 / debug削除
+          </text>
+        </g>
+
+        <!-- Bottom message -->
+        <g>
+          <rect x="30" y="270" width="640" height="22" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="285" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700">「動くこと」を確認してから整える。動作テストを通したら再びテスト。</text>
+        </g>
+
+        <defs>
+          <marker id="refac-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#FFB800"/>
+          </marker>
+        </defs>
+      </svg>
     </div>
   </div>
 </section>
@@ -1125,7 +1604,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
   </div>
 </section>
 
-<!-- ============ ANSWERS (GATED) ============ -->
+<!-- ============ ANSWERS (例題: 公開 / 課題: 暗号化) ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-29T16:20">
   <div class="container">
     <div class="section-header">
@@ -1134,6 +1613,14 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
     </div>
 
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
+
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+      <!-- 第14回には独立した「例題」セクションはありません（実装ガイド・チェックリスト中心の回）。 -->
+      <!-- 該当する例題が追加された場合はここに <details> ブロックで解答を追加します。 -->
+    </div>
+
+    <!-- ── 課題・参考情報の解答（暗号化） ── -->
     <div id="answers-encrypted" data-cipher="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"></div>
   </div>
 </section>

@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,10 +446,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -476,6 +488,83 @@ pre { position: relative; }
         <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ glTF を使うのか？</p>
         <p style="font-size:0.9rem"><strong>glTF（Graphics Language Transmission Format）</strong>は、Khronos Group が策定したWeb向け3Dの標準フォーマットです。「3DのJPEG」とも呼ばれ、ブラウザで高速に読み込めるよう設計されています。A-Frame、Three.js、Babylon.js など主要なWebGL フレームワークすべてが対応しています。</p>
       </div>
+
+      <!-- DIAGRAM 2: OBJ vs FBX vs GLB 比較 (animated) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">OBJ vs FBX vs GLB ── ファイルサイズと機能を比較</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+            ① OBJ: 古典・テキスト
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+            ② FBX: 巨大バイナリ
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+            ③ GLB: 軽量・最適
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+            ④ 比較完了！
+          </text>
+
+          <!-- OBJ card -->
+          <rect x="40" y="95" width="190" height="180" rx="12" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="135" y="120" text-anchor="middle" fill="#FFB800" font-size="14" font-weight="700">.obj + .mtl</text>
+          <text x="135" y="142" text-anchor="middle" fill="#aaa" font-size="11">テキスト形式</text>
+          <rect x="60" y="158" width="150" height="22" rx="6" fill="#222" stroke="#444" stroke-width="1"/>
+          <rect x="60" y="158" width="120" height="22" rx="6" fill="#FFB800" opacity="0.5"/>
+          <text x="135" y="173" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">5 MB（大きめ）</text>
+          <text x="60" y="200" fill="#aaa" font-size="11">アニメーション: <tspan fill="#FF5252" font-weight="700">不可</tspan></text>
+          <text x="60" y="218" fill="#aaa" font-size="11">テクスチャ: 別ファイル</text>
+          <text x="60" y="236" fill="#aaa" font-size="11">ボーン/スキニング: 不可</text>
+          <text x="60" y="258" fill="#FF5252" font-size="11" font-weight="700">Web向き: △</text>
+
+          <!-- FBX card -->
+          <rect x="252" y="95" width="190" height="180" rx="12" fill="#141414" stroke="#FF5252" stroke-width="2"/>
+          <text x="347" y="120" text-anchor="middle" fill="#FF5252" font-size="14" font-weight="700">.fbx</text>
+          <text x="347" y="142" text-anchor="middle" fill="#aaa" font-size="11">独自バイナリ</text>
+          <rect x="272" y="158" width="150" height="22" rx="6" fill="#222" stroke="#444" stroke-width="1"/>
+          <rect x="272" y="158" width="148" height="22" rx="6" fill="#FF5252" opacity="0.5"/>
+          <text x="347" y="173" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">20 MB（巨大）</text>
+          <text x="272" y="200" fill="#aaa" font-size="11">アニメーション: <tspan fill="#76B900" font-weight="700">可</tspan></text>
+          <text x="272" y="218" fill="#aaa" font-size="11">テクスチャ: 内包</text>
+          <text x="272" y="236" fill="#aaa" font-size="11">ボーン/スキニング: 可</text>
+          <text x="272" y="258" fill="#FF5252" font-size="11" font-weight="700">Web向き: ✕（重い）</text>
+
+          <!-- GLB card (highlighted) -->
+          <rect x="464" y="95" width="190" height="180" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="3"/>
+          <text x="559" y="120" text-anchor="middle" fill="#76B900" font-size="14" font-weight="700">.glb</text>
+          <text x="559" y="142" text-anchor="middle" fill="#93D500" font-size="11">Web標準バイナリ</text>
+          <rect x="484" y="158" width="150" height="22" rx="6" fill="#222" stroke="#444" stroke-width="1"/>
+          <rect x="484" y="158" width="40" height="22" rx="6" fill="#76B900" opacity="0.8"/>
+          <text x="559" y="173" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1.5 MB（小）</text>
+          <text x="484" y="200" fill="#aaa" font-size="11">アニメーション: <tspan fill="#76B900" font-weight="700">可</tspan></text>
+          <text x="484" y="218" fill="#aaa" font-size="11">テクスチャ: 内包</text>
+          <text x="484" y="236" fill="#aaa" font-size="11">ボーン/スキニング: 可</text>
+          <text x="484" y="258" fill="#76B900" font-size="11" font-weight="700">Web向き: ◎（最適）</text>
+
+          <!-- Highlight ring sweeping -->
+          <rect x="40" y="95" width="190" height="180" rx="12" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="252" y="95" width="190" height="180" rx="12" fill="none" stroke="#FF5252" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="464" y="95" width="190" height="180" rx="12" fill="none" stroke="#76B900" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.27;0.50;0.54;0.78;0.82;1" dur="15s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Legend -->
+          <rect x="40" y="285" width="614" height="22" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="347" y="300" text-anchor="middle" fill="#93D500" font-size="12" font-weight="600">サイズの目安: OBJ ≈ O(n)  /  FBX ≈ O(n) ×大係数  /  GLB ≈ O(n/3) 圧縮で小  ─  GLB がWeb最適</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.2 glTF形式の構造 -->
@@ -493,23 +582,23 @@ pre { position: relative; }
           <!-- gltf side -->
           <text x="170" y="25" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">.gltf 形式（複数ファイル）</text>
           <rect x="30" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="80" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">scene.gltf</text>
-          <text x="80" y="78" text-anchor="middle" fill="#999" font-size="9">JSON構造</text>
+          <text x="80" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">scene.gltf</text>
+          <text x="80" y="78" text-anchor="middle" fill="#999" font-size="11">JSON構造</text>
           <rect x="145" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-          <text x="195" y="60" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">scene.bin</text>
-          <text x="195" y="78" text-anchor="middle" fill="#999" font-size="9">頂点データ</text>
+          <text x="195" y="60" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">scene.bin</text>
+          <text x="195" y="78" text-anchor="middle" fill="#999" font-size="11">頂点データ</text>
           <rect x="260" y="40" width="100" height="50" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="310" y="60" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">texture.png</text>
-          <text x="310" y="78" text-anchor="middle" fill="#999" font-size="9">テクスチャ</text>
+          <text x="310" y="60" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">texture.png</text>
+          <text x="310" y="78" text-anchor="middle" fill="#999" font-size="11">テクスチャ</text>
           <rect x="20" y="100" width="350" height="40" rx="8" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
-          <text x="195" y="125" text-anchor="middle" fill="#666" font-size="10">同じフォルダに配置する必要がある</text>
+          <text x="195" y="125" text-anchor="middle" fill="#666" font-size="11">同じフォルダに配置する必要がある</text>
           <!-- arrow -->
           <text x="420" y="70" text-anchor="middle" fill="#999" font-size="20">vs</text>
           <!-- glb side -->
           <text x="570" y="25" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">.glb 形式（単一ファイル）</text>
           <rect x="470" y="40" width="200" height="50" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="570" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">model.glb</text>
-          <text x="570" y="78" text-anchor="middle" fill="#999" font-size="9">すべてが1ファイルにまとまる</text>
+          <text x="570" y="60" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">model.glb</text>
+          <text x="570" y="78" text-anchor="middle" fill="#999" font-size="11">すべてが1ファイルにまとまる</text>
           <rect x="490" y="100" width="50" height="25" rx="4" fill="#76B900" opacity="0.3"/>
           <text x="515" y="117" text-anchor="middle" fill="#76B900" font-size="8" font-weight="600">JSON</text>
           <rect x="545" y="100" width="50" height="25" rx="4" fill="#FFB800" opacity="0.3"/>
@@ -521,6 +610,91 @@ pre { position: relative; }
       </div>
 
       <p style="margin-top:0.5rem">この授業では、管理が簡単な <strong>.glb 形式</strong> を主に使います。 <span class="exam-alert">課題に出ます</span></p>
+
+      <!-- DIAGRAM 3: Bone構造とスキニング (animated) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Bone (ボーン) 構造とスキニングの仕組み</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            ① Mesh（メッシュ）
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            ② Bone 配置
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            ③ スキニング結合
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            ④ ボーンを回転
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            ⑤ メッシュ変形
+          </text>
+
+          <!-- Body outline (mesh) -->
+          <path d="M 200 110 Q 175 130 175 170 L 175 220 Q 175 260 200 280 L 240 280 Q 265 260 265 220 L 265 170 Q 265 130 240 110 Z" fill="#1a2e0a" stroke="#76B900" stroke-width="2" opacity="0.8"/>
+          <!-- Head -->
+          <circle cx="220" cy="95" r="20" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+
+          <!-- Bones (initial, vertical) -->
+          <g>
+            <!-- Spine bone -->
+            <line x1="220" y1="115" x2="220" y2="200" stroke="#4FC3F7" stroke-width="3" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            </line>
+            <circle cx="220" cy="115" r="5" fill="#4FC3F7" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="220" cy="200" r="5" fill="#4FC3F7" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            </circle>
+
+            <!-- Arm bone (rotates in step 4-5) -->
+            <line x1="220" y1="135" x2="290" y2="135" stroke="#FFB800" stroke-width="3" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              <animate attributeName="x2" values="290;290;290;290;290;290;320;320;320;320" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              <animate attributeName="y2" values="135;135;135;135;135;135;95;95;95;95" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            </line>
+            <circle cy="135" r="5" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              <animate attributeName="cx" values="290;290;290;290;290;290;320;320;320;320" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="135;135;135;135;135;135;95;95;95;95" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Skinning links (appear in step 3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
+            <line x1="220" y1="135" x2="265" y2="135" stroke="#93D500" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="220" y1="135" x2="175" y2="135" stroke="#93D500" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="220" y1="170" x2="265" y2="170" stroke="#93D500" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="220" y1="170" x2="175" y2="170" stroke="#93D500" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="120" y="155" fill="#93D500" font-size="10">skinning weight: 1.0</text>
+          </g>
+
+          <!-- Right side panel (info) -->
+          <rect x="380" y="100" width="280" height="180" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="395" y="125" fill="#76B900" font-size="13" font-weight="700">用語と関係</text>
+          <text x="395" y="148" fill="#aaa" font-size="11"><tspan fill="#76B900" font-weight="700">Mesh</tspan>: 三角形の集合（外見）</text>
+          <text x="395" y="168" fill="#aaa" font-size="11"><tspan fill="#4FC3F7" font-weight="700">Bone</tspan>: 骨格の1本（内部構造）</text>
+          <text x="395" y="188" fill="#aaa" font-size="11"><tspan fill="#FFB800" font-weight="700">Skeleton</tspan>: Bone の階層集合</text>
+          <text x="395" y="208" fill="#aaa" font-size="11"><tspan fill="#93D500" font-weight="700">Skinning</tspan>: 頂点 ⇔ Bone の対応</text>
+          <text x="395" y="228" fill="#aaa" font-size="11"><tspan fill="#FF5252" font-weight="700">Animation</tspan>: Bone の回転の時系列</text>
+          <text x="395" y="256" fill="#93D500" font-size="11" font-weight="700">頂点数 × ボーン数 = 計算量 O(VB)</text>
+
+          <!-- Legend -->
+          <rect x="40" y="290" width="620" height="22" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="305" text-anchor="middle" fill="#93D500" font-size="12" font-weight="600">Bone 数の目安: 人型キャラ ≈ 50〜80本 / 手や指まで含めると 100本超 ─ ボーン数が多いほど描画コストは O(n)</text>
+        </svg>
+      </div>
     </div>
 
     <!-- 1.3 A-Frameでのモデル読み込み -->
@@ -551,36 +725,36 @@ pre { position: relative; }
 
       <table>
         <tr><th>方法</th><th>メリット</th><th>デメリット</th></tr>
-<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem">直接指定（方法1）と a-assets プリロード（方法2）の両方でモデルを読み込み、ページ表示時の挙動の違いを観察してみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 読み込み方法の違いで気づいたことを1文で書く</div></div>
-</div>
         <tr><td><strong>直接指定</strong></td><td>コードが短い</td><td>表示中にモデルが「ポンッ」と出現する</td></tr>
         <tr><td><strong>a-assets プリロード</strong></td><td>すべてのアセットを先に読み込んでから表示。スムーズ。</td><td>コードが少し長くなる</td></tr>
       </table>
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">直接指定（方法1）と a-assets プリロード（方法2）の両方でモデルを読み込み、ページ表示時の挙動の違いを観察してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 読み込み方法の違いで気づいたことを1文で書く</div></div>
+      </div>
       <p style="margin-top:0.5rem"><code>&lt;a-assets&gt;</code> は画像、音声、動画、3Dモデルなどのメディアファイルを<strong>事前にまとめて読み込む</strong>ための仕組みです。複数のモデルを使うシーンではプリロードを推奨します。</p>
       <div class="diagram-container" style="margin:1.5rem 0">
         <svg viewBox="0 0 700 120" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
           <!-- Step 1: Model file -->
           <rect x="20" y="25" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
           <text x="85" y="48" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">3Dモデルファイル</text>
-          <text x="85" y="65" text-anchor="middle" fill="#999" font-size="9">.glb / .gltf</text>
+          <text x="85" y="65" text-anchor="middle" fill="#999" font-size="11">.glb / .gltf</text>
           
           <line x1="150" y1="52" x2="195" y2="52" stroke="#76B900" stroke-width="2" marker-end="url(#pl-arr)"/>
           
           <!-- Step 2: a-assets -->
           <rect x="195" y="25" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="260" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">&lt;a-assets&gt;</text>
-          <text x="260" y="60" text-anchor="middle" fill="#E0E0E0" font-size="9">プリロード</text>
+          <text x="260" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">&lt;a-assets&gt;</text>
+          <text x="260" y="60" text-anchor="middle" fill="#E0E0E0" font-size="11">プリロード</text>
           <text x="260" y="72" text-anchor="middle" fill="#999" font-size="8">id で名前を付ける</text>
           
           <line x1="325" y1="52" x2="370" y2="52" stroke="#76B900" stroke-width="2" marker-end="url(#pl-arr)"/>
           
           <!-- Step 3: gltf-model -->
           <rect x="370" y="25" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="435" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">gltf-model="#id"</text>
-          <text x="435" y="60" text-anchor="middle" fill="#E0E0E0" font-size="9">モデルを参照</text>
+          <text x="435" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">gltf-model="#id"</text>
+          <text x="435" y="60" text-anchor="middle" fill="#E0E0E0" font-size="11">モデルを参照</text>
           <text x="435" y="72" text-anchor="middle" fill="#999" font-size="8">position/scale/rotation</text>
           
           <line x1="500" y1="52" x2="545" y2="52" stroke="#4FC3F7" stroke-width="2" marker-end="url(#pl-arr2)"/>
@@ -588,13 +762,99 @@ pre { position: relative; }
           <!-- Step 4: Scene -->
           <rect x="545" y="25" width="130" height="55" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
           <text x="610" y="48" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">3Dシーンに表示</text>
-          <text x="610" y="65" text-anchor="middle" fill="#999" font-size="9">ブラウザで描画</text>
+          <text x="610" y="65" text-anchor="middle" fill="#999" font-size="11">ブラウザで描画</text>
           
-          <text x="350" y="105" text-anchor="middle" fill="#666" font-size="10">3Dアセットパイプライン: ファイル取得 → プリロード → 参照配置 → レンダリング</text>
-          
+          <text x="350" y="105" text-anchor="middle" fill="#666" font-size="11">3Dアセットパイプライン: ファイル取得 → プリロード → 参照配置 → レンダリング</text>
+
           <defs>
             <marker id="pl-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#76B900"/></marker>
             <marker id="pl-arr2" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- DIAGRAM 4: Material 参照（テクスチャ・PBR）(animated) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Material 参照: メッシュがマテリアル/テクスチャを共有する仕組み</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            ① Mesh が要求
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            ② Material 参照
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            ③ Texture 参照
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            ④ 描画完了
+          </text>
+
+          <!-- Left: Mesh cluster (3 meshes share 1 material) -->
+          <text x="100" y="95" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">Mesh（3個）</text>
+          <rect x="50" y="105" width="100" height="50" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="100" y="135" text-anchor="middle" fill="#76B900" font-size="11">body.mesh</text>
+          <rect x="50" y="165" width="100" height="50" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="100" y="195" text-anchor="middle" fill="#76B900" font-size="11">arm.mesh</text>
+          <rect x="50" y="225" width="100" height="50" rx="8" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="100" y="255" text-anchor="middle" fill="#76B900" font-size="11">leg.mesh</text>
+
+          <!-- Middle: Material -->
+          <text x="350" y="95" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">Material（共有・1個）</text>
+          <rect x="280" y="160" width="140" height="60" rx="10" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="350" y="180" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">PBR Material</text>
+          <text x="350" y="198" text-anchor="middle" fill="#aaa" font-size="10">baseColor / metallic</text>
+          <text x="350" y="212" text-anchor="middle" fill="#aaa" font-size="10">roughness / normal</text>
+
+          <!-- Right: Textures -->
+          <text x="595" y="95" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">Texture（2枚）</text>
+          <rect x="540" y="105" width="110" height="50" rx="8" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="595" y="128" text-anchor="middle" fill="#FFB800" font-size="11">albedo.png</text>
+          <text x="595" y="145" text-anchor="middle" fill="#888" font-size="10">1024×1024</text>
+          <rect x="540" y="180" width="110" height="50" rx="8" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="595" y="203" text-anchor="middle" fill="#FFB800" font-size="11">normal.png</text>
+          <text x="595" y="220" text-anchor="middle" fill="#888" font-size="10">1024×1024</text>
+
+          <!-- Arrows from meshes to material (step 2) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            <line x1="150" y1="130" x2="280" y2="185" stroke="#4FC3F7" stroke-width="2" marker-end="url(#m-arr1)"/>
+            <line x1="150" y1="190" x2="280" y2="190" stroke="#4FC3F7" stroke-width="2" marker-end="url(#m-arr1)"/>
+            <line x1="150" y1="250" x2="280" y2="200" stroke="#4FC3F7" stroke-width="2" marker-end="url(#m-arr1)"/>
+          </g>
+
+          <!-- Arrows from material to textures (step 3) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+            <line x1="420" y1="180" x2="540" y2="130" stroke="#FFB800" stroke-width="2" marker-end="url(#m-arr2)"/>
+            <line x1="420" y1="200" x2="540" y2="205" stroke="#FFB800" stroke-width="2" marker-end="url(#m-arr2)"/>
+          </g>
+
+          <!-- Highlight rings -->
+          <rect x="50" y="105" width="100" height="170" rx="8" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="280" y="160" width="140" height="60" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="540" y="105" width="110" height="125" rx="8" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.24;0.46;0.50;0.72;0.76;1" dur="17s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Legend -->
+          <rect x="40" y="290" width="620" height="22" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="350" y="305" text-anchor="middle" fill="#93D500" font-size="12" font-weight="600">参照を共有することで、テクスチャは1枚で済む（メモリ削減 O(1) × 共有数）</text>
+
+          <defs>
+            <marker id="m-arr1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="m-arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#FFB800"/></marker>
           </defs>
         </svg>
       </div>
@@ -616,12 +876,12 @@ pre { position: relative; }
           position=<span class="str">"0 1 -5"</span>
           rotation=<span class="str">"0 180 0"</span>
           scale=<span class="str">"2 2 2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>よくある問題:</strong>
-<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem"><code>scale</code> を <code>"1 3 1"</code>（Y軸だけ3倍）に変えてモデルの形がどう変わるか確認してみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 不均等スケールの結果を1文で書く</div></div>
-</div> モデルが巨大すぎる → <code>scale="0.01 0.01 0.01"</code> で小さくする。モデルが地面に埋まる → <code>position</code> の y を上げる。モデルが後ろ向き → <code>rotation</code> の y を調整する。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>よくある問題:</strong> モデルが巨大すぎる → <code>scale="0.01 0.01 0.01"</code> で小さくする。モデルが地面に埋まる → <code>position</code> の y を上げる。モデルが後ろ向き → <code>rotation</code> の y を調整する。</p>
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>scale</code> を <code>"1 3 1"</code>（Y軸だけ3倍）に変えてモデルの形がどう変わるか確認してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 不均等スケールの結果を1文で書く</div></div>
+      </div>
     </div>
 
     <!-- 1.5 無料3Dモデルの入手先 -->
@@ -654,6 +914,76 @@ pre { position: relative; }
         <tr><td><strong>テクスチャ</strong></td><td>1024x1024 px 以下</td><td>大きなテクスチャはGPUメモリを消費する。</td></tr>
       </table>
       <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>確認方法:</strong> A-Frameのシーンで <kbd>Ctrl+Alt+I</kbd>（またはアドレスバーの末尾に <code>?stats</code> を追加）で統計情報を表示できます。draw calls や triangles の数値を確認しましょう。</p>
+
+      <!-- DIAGRAM 5: Draco 圧縮効果 (animated) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Draco 圧縮: glTF をさらに 5〜10 倍小さくする</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ① 元の GLB
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ② Draco 圧縮
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ③ 縮小ファイル
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ④ ブラウザで解凍
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ⑤ 元のメッシュ復元
+          </text>
+
+          <!-- Before bar (large) -->
+          <text x="40" y="105" fill="#FFB800" font-size="12" font-weight="700">圧縮前 (model.glb)</text>
+          <rect x="40" y="115" width="620" height="36" rx="8" fill="#222" stroke="#444" stroke-width="1"/>
+          <rect x="40" y="115" height="36" rx="8" fill="#FFB800" opacity="0.6">
+            <animate attributeName="width" values="0;620;620;620;620;620;620;620;620;620" keyTimes="0;0.18;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="138" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">10 MB（頂点・法線・UVを全て格納）</text>
+
+          <!-- Arrow -->
+          <text x="350" y="180" text-anchor="middle" fill="#4FC3F7" font-size="20" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            ↓ Draco エンコーダ
+          </text>
+
+          <!-- After bar (small) -->
+          <text x="40" y="215" fill="#76B900" font-size="12" font-weight="700">圧縮後 (model.glb + Draco)</text>
+          <rect x="40" y="225" width="620" height="36" rx="8" fill="#222" stroke="#444" stroke-width="1"/>
+          <rect x="40" y="225" height="36" rx="8" fill="#76B900" opacity="0.85">
+            <animate attributeName="width" values="0;0;0;0;0;0;124;124;124;124" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="350" y="248" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            1.2 MB（約 8 倍小さく！）
+          </text>
+
+          <!-- Result panel -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.78;0.82;1" dur="18s" repeatCount="indefinite"/>
+            <rect x="160" y="280" width="380" height="30" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+            <text x="350" y="300" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">転送時間: 8倍速 / GPU 上で展開 → 描画</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- R9: Tables ↔ diagrams cross-reference -->
+      <table style="margin-top:1rem">
+        <tr><th>圧縮技術</th><th>対象</th><th>圧縮率</th><th>備考</th></tr>
+        <tr><td><strong>Draco</strong></td><td>頂点・法線・UV</td><td>5〜10倍</td><td>Googleが開発。glTF 拡張 <code>KHR_draco_mesh_compression</code></td></tr>
+        <tr><td><strong>Meshopt</strong></td><td>頂点・インデックス</td><td>3〜5倍</td><td>軽量・高速。GPU 解凍向き</td></tr>
+        <tr><td><strong>KTX2 / Basis</strong></td><td>テクスチャ</td><td>4〜8倍</td><td>GPU で直接読める圧縮テクスチャ</td></tr>
+      </table>
     </div>
 
 
@@ -667,6 +997,62 @@ pre { position: relative; }
       </table>
     </div>
 
+    <!-- R8: 読み方 (Pronunciation guide) -->
+    <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F50A; 読み方ガイド</p>
+      <p style="font-size:0.85rem;color:#aaa;margin-bottom:0.6rem">3D アセット用語の読み方を一覧にしました。グループ口頭試問で正しく発音できるように確認しておきましょう。</p>
+      <table style="font-size:0.88rem">
+        <tr><th>用語</th><th>読み方</th><th>意味</th></tr>
+        <tr><td><strong>glTF</strong></td><td><strong style="color:#FFB800">ジーエルティーエフ</strong>（gee-el-tee-eff）</td><td>Web向け3D標準フォーマット</td></tr>
+        <tr><td><strong>GLB</strong></td><td><strong style="color:#FFB800">ジーエルビー</strong>（gee-el-bee）</td><td>glTF のバイナリ単一ファイル版</td></tr>
+        <tr><td><strong>FBX</strong></td><td><strong style="color:#FFB800">エフビーエックス</strong>（eff-bee-ex）</td><td>Autodesk の3D交換フォーマット</td></tr>
+        <tr><td><strong>OBJ</strong></td><td><strong style="color:#FFB800">オービージェー</strong>／オブジェ</td><td>古典的なテキスト3Dフォーマット</td></tr>
+        <tr><td><strong>USDZ</strong></td><td><strong style="color:#FFB800">ユーエスディーゼット</strong></td><td>Apple AR 用フォーマット</td></tr>
+        <tr><td><strong>asset</strong></td><td><strong style="color:#FFB800">アセット</strong>（ásset）</td><td>素材ファイル（モデル・音声・画像など）</td></tr>
+        <tr><td><strong>skinning</strong></td><td><strong style="color:#FFB800">スキニング</strong></td><td>頂点とボーンの結合（変形のしくみ）</td></tr>
+        <tr><td><strong>bone</strong></td><td><strong style="color:#FFB800">ボーン</strong>（骨）</td><td>キャラの骨格を構成する1本</td></tr>
+        <tr><td><strong>Draco</strong></td><td><strong style="color:#FFB800">ドラコ</strong></td><td>Google製の3D圧縮ライブラリ</td></tr>
+        <tr><td><strong>PBR</strong></td><td><strong style="color:#FFB800">ピービーアール</strong></td><td>Physically Based Rendering（物理ベース描画）</td></tr>
+      </table>
+    </div>
+
+    <!-- R8: 具体例 (Concrete examples) -->
+    <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4A1; 具体例で理解する 3D アセット</p>
+      <table style="font-size:0.88rem">
+        <tr><th>概念</th><th>身近な例</th><th>3Dでの対応</th></tr>
+        <tr><td><strong>asset</strong></td><td>料理の食材（肉・野菜・調味料）</td><td>モデル・テクスチャ・音声・アニメ</td></tr>
+        <tr><td><strong>glTF/GLB</strong></td><td>レシピを1つの PDF にまとめる</td><td>JSON・バイナリ・画像を1ファイルに</td></tr>
+        <tr><td><strong>Mesh</strong></td><td>紙工作の外形（折り紙のかたち）</td><td>三角形の集合で表す3Dの表面</td></tr>
+        <tr><td><strong>Bone</strong></td><td>骨と関節（人体の骨格）</td><td>変形の中心になる1本の棒</td></tr>
+        <tr><td><strong>Skinning</strong></td><td>皮膚が骨に貼り付いて動く</td><td>頂点が Bone の動きに追従</td></tr>
+        <tr><td><strong>Material</strong></td><td>絵具・テクスチャ・質感</td><td>色・光沢・凹凸を決める設定</td></tr>
+        <tr><td><strong>Draco 圧縮</strong></td><td>ZIPで写真を圧縮して送る</td><td>頂点データを8倍小さく転送</td></tr>
+        <tr><td><strong>プリロード</strong></td><td>料理の下ごしらえを先に済ます</td><td>表示前にモデルを全部読み込む</td></tr>
+      </table>
+    </div>
+
+    <!-- R8: Q&A box -->
+    <div style="background:#111;border:1px solid #4FC3F7;border-radius:8px;padding:1rem;margin:1.5rem 0">
+      <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x2753; よくある質問（Q&amp;A）</p>
+      <div style="font-size:0.9rem">
+        <p style="color:#FFB800;font-weight:700;margin-top:0.5rem">Q1. glTF と GLB はどちらを使えばいいですか？</p>
+        <p style="color:#ccc;margin-bottom:0.6rem">A. 基本は <strong>GLB</strong> でOK。1ファイルにまとまるため管理・配信が楽。デバッグ中に中身を編集したいときだけ <code>.gltf</code> を選ぶ。</p>
+
+        <p style="color:#FFB800;font-weight:700">Q2. ダウンロードしたモデルが大きすぎてブラウザが固まります。</p>
+        <p style="color:#ccc;margin-bottom:0.6rem">A. ポリゴン数とテクスチャ解像度を疑う。<code>?stats</code> で <strong>triangles &gt; 5万</strong> なら要削減。Blender で「Decimate」モディファイアをかけるか、Draco 圧縮版を出力する。</p>
+
+        <p style="color:#FFB800;font-weight:700">Q3. モデルが真っ黒で表示されます。</p>
+        <p style="color:#ccc;margin-bottom:0.6rem">A. <strong>光源（&lt;a-light&gt;）</strong>が無い可能性が高い。<code>type="ambient"</code>（環境光）と <code>type="directional"</code>（指向性光）を最低1つずつ配置する。</p>
+
+        <p style="color:#FFB800;font-weight:700">Q4. FBX ファイルを使いたい！</p>
+        <p style="color:#ccc;margin-bottom:0.6rem">A. A-Frame / Three.js は <strong>FBX を直接サポートしていない</strong>。Blender で読み込み → glTF/GLB に変換して使う。</p>
+
+        <p style="color:#FFB800;font-weight:700">Q5. 同じモデルを100個並べると遅くなりますか？</p>
+        <p style="color:#ccc">A. はい。<strong>draw call が100回</strong>になる。<code>instanced rendering</code>（Three.js の <code>InstancedMesh</code>）を使えば draw call を 1 回にまとめられる。A-Frame では <code>aframe-instancing</code> コンポーネントが有名。</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -678,20 +1064,32 @@ pre { position: relative; }
       <h2>例題とトレース演習</h2>
     </div>
 
-    <!-- Example -->
+    <!-- Example 1 -->
     <div class="card example">
       <div class="card-header">
-        <span class="tag tag-example">例題</span>
+        <span class="tag tag-example">例題 1</span>
         <h3>glTFモデルの読み込みコードを読む</h3>
       </div>
-      <p>以下のHTMLコードがどのようにモデルを読み込んで表示するか確認しましょう。</p>
+      <p>以下のHTMLコードがどのようにモデルを読み込んで表示するか確認しましょう。1行にまとめず、属性ごとに改行することで「位置・スケール・回転」が一目で分かるようにしています。</p>
       <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- ① モデルのURL（中間変数のように分かりやすく一旦定数として書く） --&gt;</span>
+<span class="cmt">&lt;!-- MODEL_URL = "https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf" --&gt;</span>
+
 <span class="kw">&lt;a-scene&gt;</span>
+  <span class="cmt">&lt;!-- ② a-assets でプリロード（id=dino で名前付け） --&gt;</span>
   <span class="kw">&lt;a-assets&gt;</span>
-    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span> src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+    <span class="kw">&lt;a-asset-item</span>
+      id=<span class="str">"dino"</span>
+      src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
   <span class="kw">&lt;/a-assets&gt;</span>
 
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span> position=<span class="str">"0 0 -5"</span> scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+  <span class="cmt">&lt;!-- ③ モデル配置: 属性を1行ずつ書く（1行に詰めず、変数のように分けて読みやすく） --&gt;</span>
+  <span class="kw">&lt;a-entity</span>
+    gltf-model=<span class="str">"#dino"</span>
+    position=<span class="str">"0 0 -5"</span>     <span class="cmt">&lt;!-- x=0, y=0, z=-5 → 正面・床面・少し奥 --&gt;</span>
+    scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+  <span class="cmt">&lt;!-- ④ 背景（空） --&gt;</span>
   <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
       <table>
@@ -701,6 +1099,103 @@ pre { position: relative; }
         <tr><td><code>gltf-model="#dino"</code></td><td>読み込んだモデルを <code>#dino</code> で参照して表示する</td></tr>
         <tr><td><code>scale="0.5 0.5 0.5"</code></td><td>モデルを半分のサイズに縮小する</td></tr>
       </table>
+
+      <!-- DIAGRAM 1: GLTFLoader ロード進捗 (animated) -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">GLTFLoader: モデル読み込みの5ステップ</text>
+
+          <!-- Step badge -->
+          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+            ① fetch 要求
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+            ② バイナリ受信
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+            ③ JSON 解析
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+            ④ GPUへ転送
+          </text>
+          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+            ⑤ シーン描画
+          </text>
+
+          <!-- Pipeline stages -->
+          <rect x="40" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="95" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">① fetch</text>
+          <text x="95" y="142" text-anchor="middle" fill="#aaa" font-size="11">model.glb</text>
+
+          <rect x="172" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="227" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">② バイナリ</text>
+          <text x="227" y="142" text-anchor="middle" fill="#aaa" font-size="11">ArrayBuffer</text>
+
+          <rect x="304" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="359" y="125" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">③ 解析</text>
+          <text x="359" y="142" text-anchor="middle" fill="#aaa" font-size="11">parseJSON</text>
+
+          <rect x="436" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="491" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">④ GPU</text>
+          <text x="491" y="142" text-anchor="middle" fill="#aaa" font-size="11">VBO/Texture</text>
+
+          <rect x="568" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="623" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">⑤ 描画</text>
+          <text x="623" y="142" text-anchor="middle" fill="#aaa" font-size="11">render()</text>
+
+          <!-- Arrows -->
+          <line x1="150" y1="128" x2="172" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
+          <line x1="282" y1="128" x2="304" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
+          <line x1="414" y1="128" x2="436" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
+          <line x1="546" y1="128" x2="568" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
+
+          <!-- Highlight ring - animated -->
+          <rect x="40" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="172" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="304" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="436" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="568" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Progress bar -->
+          <rect x="40" y="190" width="638" height="22" rx="11" fill="#222" stroke="#333" stroke-width="1"/>
+          <rect x="42" y="192" height="18" rx="9" fill="#76B900" opacity="0.85">
+            <animate attributeName="width" values="0;128;256;384;512;634" keyTimes="0;0.20;0.40;0.60;0.80;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <text x="359" y="206" text-anchor="middle" fill="#000" font-size="12" font-weight="700">progress %</text>
+
+          <!-- Legend / size info -->
+          <rect x="40" y="246" width="638" height="50" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
+          <text x="60" y="268" fill="#76B900" font-size="12" font-weight="700">ロード時間目安:</text>
+          <text x="60" y="285" fill="#aaa" font-size="11">サイズ 1MB → 約 0.3 秒 (高速回線) / 5MB → 約 1.5 秒 / 20MB → 約 6 秒  ─  ファイルサイズが大きいほどロード時間は線形に O(n)</text>
+
+          <defs>
+            <marker id="g1arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#666"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
+        <p style="color:#ccc;font-size:0.9rem">例題のコードをそのまま実行した後、<code>position</code> の z 値を <code>-5</code> から <code>-10</code> に変えて保存しよう。モデルはどちらに移動して、見かけの大きさはどう変わる？</p>
+        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ z はカメラから離れる方向（負）/近づく方向（正）。-10 にすると奥に下がるので、見かけは小さく見える。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> z 値の変化と見かけの大きさの関係を1文で書く</div></div>
+      </div>
     </div>
 
     <!-- Trace 1 -->
@@ -1263,6 +1758,22 @@ pre { position: relative; }
       <h2>解答例</h2>
     </div>
 
+    <!-- ── 例題・トレース演習・コード体験の解答（常に公開） ── -->
+    <div id="answers-examples">
+
+    <!-- 例題1 解答 -->
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 1 やってみよう 解答</summary>
+      <div class="answer-content">
+        <p><code>position="0 0 -5"</code> を <code>position="0 0 -10"</code> に変更した場合の挙動:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">変更前: z = -5 → 恐竜はカメラから5メートル奥
+変更後: z = -10 → 恐竜はカメラから10メートル奥（さらに遠く）
+見かけの大きさ: 約 1/2 になる（距離が2倍 → 視覚的に半分）</pre>
+        <p>3D空間では <strong>z 軸の負方向がカメラから離れる方向</strong>。距離が2倍になると、遠近法により見かけの大きさは約 1/2 になる（人間の目の遠近感と同じ）。つまり <code>scale</code> を変えずに <code>position</code> の z だけ動かしても、<strong>カメラから遠ざけば小さく見える</strong>。これは「絶対サイズは変わらないが、相対サイズが変わる」現象。</p>
+      </div>
+    </details>
+
+    <!-- トレース演習 1 解答 -->
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
       <div class="answer-content">
@@ -1278,6 +1789,7 @@ pre { position: relative; }
       </div>
     </details>
 
+    <!-- トレース演習 2 解答 -->
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
       <div class="answer-content">
@@ -1290,6 +1802,7 @@ pre { position: relative; }
       </div>
     </details>
 
+    <!-- コード体験 1 解答 -->
     <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
       <div class="answer-content">
@@ -1301,6 +1814,7 @@ pre { position: relative; }
       </div>
     </details>
 
+    <!-- コード体験 2 解答 -->
     <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
       <div class="answer-content">
@@ -1311,6 +1825,9 @@ pre { position: relative; }
         </ul>
       </div>
     </details>
+
+    </div>
+    <!-- ── /answers-examples ── -->
 
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>

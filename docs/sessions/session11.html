@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -434,10 +446,10 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</div>
-        <div class="sub-item"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</div>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -459,6 +471,25 @@ pre { position: relative; }
       今回は<strong>ユーザの操作（クリック・インタラクション）</strong>を全ユーザ間で同期し、<strong>「誰かが箱をクリックしたら全員の画面で色が変わる」</strong>ような共有体験を実現します。
     </p>
 
+    <!-- 用語の読み方 -->
+    <div class="concept-box" style="border-left:4px solid #FFB800">
+      <h4>用語の読み方</h4>
+      <p style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.6rem 1rem;margin-bottom:1rem;border-radius:6px;font-size:0.95rem">
+        本回で出てくる英単語は、技術書・公式ドキュメントでも頻出する基本用語です。意味だけでなく<strong>読み方</strong>も覚えておくと、英語のチュートリアルや GitHub の Issue を読むときに迷いません。
+      </p>
+      <table>
+        <tr><th style="width:140px">用語</th><th style="width:120px">読み方</th><th>意味</th></tr>
+        <tr><td><code>event</code></td><td><strong>イベント</strong></td><td>「出来事」。クリック・キー入力・受信などの発生事象。<code>addEventListener</code>＝アド・イベント・リスナー</td></tr>
+        <tr><td><code>emit</code></td><td><strong>エミット</strong></td><td>「発する／送出する」。Socket.IO で<strong>メッセージを送る</strong>動作</td></tr>
+        <tr><td><code>throttle</code></td><td><strong>スロットル</strong></td><td>「絞る／制限する」。一定間隔ごとに最大1回だけ実行する仕組み（連射防止）</td></tr>
+        <tr><td><code>debounce</code></td><td><strong>デバウンス</strong></td><td>「跳ね返りを抑える」。短時間に連続したイベントをまとめて最後の1回だけ処理する仕組み</td></tr>
+        <tr><td><code>authoritative</code></td><td><strong>オーソリタティブ</strong></td><td>「権威ある／決定権を持つ」。サーバが状態の<strong>正解</strong>を決める設計を server-authoritative と呼ぶ</td></tr>
+        <tr><td><code>lockstep</code></td><td><strong>ロックステップ</strong></td><td>「歩調を合わせる」。全員が同じ順番でイベントを処理して状態を一致させる手法</td></tr>
+        <tr><td><code>broadcast</code></td><td><strong>ブロードキャスト</strong></td><td>「放送する」。送信者以外の全員にメッセージを送る</td></tr>
+        <tr><td><code>raycaster</code></td><td><strong>レイキャスター</strong></td><td>「光線を投げる装置」。3D空間で<strong>視線の先にあるオブジェクトを判定</strong>する仕組み</td></tr>
+      </table>
+    </div>
+
     <!-- 1.1 クリックイベントの同期 -->
     <div class="concept-box">
       <h4>1.1 クリックイベントの同期 <span class="exam-alert">課題に出ます</span></h4>
@@ -472,20 +503,20 @@ pre { position: relative; }
         <svg viewBox="0 0 720 250" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
           <!-- Steps -->
           <rect x="20" y="30" width="150" height="50" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="95" y="50" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="10">ユーザA</text>
-          <text x="95" y="68" text-anchor="middle" fill="#E0E0E0" font-size="10">箱をクリック</text>
+          <text x="95" y="50" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">ユーザA</text>
+          <text x="95" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11">箱をクリック</text>
 
           <rect x="200" y="30" width="150" height="50" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-          <text x="275" y="50" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="10">クライアントA</text>
-          <text x="275" y="68" text-anchor="middle" fill="#E0E0E0" font-size="9">emit('objectClick', id)</text>
+          <text x="275" y="50" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">クライアントA</text>
+          <text x="275" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11">emit('objectClick', id)</text>
 
           <rect x="380" y="30" width="150" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="455" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">サーバ</text>
-          <text x="455" y="68" text-anchor="middle" fill="#E0E0E0" font-size="9">状態を更新 + 全員に配信</text>
+          <text x="455" y="50" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">サーバ</text>
+          <text x="455" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11">状態を更新 + 全員に配信</text>
 
           <rect x="560" y="30" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#93D500" stroke-width="2"/>
-          <text x="630" y="50" text-anchor="middle" fill="#93D500" font-weight="700" font-size="10">全クライアント</text>
-          <text x="630" y="68" text-anchor="middle" fill="#E0E0E0" font-size="9">色を変更して表示</text>
+          <text x="630" y="50" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">全クライアント</text>
+          <text x="630" y="68" text-anchor="middle" fill="#E0E0E0" font-size="11">色を変更して表示</text>
 
           <!-- Arrows -->
           <line x1="170" y1="55" x2="200" y2="55" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arw1)"/>
@@ -494,12 +525,12 @@ pre { position: relative; }
 
           <!-- New user flow -->
           <rect x="380" y="120" width="150" height="50" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-          <text x="455" y="140" text-anchor="middle" fill="#76B900" font-weight="700" font-size="10">サーバ（状態保持）</text>
-          <text x="455" y="158" text-anchor="middle" fill="#E0E0E0" font-size="9">objectStates オブジェクト</text>
+          <text x="455" y="140" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">サーバ（状態保持）</text>
+          <text x="455" y="158" text-anchor="middle" fill="#E0E0E0" font-size="11">objectStates オブジェクト</text>
 
           <rect x="560" y="120" width="140" height="50" rx="10" fill="#1A1A1A" stroke="#E040FB" stroke-width="2"/>
-          <text x="630" y="140" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="10">新規ユーザ</text>
-          <text x="630" y="158" text-anchor="middle" fill="#E0E0E0" font-size="9">接続時に現在の状態を受信</text>
+          <text x="630" y="140" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">新規ユーザ</text>
+          <text x="630" y="158" text-anchor="middle" fill="#E0E0E0" font-size="11">接続時に現在の状態を受信</text>
 
           <line x1="530" y1="145" x2="560" y2="145" stroke="#E040FB" stroke-width="2" marker-end="url(#arw5)"/>
           <line x1="455" y1="80" x2="455" y2="120" stroke="#76B900" stroke-width="1.5" stroke-dasharray="5,3"/>
@@ -536,6 +567,154 @@ pre { position: relative; }
 <span class="kw">&lt;a-box</span> id=<span class="str">"target-box"</span> class=<span class="str">"clickable"</span>
        position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
 
+      <!-- R6: イベント送受信を関数として整理 -->
+      <p style="margin-top:1rem"><strong>イベント送受信を関数に分けて書く</strong>と、流れがはっきりします。</p>
+      <pre><span class="code-label">JavaScript ── クライアント側を関数として整理</span>
+<span class="cmt">// (1) クリックされた時に呼ばれる関数</span>
+<span class="kw">function</span> <span class="fn">handleBoxClick</span>(element) {
+  <span class="kw">var</span> clickedId = element.id;            <span class="cmt">// ← 中間変数で意図を明確に</span>
+  <span class="kw">var</span> message = { id: clickedId };
+  socket.<span class="fn">emit</span>(<span class="str">'objectClick'</span>, message);
+}
+
+<span class="cmt">// (2) サーバから更新通知が来た時に呼ばれる関数</span>
+<span class="kw">function</span> <span class="fn">applyObjectUpdate</span>(data) {
+  <span class="kw">var</span> target = document.<span class="fn">getElementById</span>(data.id);
+  <span class="kw">if</span> (target === <span class="kw">null</span>) {              <span class="cmt">// ← 1行 if ではなくブロックで</span>
+    <span class="kw">return</span>;
+  }
+  target.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
+}
+
+<span class="cmt">// (3) クリック対象に (1) を登録</span>
+<span class="kw">function</span> <span class="fn">setupClickListeners</span>() {
+  <span class="kw">var</span> clickables = document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>);
+  clickables.<span class="fn">forEach</span>(<span class="kw">function</span>(el) {
+    el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() { <span class="fn">handleBoxClick</span>(el); });
+  });
+}
+
+<span class="cmt">// (4) サーバからの受信を (2) にディスパッチ</span>
+socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, applyObjectUpdate);
+<span class="fn">setupClickListeners</span>();</pre>
+
+      <!-- R9: 役割マップ表 -->
+      <p style="margin-top:1rem"><strong>関数ごとの役割マップ</strong></p>
+      <table>
+        <tr><th>関数</th><th>呼ばれるタイミング</th><th>役割</th></tr>
+        <tr><td><code>handleBoxClick</code></td><td>ユーザがクリックした瞬間</td><td><strong>送信</strong>: サーバに「何をクリックしたか」だけ伝える</td></tr>
+        <tr><td><code>applyObjectUpdate</code></td><td>サーバから <code>objectUpdated</code> 受信時</td><td><strong>適用</strong>: サーバが決めた色を画面に反映する</td></tr>
+        <tr><td><code>setupClickListeners</code></td><td>ページ読み込み時に1回</td><td><strong>初期化</strong>: 全 <code>.clickable</code> に (1) を結び付ける</td></tr>
+      </table>
+
+      <!-- R7: クリック・キー入力イベントのアニメーション図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 320" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">クリック・キー入力イベントの流れ（5段階）</text>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="540" y="48" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="64" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ① イベント発生
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ② emit で送信
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ③ サーバが受信
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ④ 全員に配信
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ 画面更新
+            </text>
+          </g>
+
+          <!-- Nodes -->
+          <rect x="30" y="120" width="140" height="60" rx="10" fill="#141414" stroke="#FF5252" stroke-width="2"/>
+          <text x="100" y="143" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="13">ユーザA</text>
+          <text x="100" y="160" text-anchor="middle" fill="#E0E0E0" font-size="11">click / keydown</text>
+          <text x="100" y="175" text-anchor="middle" fill="#E0E0E0" font-size="11">が発火</text>
+
+          <rect x="200" y="120" width="140" height="60" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="270" y="143" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">クライアントA</text>
+          <text x="270" y="160" text-anchor="middle" fill="#E0E0E0" font-size="11">socket.emit(</text>
+          <text x="270" y="175" text-anchor="middle" fill="#E0E0E0" font-size="11">'objectClick', ...)</text>
+
+          <rect x="370" y="120" width="140" height="60" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="440" y="143" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">サーバ</text>
+          <text x="440" y="160" text-anchor="middle" fill="#E0E0E0" font-size="11">状態更新 +</text>
+          <text x="440" y="175" text-anchor="middle" fill="#E0E0E0" font-size="11">io.emit 配信</text>
+
+          <rect x="540" y="120" width="150" height="60" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="615" y="143" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13">全クライアント</text>
+          <text x="615" y="160" text-anchor="middle" fill="#E0E0E0" font-size="11">setAttribute(</text>
+          <text x="615" y="175" text-anchor="middle" fill="#E0E0E0" font-size="11">'color', newColor)</text>
+
+          <!-- Highlight rings (step indicator) -->
+          <rect x="22" y="112" width="156" height="76" rx="14" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="192" y="112" width="156" height="76" rx="14" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="362" y="112" width="156" height="76" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="532" y="112" width="166" height="76" rx="14" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Arrows -->
+          <line x1="170" y1="150" x2="200" y2="150" stroke="#FFB800" stroke-width="2.5" marker-end="url(#evArr1)"/>
+          <line x1="340" y1="150" x2="370" y2="150" stroke="#76B900" stroke-width="2.5" marker-end="url(#evArr2)"/>
+          <line x1="510" y1="150" x2="540" y2="150" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#evArr3)"/>
+
+          <!-- Final highlight (step 5) -->
+          <text x="615" y="208" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.30;0.40;0.55;0.70;0.85;0.95;1" dur="16s" repeatCount="indefinite"/>
+            ✓ 全員の画面で色が変わる
+          </text>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="30" y="248" width="660" height="50" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <circle cx="55" cy="265" r="5" fill="#FF5252"/><text x="68" y="269" fill="#FF5252" font-size="11" font-weight="600">入力 (Input)</text>
+            <circle cx="180" cy="265" r="5" fill="#FFB800"/><text x="193" y="269" fill="#FFB800" font-size="11" font-weight="600">送信 (Network)</text>
+            <circle cx="320" cy="265" r="5" fill="#76B900"/><text x="333" y="269" fill="#76B900" font-size="11" font-weight="600">権威 (Server)</text>
+            <circle cx="450" cy="265" r="5" fill="#4FC3F7"/><text x="463" y="269" fill="#4FC3F7" font-size="11" font-weight="600">配信 (Broadcast)</text>
+            <circle cx="600" cy="265" r="5" fill="#93D500"/><text x="613" y="269" fill="#93D500" font-size="11" font-weight="600">反映 (Render)</text>
+            <text x="360" y="288" text-anchor="middle" fill="#888" font-size="11">入力 → ネットワーク → サーバ判定 → 全員に配信 → 画面反映</text>
+          </g>
+
+          <defs>
+            <marker id="evArr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="evArr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="evArr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- 具体例 -->
+      <div style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.8rem 1rem;margin-top:1rem;border-radius:6px;font-size:0.9rem">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc">教室の電子黒板を想像してください。学生Aがホワイトボードの「赤」ボタンを<strong>クリック</strong>すると、その情報が先生のサーバに送られ、サーバが「次は青にしよう」と判定して<strong>全員のタブレット</strong>に配信します。学生B・Cの画面も同時に青になります。これと同じ流れを Socket.IO で実装しているだけです。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">Q&amp;A よくある疑問</p>
+        <p style="color:#ccc;font-size:0.9rem"><strong>Q:</strong> クライアント側で色を直接変えてはダメなの？<br>
+        <strong>A:</strong> ダメではないが、<strong>状態の食い違い</strong>が起きやすくなります。例えば、ユーザAが「赤→青」、ユーザBが同じ瞬間に「赤→緑」とクリックしたとき、各クライアントが勝手に色を計算すると<strong>AとBで見える色が違う</strong>状況になります。サーバを唯一の判定者にすれば、全員が「赤→青→緑」のように同じ順で同じ色を見ます。</p>
+      </div>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">上のコードで <code>class="clickable"</code> を削除した場合、カーソルを合わせたときの挙動はどう変わるか予測してみよう。</p>
@@ -555,22 +734,152 @@ pre { position: relative; }
         <tr><td><strong>リアルタイム反映</strong></td><td>クリック時にサーバで状態を更新し、全クライアントに配信する</td></tr>
         <tr><td><strong>途中参加</strong></td><td>新しいユーザが接続したとき、サーバが現在のオブジェクト状態を送信する</td></tr>
       </table>
-      <pre><span class="code-label">JavaScript（サーバ側の概念コード）</span>
-<span class="cmt">// サーバでオブジェクトの状態を管理</span>
+      <pre><span class="code-label">JavaScript（サーバ側の概念コード）── 関数として整理</span>
+<span class="cmt">// サーバでオブジェクトの状態を管理（唯一の正解）</span>
 <span class="kw">var</span> objectStates = {
   <span class="str">'box-1'</span>: { color: <span class="str">'red'</span> },
   <span class="str">'box-2'</span>: { color: <span class="str">'blue'</span> },
   <span class="str">'box-3'</span>: { color: <span class="str">'green'</span> }
 };
 
-<span class="cmt">// 新規接続時: 現在の全状態を送信</span>
-socket.<span class="fn">emit</span>(<span class="str">'initState'</span>, objectStates);
+<span class="cmt">// (1) 状態更新ロジックを関数として切り出す</span>
+<span class="kw">function</span> <span class="fn">updateObjectColor</span>(id, newColor) {
+  <span class="kw">if</span> (objectStates[id] === <span class="kw">undefined</span>) {       <span class="cmt">// ← 1行 if ではなくブロックで</span>
+    <span class="kw">return</span> <span class="kw">null</span>;
+  }
+  objectStates[id].color = newColor;
+  <span class="kw">return</span> objectStates[id];
+}
 
-<span class="cmt">// クリック時: 状態を更新して全員に配信</span>
-socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span class="kw">function</span>(data) {
-  objectStates[data.id].color = data.newColor;
-  io.<span class="fn">emit</span>(<span class="str">'objectUpdated'</span>, data);
+<span class="cmt">// (2) 新規接続時: 現在の全状態を送信</span>
+<span class="kw">function</span> <span class="fn">sendInitialState</span>(socket) {
+  socket.<span class="fn">emit</span>(<span class="str">'initState'</span>, objectStates);
+}
+
+<span class="cmt">// (3) クリック受信: 状態を更新して全員に配信</span>
+<span class="kw">function</span> <span class="fn">handleObjectClick</span>(data) {
+  <span class="kw">var</span> updated = <span class="fn">updateObjectColor</span>(data.id, data.newColor);
+  <span class="kw">if</span> (updated === <span class="kw">null</span>) {
+    <span class="kw">return</span>;
+  }
+  <span class="kw">var</span> payload = { id: data.id, color: updated.color };  <span class="cmt">// ← 中間変数</span>
+  io.<span class="fn">emit</span>(<span class="str">'objectUpdated'</span>, payload);
+}
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  <span class="fn">sendInitialState</span>(socket);
+  socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, handleObjectClick);
 });</pre>
+
+      <!-- R7: Input → Network → State更新 アニメーション図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">Input → Network → State更新 → Broadcast の流れ</text>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="540" y="48" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="64" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ① 入力イベント
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ② ネットワーク送信
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ③ サーバ状態更新
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ④ 全員に配信
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ 全画面が一致
+            </text>
+          </g>
+
+          <!-- Input box -->
+          <rect x="30" y="100" width="120" height="50" rx="10" fill="#141414" stroke="#FF5252" stroke-width="2"/>
+          <text x="90" y="123" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="13">Input</text>
+          <text x="90" y="142" text-anchor="middle" fill="#aaa" font-size="11">click / keydown</text>
+
+          <rect x="22" y="92" width="136" height="66" rx="14" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Network arrow -->
+          <line x1="150" y1="125" x2="220" y2="125" stroke="#FFB800" stroke-width="3" marker-end="url(#sArr1)"/>
+          <text x="185" y="115" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">Network</text>
+
+          <!-- Server box -->
+          <rect x="220" y="100" width="180" height="80" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="310" y="123" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">サーバ (Authoritative)</text>
+          <text x="310" y="142" text-anchor="middle" fill="#aaa" font-size="11">updateObjectColor()</text>
+          <text x="310" y="160" text-anchor="middle" fill="#aaa" font-size="11">→ io.emit('objectUpdated')</text>
+          <text x="310" y="176" text-anchor="middle" fill="#888" font-size="11">objectStates が「唯一の正解」</text>
+
+          <rect x="212" y="92" width="196" height="96" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Broadcast arrow (three branches) -->
+          <line x1="400" y1="125" x2="470" y2="100" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#sArr2)"/>
+          <line x1="400" y1="140" x2="470" y2="140" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#sArr2)"/>
+          <line x1="400" y1="155" x2="470" y2="180" stroke="#4FC3F7" stroke-width="2.5" marker-end="url(#sArr2)"/>
+
+          <!-- 3 clients -->
+          <rect x="470" y="85" width="100" height="32" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="520" y="106" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアントA</text>
+          <rect x="470" y="125" width="100" height="32" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="520" y="146" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアントB</text>
+          <rect x="470" y="165" width="100" height="32" rx="6" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="520" y="186" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアントC</text>
+
+          <rect x="462" y="77" width="116" height="128" rx="14" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Final state (step 5): All clients show same color -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.20;0.35;0.45;0.60;0.75;0.88;0.95;1" dur="16s" repeatCount="indefinite"/>
+            <rect x="180" y="220" width="360" height="50" rx="10" fill="#1a2e0a" stroke="#93D500" stroke-width="2"/>
+            <text x="360" y="245" text-anchor="middle" fill="#93D500" font-size="14" font-weight="700">全員の objectStates['box-1'].color === '#4FC3F7'</text>
+            <text x="360" y="262" text-anchor="middle" fill="#aaa" font-size="11">→ A・B・Cの画面でまったく同じ色が見える</text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="30" y="290" width="660" height="50" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <circle cx="55" cy="307" r="5" fill="#FF5252"/><text x="68" y="311" fill="#FF5252" font-size="11" font-weight="600">Input</text>
+            <circle cx="140" cy="307" r="5" fill="#FFB800"/><text x="153" y="311" fill="#FFB800" font-size="11" font-weight="600">Network</text>
+            <circle cx="245" cy="307" r="5" fill="#76B900"/><text x="258" y="311" fill="#76B900" font-size="11" font-weight="600">State更新</text>
+            <circle cx="365" cy="307" r="5" fill="#4FC3F7"/><text x="378" y="311" fill="#4FC3F7" font-size="11" font-weight="600">Broadcast</text>
+            <circle cx="495" cy="307" r="5" fill="#93D500"/><text x="508" y="311" fill="#93D500" font-size="11" font-weight="600">全員同じ状態</text>
+            <text x="360" y="330" text-anchor="middle" fill="#888" font-size="11">サーバの objectStates が「唯一の正解」になることで、後から接続した人にも最新を渡せる</text>
+          </g>
+
+          <defs>
+            <marker id="sArr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="sArr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- 具体例 -->
+      <div style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.8rem 1rem;margin-top:1rem;border-radius:6px;font-size:0.9rem">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc">Google ドキュメントの裏側では、文書本体（文字列、書式、コメント）が <strong>Google サーバ上の1つのデータ</strong>として保管されています。あなたが文字を打つと、その差分がサーバに送られ、サーバが本体を更新して、開いている全員に新しい状態を配信します。<strong>後から開いた人</strong>も、サーバから「現在のドキュメント全文」をもらって即座に最新版を見られます。<code>objectStates</code> と <code>initState</code> はまさにこの役割です。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">Q&amp;A よくある疑問</p>
+        <p style="color:#ccc;font-size:0.9rem"><strong>Q:</strong> サーバが再起動したら状態は消えるの？<br>
+        <strong>A:</strong> はい、メモリ上の変数なので消えます。本番では Redis やデータベース（PostgreSQL など）に <code>objectStates</code> を保存して、再起動後も復元します。授業中はメモリで十分ですが、「永続化」という発想は覚えておきましょう。</p>
+      </div>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
@@ -581,17 +890,143 @@ socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span 
 
     <!-- 1.3 アニメーションの同期 -->
     <div class="concept-box">
-      <h4>1.3 アニメーションの同期</h4>
-      <p>A-Frame の <code>animation</code> コンポーネントを使い、全クライアントで同時にアニメーションを再生します。</p>
-      <p>サーバから「アニメーション開始」のイベントを受信したら、該当オブジェクトに <code>setAttribute('animation', ...)</code> でアニメーションを設定します。</p>
-      <pre><span class="code-label">JavaScript（クライアント側）</span>
-<span class="cmt">// クリック時: 回転アニメーションを設定</span>
-box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
-  property: <span class="str">'rotation'</span>,
-  to: <span class="str">'0 360 0'</span>,
-  dur: <span class="num">1000</span>,
-  easing: <span class="str">'easeInOutQuad'</span>
+      <h4>1.3 アニメーションの同期と判定の権威</h4>
+      <div class="analogy">
+        オンラインゲームで「敵に攻撃が当たった／外れた」をどこが決めるか考えてみてください。<strong>自分のPCで判定</strong>するとチートが可能になり、相手と結果が食い違います。だから多くのゲームは<strong>サーバが判定</strong>します。これを <strong>server-authoritative（サーバ権威）</strong> と呼びます。アニメーション・衝突判定もまったく同じです。
+      </div>
+      <p>A-Frame の <code>animation</code> コンポーネントを使い、全クライアントで同時にアニメーションを再生します。<strong>「いつ再生するか」「結果が当たったか」</strong>はサーバが判定し、クライアントは<strong>描画だけ</strong>を担当します。</p>
+
+      <!-- R9: 権威設計の比較表 -->
+      <p style="margin-top:1rem"><strong>Client-authoritative vs Server-authoritative</strong></p>
+      <table>
+        <tr><th></th><th>Client-authoritative（クライアント権威）</th><th>Server-authoritative（サーバ権威）</th></tr>
+        <tr><td><strong>判定する場所</strong></td><td>各クライアント</td><td>サーバ</td></tr>
+        <tr><td><strong>長所</strong></td><td>応答が速い（ローカルで即決定）</td><td>全員の状態が一致する／チート困難</td></tr>
+        <tr><td><strong>短所</strong></td><td>食い違いが起きる／チート可能</td><td>判定が往復ぶんだけ遅れる</td></tr>
+        <tr><td><strong>用途</strong></td><td>カーソル位置・UI（自分にしか影響しない）</td><td>共有オブジェクト・スコア・当たり判定</td></tr>
+      </table>
+
+      <pre><span class="code-label">JavaScript ── アニメーションも関数として整理</span>
+<span class="cmt">// (1) アニメーション再生関数（クライアント側）</span>
+<span class="kw">function</span> <span class="fn">playRotateAnimation</span>(elementId) {
+  <span class="kw">var</span> box = document.<span class="fn">getElementById</span>(elementId);
+  <span class="kw">if</span> (box === <span class="kw">null</span>) {
+    <span class="kw">return</span>;
+  }
+  <span class="kw">var</span> animationConfig = {        <span class="cmt">// ← 中間変数で意図を明確に</span>
+    property: <span class="str">'rotation'</span>,
+    to: <span class="str">'0 360 0'</span>,
+    dur: <span class="num">1000</span>,
+    easing: <span class="str">'easeInOutQuad'</span>
+  };
+  box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, animationConfig);
+}
+
+<span class="cmt">// (2) サーバが「再生せよ」と命令してきたら (1) を呼ぶ</span>
+socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <span class="kw">function</span>(data) {
+  <span class="fn">playRotateAnimation</span>(data.id);
 });</pre>
+
+      <!-- R7: 衝突判定の権威 アニメーション図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">衝突判定の権威: Client vs Server</text>
+
+          <!-- Left: Client-authoritative (BAD) -->
+          <text x="180" y="64" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="14">❌ Client-authoritative</text>
+
+          <rect x="50" y="80" width="120" height="40" rx="8" fill="#141414" stroke="#FF5252" stroke-width="1.5"/>
+          <text x="110" y="98" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">クライアントA</text>
+          <text x="110" y="113" text-anchor="middle" fill="#aaa" font-size="11">「当たった！」</text>
+
+          <rect x="200" y="80" width="120" height="40" rx="8" fill="#141414" stroke="#FF5252" stroke-width="1.5"/>
+          <text x="260" y="98" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">クライアントB</text>
+          <text x="260" y="113" text-anchor="middle" fill="#aaa" font-size="11">「外れた！」</text>
+
+          <rect x="125" y="140" width="120" height="50" rx="8" fill="#3a0a0a" stroke="#FF5252" stroke-width="2"/>
+          <text x="185" y="160" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">食い違い発生</text>
+          <text x="185" y="178" text-anchor="middle" fill="#aaa" font-size="11">どちらが正解？</text>
+
+          <line x1="110" y1="120" x2="160" y2="140" stroke="#FF5252" stroke-width="2"/>
+          <line x1="260" y1="120" x2="210" y2="140" stroke="#FF5252" stroke-width="2"/>
+
+          <!-- Divider -->
+          <line x1="360" y1="60" x2="360" y2="240" stroke="#555" stroke-width="1" stroke-dasharray="4 4"/>
+
+          <!-- Right: Server-authoritative (GOOD) -->
+          <text x="540" y="64" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">✓ Server-authoritative</text>
+
+          <rect x="410" y="80" width="120" height="40" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="470" y="98" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアントA</text>
+          <text x="470" y="113" text-anchor="middle" fill="#aaa" font-size="11">入力だけ送る</text>
+
+          <rect x="560" y="80" width="120" height="40" rx="8" fill="#141414" stroke="#4FC3F7" stroke-width="1.5"/>
+          <text x="620" y="98" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアントB</text>
+          <text x="620" y="113" text-anchor="middle" fill="#aaa" font-size="11">入力だけ送る</text>
+
+          <rect x="485" y="140" width="120" height="50" rx="8" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="545" y="160" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">サーバが判定</text>
+          <text x="545" y="178" text-anchor="middle" fill="#aaa" font-size="11">唯一の正解を決定</text>
+
+          <line x1="470" y1="120" x2="520" y2="140" stroke="#4FC3F7" stroke-width="2"/>
+          <line x1="620" y1="120" x2="570" y2="140" stroke="#4FC3F7" stroke-width="2"/>
+
+          <!-- Highlight ring (step animation) -->
+          <rect x="42" y="72" width="280" height="128" rx="14" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="1;1;1;0;0;0;0;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="402" y="72" width="280" height="128" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;1;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="540" y="40" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="56" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;1;0;0;0;0;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+              ① 左: 各自で判定
+            </text>
+            <text x="620" y="56" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;1;1;0;0;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+              ② 結果が割れる→破綻
+            </text>
+            <text x="620" y="56" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+              ③ 右: 入力だけ送る
+            </text>
+            <text x="620" y="56" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+              ④ サーバ判定→全員一致
+            </text>
+            <text x="620" y="56" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;1;0;0" keyTimes="0;0.10;0.30;0.40;0.50;0.70;0.90;1" dur="14s" repeatCount="indefinite"/>
+              ⑤ A・B・C 全員同じ結果
+            </text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="30" y="248" width="660" height="92" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="360" y="270" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">設計判断のチートシート</text>
+            <circle cx="55" cy="294" r="5" fill="#FF5252"/><text x="68" y="298" fill="#FF5252" font-size="11" font-weight="600">Client権威 = 応答速い／食い違いリスク高</text>
+            <circle cx="370" cy="294" r="5" fill="#76B900"/><text x="383" y="298" fill="#76B900" font-size="11" font-weight="600">Server権威 = 一致保証／往復ぶん遅延</text>
+            <text x="360" y="320" text-anchor="middle" fill="#888" font-size="11">共有オブジェクトの色・スコア・衝突判定は Server権威 を選ぶ。アバター位置・UI は Client権威 でよい。</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- 具体例 -->
+      <div style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.8rem 1rem;margin-top:1rem;border-radius:6px;font-size:0.9rem">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc">FPS（オンラインシューティング）で「ヘッドショットが入ったか」をクライアントが判定すると、改造プログラムで「絶対当たる」状態を作れてしまいます。だから Counter-Strike や VALORANT のような競技ゲームは <strong>サーバが当たり判定</strong>を行う server-authoritative 設計です。3D 空間の共有オブジェクトも、サーバが色や状態を決めることで「自分の画面だけ違う色」を防げます。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">Q&amp;A よくある疑問</p>
+        <p style="color:#ccc;font-size:0.9rem"><strong>Q:</strong> サーバ判定だと遅くなる気がする。応答性をよくする方法は？<br>
+        <strong>A:</strong> <strong>楽観的更新 (optimistic update)</strong> を組み合わせます。クリックした瞬間にクライアント側でも「とりあえず青に変える」演出を入れて、サーバから違う色が返ってきたら直す。これで体感速度はそのまま、最終的な状態は全員一致します。</p>
+      </div>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
@@ -603,7 +1038,7 @@ box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
     <!-- 1.4 共有オブジェクト vs 個人オブジェクト -->
     <div class="concept-box">
       <h4>1.4 共有オブジェクト vs 個人オブジェクト <span class="exam-alert">課題に出ます</span></h4>
-      <p>マルチユーザ3D空間では、オブジェクトを2種類に分けて考えます。</p>
+      <p>マルチユーザ3D空間では、オブジェクトを2種類に分けて考えます。さらに、共有オブジェクトを操作するときは<strong>送信頻度の制御</strong>（throttle / debounce）が必要です。</p>
       <table>
         <tr><th></th><th>共有オブジェクト</th><th>個人オブジェクト</th></tr>
         <tr><td><strong>定義</strong></td><td>全ユーザが同じ状態を見るオブジェクト</td><td>各ユーザだけが見る・操作するオブジェクト</td></tr>
@@ -611,20 +1046,322 @@ box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, {
         <tr><td><strong>状態管理</strong></td><td>サーバで管理し、全員に同期する</td><td>各クライアントのローカルで管理する</td></tr>
         <tr><td><strong>クリック</strong></td><td>クリックすると全員の画面で変化する</td><td>クリックしても自分の画面だけ変わる</td></tr>
       </table>
+
+      <!-- R9: throttle vs debounce 比較表 -->
+      <p style="margin-top:1rem"><strong>送信頻度の制御: throttle と debounce</strong></p>
+      <p>共有オブジェクトをドラッグやキー連打で動かすと、何百回も <code>emit</code> が発火してネットワークが詰まります。これを抑えるのが <strong>throttle（スロットル）</strong> と <strong>debounce（デバウンス）</strong> です。</p>
+      <table>
+        <tr><th></th><th>throttle（スロットル）</th><th>debounce（デバウンス）</th></tr>
+        <tr><td><strong>動作</strong></td><td>一定間隔ごとに <strong>最大1回だけ</strong>実行</td><td>連続イベントが止まってから一定時間後に <strong>最後の1回だけ</strong>実行</td></tr>
+        <tr><td><strong>イメージ</strong></td><td>蛇口を絞って一定量だけ流す</td><td>静かになるまで待ってから処理</td></tr>
+        <tr><td><strong>用途</strong></td><td>マウスドラッグ・スクロール位置の送信</td><td>検索フォームの入力確定・リサイズ完了の検知</td></tr>
+        <tr><td><strong>間隔の目安</strong></td><td>16〜100ms（滑らかさ重視）</td><td>200〜500ms（確定タイミング重視）</td></tr>
+      </table>
+
+      <pre><span class="code-label">JavaScript ── throttle と debounce の最小実装</span>
+<span class="cmt">// (1) throttle: 100msに1回しか実行しない</span>
+<span class="kw">function</span> <span class="fn">createThrottle</span>(fn, intervalMs) {
+  <span class="kw">var</span> lastTime = <span class="num">0</span>;                       <span class="cmt">// ← 中間変数</span>
+  <span class="kw">return</span> <span class="kw">function</span>(data) {
+    <span class="kw">var</span> now = Date.<span class="fn">now</span>();
+    <span class="kw">var</span> elapsed = now - lastTime;
+    <span class="kw">if</span> (elapsed &lt; intervalMs) {
+      <span class="kw">return</span>;                         <span class="cmt">// ← 早期return、1行 if は避ける</span>
+    }
+    lastTime = now;
+    <span class="fn">fn</span>(data);
+  };
+}
+
+<span class="cmt">// (2) debounce: 連続イベントの最後の1回だけ実行</span>
+<span class="kw">function</span> <span class="fn">createDebounce</span>(fn, waitMs) {
+  <span class="kw">var</span> timerId = <span class="kw">null</span>;
+  <span class="kw">return</span> <span class="kw">function</span>(data) {
+    <span class="kw">if</span> (timerId !== <span class="kw">null</span>) {
+      <span class="fn">clearTimeout</span>(timerId);
+    }
+    timerId = <span class="fn">setTimeout</span>(<span class="kw">function</span>() {
+      <span class="fn">fn</span>(data);
+      timerId = <span class="kw">null</span>;
+    }, waitMs);
+  };
+}
+
+<span class="cmt">// (3) 使用例: ドラッグ位置は throttle、入力確定は debounce</span>
+<span class="kw">var</span> sendPosition = <span class="fn">createThrottle</span>(<span class="kw">function</span>(pos) {
+  socket.<span class="fn">emit</span>(<span class="str">'movePosition'</span>, pos);
+}, <span class="num">50</span>);
+
+<span class="kw">var</span> sendQuery = <span class="fn">createDebounce</span>(<span class="kw">function</span>(text) {
+  socket.<span class="fn">emit</span>(<span class="str">'search'</span>, text);
+}, <span class="num">300</span>);</pre>
+
+      <!-- R7: throttle/debounce アニメーション図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">throttle vs debounce: イベントの間引き方</text>
+
+          <!-- Common: 10 events firing -->
+          <text x="50" y="80" fill="#aaa" font-size="12" font-weight="700">入力イベント</text>
+          <g>
+            <circle cx="100" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="150" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="200" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="250" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="300" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="350" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="400" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="450" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="500" cy="100" r="6" fill="#FF5252"/>
+            <circle cx="600" cy="100" r="6" fill="#FF5252"/>
+            <line x1="80" y1="100" x2="660" y2="100" stroke="#333" stroke-width="1" stroke-dasharray="2 2"/>
+          </g>
+
+          <!-- Throttle row: every 100ms -->
+          <text x="50" y="160" fill="#FFB800" font-size="12" font-weight="700">throttle (100ms)</text>
+          <g>
+            <line x1="80" y1="180" x2="660" y2="180" stroke="#333" stroke-width="1" stroke-dasharray="2 2"/>
+            <circle cx="100" cy="180" r="8" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;1;1;1;1;1;1;1" keyTimes="0;0.10;0.20;0.40;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="250" cy="180" r="8" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.30;0.40;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="400" cy="180" r="8" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.30;0.45;0.55;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="600" cy="180" r="8" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.30;0.45;0.60;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="680" y="184" fill="#FFB800" font-size="11" font-weight="600">→ 4回</text>
+          </g>
+
+          <!-- Debounce row: only last after silence -->
+          <text x="50" y="240" fill="#4FC3F7" font-size="12" font-weight="700">debounce (300ms)</text>
+          <g>
+            <line x1="80" y1="260" x2="660" y2="260" stroke="#333" stroke-width="1" stroke-dasharray="2 2"/>
+            <circle cx="500" cy="260" r="8" fill="#4FC3F7" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;1;1;1" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="600" cy="260" r="8" fill="#4FC3F7" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.30;0.45;0.60;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="680" y="264" fill="#4FC3F7" font-size="11" font-weight="600">→ 2回</text>
+          </g>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="540" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="62" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ① 10個のイベント発生
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ② throttle が間引き
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ③ 100ms ごとに1回
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;1;0;0" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ④ debounce は最後のみ
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.30;0.45;0.60;0.80;0.92;1" dur="16s" repeatCount="indefinite"/>
+              ⑤ 通信量を激減
+            </text>
+          </g>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="30" y="290" width="660" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <circle cx="55" cy="307" r="5" fill="#FF5252"/><text x="68" y="311" fill="#FF5252" font-size="11" font-weight="600">入力 (10回)</text>
+            <circle cx="180" cy="307" r="5" fill="#FFB800"/><text x="193" y="311" fill="#FFB800" font-size="11" font-weight="600">throttle (4回)</text>
+            <circle cx="320" cy="307" r="5" fill="#4FC3F7"/><text x="333" y="311" fill="#4FC3F7" font-size="11" font-weight="600">debounce (2回)</text>
+            <circle cx="475" cy="307" r="5" fill="#93D500"/><text x="488" y="311" fill="#93D500" font-size="11" font-weight="600">サーバ送信</text>
+            <text x="360" y="335" text-anchor="middle" fill="#888" font-size="11">ドラッグ中の中間結果は throttle で間引く / 入力確定は debounce で最後だけ送る</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- 具体例 -->
+      <div style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.8rem 1rem;margin-top:1rem;border-radius:6px;font-size:0.9rem">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc">Google マップで地図をドラッグしているとき、移動の<strong>途中ピクセル</strong>を1秒間に60回サーバに送ったら回線が崩壊します。実際は<strong>throttle</strong>でだいたい100msに1回だけ送り、最後に手を離した瞬間に <strong>debounce</strong>で確定座標を送る、という組み合わせを使っています。Slack の「入力中…」表示も同じ。タイプするたびに送らず、debounce で <strong>1秒間タイプが止まったら一度だけ</strong>「入力中」を消すフラグを送ります。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">Q&amp;A よくある疑問</p>
+        <p style="color:#ccc;font-size:0.9rem"><strong>Q:</strong> throttle と debounce どちらを選べばよい？<br>
+        <strong>A:</strong> <strong>「途中経過も見せたい → throttle」「最終結果だけでよい → debounce」</strong>と覚えます。マウス位置の同期は throttle（動きが見えないと不自然）、フォームの自動保存は debounce（タイプ中に毎回保存すると重い）。</p>
+      </div>
     </div>
 
     <!-- 1.5 レイテンシへの対処の考え方 -->
     <div class="concept-box">
-      <h4>1.5 レイテンシへの対処の考え方</h4>
+      <h4>1.5 レイテンシへの対処と共有オブジェクトのロック</h4>
       <div class="analogy">
-        電話で会話すると、声がわずかに遅れて届くことがあります。ネットワーク通信でも同じ<strong>遅延（レイテンシ）</strong>が発生します。この遅延をゼロにはできませんが、ユーザが気にならないレベルに抑えることが重要です。
+        電話で会話すると、声がわずかに遅れて届くことがあります。ネットワーク通信でも同じ<strong>遅延（レイテンシ）</strong>が発生します。さらに2人が同時に同じオブジェクトを編集すると<strong>競合</strong>が起きます。これを防ぐ仕組みが<strong>ロック (lock)</strong> です。Google ドキュメントが「カーソルが2つ並んで動く」のはロックなしで競合を許す設計、銀行ATMが「他の人が操作中はお待ちください」と表示するのはロックする設計です。
       </div>
       <table>
-        <tr><th>対策</th><th>説明</th></tr>
-        <tr><td><strong>楽観的更新</strong></td><td>サーバの応答を待たずに、クリックした本人の画面では即座に変化を反映する。サーバから確認が来なかった場合は元に戻す。</td></tr>
-        <tr><td><strong>送信間隔の調整</strong></td><td>位置データの送信頻度を調整して、通信量と滑らかさのバランスを取る。</td></tr>
-        <tr><td><strong>補間（Interpolation）</strong></td><td>受信した位置データ間を滑らかに補間して、カクカクした動きを軽減する（発展的な内容）。</td></tr>
+        <tr><th>対策</th><th>説明</th><th>例</th></tr>
+        <tr><td><strong>楽観的更新</strong></td><td>サーバ応答を待たずに、本人画面で即座に変化を反映。サーバから違う結果が返れば直す。</td><td>クリックした瞬間に色変更を表示</td></tr>
+        <tr><td><strong>throttle / debounce</strong></td><td>送信頻度を絞る。<a href="#none" style="color:#93D500">1.4 参照</a></td><td>ドラッグ・入力フォーム</td></tr>
+        <tr><td><strong>補間 (interpolation)</strong></td><td>受信した位置データ間を滑らかに繋ぐ。</td><td>アバターの移動を滑らかに見せる</td></tr>
+        <tr><td><strong>ロック (lock)</strong></td><td>1人が編集中は他のユーザの操作を拒否する。</td><td>家具を移動中は他人が動かせない</td></tr>
+        <tr><td><strong>lockstep (ロックステップ)</strong></td><td>全員が同じ順番でイベントを処理して状態を一致させる手法</td><td>RTS（リアルタイム戦略ゲーム）</td></tr>
       </table>
+
+      <pre><span class="code-label">JavaScript ── 共有オブジェクトのロック（サーバ側）</span>
+<span class="cmt">// ロック状態を管理</span>
+<span class="kw">var</span> locks = {};   <span class="cmt">// { 'box-1': 'socket-id-of-locker', ... }</span>
+
+<span class="cmt">// (1) ロック取得を試みる</span>
+<span class="kw">function</span> <span class="fn">tryAcquireLock</span>(objectId, socketId) {
+  <span class="kw">var</span> currentLocker = locks[objectId];
+  <span class="kw">if</span> (currentLocker !== <span class="kw">undefined</span> &amp;&amp; currentLocker !== socketId) {
+    <span class="kw">return</span> <span class="kw">false</span>;        <span class="cmt">// ← 既に他人が握っている</span>
+  }
+  locks[objectId] = socketId;
+  <span class="kw">return</span> <span class="kw">true</span>;
+}
+
+<span class="cmt">// (2) ロック解放</span>
+<span class="kw">function</span> <span class="fn">releaseLock</span>(objectId, socketId) {
+  <span class="kw">if</span> (locks[objectId] === socketId) {
+    <span class="kw">delete</span> locks[objectId];
+  }
+}
+
+<span class="cmt">// (3) クリック処理にロック判定を追加</span>
+socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span class="kw">function</span>(data) {
+  <span class="kw">var</span> acquired = <span class="fn">tryAcquireLock</span>(data.id, socket.id);
+  <span class="kw">if</span> (acquired === <span class="kw">false</span>) {
+    socket.<span class="fn">emit</span>(<span class="str">'lockDenied'</span>, { id: data.id });
+    <span class="kw">return</span>;
+  }
+  <span class="cmt">// ... 通常の状態更新処理 ...</span>
+  <span class="fn">releaseLock</span>(data.id, socket.id);
+});</pre>
+
+      <!-- R7: 共有オブジェクトのロック アニメーション図 -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 380" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">共有オブジェクトのロック (lock) と競合回避</text>
+
+          <!-- Step badge -->
+          <g>
+            <rect x="540" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="62" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+              ① A・B が同時にクリック
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+              ② Aの要求が先着
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+              ③ Aがロック取得
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+              ④ Bは拒否される
+            </text>
+            <text x="620" y="62" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+              ⑤ Aが解放→次の人へ
+            </text>
+          </g>
+
+          <!-- User A -->
+          <rect x="40" y="100" width="130" height="50" rx="10" fill="#141414" stroke="#FF5252" stroke-width="2"/>
+          <text x="105" y="123" text-anchor="middle" fill="#FF5252" font-weight="700" font-size="13">ユーザA</text>
+          <text x="105" y="142" text-anchor="middle" fill="#aaa" font-size="11">クリック</text>
+
+          <!-- User B -->
+          <rect x="40" y="200" width="130" height="50" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="105" y="223" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="13">ユーザB</text>
+          <text x="105" y="242" text-anchor="middle" fill="#aaa" font-size="11">同時にクリック</text>
+
+          <!-- Server lock table -->
+          <rect x="280" y="120" width="180" height="120" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
+          <text x="370" y="143" text-anchor="middle" fill="#76B900" font-weight="700" font-size="13">サーバ: locks{}</text>
+          <line x1="290" y1="155" x2="450" y2="155" stroke="#333" stroke-width="1"/>
+          <text x="370" y="178" text-anchor="middle" fill="#aaa" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;1;1;1;0;0" keyTimes="0;0.10;0.22;0.38;0.62;0.75;0.85;1" dur="18s" repeatCount="indefinite"/>
+            box-1: socket-A
+          </text>
+          <text x="370" y="200" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+            ❌ B の要求は拒否
+          </text>
+          <text x="370" y="222" text-anchor="middle" fill="#93D500" font-size="11" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+            ✓ locks クリア
+          </text>
+
+          <rect x="272" y="112" width="196" height="136" rx="14" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;0.85;0.95;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+
+          <!-- Box (shared object) -->
+          <rect x="540" y="120" width="130" height="50" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="605" y="143" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="13">共有オブジェクト</text>
+          <text x="605" y="162" text-anchor="middle" fill="#aaa" font-size="11">box-1</text>
+
+          <!-- Lock icon -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;1;1;1;0;0" keyTimes="0;0.10;0.22;0.38;0.62;0.75;0.85;1" dur="18s" repeatCount="indefinite"/>
+            <circle cx="605" cy="200" r="14" fill="#76B900" stroke="#1a2e0a" stroke-width="2"/>
+            <text x="605" y="205" text-anchor="middle" fill="#0A0A0A" font-size="14" font-weight="900">🔒</text>
+            <text x="605" y="232" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">A 保有</text>
+          </g>
+
+          <!-- Arrows -->
+          <line x1="170" y1="125" x2="280" y2="155" stroke="#FF5252" stroke-width="2" marker-end="url(#lkArr1)" opacity="0">
+            <animate attributeName="opacity" values="1;1;1;1;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <line x1="170" y1="225" x2="280" y2="195" stroke="#FFB800" stroke-width="2" marker-end="url(#lkArr2)" opacity="0">
+            <animate attributeName="opacity" values="1;1;1;1;0;0;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+          <line x1="460" y1="155" x2="540" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#lkArr3)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;1;1;1;0;0" keyTimes="0;0.10;0.22;0.38;0.50;0.62;0.75;1" dur="18s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Bottom legend -->
+          <g>
+            <rect x="30" y="290" width="660" height="78" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+            <text x="360" y="312" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">ロックの取り扱い4原則</text>
+            <text x="50" y="334" fill="#aaa" font-size="11">① 取得失敗時の挙動を決める（待つ / 拒否する）</text>
+            <text x="50" y="350" fill="#aaa" font-size="11">② 必ず解放（クリック完了時 / 切断時 / タイムアウト）</text>
+            <text x="380" y="334" fill="#aaa" font-size="11">③ ロック粒度はできるだけ小さく（オブジェクト単位）</text>
+            <text x="380" y="350" fill="#aaa" font-size="11">④ デッドロックを避ける（同時に2つ取らない）</text>
+          </g>
+
+          <defs>
+            <marker id="lkArr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF5252"/></marker>
+            <marker id="lkArr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="lkArr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- 具体例 -->
+      <div style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.8rem 1rem;margin-top:1rem;border-radius:6px;font-size:0.9rem">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.3rem">具体例</p>
+        <p style="color:#ccc">航空券予約サイトで「残り1席」の便を2人が同時に予約しようとしたとき、サーバは<strong>先に決済まで進んだ方だけ</strong>に座席を確保し、もう一方には「申し訳ありません、既に売り切れました」と返します。これがロック設計です。3D 空間で2人が同時に同じ家具をドラッグしたら、先にロックを取った方だけが動かせて、もう一方は「他のユーザが操作中です」と表示する、というのが基本パターンです。</p>
+      </div>
+
+      <!-- Q&A box -->
+      <div style="background:#111;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">Q&amp;A よくある疑問</p>
+        <p style="color:#ccc;font-size:0.9rem"><strong>Q:</strong> ユーザがロックを取ったまま切断したら、永遠にロックされる？<br>
+        <strong>A:</strong> なるので必ず<strong>解放処理</strong>が必要です。Socket.IO なら <code>socket.on('disconnect', ...)</code> でそのソケットが保持していたロックをすべて解放するか、<strong>タイムアウト</strong>（例: 30秒）で自動解放します。これを「リース型ロック」と呼びます。</p>
+      </div>
     </div>
 
   </div>
@@ -1346,6 +2083,32 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
       </div>
     </details>
 
+    <!-- ── 例題の解答（常に公開） ── -->
+    <div id="answers-examples">
+    <details>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 やってみよう 解答（イベント同期のデータフロー）</summary>
+      <div class="answer-content">
+        <p><strong>手順1〜4の主役と動作</strong>を整理すると、以下のようになる。</p>
+        <table>
+          <tr><th>手順</th><th>主役</th><th>役割</th></tr>
+          <tr><td>1</td><td>ユーザA（A-Frame）</td><td><strong>イベント発生源</strong>: カーソルが箱に当たり <code>click</code> イベントが <code>raycaster</code> 経由で発火する</td></tr>
+          <tr><td>2</td><td>クライアントA（JS）</td><td><strong>送信側</strong>: <code>socket.emit('objectClick', {id})</code> でサーバに「何をクリックしたか」だけ伝える（色は計算しない）</td></tr>
+          <tr><td>3</td><td>サーバ</td><td><strong>権威 (authoritative) サーバ</strong>: 次の色を決定し <code>objectStates</code> を更新 → <code>io.emit('objectUpdated', ...)</code> で全員に同じ結果を配信</td></tr>
+          <tr><td>4</td><td>全クライアント（A含む）</td><td><strong>受信側</strong>: <code>setAttribute('color', newColor)</code> で表示を更新</td></tr>
+        </table>
+        <p><strong>ポイント:</strong> 手順3が <code>broadcast.emit</code>（送信者以外）ではなく <code>io.emit</code>（全員）になっている理由は、<strong>クリックした本人もサーバが決めた色を反映する必要がある</strong>から。クライアントが勝手に色を変えると、サーバの状態と食い違って「自分だけ違う色が見える」バグの原因になる。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">// クライアント側ではローカルで色を計算しない！
+socket.emit('objectClick', { id: el.id });   // ← サーバに任せる
+// サーバから来た色を待って描画する
+socket.on('objectUpdated', function(data) {
+  document.getElementById(data.id).setAttribute('color', data.color);
+});</pre>
+        <p>これが<strong>「サーバが権威を持つ (server-authoritative)」</strong>設計の基本パターン。アバター位置（前回）は逆に「送信者本人は自分の位置を知っているので broadcast」だが、共有オブジェクトの色は「全員が同じ計算結果を見る」必要があるため <code>io.emit</code> を使う。</p>
+      </div>
+    </details>
+    </div>
+
+    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
     <div id="answers-encrypted" data-cipher="nWaVm0A0hNn8n+hABtCZQlHFMAHdCm2aSw/79Ia9bCK38EAvA7abllpmRFILS6SVfkX6wrTLerIxtnw9hofGBVD05S8+AHOZR8C/P9XklLZ9/sdBvRoj9omRUjfLRNEKqS9i0YO1Jt8cd7n4+JldPgTJVeTZUWOYTLMbSjmispNPfpI9DmOxDS3Ih3cp9hWteC+nmtxVFwrtJTidc6l05YbJI53QNkYf7SPcBFPq15mf3OyGzUmxP0z+RTTS6i4RMbd5ZOymtuwQFpwK5YMVcj6OmdcMUvGV62lKAESa+dYlQGxzlHKJy54SCHIUVXsDV/Rk3eF8kMZz8mDWWEUz15+EXf8KN5cwZeCzjIQgY6IOxWD5B89gknUD5u1E9rU5LFC6opfYy54MUEa8usH6+clCpHlpm4hXmkyHlmvMjy6NjwS2HbN8q/Nycty27X3yJcZaquNt+6EBnaWToVeOZQOuQdOTk/dmEtcmXlb76HwhXEjiypFtkg0pgOifBUM2Y1Y0KQBhgrsqtpp04A6z1zi7M4+jkCDgxCyM4xqx0VsCzScGTZcE3O1kbXNF+rmLI1rj/HKD3DfsB32AC2TxExPJ+aEw6SN86Qou2T8FPNl5Eo0IUin3jPWbHOW9UNzPElgcvdJPvWE6C8NiISV5gJAVMJbMnElwWlmhhDm2/S30iRNADqDVdxRGQ+LoH8EsbzzOVtN4rdjkr6a2UZWPTLLXfIfJwto7b1bGr3sRzyD+W/Yn3hxMgTHChNpFmFekr6ERmZp38OEAP6BHPzcnbkDiZ7+Ak9gLUbn593T1audC56ArzFTKal8yd1u4+IrVfqe/0t+jj6AtZF8bkun0P/tR/6aSUaOR+5Yf1lfJaszuHhNC7sLm3+A0eXhW+DIoqEMWjfK4VuZQ/1ayy6qCkpvoA8kDIAgZ2I6WJLOc1GkFrvu12Kqq1hVQJ9fNyjhJt4652M8UvKQTtxBP+1fhELOai7Nxr7PlG5fFTtblZ9TbxDByeDPbAQgkF+yHHtVFcetCqJg5DtdZNR1qh84DuBVz8YwnWxkEuTN9+Hu7Zg0NmAzfDtM+OHMr2PjI/D2VzhIBH/cfr0qfys00stWzMCbzH5Bhzpeo40NODShIcolvwNzgZipVQojQOc2206ZdeK+KBCOuOe1QuPhNZMFEkAEG3Y/XdpU2FnT7qW6GCpT3rKuFzwYOgcVEJlfTcnGQOAIWwJbB8m344DxOTO7pylphtgCRDai6fsgPfn1UqKzrqxreloSfUOjexvr0KxCWTLC49nhr7WsDyQ/XDSw/2hXT2gsV0H+VttcyB15HGhaZwxXtW56ARZhLb0WdNKVewcjGyVRSf5m+YQGT6B6iEQbKJa/pa3azoQUBUFMHBnumi9dtwVjPWuvb6S/tnrfZ16+fOdeYY6+XXFidnqMDpcyRvGjLcI2uGgZ2b7gfqybWMbcHq2NMvhPeg1YQ2QECgjenNWiyTrmGqXw++o8hwMNjFQrexU5FfKphn1kcLGbXY5HLeDVcQPIa4IMyjyPsc/BA2zjryhyLbOeX/YIy/+MBKl1zFnRjZwrkpxDaXbflBRCMP11MEmYtDdK2SJ31cn7HRbC5L2RZDp6FkeEwditBsegBRCNE/BTij3oPunalc2BnzzqZWP+A1PcnpLZOjWFIHXBmv6lvB9Iytf54o/eBnNZtA2Mg17ByFx3jXo944ieUDdYCjgrVMNBHPm1cxpcJGw9QbJZcTgJVYpWoV4ZxtEB1IC4J13rkBTfiXREOv6q9VmT2/A0U0LEsBnAlCW3UhHJzTt54Akacs62YjKrJd2U0ENVDtawO90+nL5RK0w//2li31ktMHt3KhkC6IE2EVBLD4nl/0tVur4MRAM1sMHmIdigYWBMHZxGefJiUllYxI/EJ0rsDPHnkr0ULBuECfjY1oxNGJQwO0yIgaPM6RpUnZWKr/xH8MRAhoTKrqvx5WtgdNHW8/JHIYIbgG0bwF6SrUPNnqy6SVMmGDRvILb11k1q0YeNm1SpDzdHX4WSBBotuQqw9QWCL/rpIpnF+u1welnREe1fJGesMBCeOo+KNOHPOyPedHkBTAohJzgD5HkoSsMZwQWMKf0kvT+z8KW/pkIgAkWxHIuInxNY69FS/7vnI/R9AvpGIceCoW3mdYBW8HBPC1Sh7mMISmRGghlUPVDV7EiZlr3lISGp1zWkx88YlO8/2m8KOfz6psj49+eC0ypvJus58USTtccg0FNm2HytIyx0lb0wV0awp711HZpX7HlI0T8lZBwaygTMDAuaQLAhKpBCyj0iZ08sZEyIsfPhhqcyxeuob8MTJ+eXai17bgJZMVUSsbYgTMdDlwEBtFA0PZS2N78zLtjJX2vb5cTq1bXLMLpeUEPvMDXoNDxBODWt2nam0/uiRatu0pvYwV7Axn57zGPD3vFGstxMGS6rb9H/yBb1H+UBruU3fuPzmgVKywyQdcYyq93W006tmPSg9jt1sATNL6D6TPdk1COnPYHEibMJGHn8aaFO4QwptDBoE9KbVQkXSOibjKbn+zggOpHKBq/FGv4FQJq/3yxFjJONL3POOo4fl+YpHx4HUzXGuZWqQj9s8zoTJ/xyrKU3xEY15cyGz+fJat0ExzshwFfcn3W1VE8GZJNYthMOXVHn+Q5IR3aw/lzKUA2RFFT5hF1wIOUVhpgf2Wh3A2I9hiihCzg3ZjkQOihGfbgiiPlYPtl4lSOoS0VwRJHmfRdO+N2pkibHHjvWkY3FI5AS+knVOnpC0Iwj+FbN3XkoSYBp4bZ4EoZAPTGjqUnlHzXv5CCMSVwsQcQjUZCzePCjIFxaNw/WcOSnCe/8m9pwLxYaMjUZjDUtMQNjYXVUHmMuKuxh4BlTHZU3N4m53+1MrVuvT2mHPqYLHEksUzLvzrFhlDRb3GQODx9Q2e8Mnjru+qDmojW6LfPxjb2dvcfdJhmmFjrvRM6X7IMR5zgdy4AI2+eW/C3H6xUKA1Oa4Ao5eEaTHUcsce0V+Pjk9WLuEVTZAOtGKbR1wKLC+r8EOMCdmleqNr+Mju+aZPWCuFxB9yqykIi4nHJqoMoOYWzTWjRt5Nign4vYivJuyAp0WCdz+sSnPh2l291Vp6jU+3nzbaCBgr09cDfIZ4CiJPUMFZ7J1ksEmarxi6FIvw9tWJ1heVLb4Jy7WrD9SsLs2GqTzXWuMGGs5XozDRZ+SeLVrzh9hAhwnmasIg5396Xs2g4MigqAafqN74PJIOi4MS3lejzafVKH08zPFLAknM4w7PFvRqwMUc0F3uOg14JUn+UHmUJ6xpTUJIIxKfECSwOr7lzymeNscJ4EIz8ITzcHcgDEPqLL199n/+UpsjMnx8E6JYfxOfcSGpvhrk+H1gUAOB3pZKMtOjgRd+B1wsRt0aPobsa8lVBLUQAPVMJm2ZwF5lMVFRyqOWCrK1KM7aQgQAPCHm+rNrSK1OZmitlMj3aY1dwswJ6Nn7T6DU6l9v5lxCUe/DrUT5FrCtjGcUpbpWWIivw+J/xKY6Elf+u8XyXu2G5bDicOGUq6jJEEHtv4koLgY0D5o9A6vK5VJAzkLkzp9dJ8JuqBabMwX8CnYNMJaiaucROj4h2BAXsMTXaigkKaUYMjJcNbE4bgIcobgLanyaLd9gMZLDBrMgSCvG9h947StmNKEbd7wq2TeEEGQyE8WIeYenBSA0L1ozuQ2yD86TEb6THEPbjv10yDLm2YpsQy7eaZlf5CDZh63k/pO4jJW54Go7FV4VeJL0wOun2eTtRh5UbQRF8Vf4YvQi9Ip1RRmRadq657VC/f+eWvB6tgdSUgdIXmpyCiWJ1NklNuIu28gJnxJrcDbexYLeoGIbg6dJmW3OhOYTVvFfQFxeovb+vNRRByDC7PIAPfckmGGShuPjeb4yPMoPjb5ju3AOAJNb5qhAm81PQ/JReCNqyugFrPdAPUUk5Q9dFtK+unJXpFd380DF2143hevx/No+/omsilPSULQ7QkvJzJ55Oz/45XGr2TmyeNT56lAOmhKkEuKSvOyE3v42gef36qHQZMIgMdYSIl2aeuNm8AIOzOxW+57vlOYuwVOoa3EFDUApIZhyQLqfWXmkxqV73C+l3NWKIFzic5f4O1fA2+vwWMOQ8RPMbDIAvE4KSilt31luC6JpYRZV69KRi+2+8LkLkUOJr9bxn4vB56BfW2HKmbXnUs2IpPiwrSetxZJLXmDX7Set0SUtc4GaU42NWU0uc82KexEAt0ghomcK3ym5Yl5Zt8zl4kM6vSBxkjMI+azi6nxG+2YRmooBGO0wGtdzfuf8H8aPkv5bdvBI1Lsv94nFzYRbel9JABp/w9IwRW92ZOjgXXvG5XCxGftBdu9SuXgNJF+WjkZWisIR9E75bZ2g1fS10Yh/y4Ri6QKmPVrEb84W+MBFR7/mn0YvMcGhMIyBRsmR0bD3CtfJnTBxpOM+icxpUo+DiAqYNsqi9Ei8ettvhQl8KlcASp6PkFNf/YRqpby3WPZEOHgEiHh25Q5lP2G7qE+q9bgrhOi1ZKsjvvTEnX0N1LerW0CUgD5S+ZIdb8t+2ob+Vt1I3ew7Nz3o7Skmm7oyUCFkt72X49LNLTiYAx6Wtttzq91EEj42muBFaFUH29IaP5FffDKvIuHWqjj5zeD470dOxw2/AIE8lJOIdOqwsWA3VGTN4LHcqUdj5oY7Dxv2aA0AuI3Sk+yGfPkcIlTBWpErUMyeis0YI94vlDB/CzKZP0nQzX02uyuqU6+fDOLtAksth511LK/f+xUo6q/HBOmDekgGT/QkDqjMwk1PNMFu56OZmzh8djuJMMlZPLbfGgYxcFSVaV53wbWiRL0oEsuOjKJOtOGgTeOgA1A3hlzAS7TpSLOk+9lgxD8USdGK4ry3/P9jBS+fiqpzmU5W/ENVs4HosMPwCR0d8UUAlf5oIOim4aKmee1ExgJU9OPPwIdBbZUngnI3msYW/6eaHV9VuzSALYWJ06C6D7SY7+XD205peJ0EeNx2VPD/O8foesY0ILKd3GebxAwU3tjo65PcSoJy/32SKCpugNtYuqbwcONz7Gh6vd408Th0yMefN1xHomLV/hDaAuzxZKjjR1fVkHo14ncfoUKVkU61kVHjcSbU9KODPDgjdefAwntj5uGZv5fEGIqLBzkeFTY5gZD89bLkO2iJMaOrRFGM1oHeXPis3Lq9zFXMr7eW2nPNNUsMSRufjNiNDzcC/yKuhX34cgtTCJkUW8bwLcb7iOaC35V1ge4lbL9iMbqB+O5gCYoW4TTa4WrloCTruc6RRo7jPNK9ZMqdzgk0jmjBW28byDwRIKaZoys5EQBvL3NfiEngG1MGB6ttXSdSKAh+sNuQWGEgFrQ0c191o3Xf1LAhrV2ZpS8IsegSzE9uibAiEtb5PHCHKp6BA14YyDMTRA/oZqCSL8oC73pzkoXjpXnc90tq8rBUaGh96Qo+F+RM01FcYFvRLNfzZ1z4cSzueXgMrKgPz2PkVcMrH0ifID4rdj/2j9o87/KPYAtfWoQiqBwrxvzX0NCAZ1yPb8YjdOaM7rPik4LW/efl9WXTe8tYy4s7LP6KhNQv/m6G9pN1T6BeLk8SG3JYdS64FWx1W4lP9C1r9Qr+Zz76DwE9V+QOttIA428nXokDob65dzr2IHiJ0SqSywkgBgiZU1vfFhQ0rHTM0waf/BNFUUleDBUEXs1wAnfBCqp0ic+vJyEfxpB6fpgdg0DBUWR+Y0C9PaMfKHQ/G7oVb4Y6q77w8XSI3nIbTi5tsC0VnMCszSn3LvRa5mHzVbcYFCyjK/bI1Ud3ruyreRg4ZN+OE+X2TikVnBN0MQCvp4JKFEN+GVWKwhWwRUtSr9dewYSU2/8rPwqJ6o/UOny0PIOLww8Ac+K9p9BAlDDfr2QcKXo0D/zju2I7a+cX/Fqr2PH3sND6KV9XHM/zuWIWUOVUGY+Mr7zrl54OA85o4j+elShiLqrHVyRLqWIgLZZEwz12u00xFue30LSHQUWMDxqpwTUhXWgVdbvusM6s68bM/YaUbuO64enBm9P/X+Oj+pJVfPjWfSxAl7YrJRZmC4FqU6Nyb12kXRmnmmaQ0DX+bLcvRHzBykkC1yOGYuFYnOlYueaiiKrkyT0T17YuiuyT1gjRwrkgPBpm1CXWa8DJpiaeCTGNv/8OBao76+FIadHfYPGufLJUgcW+WaxzWSwg3GUyLWmV4M+j6hoUO8K2j2yt+VzWlBj/Adv5Q18ld/EiLeEBlFKQ7MXeFHURjkgAOawBZcNUDkI1mj2Ali0bPOYJT+M6l/adOhmUweTrLodZRUxhloA1MnKTthrZaHMNrmQvc4LzqdRJcRVBI6yN1aZlsadClyV4tIJLxJA3xp0DGxtTHeeNeCNTrllaVZ0ZwpZuC7bMyj/COgWj1Wkz4EzfdG9iljS5vLK9shWGWUTjiWNzR8DvD5N6OYNsS0L7uqzTNtzmy5oKm+pEI12pSduO5+kpHNO1HIiD3LOvfdpyp6llpbiBSVuRk9utHGduhuaHGSAQoewzs6AHlSQVJZNDezn+vGhT4cUc/BgYEqXUTeIXcvTOu8Jl5SGGJ8QL/f72D6yechu8uJfWhFS+QYOmuscSgk0RtO5vmGQVa/8Rmdn1vTTZbigiHJv6bqjGdi68g3fkvszhj1o15fuE2a7ombreXHqL1k+l5PM8yqEnYa83ctEHXmN79QrYQ8QPHlWEn4QcK0IkKPHQ+/e5BXjityD70LUxIDXsIutw/Rwj9VoC89S2jiWhCj2lH/hx2SN06q8jlpETHa2IZ37QD5HTZdkkjz8QMEkhwY7zf5y1fOyPMIhTJKUi8NihWWhLy+XVv0kZSdZe5NJUotCPKaPiN0yhS9zL+h178IsSoNO73Fsa/ftYZBybQCU4jwti7blAQLb8/dfAyNsUwuI5c0TpGnRC4tF8Rv8hVkfkasHDSISJ/OBI606+17yS5ISkqFNJO+A+1Wb13L34e39jfltvKD1I6PkEPPG7yZfMOBzyDUTEionokzjSa+GO/z8r/2I9qellXx+DHbz3Q2kHuZkhSCM2Q8mLdCj+wnPTzp38GSviTvxjnBmVfaF1RtaGhPny3eTn4I9qOcrC5UWSmwPwuohSTBxHfIMTEZqw6hxkV8IY4MaoOs8G8G1NaXw5r3ExSShQql0JHkmXukCNrrs+KtJExC19MWVpSkO9dKWd32aDNOLwMZjYSNLdIG0et2AWNm8HQCn3GTpX7LfhGNnmHcoyuC11gRu8wCSMULzNB4kisXaGs3M0IY99WFZ9t40I+u9BmuZKfWxAeJfYwXA0t4ZAbXGEdA/t138I6OS8vEol/6shqP5VTh3pkaKZzqzV3cvvNiVqmMyqFWqcbM9p0A/DJX8vcckNGIYHXEOGaqMSDCirz0bgWU7k0ZXZGWscw2zBuAqM7yqNHc+RcQVue8UwdNviNOX2Eof/y6XshK7KOEPDIiPfaWlpXdF5pBhpYoo60sitksCzKXIXPV2PdPRA84brr1rV91boswE7euFzRL/yxo5phIrW45ElYDd5qhfTcAzJ8+Gzc+P+zmvWyt22M01iW68/ggy9+jny9sNeLJaYrMQ5XHpsYcyeaTg/i0BLcC7+IaSKPn7MX3ugyqT8HgLGqXeMLCj0APvLc562sgx9KnILfD5CHzgKpvXFqUoOUQQ5zrOCX6UE4bPP/5llk+2zI8lc+J3u4T2zVNuJLne7QL6OUWlDhEVewLOZpRVHcxCudKc6Uhq+7ALkGdGWqvA1EgatR+NtjtfRVqnBqexhFrUqxtVX3hOCA5JxnUS5s1rWFfu9C7vGRU90MRs5fs9+0QFrp4FJHyJsoHakPetAobi7pkfTuq4oeUBu7jQ++EdM+ZbEgefKME+I36yjIXRxOTgecA6kzdcF1hu4X/pnk1xSm245MJi+ATRcgH9RfWWI9ixrPJFZ01BM5UHgf+0aL3VyibksPBiK2gJpkRrEw3bIK7/MdhLl82DlL0Fc1iVwejUcmymTlkeV8DJTIrFjag4kUnl0goNOPJzyYOmpyim9hvrpP+S+4FcOVLRa12wR269K8idXHgDKCgt1F+SbTbyAC87suEl2iBZemZFWGekA5zNYsTt2MzcddhvDgjDEfCc5OiquA8wNr6UuSSAHsfwlCPd/wIePzY7HR3qwQBgHqZnoBVdOijnxZr0iF13qWycxbTg4o63bwov7iJX2z1K8egmCp+qT49Xtnzt1NBb33W+Rhed4FaO0CJDAUoAzx6O+1PX2flYCYm3bQONEA8nKnsMWhnSSluERRQ0+oG4/tOM0ZuhSV6R003ZLB7ezL42NSqn+TjOfyZ7KPrwrkkj0QR7G4yqM5OV4k3jHxqH26C+JJS9KJgI4w4GC5PfP8TNJJsSNWHpvssEjVLbp9aSKVEcHCJAYwxS4umiHg5oGGnpD36DR5H4ltkYnxeavW9KLAeGTQLx79LWTj/W5kbgjK5zpuFnZgoyB9r2/WPm8fYv6J3ZYYuA5giT5LrBozW+Flc9CCxfINEhwm0NtiNX5wzjO5lupl64MrBqPji1RJa5cj15n2j4AoPI6x23gcKNC8YvwPQkO+ijtgMVg7yFil+q0SJt/dM7JulZbPjft5RJONAmRjemZsm2SRep7xIKRedV7gPtHlljjQ+NgKnROir82x5fOg3olIDNRCM36bTOM6FmB8jBT7qJke3qzJX+lhTS362dX2ib67jPX4NBgd2tKJXlOr5EnZa/+QabWb2Mu0vc+2yNB1ugRxnG6w4t7DIbWTwsr5J81v1lYI7l+o4pOoy/4UpEsF41tFuI0IFilu1Ik06KHN/UhJwWPemZ840qJ3QrBMmvCX39ikkYvW3SOYVkYINuNW0hooAeOU2dXLPtoeFWTD68Iotm5ThF9977ki/gDX1x84i6PZrvYsi2OCTpXIPoKEe4CDbX5080hNnAd1sxweKPcfys+4K0uk3xhCa11nDW5v90O8QhNyPDG4BF+mVTrlUI5xVBE1Hw/7vZC9WE863/npG+ak+gR8YenhAfH88Sr1z5fcSRTkOmVuDYc+l0OzNvshIdQ7dLRJYPXWO3vBsROIlyQSJn7Weyy0WBdnJoGRG/+Y47NPvfaDQsoYcrXPyer2WHhsbHYjVDHmu6+3/A95PLrEBoZ1q8rQEj9zfVpzbBSFKBJT2zOjiQ9ckkKhwCftLaSP0T55NhCZT6nmf/ak+JP9slWwIn+HOEeUiE3KOkEWqzmZGdL7d0iZhr/xxLNnGb7IgFJRP8AOAUCSJGMRJubkKs1ajseMRr38xTygmomZuP6yNHnN/aPKLAlL7NayMnEaLFlcR0A7rJYmH9Ppi+yIebzPjdpiTwlQNpnClykenLEDvrL7Bu2kP/efmNu2PzPhNemHPhVIRYBvCKJnBv2RhHm13N0g1rpcCxbt5LWYs9T+lRKyRIQUK00yUynQWRhbjEM3mbCLKK5vGNBfEhpVE6ar3tvUsghzzJC8xMw+r6ecZ0/jN9F4tXP1VM4WVH/Ryu4y8x5NOHCTLkPBGmuM4U8Z5BsOtGGQUeq+Doguy7ttduO4fbprFB3dQMOLhbBBqPO/VTK6yvTX1j8BUapWpcUvK+JkzxHEm5V7EGQ/XGgRbrWoMKpw1YBus+mwT4Ghgtuoq25QwrJafgWJmeZL1T+O0wi9MiAKO9REEpE2Zbo5W1vZ21IQKAHJQxe6pnI6Pr0gvFxXDsEc7uTBRbOQGZMehMbLqWTnUr7gUO3DupF/8Kdhxv8ZFqrYbqPKJDIHuD7ndFwNgZxPCPhsHKOdS7PCL91Zm+a9FKiIwnODbhRuOk2ZucC0HBsP3LtDyzjE3YhchgbBEJq5prDTPXdI1eb4UEKiajSuxCGkZ0j8pOv7qORQz/L/R1FKDtbGXPxO9YyWsiJUEWDixsbBtv4hV6IJA+lcWHnVu42sd4YMkaPyMd0ArnDdqcu1TpkmUV6ufBly+yxkuzrMkXZrwsi5mbxPoDDLZ8rICOjLPQE/pvxqEjANKjDefBbW5LQVMLUkIfJDAC62NbICCFmt/lGaq5sHQLh72LpzE6LLHYHNTDLOlTf9ncTeMyELOcfiS8VnTALoANcR5uke7hpyuSouIMECTuLY+bkjla3cC+uP2miL5ZzxlNgO3+ZEdYv/B6ToVky/hzJQIQYlvW8UUNn+W4Tt6a/KLj9/wyCfBqZZ+cBGe36TyTd3op/DRiBq2Xi6EkhCnsZLSaskK9Ir2/XlG0lehESaewYRjOS5MyErhzywHKU+fJHF75otf+nuLZkYTS/gid8ZHwxPQBm57b6M4D6bOKNGimnPFbxioYe5tW5LF0MhfimazG/uTLMnC9juLR5GlxPwUD0EVLE//PQykIlw1JS5Q4WB7QQqevOVT/a5Q/wMvd+wBh2bdca63VrcCln2iXHAsazH1+sr+6xIi7cIYFXuoVjWf0XWdp9FwJRKGdoIaYUff/0DEUGLyF5T98yNHBvTlCOkS5UlZgMwDC3y+B2oYEI/r/PyrQFfNvm2QYvhC+vZE0gH7HdLuKLg72CkZ2kiliZOZofNzfCBITha9lOP07r/ucuXNd/33kX0TES11SMl2r50gyQ66xDWFLYK/sLVtdIhhOwVqr9ZKgSFXp88frL57zJg9v2/VzepWnivJZOYBgY9nEdf9ugYl5/NCSN2qQKondKNcZ+G5o8xA1c7CaPve8da7Ms7jyW7fcMfttB9PzyfRBl0PCAtVSKhhBU6wtEb6hnaCXI/Q3/xYTQZl45qqtcCBEP4nmyvCIrQ3G5l9ZUEfBmrT2BBcs3rGq3qGT8sPpUpJbY/VQ4Vt61uCroU3wZZZ/TRvpMZTPMJMyvpXQ/AzL7YpyDVoHl7RSl+7feE5oP9V3N7kg5xxNWBNu2agqhJpChN4zGyUJnyqdgt3ivXjLvmn6gHqByk74ViJ0LOQ2ZKicXefSd27wGfmbHAvb9KiEy+2YaUvbaqL0wF5NMy3QOgTnw7mav4HsuXhHHEIUSInCXBWhsA2/ZZs4CQNIXaV82Hr5tfdpltLa5eJVsGBRtKf9K4gTYFJebCXlO2B/0oXqIy83ROdC2a+rceT4hdVw3SGG84LRS41CBXLf/B2v69ZeaVPlNU0AuCYDM4Gl6h5zbCTrZId5zOFAIjViTVCCxxVkFFWfEhBIvWXr5aNs0gBpfI5gM+2TQrUxkYKd4tQhNV8Mp/fmwBTu4WFXgHZkcoQ6ttmrXnvueDq8u9HaqLfcrUbtYJZQsNVXUjy6DmnhwNM2kf1eiSb1ElIL4mMuL74YgK3S7t+3S+STUH2UgoTDc7YJGGQakmDuzXVibM7uJu/cxcQ6aPvgitW6XDwj/TL3hOt68NYBWDvV1HZCd28ZmMxbkYPUDKUIIBgQvvmx3zip8p6gTI2rQBWcj98ykoWLiYJHin68Hq0IW2lLc7cVvyZ+rVSS3jQp+osAG8wRL/zmvmiKZRRLfgb7+2m9lJ1VgSGYYY4R+Szo4MyUOsai9DoGvvNA3Hx7i+PxO+7iRnEef3Tk+bi7LMWmvigaP7jTxUmDr+KMC2NGyfOyUi2qww6GGE4bqQJsVDn4bet5ewVnHUMxM//EsVKWvluaJ1VHh+x05MmEiX7cqk9OuoRniaY5Sgj+7B5u+z6MWgdv3HEYmmNJtg0J3VXtsrMRq3Kn6ptxidAY2QSsj4LNH1OAAdT/JyDoOkt+DAbQKHWG0RXv/7XX9DuXK3qr+BoFeHoZLsigNlzj58j6Ynu0bPeL1EktDwySaJvotUHnZnp5FCD9Gx6z0HUpEYYr9wd12w568+EMgtFoE/QsLJq3bXP/QrfiYTywnt0jJubdOfydEe3QI5x/0gMlzmOttJ/dqp0RyD6odHY7qPeUF88PyRTKBhMJ3hfvkXkU1NKPGPuNLJtLG6YydNwHgaaMIMJgcugs9rhTlhHs+VyUou1eg56vn8J/1yVmIWNsdnlnYn/cuUegHpdckuMtKkfNp3Kcqyu8YeIyNjmnX6bKC28a9rC6PRhCl+8sTDd/p9ce0ejpDKUURuYOQGXctLF3oEpCGLj25EnDQ0rK7Bkq6j6AnDyyMsEmc6FZxLGHXhFT/+fKU2gybJQtta5K9emhgK3lF/xTKp3fAIHcN5B2Ckg2IiTjHfQQZ5txmaFOUo032C3B/UrEmvibcR4CyeMqkBl9VjS2btx6HMCoNFtQY7HiMspKxF97O5PztyPcnUJD6s5S7lV+1eHFgn8a33ZdYMwQ9b3ll+Ri6OcNxXS5Pk61aGO0oColc4k4gkwWn8HoHldNAu3Zv9cHo+JGKkzu80pizSTw6MFCKO3XPG/YaLy4AxVYiRvCFvQths2hl6rsKLayBJCkLdK8/XBvCSN89BSVqoeX/KSvLfMGXX343DIXzYVI6jdqp7d9nhwlPIXR3+poc4uJQVNnvpxiX9J9zPv9wzYp7U0v/HR2nV9fcOk7TLa9G4IdsSb+7xRAcoMR1NzyhNIKe+95mJUqHGFAPyo0+uvqQP4geT9lE8O2Uimt8MY2DyB2uc6IlgEsb39bd4XZjmvxmu2QoFnuwEbQZxUSBvojmcbt5F+GATN0hXUcF34415FxhklNs7cCcNfs2V3ouudlEh2pgRyJHDqZmSm83vmN0tN3NZsa2X2IopbhDajv5O+hFK6tJ/S3wIpSRvzG8MvwF5fQ81bPr1CBP7nDxH7WZQvdP2Mju2vbKazsZIyLN76N/k7/mpiORsrGecnMGCVwJFqeD/8w8yR96qbScn23LmfqOuXdfa5Mogtui74sYl/FLtilAMHsEKKIjPx+crgbCSfICN4g5XhSgSM2x9na0VezNs+cdZMyuCwANR6B04+NZnerGVyeIrVkCYUMAOz5gZLqBS39w0JXzGe8FMuN65Tq9LLGO1dg4IWoALhA0EJmAvIRzN+dbZG6ZKdsT7kW4OY5DTLDoRSpcafGIo0BJLq+1CMkYPesdPlobWBnB/9o5W1ttRa2SfRtqsnLE6x3qhBNbpunbXoltUAWpJ18m7U2/vgcOOeuSWlhPoDFxwNlmqc6Hz/8VGpunngsCoLDvRJw0YV6xfm0JF54qWG+nHFR/UlFf/z7G9kNDwkpVWFoMXnSxAUP+nKMm27Rq9kKxsMP/uiR/r8wXhOYVct7d4G4CYZ96LjGsXd656GZqMJ60DnXb0YnONxUnasbT/xJ4mSYjBlWXBd4/mPcGaFL+wi8xuRljTGptbCQPlQ84pWX68dbmeTI1DtIADTStbdaAGEceXgeTTb2RJVpj0EhCTslSBN9BiTe0SxxP7C298YkhNygHQF2ssdyx1wY2no4zNFmt4zvwr54QCFoIgMXUr4HR8WZDmmvOKGYFGd3oKfknvCAymWQTuPortsLQL+UXfikW5VcsObbZDTk8WlWrk20DZ6i2Zvh6YhtZPV+RSUcNPf/CrE08SnaBGhydJWZm//SjM+hRdF6jpJOwH+o8BRvf0FZqXW/QRuOohJFx3iZNCBhWH+t4hC2qbqAhuP68sw8WsC2ZYg="></div>

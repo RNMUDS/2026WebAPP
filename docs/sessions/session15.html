@@ -96,6 +96,18 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
+
+a.sub-item {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+a.sub-item:hover {
+  border-color: #76B900;
+  background: #1f2a14;
+  transform: translateY(-1px);
+}
 /* ============ TAGS ============ */
 .tag {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -466,8 +478,8 @@ pre { position: relative; }
     <div class="submission-box">
       <h3>提出ガイド（この回の提出物: 計2項目）</h3>
       <div class="submission-items">
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-group">相互評価</span>評価シート</div>
-        <div class="sub-item"><span class="sub-count">1</span><span class="tag tag-standard">振り返り</span>振り返りエッセイ</div>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">相互評価</span>評価シート</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">振り返り</span>振り返りエッセイ</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -500,6 +512,118 @@ pre { position: relative; }
           <span style="color:#76B900;font-size:1.2rem">&rarr;</span>
           <span style="background:#FFB800;color:#111;padding:0.3rem 0.8rem;border-radius:6px;font-weight:700">4. 質疑応答</span>
         </div>
+      </div>
+
+      <!-- Animated SVG: 発表構成のタイムライン（4ステージ） -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 280" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="32" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">発表のステージ進行（5分間のタイムライン）</text>
+
+          <!-- Step badge (top right) -->
+          <g>
+            <rect x="540" y="48" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+            <text x="620" y="64" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+              ステージ 1: テーマ紹介
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+              ステージ 2: デモ実演
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+              ステージ 3: 技術説明
+            </text>
+            <text x="620" y="64" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+              ステージ 4: 質疑応答
+            </text>
+          </g>
+
+          <!-- Timeline base bar -->
+          <rect x="60" y="120" width="600" height="14" rx="7" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+
+          <!-- Progress fill -->
+          <rect x="60" y="120" width="0" height="14" rx="7" fill="url(#timegrad)">
+            <animate attributeName="width" values="0;60;60;360;360;480;480;600" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+          </rect>
+
+          <defs>
+            <linearGradient id="timegrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#76B900"/>
+              <stop offset="40%" stop-color="#FFB800"/>
+              <stop offset="75%" stop-color="#4FC3F7"/>
+              <stop offset="100%" stop-color="#FF5252"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Stage 1: テーマ紹介 (0-30s) -->
+          <g>
+            <rect x="50" y="148" width="80" height="58" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+            <text x="90" y="170" text-anchor="middle" fill="#76B900" font-weight="900" font-size="13">① テーマ</text>
+            <text x="90" y="188" text-anchor="middle" fill="#E0E0E0" font-size="11">30秒</text>
+            <text x="90" y="202" text-anchor="middle" fill="#999" font-size="11">コンセプト</text>
+            <circle cx="90" cy="127" r="11" fill="#76B900" opacity="0">
+              <animate attributeName="opacity" values="0;1;1;0;0;0;0;0" keyTimes="0;0.10;0.22;0.27;0.50;0.55;0.80;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="90" y="131" text-anchor="middle" fill="#0A0A0A" font-size="11" font-weight="900" opacity="0">
+              <animate attributeName="opacity" values="0;1;1;0;0;0;0;0" keyTimes="0;0.10;0.22;0.27;0.50;0.55;0.80;1" dur="16s" repeatCount="indefinite"/>
+              ▶
+            </text>
+          </g>
+
+          <!-- Stage 2: デモ実演 (30s-2:30) -->
+          <g>
+            <rect x="170" y="148" width="220" height="58" rx="10" fill="#2e1a0a" stroke="#FFB800" stroke-width="2"/>
+            <text x="280" y="170" text-anchor="middle" fill="#FFB800" font-weight="900" font-size="13">② デモ実演（ライブ）</text>
+            <text x="280" y="188" text-anchor="middle" fill="#E0E0E0" font-size="11">2分</text>
+            <text x="280" y="202" text-anchor="middle" fill="#999" font-size="11">サーバ起動 → 複数タブで接続 → アバター同期/チャット</text>
+            <circle cx="280" cy="127" r="11" fill="#FFB800" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;1;1;0;0;0" keyTimes="0;0.22;0.27;0.30;0.50;0.55;0.80;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="280" y="131" text-anchor="middle" fill="#0A0A0A" font-size="11" font-weight="900" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;1;1;0;0;0" keyTimes="0;0.22;0.27;0.30;0.50;0.55;0.80;1" dur="16s" repeatCount="indefinite"/>
+              ▶
+            </text>
+          </g>
+
+          <!-- Stage 3: 技術説明 (2:30-4:30) -->
+          <g>
+            <rect x="430" y="148" width="160" height="58" rx="10" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2"/>
+            <text x="510" y="170" text-anchor="middle" fill="#4FC3F7" font-weight="900" font-size="13">③ 技術説明</text>
+            <text x="510" y="188" text-anchor="middle" fill="#E0E0E0" font-size="11">1〜2分</text>
+            <text x="510" y="202" text-anchor="middle" fill="#999" font-size="11">工夫・苦労した点</text>
+            <circle cx="510" cy="127" r="11" fill="#4FC3F7" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.27;0.50;0.55;0.60;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="510" y="131" text-anchor="middle" fill="#0A0A0A" font-size="11" font-weight="900" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;1;1;0;0" keyTimes="0;0.22;0.27;0.50;0.55;0.60;0.80;0.85;1" dur="16s" repeatCount="indefinite"/>
+              ▶
+            </text>
+          </g>
+
+          <!-- Stage 4: 質疑応答 (4:30-5:00) -->
+          <g>
+            <rect x="610" y="148" width="80" height="58" rx="10" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
+            <text x="650" y="170" text-anchor="middle" fill="#FF5252" font-weight="900" font-size="13">④ Q&amp;A</text>
+            <text x="650" y="188" text-anchor="middle" fill="#E0E0E0" font-size="11">30秒</text>
+            <text x="650" y="202" text-anchor="middle" fill="#999" font-size="11">質疑応答</text>
+            <circle cx="650" cy="127" r="11" fill="#FF5252" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text x="650" y="131" text-anchor="middle" fill="#0A0A0A" font-size="11" font-weight="900" opacity="0">
+              <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1" keyTimes="0;0.22;0.27;0.50;0.55;0.80;0.85;0.90;1" dur="16s" repeatCount="indefinite"/>
+              ▶
+            </text>
+          </g>
+
+          <!-- Bottom completion panel (appears at end) -->
+          <g opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.22;0.27;0.50;0.55;0.80;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
+            <rect x="220" y="232" width="280" height="36" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+            <text x="360" y="256" text-anchor="middle" fill="#76B900" font-size="14" font-weight="700">発表完了！次の発表者へ</text>
+          </g>
+        </svg>
       </div>
     </div>
 
@@ -632,35 +756,99 @@ pre { position: relative; }
       各技術がどうつながって、最終制作のマルチユーザ3D Webアプリケーションになったかを確認します。
     </p>
 
-    <!-- Course Summary / Technology Stack SVG -->
+    <!-- Animated SVG: コースで学んだ技術スタック全体図（4ステージ） -->
     <div class="diagram-container">
-      <svg viewBox="0 0 760 280" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
-        <rect x="20" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-        <text x="130" y="45" text-anchor="middle" fill="#76B900" font-weight="900" font-size="13">サーバサイド</text>
-        <text x="130" y="65" text-anchor="middle" fill="#999" font-size="9">第2〜3回</text>
-        <text x="130" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">Node.js + Express</text>
-        <text x="130" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">HTTP / JSON / 静的配信</text>
-        <rect x="270" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-        <text x="380" y="45" text-anchor="middle" fill="#FFB800" font-weight="900" font-size="13">3D表現</text>
-        <text x="380" y="65" text-anchor="middle" fill="#999" font-size="9">第4〜8回</text>
-        <text x="380" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">A-Frame 1.7.1</text>
-        <text x="380" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">ジオメトリ / ライト / glTF</text>
-        <rect x="520" y="20" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-        <text x="630" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="900" font-size="13">リアルタイム通信</text>
-        <text x="630" y="65" text-anchor="middle" fill="#999" font-size="9">第9〜12回</text>
-        <text x="630" y="82" text-anchor="middle" fill="#E0E0E0" font-size="9">Socket.IO</text>
-        <text x="630" y="98" text-anchor="middle" fill="#E0E0E0" font-size="9">同期 / チャット / DB連携</text>
-        <line x1="130" y1="120" x2="380" y2="170" stroke="#76B900" stroke-width="2" marker-end="url(#arr15a)"/>
-        <line x1="380" y1="120" x2="380" y2="170" stroke="#FFB800" stroke-width="2" marker-end="url(#arr15b)"/>
-        <line x1="630" y1="120" x2="380" y2="170" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr15c)"/>
-        <rect x="220" y="175" width="320" height="60" rx="12" fill="#76B900" stroke="#93D500" stroke-width="2"/>
-        <text x="380" y="200" text-anchor="middle" fill="white" font-weight="900" font-size="13">マルチユーザ3D Webアプリ</text>
-        <text x="380" y="220" text-anchor="middle" fill="white" font-size="10">第13〜15回: 設計 → 実装 → 発表</text>
-        <text x="380" y="265" text-anchor="middle" fill="#888" font-size="11">3つの柱を統合して最終制作を完成させる</text>
+      <svg viewBox="0 0 760 320" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="380" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">技術スタックの統合プロセス（3つの柱 → 最終制作）</text>
+
+        <!-- Step badge -->
+        <g>
+          <rect x="580" y="44" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="660" y="60" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ① サーバサイド
+          </text>
+          <text x="660" y="60" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ② 3D表現
+          </text>
+          <text x="660" y="60" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ③ リアルタイム通信
+          </text>
+          <text x="660" y="60" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;0.80;1" dur="18s" repeatCount="indefinite"/>
+            ④ 統合完了
+          </text>
+        </g>
+
+        <!-- Pillar 1: Server-side (highlight phase 1) -->
+        <g>
+          <rect x="20" y="90" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#444" stroke-width="2">
+            <animate attributeName="stroke" values="#444;#76B900;#76B900;#76B900;#76B900;#76B900;#76B900;#76B900" keyTimes="0;0.10;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-width" values="2;3;3;2;2;2;2;2" keyTimes="0;0.10;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="130" y="115" text-anchor="middle" fill="#76B900" font-weight="900" font-size="13">サーバサイド</text>
+          <text x="130" y="135" text-anchor="middle" fill="#999" font-size="11">第2〜3回</text>
+          <text x="130" y="152" text-anchor="middle" fill="#E0E0E0" font-size="11">Node.js + Express</text>
+          <text x="130" y="168" text-anchor="middle" fill="#E0E0E0" font-size="11">HTTP / JSON / 静的配信</text>
+        </g>
+
+        <!-- Pillar 2: 3D (highlight phase 2) -->
+        <g>
+          <rect x="270" y="90" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#444" stroke-width="2">
+            <animate attributeName="stroke" values="#444;#444;#444;#FFB800;#FFB800;#FFB800;#FFB800;#FFB800" keyTimes="0;0.18;0.22;0.30;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-width" values="2;2;2;3;3;2;2;2" keyTimes="0;0.18;0.22;0.30;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="380" y="115" text-anchor="middle" fill="#FFB800" font-weight="900" font-size="13">3D表現</text>
+          <text x="380" y="135" text-anchor="middle" fill="#999" font-size="11">第4〜8回</text>
+          <text x="380" y="152" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame 1.7.1</text>
+          <text x="380" y="168" text-anchor="middle" fill="#E0E0E0" font-size="11">ジオメトリ / ライト / glTF</text>
+        </g>
+
+        <!-- Pillar 3: Realtime (highlight phase 3) -->
+        <g>
+          <rect x="520" y="90" width="220" height="100" rx="12" fill="#1A1A1A" stroke="#444" stroke-width="2">
+            <animate attributeName="stroke" values="#444;#444;#444;#444;#444;#4FC3F7;#4FC3F7;#4FC3F7" keyTimes="0;0.18;0.22;0.38;0.42;0.50;0.62;1" dur="18s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-width" values="2;2;2;2;2;3;3;2" keyTimes="0;0.18;0.22;0.38;0.42;0.50;0.62;1" dur="18s" repeatCount="indefinite"/>
+          </rect>
+          <text x="630" y="115" text-anchor="middle" fill="#4FC3F7" font-weight="900" font-size="13">リアルタイム通信</text>
+          <text x="630" y="135" text-anchor="middle" fill="#999" font-size="11">第9〜12回</text>
+          <text x="630" y="152" text-anchor="middle" fill="#E0E0E0" font-size="11">Socket.IO</text>
+          <text x="630" y="168" text-anchor="middle" fill="#E0E0E0" font-size="11">同期 / チャット / DB連携</text>
+        </g>
+
+        <!-- Arrows (appear at step 4) -->
+        <line x1="130" y1="190" x2="350" y2="234" stroke="#76B900" stroke-width="2" marker-end="url(#arrSA)" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+        </line>
+        <line x1="380" y1="190" x2="380" y2="234" stroke="#FFB800" stroke-width="2" marker-end="url(#arrSB)" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+        </line>
+        <line x1="630" y1="190" x2="410" y2="234" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arrSC)" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+        </line>
+
+        <!-- Final integrated app box (grows in step 4) -->
+        <rect x="240" y="238" width="280" height="56" rx="12" fill="#1A1A1A" stroke="#444" stroke-width="2">
+          <animate attributeName="fill" values="#1A1A1A;#1A1A1A;#1A1A1A;#1A1A1A;#1A1A1A;#1A1A1A;#76B900;#76B900" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="#444;#444;#444;#444;#444;#444;#93D500;#93D500" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+        </rect>
+        <text x="380" y="262" text-anchor="middle" fill="#666" font-weight="900" font-size="13">
+          <animate attributeName="fill" values="#666;#666;#666;#666;#666;#666;#fff;#fff" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+          マルチユーザ3D Webアプリ
+        </text>
+        <text x="380" y="282" text-anchor="middle" fill="#555" font-size="11">
+          <animate attributeName="fill" values="#555;#555;#555;#555;#555;#555;#fff;#fff" keyTimes="0;0.18;0.22;0.38;0.42;0.58;0.62;1" dur="18s" repeatCount="indefinite"/>
+          第13〜15回: 設計 → 実装 → 発表
+        </text>
+
+        <text x="380" y="312" text-anchor="middle" fill="#888" font-size="11">3つの柱を統合して最終制作を完成させる</text>
+
         <defs>
-          <marker id="arr15a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-          <marker id="arr15b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
-          <marker id="arr15c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+          <marker id="arrSA" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+          <marker id="arrSB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+          <marker id="arrSC" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
         </defs>
       </svg>
     </div>
@@ -686,6 +874,78 @@ pre { position: relative; }
         <tr class="session-row"><td>14</td><td>総合制作 (2)</td><td>機能実装・調整・デバッグ</td></tr>
         <tr class="session-row"><td>15</td><td>成果発表・まとめ</td><td>発表・講評・技術の整理</td></tr>
       </table>
+    </div>
+
+    <!-- Reading guide: 用語の読み方ガイド -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-code-exp">用語ガイド</span>
+        <h3>主要用語の読み方・覚え方</h3>
+      </div>
+      <p style="font-size:0.9rem;color:#bbb;margin-bottom:1rem">発表で使うときに困らないよう、主要技術用語の読み方と「ひとことで言うと何か」を整理しておきます。</p>
+
+      <table>
+        <tr><th style="width:22%">用語</th><th style="width:18%">読み方</th><th>ひとことで言うと</th></tr>
+        <tr>
+          <td><strong>Node.js</strong></td>
+          <td>ノード・ジェイエス</td>
+          <td>ブラウザの外で JavaScript を動かす実行環境。サーバを書くために使う。</td>
+        </tr>
+        <tr>
+          <td><strong>Express</strong></td>
+          <td>エクスプレス</td>
+          <td>Node.js でルーティング（URL → 処理）を簡単に書くためのライブラリ。</td>
+        </tr>
+        <tr>
+          <td><strong>HTTP</strong></td>
+          <td>エイチ・ティー・ティー・ピー</td>
+          <td>クライアントとサーバが「お願い／返事」を交換する約束ごと（プロトコル）。</td>
+        </tr>
+        <tr>
+          <td><strong>JSON</strong></td>
+          <td>ジェイソン</td>
+          <td>キーと値で書く、軽量なデータ形式。サーバとブラウザの会話言語。</td>
+        </tr>
+        <tr>
+          <td><strong>A-Frame</strong></td>
+          <td>エー・フレーム</td>
+          <td>HTMLタグで3D空間を作れるフレームワーク。中身は Three.js + WebGL。</td>
+        </tr>
+        <tr>
+          <td><strong>glTF</strong></td>
+          <td>ジー・エル・ティー・エフ（GLビット転送フォーマット）</td>
+          <td>3Dモデルの標準フォーマット。「3D界のJPEG」と呼ばれる。</td>
+        </tr>
+        <tr>
+          <td><strong>Socket.IO</strong></td>
+          <td>ソケット・アイオー</td>
+          <td>WebSocket をラップして、双方向リアルタイム通信を簡単にするライブラリ。</td>
+        </tr>
+        <tr>
+          <td><strong>WebSocket</strong></td>
+          <td>ウェブ・ソケット</td>
+          <td>サーバとブラウザが常時つながり、必要なときに双方から送信できる通信方式。</td>
+        </tr>
+        <tr>
+          <td><strong>WebXR</strong></td>
+          <td>ウェブ・エックス・アール</td>
+          <td>ブラウザから VR/AR デバイス（Meta Quest など）にアクセスする Web 標準API。</td>
+        </tr>
+        <tr>
+          <td><strong>Three.js</strong></td>
+          <td>スリー・ジェイエス</td>
+          <td>A-Frame の内部で動いている、低レベルな 3D ライブラリ。自由度が高い。</td>
+        </tr>
+      </table>
+
+      <div style="background:#0a1a2e;border:1px solid #4FC3F7;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.88rem">
+        <p style="color:#4FC3F7;font-weight:700;margin-bottom:0.4rem">発表での使い分け</p>
+        <ul class="point-list" style="font-size:0.88rem">
+          <li><strong>「サーバ側で〇〇」</strong>と言う場合 → Node.js / Express の話</li>
+          <li><strong>「クライアント側で〇〇」</strong>と言う場合 → ブラウザ上の A-Frame / JavaScript の話</li>
+          <li><strong>「同期で〇〇」</strong>と言う場合 → Socket.IO のイベント（emit / on）の話</li>
+        </ul>
+      </div>
     </div>
 
     <div class="card" style="border-left:4px solid #FFB800">
@@ -755,6 +1015,88 @@ pre { position: relative; }
       これが <strong>振り返りエッセイ</strong> としての提出物になります。
     </p>
 
+    <!-- Animated SVG: 15回の振り返りタイムライン -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 720 260" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+        <text x="360" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="16">全15回の学びの軌跡（4フェーズの旅）</text>
+
+        <!-- Step badge -->
+        <g>
+          <rect x="540" y="44" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
+          <text x="620" y="60" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.45;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            フェーズ 1: 基礎習得
+          </text>
+          <text x="620" y="60" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.45;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            フェーズ 2: 3D表現
+          </text>
+          <text x="620" y="60" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.45;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            フェーズ 3: 通信実装
+          </text>
+          <text x="620" y="60" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.25;0.45;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
+            フェーズ 4: 総合制作
+          </text>
+        </g>
+
+        <!-- Horizontal journey line -->
+        <line x1="60" y1="130" x2="660" y2="130" stroke="#333" stroke-width="3" stroke-dasharray="4,4"/>
+
+        <!-- Animated progress dot -->
+        <circle r="9" fill="#fff" stroke="#76B900" stroke-width="3">
+          <animate attributeName="cx" values="60;130;130;260;260;430;430;620" keyTimes="0;0.20;0.25;0.40;0.50;0.65;0.70;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="cy" values="130;130;130;130;130;130;130;130" keyTimes="0;0.20;0.25;0.40;0.50;0.65;0.70;1" dur="16s" repeatCount="indefinite"/>
+          <animate attributeName="stroke" values="#76B900;#76B900;#FFB800;#FFB800;#4FC3F7;#4FC3F7;#FF5252;#FF5252" keyTimes="0;0.20;0.25;0.40;0.50;0.65;0.70;1" dur="16s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Phase 1: 第1-3回 基礎 -->
+        <g>
+          <rect x="60" y="80" width="140" height="46" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="130" y="100" text-anchor="middle" fill="#76B900" font-weight="900" font-size="12">第1〜3回</text>
+          <text x="130" y="118" text-anchor="middle" fill="#E0E0E0" font-size="11">Web基礎・Node.js</text>
+          <text x="130" y="158" text-anchor="middle" fill="#999" font-size="11">クライアント／サーバ</text>
+          <text x="130" y="174" text-anchor="middle" fill="#999" font-size="11">HTTP / JSON通信</text>
+        </g>
+
+        <!-- Phase 2: 第4-8回 3D -->
+        <g>
+          <rect x="220" y="80" width="160" height="46" rx="10" fill="#2e1a0a" stroke="#FFB800" stroke-width="2"/>
+          <text x="300" y="100" text-anchor="middle" fill="#FFB800" font-weight="900" font-size="12">第4〜8回</text>
+          <text x="300" y="118" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame / 3D表現</text>
+          <text x="300" y="158" text-anchor="middle" fill="#999" font-size="11">ジオメトリ / マテリアル</text>
+          <text x="300" y="174" text-anchor="middle" fill="#999" font-size="11">ライト / アニメ / glTF</text>
+        </g>
+
+        <!-- Phase 3: 第9-12回 Realtime -->
+        <g>
+          <rect x="400" y="80" width="160" height="46" rx="10" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="480" y="100" text-anchor="middle" fill="#4FC3F7" font-weight="900" font-size="12">第9〜12回</text>
+          <text x="480" y="118" text-anchor="middle" fill="#E0E0E0" font-size="11">Socket.IO通信</text>
+          <text x="480" y="158" text-anchor="middle" fill="#999" font-size="11">アバター同期</text>
+          <text x="480" y="174" text-anchor="middle" fill="#999" font-size="11">チャット / 状態管理</text>
+        </g>
+
+        <!-- Phase 4: 第13-15回 Integration -->
+        <g>
+          <rect x="580" y="80" width="120" height="46" rx="10" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
+          <text x="640" y="100" text-anchor="middle" fill="#FF5252" font-weight="900" font-size="12">第13〜15回</text>
+          <text x="640" y="118" text-anchor="middle" fill="#E0E0E0" font-size="11">総合制作・発表</text>
+          <text x="640" y="158" text-anchor="middle" fill="#999" font-size="11">設計 → 実装</text>
+          <text x="640" y="174" text-anchor="middle" fill="#999" font-size="11">→ 発表 → 振り返り</text>
+        </g>
+
+        <!-- Reflection panel (appears at end) -->
+        <g opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.20;0.25;0.40;0.50;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
+          <rect x="200" y="200" width="320" height="44" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="360" y="220" text-anchor="middle" fill="#76B900" font-size="14" font-weight="700">15回の学びを「自分の言葉」で振り返る</text>
+          <text x="360" y="236" text-anchor="middle" fill="#93D500" font-size="11">→ 振り返りエッセイ（質問1〜5）へ</text>
+        </g>
+      </svg>
+    </div>
+
     <div class="card" style="border-left:4px solid #FFB800">
       <div class="card-header">
         <span class="tag tag-standard">振り返り</span>
@@ -802,6 +1144,64 @@ pre { position: relative; }
       </div>
 
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 質問1〜5のすべてに回答してください。各回答は3文以上で記述すること。</div></div>
+    </div>
+
+    <!-- Self-check Q&A box -->
+    <div class="card" style="border-left:4px solid #4FC3F7">
+      <div class="card-header">
+        <span class="tag tag-code-exp">セルフチェック</span>
+        <h3>自分の理解を確認する Q&amp;A</h3>
+      </div>
+      <p style="font-size:0.9rem;color:#bbb;margin-bottom:1rem">発表前・振り返り中に、自分の言葉で答えられるか確認しましょう。詰まったら該当回の資料を見直してみてください。</p>
+
+      <details>
+        <summary><span class="tag tag-code-exp" style="font-size:0.7rem">Q1</span> 「クライアントとサーバの違い」を1文で説明できますか?</summary>
+        <div class="answer-content">
+          <p><strong>ヒント:</strong> どちらが「お願いする側」で、どちらが「応える側」かを軸に考えると整理しやすい。</p>
+          <p style="margin-top:0.5rem"><strong>説明例:</strong> 「クライアントは画面を持ち、ユーザの操作を起点にリクエストを送る側。サーバはリクエストを受け取って、データやファイルを返す側。今回は Node.js + Express がサーバ、ブラウザの A-Frame ページがクライアント。」</p>
+          <p style="margin-top:0.5rem;color:#999;font-size:0.85rem">関連: 第1〜3回</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="tag tag-code-exp" style="font-size:0.7rem">Q2</span> なぜ Socket.IO を使ったのですか? 普通の HTTP では何がダメだったのですか?</summary>
+        <div class="answer-content">
+          <p><strong>ヒント:</strong> HTTP は「お願い → 返事」の片道型。アバターの動きを「相手が動いた瞬間に」伝えるには何が必要か。</p>
+          <p style="margin-top:0.5rem"><strong>説明例:</strong> 「HTTP はクライアントが聞きに行かないと情報が来ない（ポーリングが必要）。Socket.IO はサーバとブラウザが常時つながっていて、誰かが動いた瞬間に全員にプッシュ配信できる。だから低遅延でアバター同期ができる。」</p>
+          <p style="margin-top:0.5rem;color:#999;font-size:0.85rem">関連: 第9〜12回</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="tag tag-code-exp" style="font-size:0.7rem">Q3</span> A-Frame と Three.js は何が違うのですか?</summary>
+        <div class="answer-content">
+          <p><strong>ヒント:</strong> 抽象度（書きやすさ vs 自由度）の違いに注目。</p>
+          <p style="margin-top:0.5rem"><strong>説明例:</strong> 「A-Frame は HTML タグ（&lt;a-box&gt; など）で3D空間を宣言的に書ける高レベルなフレームワーク。Three.js はそのA-Frameの内部で動いている低レベル3Dライブラリで、JavaScript で細かく制御できるかわりに記述量が増える。授業では学習コストの低い A-Frame を採用した。」</p>
+          <p style="margin-top:0.5rem;color:#999;font-size:0.85rem">関連: 第4〜8回</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="tag tag-code-exp" style="font-size:0.7rem">Q4</span> 自分のアプリで「状態」を持っているのはサーバ側ですか? クライアント側ですか?</summary>
+        <div class="answer-content">
+          <p><strong>ヒント:</strong> 「正しい状態」（=正本）はどこにあるべきか。新しい人が入室したとき、何を最初に渡しますか?</p>
+          <p style="margin-top:0.5rem"><strong>説明例:</strong> 「アバターの位置一覧やチャット履歴の正本はサーバが持つ。新規接続時にサーバが現在状態を渡し、以後は差分（emit）でブラウザを更新する。これがマルチユーザ共有の基本パターン。」</p>
+          <p style="margin-top:0.5rem;color:#999;font-size:0.85rem">関連: 第11〜12回</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="tag tag-code-exp" style="font-size:0.7rem">Q5</span> 「もしユーザが100人に増えたら」何がボトルネックになりますか?</summary>
+        <div class="answer-content">
+          <p><strong>ヒント:</strong> ブロードキャストの回数、ネットワーク帯域、サーバの CPU の3つで考える。</p>
+          <p style="margin-top:0.5rem"><strong>説明例:</strong> 「全員のアバター位置を全員に配るので、トラフィックは N×N で増える（100人なら毎フレーム1万送信）。対策としては送信頻度を下げる、近くの人だけに送る（部屋分割）、差分だけ送る、などが考えられる。」</p>
+          <p style="margin-top:0.5rem;color:#999;font-size:0.85rem">関連: 第12回・発展課題</p>
+        </div>
+      </details>
+
+      <div style="background:#0a1a2e;border:1px solid #4FC3F7;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.88rem;color:#cce8ff">
+        <strong style="color:#4FC3F7">発表のヒント:</strong> 質疑応答（Q&amp;A）でよく聞かれるのは、上の Q1〜Q5 の系統です。自分の作品に当てはめて、1〜2文で答えられるよう準備しておくと安心です。
+      </div>
     </div>
   </div>
 </section>
