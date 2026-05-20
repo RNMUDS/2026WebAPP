@@ -2293,6 +2293,188 @@ pre { position: relative; }
           <li><strong>独自性:</strong> 既存ヒントのコピーではなく、自分なりの工夫があるか</li>
         </ul>
       </div>
+
+      <!-- ============ 発展: Sketchfab + animation-mixer ============ -->
+      <div class="column-box" style="margin-top:1.5rem">
+        <p class="col-title">&#x1F408; 発展: Sketchfab から動くキャラを連れてくる ── glTF + animation-mixer</p>
+        <p style="margin:0 0 0.8rem;font-size:0.95rem">
+          ここまでは <code>&lt;a-box&gt;</code> や <code>&lt;a-cylinder&gt;</code> など <strong>プリミティブ図形</strong>でモデリングしてきましたが、本格的な <strong>3Dキャラクター</strong>を一から作るのは大変です。<br>
+          そこで <a href="https://sketchfab.com/" target="_blank" rel="noopener" style="color:#76B900">Sketchfab</a>（無料3Dモデル共有サイト）からダウンロードしてきた <strong>glTF（.glb）ファイル</strong>を、A-Frame の <code>gltf-model</code> + <code>animation-mixer</code> で<strong>歩く・しっぽを振るアニメーション付き</strong>で読み込んでみましょう。
+        </p>
+
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#76B900;font-weight:700">&#x1F4E5; ステップ1: Sketchfab からモデルをダウンロード</p>
+        <ol style="padding-left:1.5rem;font-size:0.9rem;line-height:1.9;color:#ccc;margin-bottom:0.8rem">
+          <li><a href="https://sketchfab.com/3d-models/toon-cat-free-b2bd1ee7858444bda366110a2d960386" target="_blank" rel="noopener" style="color:#76B900">Toon Cat Free（無料アニメ風猫モデル）</a> を開く</li>
+          <li>右上の <strong>「Sign in」</strong> から無料登録 / ログイン（Google アカウントでOK）</li>
+          <li>モデル下の <strong>「Download 3D Model」</strong> ボタンをクリック</li>
+          <li>形式は <strong>「glTF (.glb)」</strong> を選択 ──（.glb は画像とアニメを <strong>1つのファイルに同梱</strong>した形式なので扱いやすい）</li>
+          <li>ダウンロードしたファイルを <code>Web05/</code> フォルダに <strong><code>toon-cat.glb</code></strong> という名前で保存</li>
+        </ol>
+
+        <div class="col-tip" style="margin-bottom:1rem">
+          <strong>&#x1F511; なぜ glb 形式？</strong> <code>.gltf</code> はテクスチャ画像やアニメーションが別ファイルに分かれている形式で、フォルダごと配置する必要があります。<strong><code>.glb</code> は1つのバイナリにすべて梱包</strong>されているので、HTML から <code>src="toon-cat.glb"</code> と書くだけで動きます。<strong>初心者は迷わず .glb を選択</strong>してください。
+        </div>
+
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#76B900;font-weight:700">&#x1F3AC; ステップ2: A-Frame で読み込み + アニメーション再生</p>
+        <p style="margin:0 0 0.5rem;font-size:0.9rem">
+          A-Frame 本体だけでは glTF の<strong>形状は表示できてもアニメーションは動きません</strong>。<br>
+          <strong>aframe-extras</strong> という追加ライブラリの <code>animation-mixer</code> コンポーネントを読み込むことで、モデルに内蔵されたアニメーション（歩く・しっぽを振る・鳴く など）を再生できます。
+        </p>
+
+        <pre><span class="code-label">HTML ── Web05/toon-cat.html（新規作成）</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="kw">html</span>&gt;
+&lt;<span class="kw">head</span>&gt;
+  &lt;<span class="kw">meta</span> charset=<span class="str">"UTF-8"</span>&gt;
+  &lt;<span class="kw">title</span>&gt;Toon Cat with Animation&lt;/<span class="kw">title</span>&gt;
+  <span class="cmt">&lt;!-- ① A-Frame 本体 --&gt;</span>
+  &lt;<span class="kw">script</span> src=<span class="str">"https://aframe.io/releases/1.5.0/aframe.min.js"</span>&gt;&lt;/<span class="kw">script</span>&gt;
+  <span class="cmt">&lt;!-- ② アニメーション再生のための追加ライブラリ（animation-mixer 含む） --&gt;</span>
+  &lt;<span class="kw">script</span> src=<span class="str">"https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"</span>&gt;&lt;/<span class="kw">script</span>&gt;
+&lt;/<span class="kw">head</span>&gt;
+&lt;<span class="kw">body</span>&gt;
+  &lt;<span class="kw">a-scene</span> background=<span class="str">"color: #87CEEB"</span>&gt;
+
+    <span class="cmt">&lt;!-- ③ アセット読み込み（glb は1ファイル完結） --&gt;</span>
+    &lt;<span class="kw">a-assets</span>&gt;
+      &lt;<span class="kw">a-asset-item</span> id=<span class="str">"cat"</span> src=<span class="str">"toon-cat.glb"</span>&gt;&lt;/<span class="kw">a-asset-item</span>&gt;
+    &lt;/<span class="kw">a-assets</span>&gt;
+
+    <span class="cmt">&lt;!-- ④ モデルを配置 + animation-mixer でアニメ再生 --&gt;</span>
+    &lt;<span class="kw">a-entity</span>
+      gltf-model=<span class="str">"#cat"</span>
+      animation-mixer=<span class="str">"clip: *; loop: repeat"</span>
+      position=<span class="str">"0 0 -3"</span>
+      rotation=<span class="str">"0 180 0"</span>
+      scale=<span class="str">"1 1 1"</span>&gt;
+    &lt;/<span class="kw">a-entity</span>&gt;
+
+    <span class="cmt">&lt;!-- ⑤ 床（猫が立っている地面） --&gt;</span>
+    &lt;<span class="kw">a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"20"</span> height=<span class="str">"20"</span>
+      material=<span class="str">"color: #7BC8A4; roughness: 0.9"</span>&gt;&lt;/<span class="kw">a-plane</span>&gt;
+
+    <span class="cmt">&lt;!-- ⑥ ライト --&gt;</span>
+    &lt;<span class="kw">a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.7"</span>&gt;&lt;/<span class="kw">a-light</span>&gt;
+    &lt;<span class="kw">a-light</span> type=<span class="str">"directional"</span> intensity=<span class="str">"0.8"</span> position=<span class="str">"1 2 1"</span>&gt;&lt;/<span class="kw">a-light</span>&gt;
+
+    <span class="cmt">&lt;!-- ⑦ カメラ（マウスで見回せる） --&gt;</span>
+    &lt;<span class="kw">a-camera</span> position=<span class="str">"0 1.6 2"</span> look-controls wasd-controls&gt;&lt;/<span class="kw">a-camera</span>&gt;
+
+  &lt;/<span class="kw">a-scene</span>&gt;
+&lt;/<span class="kw">body</span>&gt;
+&lt;/<span class="kw">html</span>&gt;</pre>
+
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#76B900;font-weight:700">&#x1F50D; コードのポイント解説</p>
+        <table>
+          <tr><th style="width:30%">行</th><th>役割</th></tr>
+          <tr>
+            <td><code>aframe-extras.min.js</code></td>
+            <td><strong>animation-mixer コンポーネントを追加</strong>するための追加ライブラリ。A-Frame 本体だけでは glTF のアニメーションは再生されない</td>
+          </tr>
+          <tr>
+            <td><code>&lt;a-asset-item id="cat" src="toon-cat.glb"&gt;</code></td>
+            <td>モデルファイルを<strong>先に読み込んでおく</strong>。<code>src</code> は HTML と同じ階層にあるファイル名</td>
+          </tr>
+          <tr>
+            <td><code>gltf-model="#cat"</code></td>
+            <td>アセットの id を指定して glTF をシーンに配置</td>
+          </tr>
+          <tr>
+            <td><code>animation-mixer="clip: *; loop: repeat"</code></td>
+            <td><strong>clip: *</strong> は「<strong>すべて</strong>のアニメーションを再生」。<strong>loop: repeat</strong> で無限ループ。特定のアニメだけ再生したいなら <code>clip: Walk</code> のように名前指定</td>
+          </tr>
+          <tr>
+            <td><code>rotation="0 180 0"</code></td>
+            <td>モデルが後ろ向きで読み込まれる場合に <strong>Y軸180°</strong>で正面を向かせる</td>
+          </tr>
+          <tr>
+            <td><code>scale="1 1 1"</code></td>
+            <td>モデルが大きすぎる/小さすぎる場合は <code>scale="0.5 0.5 0.5"</code> や <code>"3 3 3"</code> で調整</td>
+          </tr>
+        </table>
+
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#76B900;font-weight:700">&#x1F4FA; 実行結果イメージ ── アニメーション付き Toon Cat</p>
+        <figure class="exec-mock">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: Sketchfab Toon Cat + animation-mixer</span>
+          </div>
+          <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sky background already gradient via parent CSS -->
+            <!-- Ground -->
+            <ellipse cx="320" cy="280" rx="320" ry="40" fill="#7BC8A4" opacity="0.9"/>
+            <!-- Cat shadow -->
+            <ellipse cx="320" cy="260" rx="65" ry="9" fill="#000" opacity="0.25"/>
+            <!-- Cat body (toon style) -->
+            <ellipse cx="320" cy="220" rx="55" ry="35" fill="#F5C26B" stroke="#3a2a14" stroke-width="2.5"/>
+            <!-- Cat tail (wavy, suggesting animation) -->
+            <path d="M 370 215 Q 410 195 415 165 Q 412 145 395 140" stroke="#3a2a14" stroke-width="3" fill="none"/>
+            <path d="M 370 215 Q 410 195 415 165 Q 412 145 395 140" stroke="#F5C26B" stroke-width="6" fill="none" opacity="0.95"/>
+            <!-- Cat back legs -->
+            <ellipse cx="295" cy="250" rx="11" ry="14" fill="#F5C26B" stroke="#3a2a14" stroke-width="2"/>
+            <ellipse cx="340" cy="250" rx="11" ry="14" fill="#F5C26B" stroke="#3a2a14" stroke-width="2"/>
+            <!-- Cat head -->
+            <circle cx="265" cy="190" r="38" fill="#F5C26B" stroke="#3a2a14" stroke-width="2.5"/>
+            <!-- Ears -->
+            <polygon points="240,160 248,135 260,162" fill="#F5C26B" stroke="#3a2a14" stroke-width="2"/>
+            <polygon points="280,158 288,133 296,164" fill="#F5C26B" stroke="#3a2a14" stroke-width="2"/>
+            <polygon points="244,158 249,143 257,160" fill="#E89F4B"/>
+            <polygon points="282,156 287,141 294,160" fill="#E89F4B"/>
+            <!-- Eyes -->
+            <ellipse cx="252" cy="188" rx="4.5" ry="6" fill="#1a1a1a"/>
+            <ellipse cx="278" cy="188" rx="4.5" ry="6" fill="#1a1a1a"/>
+            <circle cx="253" cy="186" r="1.5" fill="#fff"/>
+            <circle cx="279" cy="186" r="1.5" fill="#fff"/>
+            <!-- Nose -->
+            <polygon points="263,200 267,200 265,204" fill="#D86B6B"/>
+            <!-- Mouth -->
+            <path d="M 265 204 Q 260 210 256 207" stroke="#3a2a14" stroke-width="1.5" fill="none"/>
+            <path d="M 265 204 Q 270 210 274 207" stroke="#3a2a14" stroke-width="1.5" fill="none"/>
+            <!-- Whiskers -->
+            <line x1="240" y1="200" x2="225" y2="198" stroke="#3a2a14" stroke-width="1"/>
+            <line x1="240" y1="204" x2="225" y2="206" stroke="#3a2a14" stroke-width="1"/>
+            <line x1="290" y1="200" x2="305" y2="198" stroke="#3a2a14" stroke-width="1"/>
+            <line x1="290" y1="204" x2="305" y2="206" stroke="#3a2a14" stroke-width="1"/>
+            <!-- Motion lines suggesting tail wag -->
+            <path d="M 420 145 Q 430 150 432 158" stroke="#76B900" stroke-width="1.8" fill="none" opacity="0.7"/>
+            <path d="M 425 130 Q 438 135 442 145" stroke="#76B900" stroke-width="1.8" fill="none" opacity="0.5"/>
+            <!-- Label -->
+            <text x="320" y="30" text-anchor="middle" fill="#1a1a1a" font-size="12" font-weight="700">Toon Cat が地面に立ち、しっぽを振りながらアニメーション再生される</text>
+          </svg>
+          <figcaption class="exec-caption">
+            <code>animation-mixer="clip: *"</code> によって <strong>モデルに同梱されたアニメーション</strong>（しっぽを振る・呼吸する・まばたきする 等）が<strong>自動でループ再生</strong>される。プリミティブ図形だけでは作れなかった、生き物らしい動きが一気に教室に入ってくる。
+          </figcaption>
+        </figure>
+
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#76B900;font-weight:700">&#x1F3AF; アニメーションを指定再生する応用</p>
+        <p style="margin:0 0 0.5rem;font-size:0.9rem">
+          glb 内には複数のアニメーション（例: <code>Walk</code>, <code>Run</code>, <code>Idle</code>）が入っていることがあります。<br>
+          <strong>クリップ名を確認</strong>するには、モデル読み込み後にコンソールで以下を実行します。
+        </p>
+
+        <pre><span class="code-label">JavaScript ── ブラウザのコンソール（F12）に貼り付け</span>
+document.<span class="fn">querySelector</span>(<span class="str">'[gltf-model]'</span>).<span class="fn">addEventListener</span>(<span class="str">'model-loaded'</span>, (e) <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(e.detail.model.animations.<span class="fn">map</span>(a <span class="op">=&gt;</span> a.name));
+});</pre>
+
+        <p style="margin:0.5rem 0;font-size:0.9rem">クリップ名がわかれば、特定のアニメだけを再生できます。</p>
+
+        <pre><span class="code-label">HTML ── 特定クリップ + 速度調整</span>
+&lt;<span class="kw">a-entity</span>
+  gltf-model=<span class="str">"#cat"</span>
+  animation-mixer=<span class="str">"clip: Walk; loop: repeat; timeScale: 1.5; crossFadeDuration: 0.3"</span>
+  position=<span class="str">"0 0 -3"</span>&gt;
+&lt;/<span class="kw">a-entity</span>&gt;</pre>
+
+        <div style="background:#0a0a1a;border:1px solid #76B900;border-radius:6px;padding:0.7rem 0.9rem;margin-top:0.8rem;font-size:0.88rem;color:#E0D8FF">
+          <strong>&#x1F4A1; 教室シーンへの活かし方:</strong> 標準課題の <code>classroom-v2.html</code> に <strong>この Toon Cat を「先生」「来客」「教室マスコット」として置く</strong>と一気に世界観が完成します。<code>position</code> を黒板の前に、<code>scale</code> を 1.5 にして「猫の先生」を演出するも良し、机の上に小さく置いて「教室マスコット」にするのも良しです。
+        </div>
+
+        <p style="margin-top:0.8rem;font-size:0.85rem;color:#aaa">
+          <strong>&#x26A0;&#xFE0F; 注意:</strong> Sketchfab のモデルにはそれぞれ<strong>ライセンス</strong>（CC-BY 等）があります。授業内で動かす分には問題ありませんが、外部公開する場合は<strong>クレジット表記</strong>（作者名・モデル URL）が必要なケースが多いです。<br>
+          今回の Toon Cat は <strong>CC Attribution（CC-BY）</strong>ライセンス ── 作者 <code>Omabuarts Studio</code> のクレジット表記で利用できます。
+        </p>
+      </div>
     </div>
   </div>
 </section>
