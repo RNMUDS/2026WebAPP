@@ -80,11 +80,11 @@
 | `easeOutQuad` | ゆっくり終わる |
 | `easeInOutQuad` | ゆっくり始まり、ゆっくり終わる |
 | `easeInOutElastic` | 弾むような動き |
-| `easeOutBounce` | バウンドして止まる |
+| `easeOutElastic` | バネのように行き過ぎて揺れ戻る |
 
 ```html
 <a-box animation="property: position; to: 3 1 -3;
-                   dur: 2000; easing: easeOutBounce">
+                   dur: 2000; easing: easeOutElastic">
 </a-box>
 ```
 

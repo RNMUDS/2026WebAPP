@@ -415,6 +415,17 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ EXECUTION CAPTURE (実機キャプチャ: 画像/動画) ============ */
+.exec-shot { margin: 1rem 0 1.2rem; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+.exec-shot img, .exec-shot video { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 0.4rem 0.7rem; display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #888; }
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url { margin-left: 0.4rem; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 5px; padding: 0.1rem 0.5rem; flex: 1; color: #93D500; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.exec-caption { font-size: 0.78rem; color: #999; text-align: center; padding: 0.45rem 0.8rem 0.6rem; border-top: 1px solid #2a2a2a; background: #141414; }
+.exec-caption strong { color: #93D500; }
+
 </style>
 </head>
 <body>
@@ -1063,6 +1074,21 @@ pre { position: relative; }
       <div class="section-num" style="background:#4A7A00">2</div>
       <h2>例題とトレース演習</h2>
     </div>
+
+    <p style="margin-bottom:1rem">この回で作る<strong>ミニ展示館</strong>（標準課題の解答例）を実機で動かした動画です。3つの台座の上で展示物が回転・浮遊・色変化しています。<br><span style="color:#888;font-size:0.9em">※ この解答例は glb モデルが無くても動くよう<strong>プリミティブ（多面体・球・トーラス）で代替</strong>しています。実際の課題では <code>&lt;a-gltf-model&gt;</code> に差し替えて Sketchfab 等の glb を読み込みます。</span></p>
+    <figure class="exec-shot">
+      <div class="exec-mock-bar">
+        <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="url">localhost:3000 — ミニ展示館 GEOMETRY GALLERY（解答例）</span>
+      </div>
+      <video src="videos/session08-gallery.mp4" poster="images/session08-gallery-poster.jpg"
+             autoplay loop muted playsinline controls
+             aria-label="ミニ展示館の実行動画。暗い展示室の壁にGEOMETRY GALLERYの文字、3つの台座の上で赤い正十二面体が回転し、青緑に色を変える球が浮遊し、金色のトーラスが回転している。床に青とピンクの点光源の光が広がる。"></video>
+      <figcaption class="exec-caption">
+        <strong>実機での実行動画</strong>：回転（rotation）・浮遊（position）・色変化（material.color）の animation と、2つの点光源によるライティングで「展示館」らしい空間を構成している。<br>
+        <span style="color:#888;font-size:0.85em">※ solutions/week08 を実際にブラウザで動かし、画面を録画したものです（自動再生・ループ）。</span>
+      </figcaption>
+    </figure>
 
     <!-- Example 1 -->
     <div class="card example">

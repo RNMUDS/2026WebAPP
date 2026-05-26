@@ -415,6 +415,48 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ EXECUTION CAPTURE (実機キャプチャ: 画像/動画) ============ */
+.exec-shot {
+  margin: 1rem 0 1.2rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.exec-shot img, .exec-shot video { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar {
+  background: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.4rem 0.7rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url {
+  margin-left: 0.4rem;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem;
+  flex: 1;
+  color: #93D500;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.exec-caption {
+  font-size: 0.78rem;
+  color: #999;
+  text-align: center;
+  padding: 0.45rem 0.8rem 0.6rem;
+  border-top: 1px solid #2a2a2a;
+  background: #141414;
+}
+.exec-caption strong { color: #93D500; }
+
 </style>
 </head>
 <body>
@@ -770,8 +812,8 @@ pre { position: relative; }
         <tr><td><code>easeInQuad</code></td><td>ゆっくり始まり加速する</td><td>登場アニメーション</td></tr>
         <tr><td><code>easeOutQuad</code></td><td>速く始まり減速する</td><td>着地、停止</td></tr>
         <tr><td><code>easeInOutQuad</code></td><td>ゆっくり始まり、加速し、ゆっくり止まる</td><td>自然な移動、汎用的</td></tr>
-        <tr><td><code>easeInOutElastic</code></td><td>バネのように伸縮しながら動く</td><td>注目を引くUI効果</td></tr>
-        <tr><td><code>easeOutBounce</code></td><td>着地時にバウンドする</td><td>ボールの落下、弾む表現</td></tr>
+        <tr><td><code>easeInOutElastic</code></td><td>始めと終わりの両方でバネのように伸縮する</td><td>注目を引くUI効果</td></tr>
+        <tr><td><code>easeOutElastic</code></td><td>終わり際に勢いよく行き過ぎてバネのように揺れ戻る</td><td>弾むUI、強調・登場の演出</td></tr>
       </table>
 
       <!-- 読み方 / 具体例 / Q&A -->
@@ -781,10 +823,10 @@ pre { position: relative; }
           <tr><td style="width:200px;color:#FFB800;font-weight:600"><code>easing</code></td><td style="color:#ccc">イージング ── 「ease=ゆるめる」から。動きのカーブのこと</td></tr>
           <tr><td style="color:#FFB800;font-weight:600">Tween (TweenJS)</td><td style="color:#ccc">トゥイーン ── 「between=2点間」から。A-Frame の easing は内部で TweenJS の式と同じカーブを使う</td></tr>
           <tr><td style="color:#FFB800;font-weight:600"><code>easeIn</code> / <code>easeOut</code></td><td style="color:#ccc">イーズイン／イーズアウト ── 入り（始め）でゆっくり／出（終わり）でゆっくり</td></tr>
-          <tr><td style="color:#FFB800;font-weight:600"><code>Quad</code> / <code>Elastic</code> / <code>Bounce</code></td><td style="color:#ccc">クアド／エラスティック／バウンス ── 2乗カーブ／伸縮（ゴム）／跳ね返り</td></tr>
+          <tr><td style="color:#FFB800;font-weight:600"><code>Quad</code> / <code>Elastic</code></td><td style="color:#ccc">クアド／エラスティック ── 2乗カーブ／バネのように伸縮（ゴム）</td></tr>
         </table>
         <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-top:1rem;margin-bottom:0.3rem">具体例</p>
-        <p style="color:#ccc;font-size:0.9rem"><code>linear</code> は<strong>等速</strong>（時計の秒針）、<code>easeOutBounce</code> は<strong>地面に落ちて跳ねる</strong>動き、<code>easeInOutElastic</code> は<strong>ゴムが伸び縮みする</strong>ような動き。同じ <code>dur</code>（合計時間）でも、easing が違うと「印象」が大きく変わる。</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>linear</code> は<strong>等速</strong>（時計の秒針）、<code>easeOutElastic</code> は<strong>終わり際に行き過ぎてバネのように揺れ戻る</strong>動き、<code>easeInOutElastic</code> は<strong>始めと終わりの両方でゴムが伸び縮みする</strong>ような動き。同じ <code>dur</code>（合計時間）でも、easing が違うと「印象」が大きく変わる。</p>
       </div>
 
       <!-- R7 #3: Clock-based easing curve visualization -->
@@ -809,7 +851,7 @@ pre { position: relative; }
             </text>
             <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
               <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ④ easeOutBounce
+              ④ easeOutElastic
             </text>
             <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
               <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
@@ -838,8 +880,8 @@ pre { position: relative; }
           <path d="M 80 240 C 240 240 380 100 540 100" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
             <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
           </path>
-          <!-- ④ easeOutBounce -->
-          <path d="M 80 240 Q 200 100 280 120 Q 350 140 360 110 Q 380 90 420 105 Q 480 130 540 100" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
+          <!-- ④ easeOutElastic (overshoot then settle) -->
+          <path d="M 80 240 Q 150 60 210 78 Q 260 92 300 108 Q 340 96 390 101 Q 460 100 540 100" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
             <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
           </path>
           <!-- ⑤ easeInOutElastic -->
@@ -858,7 +900,7 @@ pre { position: relative; }
           <circle cx="80" cy="310" r="5" fill="#76B900"/><text x="92" y="314" fill="#ccc" font-size="11">linear</text>
           <circle cx="160" cy="310" r="5" fill="#FFB800"/><text x="172" y="314" fill="#ccc" font-size="11">easeInQuad</text>
           <circle cx="270" cy="310" r="5" fill="#4FC3F7"/><text x="282" y="314" fill="#ccc" font-size="11">easeInOutQuad</text>
-          <circle cx="390" cy="310" r="5" fill="#FF5252"/><text x="402" y="314" fill="#ccc" font-size="11">easeOutBounce</text>
+          <circle cx="390" cy="310" r="5" fill="#FF5252"/><text x="402" y="314" fill="#ccc" font-size="11">easeOutElastic</text>
           <circle cx="510" cy="310" r="5" fill="#93D500"/><text x="522" y="314" fill="#ccc" font-size="11">easeInOutElastic</text>
         </svg>
       </div>
@@ -1211,6 +1253,21 @@ pre { position: relative; }
       <h2>例題とトレース演習</h2>
     </div>
 
+    <p style="margin-bottom:1rem">この回の例題で学ぶ animation を組み合わせると、下のような<strong>「動くギャラリー」</strong>（標準課題の解答例）が作れます。まず完成イメージの動きを見てから、各パーツを読み解いていきましょう。</p>
+    <figure class="exec-shot">
+      <div class="exec-mock-bar">
+        <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="url">localhost:3000 — 動くギャラリー（解答例）</span>
+      </div>
+      <video src="videos/session07-gallery.mp4" poster="images/session07-gallery-poster.jpg"
+             autoplay loop muted playsinline controls
+             aria-label="動くギャラリーの実行動画: 暗い展示室の台座の上で、赤い多面体が回転し、青い球が上下に浮遊しながら色を変え、オレンジのトーラスが回転しながら色を変え、緑のキューブとオレンジの円錐が並ぶ。中央に紫の点光源の光が床に広がっている。"></video>
+      <figcaption class="exec-caption">
+        <strong>実機での実行動画</strong>：A-Frame の <code>animation</code> による回転・浮遊・色変化が同時に動いている。各展示物の作り方を例題1〜トレース演習で順に確認する。<br>
+        <span style="color:#888;font-size:0.85em">※ solutions/week07 を実際にブラウザで動かし、画面を録画したものです（自動再生・ループ）。</span>
+      </figcaption>
+    </figure>
+
     <!-- Example -->
     <div class="card example">
       <div class="card-header">
@@ -1277,7 +1334,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
                      dur: 1000;
                      loop: true;
                      direction: alternate;
-                     easing: easeOutBounce"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+                     easing: easeOutElastic"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
 
 <span class="cmt">&lt;!-- オブジェクトB --&gt;</span>
 <span class="kw">&lt;a-box</span> position=<span class="str">"-2 1 -4"</span> color=<span class="str">"#4CC3D9"</span>
@@ -1389,7 +1446,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
                         dur: 1000;
                         loop: true;
                         direction: alternate;
-                        easing: easeOutBounce"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
+                        easing: easeOutElastic"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
 
     <span class="cmt">&lt;!-- 3. 点滅する円柱（透明度アニメーション） --&gt;</span>
     <span class="kw">&lt;a-cylinder</span> position=<span class="str">"3 1 -5"</span> radius=<span class="str">"0.5"</span> height=<span class="str">"2"</span>
@@ -1553,7 +1610,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
           <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
           <tr><td>回転アニメーションの <code>dur</code> を <code>500</code> にする</td><td>「回転の速さはどう変わる？」</td></tr>
           <tr><td><code>loop: true</code> を <code>loop: false</code> にする</td><td>「アニメーションはどうなる？」</td></tr>
-          <tr><td><code>easing: linear</code> を <code>easeOutBounce</code> にする</td><td>「動き方はどう変わる？」</td></tr>
+          <tr><td><code>easing: linear</code> を <code>easeOutElastic</code> にする</td><td>「動き方はどう変わる？」</td></tr>
           <tr><td><code>startEvents: click</code> を削除する</td><td>「アニメーションはいつ始まる？」</td></tr>
           <tr><td><code>&lt;a-cursor&gt;</code> を削除する</td><td>「クリックアニメーションは動く？ なぜ？」</td></tr>
           <tr><td><code>direction: alternate</code> を <code>normal</code> にする</td><td>「オブジェクトの動き方はどう変わる？」</td></tr>
@@ -1622,7 +1679,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
         <tr><th>easing</th><th>動き方の説明（空欄を埋める）</th></tr>
         <tr><td><code>linear</code></td><td class="blank-cell"></td></tr>
         <tr><td><code>easeInOutQuad</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>easeOutBounce</code></td><td class="blank-cell"></td></tr>
+        <tr><td><code>easeOutElastic</code></td><td class="blank-cell"></td></tr>
       </table>
 
       <p style="margin-top:1rem"><strong>問3.</strong> 1つのオブジェクトに3つのアニメーション（回転、移動、色変化）を同時に適用したい場合、属性名をどう書きますか？</p>
@@ -1822,7 +1879,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 ### 問2. イージング関数の違い
 - linear        :
 - easeInOutQuad :
-- easeOutBounce :
+- easeOutElastic :
 
 ### 問3. 1つのオブジェクトに3つのアニメーション（回転・移動・色変化）を同時適用する属性名の書き方
 
@@ -1925,7 +1982,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
       <div class="answer-content">
         <table>
           <tr><th>オブジェクト</th><th>形</th><th>何が変化するか（property）</th><th>どう動くか</th><th>速さ（dur）</th></tr>
-          <tr><td>A</td><td>球（sphere）</td><td>position（位置）</td><td>y=1.5 から y=3 へ上下に往復移動（direction: alternate）。バウンドするような動き（easeOutBounce）。</td><td>1000ms（1秒で片道）</td></tr>
+          <tr><td>A</td><td>球（sphere）</td><td>position（位置）</td><td>y=1.5 から y=3 へ上下に往復移動（direction: alternate）。終わり際にバネのように行き過ぎて揺れ戻る動き（easeOutElastic）。</td><td>1000ms（1秒で片道）</td></tr>
           <tr><td>B</td><td>箱（box）</td><td>rotation（回転）</td><td>X軸とY軸の両方で360度回転。斜めに複雑な回転をする。等速（linear）。</td><td>5000ms（5秒で1周）</td></tr>
           <tr><td>C</td><td>円柱（cylinder）</td><td>material.opacity（透明度）</td><td>不透明（1）から半透明（0）へ徐々に消え、また戻る。点滅するように見える。</td><td>2000ms（2秒で片道）</td></tr>
         </table>
@@ -1950,7 +2007,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
         <ul class="point-list">
           <li><strong>Q1:</strong> (1) 赤い箱がY軸で等速に回転し続けている。(2) 青い球が上下にバウンドしている（着地時に跳ねるような動き）。(3) 黄色い円柱が明滅（フェードイン・フェードアウト）を繰り返している。(4) 緑のトーラスが斜めに回転しながら拡大・縮小を繰り返している。</li>
           <li><strong>Q2:</strong> トレース演習1では球・箱・円柱の3つを予測したが、実際のコードのオブジェクト配置が少し異なっていた。動きの種類（回転・移動・透明度変化）は予測どおりだった。</li>
-          <li><strong>Q3:</strong> easeOutBounce から easeInOutQuad に変えると、バウンドする「跳ね返り」がなくなり、滑らかに上下する動きになった。</li>
+          <li><strong>Q3:</strong> easeOutElastic から easeInOutQuad に変えると、バネのように「行き過ぎて揺れ戻る」動きがなくなり、滑らかに上下する動きになった。</li>
         </ul>
       </div>
     </details>

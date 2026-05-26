@@ -415,6 +415,19 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ EXECUTION CAPTURE (実機キャプチャ: 画像/動画) ============ */
+.exec-shot { margin: 1rem 0 1.2rem; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+.exec-shot img, .exec-shot video { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 0.4rem 0.7rem; display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #888; }
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url { margin-left: 0.4rem; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 5px; padding: 0.1rem 0.5rem; flex: 1; color: #93D500; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.exec-caption { font-size: 0.78rem; color: #999; text-align: center; padding: 0.45rem 0.8rem 0.6rem; border-top: 1px solid #2a2a2a; background: #141414; }
+.exec-caption strong { color: #93D500; }
+.exec-pair { display: flex; gap: 12px; flex-wrap: wrap; }
+.exec-pair .exec-shot { flex: 1 1 320px; margin: 0; }
+
 </style>
 </head>
 <body>
@@ -1167,6 +1180,21 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
       <div class="section-num" style="background:#4A7A00">2</div>
       <h2>例題とトレース演習</h2>
     </div>
+
+    <p style="margin-bottom:0.8rem">この回の主役は<strong>データの永続化（DB保存）</strong>です。下は実機での検証：① オブジェクトの色を変更（<code>better-sqlite3</code> で app.db に保存）→ ② <strong>サーバを再起動</strong>して別ブラウザで再接続 → <strong>同じ色がそのまま復元</strong>されました。これが第11回（メモリ保持）との決定的な違いです。</p>
+    <div class="exec-pair">
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">① 色を変更 → DBに保存</span></div>
+        <img src="images/session12-persist-before.png" alt="共有3D空間で5つのオブジェクトの色を、箱=ティール、球=オレンジ、円柱=濃い赤、円錐=紫、トーラス=黄 に変更した実行画面。" loading="lazy">
+        <figcaption class="exec-caption"><strong>① 変更直後</strong>：クリックで変えた色は <code>UPDATE objects SET color...</code> で app.db に保存される。</figcaption>
+      </figure>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">② サーバ再起動 → 再接続</span></div>
+        <img src="images/session12-persist-after.png" alt="サーバを一度停止して再起動し、新しいブラウザで再接続した実行画面。①と同じ色（箱=ティール、球=オレンジ、円柱=濃い赤、円錐=紫、トーラス=黄）がそのまま復元されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>② 再起動後も保持</strong>：起動時に <code>SELECT * FROM objects</code> で読み込み、色が完全に復元されている。</figcaption>
+      </figure>
+    </div>
+    <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動し、色変更 → サーバ再起動 → 再接続の順で画面をキャプチャしたものです。app.db の中身も <code>obj-1=#1ABC9C …</code> と保存されていることを確認済み。</p>
 
     <!-- Example -->
     <div class="card example">

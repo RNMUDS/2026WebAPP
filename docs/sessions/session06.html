@@ -415,6 +415,48 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ EXECUTION SCREENSHOT (実機キャプチャ) ============ */
+.exec-shot {
+  margin: 1rem 0 1.2rem;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.exec-shot img { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar {
+  background: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0.4rem 0.7rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #888;
+}
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url {
+  margin-left: 0.4rem;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem;
+  flex: 1;
+  color: #93D500;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.exec-caption {
+  font-size: 0.78rem;
+  color: #999;
+  text-align: center;
+  padding: 0.45rem 0.8rem 0.6rem;
+  border-top: 1px solid #2a2a2a;
+  background: #141414;
+}
+.exec-caption strong { color: #93D500; }
+
 </style>
 </head>
 <body>
@@ -581,7 +623,7 @@ pre { position: relative; }
       <table>
         <tr><th style="width:30px">#</th><th>設定</th><th>コード</th></tr>
         <tr><td>1</td><td><strong>シーンでシャドウを有効化</strong></td><td><code>&lt;a-scene shadow="type: pcfsoft"&gt;</code></td></tr>
-        <tr><td>2</td><td><strong>ライトで影を投射</strong>（directional または spot のみ）</td><td><code>&lt;a-light ... castShadow="true"&gt;</code></td></tr>
+        <tr><td>2</td><td><strong>ライトで影を投射</strong>（directional または spot のみ）</td><td><code>&lt;a-light ... light="castShadow: true"&gt;</code></td></tr>
         <tr><td>3</td><td><strong>オブジェクトで影を投射/受け取り</strong></td><td><code>shadow="cast: true; receive: true"</code></td></tr>
       </table>
 
@@ -589,7 +631,7 @@ pre { position: relative; }
 <span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
   <span class="cmt">&lt;!-- 影を落とすライト --&gt;</span>
   <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"-1 3 1"</span>
-           intensity=<span class="str">"0.6"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+           intensity=<span class="str">"0.6"</span> light=<span class="str">"castShadow: true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
 
   <span class="cmt">&lt;!-- 影を投射するオブジェクト --&gt;</span>
   <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"red"</span>
@@ -602,7 +644,7 @@ pre { position: relative; }
 <span class="kw">&lt;/a-scene&gt;</span></pre>
 <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
   <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem"><code>castShadow="true"</code> を削除して影が消えることを確認し、再度追加してみよう。</p>
+  <p style="color:#ccc;font-size:0.9rem"><code>light="castShadow: true"</code> を削除して影が消えることを確認し、再度追加してみよう。</p>
   <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 影が消えた/戻った挙動を1文で書く</div></div>
 </div>
 
@@ -610,7 +652,7 @@ pre { position: relative; }
         <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">影が表示されない場合のチェックリスト <span class="exam-alert">課題に出ます</span></p>
         <ul class="point-list" style="font-size:0.9rem">
           <li><code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> を書いたか？</li>
-          <li>ライトの <code>castShadow="true"</code> を指定したか？</li>
+          <li>ライトの <code>light="castShadow: true"</code> を指定したか？</li>
           <li>ライトの type は <code>directional</code> か <code>spot</code> か？（ambient / point / hemisphere は影を作れない）</li>
           <li>オブジェクトに <code>shadow="cast: true"</code> を書いたか？</li>
           <li>床に <code>shadow="receive: true"</code> を書いたか？</li>
@@ -690,7 +732,7 @@ pre { position: relative; }
       <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4D6; キーワード</p>
       <table style="font-size:0.88rem">
         <tr><td style="width:140px;color:#FFB800;font-weight:600">intensity（強度）</td><td style="color:#ccc">光の明るさを表す数値。0 で消灯、1 が標準。2 以上で過剰に明るくなる。</td></tr>
-        <tr><td style="color:#FFB800;font-weight:600">castShadow</td><td style="color:#ccc">ライトが影を投射するかどうかのフラグ。<code>true</code> で有効。directional と spot のみ対応。</td></tr>
+        <tr><td style="color:#FFB800;font-weight:600">castShadow</td><td style="color:#ccc">ライトが影を投射するかどうかのフラグ。<code>&lt;a-light ... light="castShadow: true"&gt;</code> のように light コンポーネント内で指定する（directional と spot のみ対応）。</td></tr>
         <tr><td style="color:#FFB800;font-weight:600">レイキャスト</td><td style="color:#ccc">カメラから仮想の光線（レイ）を飛ばし、3Dオブジェクトとの交差を判定する仕組み。カーソルのクリック検出に使われる。</td></tr>
         <tr><td style="color:#FFB800;font-weight:600">fov（視野角）</td><td style="color:#ccc">Field of View。カメラが映す範囲の角度。値が大きいと広角（魚眼風）、小さいと望遠になる。</td></tr>
       </table>
@@ -730,6 +772,18 @@ pre { position: relative; }
   <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -4"</span> radius=<span class="str">"1"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
   <span class="kw">&lt;a-sky</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: ambient light のみ</span>
+        </div>
+        <img src="images/session06-ex1-ambient.png" alt="AmbientLight（環境光）だけを intensity 0.5 で追加した実行画面。暗いグレーの背景の中央に白い球が1つ浮かぶが、全方向から均一に光が当たるため陰影がまったく付かず、のっぺりした平面的な円に見える。" loading="lazy">
+        <figcaption class="exec-caption">
+          パターンB（<strong>ambient だけ</strong>）を実行した結果。全方向から均一に光が当たるため<strong>陰影が出ず「のっぺり」</strong>と見える。立体感を出すには directional などを足す必要がある。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
 
       <!-- 例題1 アニメSVG: AmbientLight追加の前後 -->
       <div class="diagram-container">
@@ -839,7 +893,7 @@ pre { position: relative; }
   <span class="cmt">&lt;!-- 真上から: position="0 5 0"  --&gt;</span>
   <span class="cmt">&lt;!-- 右下から: position="3 1 -2" --&gt;</span>
   <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.9"</span>
-           position=<span class="str">"-3 4 2"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+           position=<span class="str">"-3 4 2"</span> light=<span class="str">"castShadow: true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
 
   <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -4"</span> color=<span class="str">"#FF5252"</span>
          shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
@@ -847,6 +901,18 @@ pre { position: relative; }
            width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#CCC"</span>
            shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: directional light + shadow</span>
+        </div>
+        <img src="images/session06-ex2-directional-shadow.png" alt="DirectionalLight を左上 position=-3 4 2 から当て、castShadow を有効にした実行画面。グレーの床の上に赤い箱が立ち、箱の右奥に向かって黒い影が伸びている。" loading="lazy">
+        <figcaption class="exec-caption">
+          <strong>directional（平行光源）</strong>を左上から当てた結果。光と反対側（右奥）に<strong>影が伸び</strong>、面ごとの明暗で立体感が出ている。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
 
       <!-- 例題2 アニメSVG: DirectionalLightの方向変更 -->
       <div class="diagram-container">
@@ -977,6 +1043,18 @@ pre { position: relative; }
            width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
 
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: point light + 光球</span>
+        </div>
+        <img src="images/session06-ex3-point-light.png" alt="PointLight（点光源）を position=-2 2 -3 に置き、同位置に flat shader の小さな黄色い球（光球）を置いた実行画面。暗い空間の左上に黄色く光る球が見え、その光が床に暖色のたまりを作り、白い箱の左面がうっすら暖色に照らされている。" loading="lazy">
+        <figcaption class="exec-caption">
+          <strong>point（点光源）</strong>＋可視化用の<strong>光球（flat shader の a-sphere）</strong>を置いた結果。光源の位置が黄色い球で分かり、近い床ほど明るく照らされる。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <!-- 例題3 アニメSVG: PointLightの光球移動 -->
       <div class="diagram-container">
         <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
@@ -1101,6 +1179,18 @@ pre { position: relative; }
 <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -5"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#4FC3F7"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
 <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.5 -8"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span></pre>
 
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: PerspectiveCamera (fov 80)</span>
+        </div>
+        <img src="images/session06-ex4-perspective.png" alt="PerspectiveCamera で、同じ半径0.5の球を手前から赤(z=-2)・水色(z=-5)・緑(z=-8)の順に並べた実行画面。遠近法により手前の赤い球が最も大きく、奥の緑の球が最も小さく見える。" loading="lazy">
+        <figcaption class="exec-caption">
+          <strong>PerspectiveCamera（遠近法）</strong>では、同じ大きさの球でも<strong>奥にあるほど小さく</strong>見える。Orthographic にすると3つとも同じ大きさになる。<br>
+          <span style="color:#888;font-size:0.85em">※ 上の HTML を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <!-- 例題4 アニメSVG: Perspective vs Orthographic -->
       <div class="diagram-container">
         <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
@@ -1221,6 +1311,18 @@ pre { position: relative; }
             look-at=<span class="str">"#target"</span><span class="kw">&gt;&lt;/a-camera&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
 
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">A-Frame: camera look-at</span>
+        </div>
+        <img src="images/session06-ex5-lookat.png" alt="カメラを position=3 2 -1 に置き、look-at で target の赤い箱を注視した実行画面。斜め上・横から見下ろす視点で、赤い箱の上面と2つの側面が見え、箱が画面中央に捉えられている。" loading="lazy">
+        <figcaption class="exec-caption">
+          <strong>look-at="#target"</strong> でカメラ位置 (3,2,-1) から赤い箱を注視した結果。視点を動かしても<strong>常に対象が画面中央</strong>に収まる。<br>
+          <span style="color:#888;font-size:0.85em">※ パターンC（look-at で対象を追跡）を A-Frame でレンダリングしてキャプチャしたものです。</span>
+        </figcaption>
+      </figure>
+
       <!-- 例題5 アニメSVG: カメラ位置と注視点 -->
       <div class="diagram-container">
         <svg viewBox="0 0 680 380" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
@@ -1330,7 +1432,7 @@ pre { position: relative; }
 <span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
   <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
   <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFA500"</span> intensity=<span class="str">"0.7"</span>
-           position=<span class="str">"2 4 1"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+           position=<span class="str">"2 4 1"</span> light=<span class="str">"castShadow: true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
   <span class="kw">&lt;a-light</span> type=<span class="str">"point"</span> color=<span class="str">"#4FC3F7"</span> intensity=<span class="str">"0.5"</span>
            distance=<span class="str">"8"</span> position=<span class="str">"-2 2 -3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
 
@@ -1481,7 +1583,7 @@ pre { position: relative; }
     <span class="cmt">&lt;!-- ====== ライト ====== --&gt;</span>
     <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
     <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.8"</span>
-             position=<span class="str">"-2 4 2"</span> castShadow=<span class="str">"true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+             position=<span class="str">"-2 4 2"</span> light=<span class="str">"castShadow: true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
 
     <span class="cmt">&lt;!-- ====== 影を落とすオブジェクト ====== --&gt;</span>
     <span class="kw">&lt;a-box</span> position=<span class="str">"-1.5 1 -4"</span> color=<span class="str">"#FF5252"</span>
@@ -1512,7 +1614,7 @@ pre { position: relative; }
         <ul class="point-list" style="font-size:0.9rem">
           <li>カメラの <code>position</code> を <code>"0 1.6 0"</code>（デフォルト高さ、オブジェクトの手前）に変更 → 視点はどう変わるか？</li>
           <li>カメラの <code>position</code> を <code>"0 8 -4"</code>、<code>rotation</code> を <code>"-90 0 0"</code> に変更 → 真上から見下ろす視点</li>
-          <li>directional light の <code>castShadow="true"</code> を削除 → 影はどうなるか？</li>
+          <li>directional light の <code>light="castShadow: true"</code> を削除 → 影はどうなるか？</li>
         </ul>
       </div>
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
@@ -1736,7 +1838,7 @@ pre { position: relative; }
 ---
 
 ## 説明: やってみよう（1.2 影）
-### castShadow を削除/追加したときの挙動
+### light="castShadow: true" を削除/追加したときの挙動
 （影が消えた/戻った挙動を1文で書く）
 
 ---
@@ -1877,10 +1979,21 @@ pre { position: relative; }
         <table>
           <tr><th>ライト</th><th>種類</th><th>色</th><th>予想される効果</th><th>影を作るか？</th></tr>
           <tr><td>1つ目</td><td>ambient（環境光）</td><td>#333（暗い灰色）</td><td>シーン全体をうっすら照らす。立体感は出ない。最低限の明るさを提供する下地。</td><td>いいえ</td></tr>
-          <tr><td>2つ目</td><td>directional（平行光源）</td><td>#FFA500（オレンジ）</td><td>右上（position="2 4 1"）からオレンジ色の平行光が当たる。オブジェクトの右上が明るく、左下が暗くなる。強度0.7。</td><td>はい（castShadow="true"）</td></tr>
+          <tr><td>2つ目</td><td>directional（平行光源）</td><td>#FFA500（オレンジ）</td><td>右上（position="2 4 1"）からオレンジ色の平行光が当たる。オブジェクトの右上が明るく、左下が暗くなる。強度0.7。</td><td>はい（light="castShadow: true"）</td></tr>
           <tr><td>3つ目</td><td>point（点光源）</td><td>#4FC3F7（水色）</td><td>左側（position="-2 2 -3"）から水色の光が放射される。距離8まで届く。オブジェクトの左側が青みがかる。</td><td>いいえ（point light はA-Frameで影を投射しない設定）</td></tr>
         </table>
-        <p style="margin-top:1rem"><strong>追加の問い:</strong> はい、箱の影は床に表示されます。理由: (1) <code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> でシャドウが有効、(2) directional light に <code>castShadow="true"</code> が設定されている、(3) 箱に <code>shadow="cast: true"</code>、床に <code>shadow="receive: true"</code> が設定されている。3つの条件がすべて揃っているためです。</p>
+        <p style="margin-top:1rem"><strong>追加の問い:</strong> はい、箱の影は床に表示されます。理由: (1) <code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> でシャドウが有効、(2) directional light に <code>light="castShadow: true"</code> が設定されている、(3) 箱に <code>shadow="cast: true"</code>、床に <code>shadow="receive: true"</code> が設定されている。3つの条件がすべて揃っているためです。</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar">
+            <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">A-Frame: ambient + directional(orange) + point(blue)</span>
+          </div>
+          <img src="images/session06-trace1-combined.png" alt="3つのライト（環境光#333・オレンジの平行光源・水色の点光源）を組み合わせた実行画面。床と空間がオレンジ色に照らされ、白い箱の左面がやや青みがかり、箱の手前に影が落ちている。" loading="lazy">
+          <figcaption class="exec-caption">
+            <strong>実行結果（答え合わせ用）</strong>：オレンジの directional で全体が暖色に照らされ、左の point light で箱の左面が青みがかり、directional により<strong>影が1つ</strong>できる。<br>
+            <span style="color:#888;font-size:0.85em">※ 上の3ライト構成を A-Frame でレンダリングしてキャプチャしたものです。</span>
+          </figcaption>
+        </figure>
       </div>
     </details>
 

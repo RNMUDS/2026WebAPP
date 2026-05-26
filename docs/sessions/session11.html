@@ -415,6 +415,17 @@ pre { position: relative; }
 /* ============ SCROLL TARGET OFFSET ============ */
 [id] { scroll-margin-top: 3rem; }
 
+/* ============ EXECUTION CAPTURE (実機キャプチャ: 画像/動画) ============ */
+.exec-shot { margin: 1rem 0 1.2rem; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+.exec-shot img, .exec-shot video { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 0.4rem 0.7rem; display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #888; }
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url { margin-left: 0.4rem; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 5px; padding: 0.1rem 0.5rem; flex: 1; color: #93D500; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.exec-caption { font-size: 0.78rem; color: #999; text-align: center; padding: 0.45rem 0.8rem 0.6rem; border-top: 1px solid #2a2a2a; background: #141414; }
+.exec-caption strong { color: #93D500; }
+
 </style>
 </head>
 <body>
@@ -1374,6 +1385,21 @@ socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span 
       <div class="section-num" style="background:#4A7A00">2</div>
       <h2>例題</h2>
     </div>
+
+    <p style="margin-bottom:1rem">この回で作る<strong>インタラクティブ共有3D空間</strong>（標準課題の解答例）の実行動画です。左のユーザーがオブジェクトをクリックすると、<strong>色がランダムに変わり・跳ねるアニメーション</strong>が起き、その結果が<strong>右のユーザーの画面にも即同期</strong>されます。</p>
+    <figure class="exec-shot">
+      <div class="exec-mock-bar">
+        <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="url">localhost:3000 — 共有3D空間（左:クリックする側 / 右:同期される側）</span>
+      </div>
+      <video src="videos/session11-shared.mp4" poster="images/session11-shared-poster.jpg"
+             autoplay loop muted playsinline controls
+             aria-label="2つのブラウザを並べた共有3D空間の実行動画。暗い床に箱・球・円柱・円錐・トーラスの5つのオブジェクトが並び、左画面でクリックされたオブジェクトの色が変わると、右画面の同じオブジェクトも同じ色に変化する。互いのアバターも中央に表示されている。"></video>
+      <figcaption class="exec-caption">
+        <strong>実機での実行動画</strong>：クリックを <code>socket.emit('object-click', ...)</code> で送り、サーバが <code>io.emit('object-update', ...)</code> で全員に配信。<strong>全クライアントのオブジェクト色が一致</strong>する。<br>
+        <span style="color:#888;font-size:0.85em">※ solutions/week11 のサーバを起動し、2つのブラウザ画面を並べて録画したものです（自動再生・ループ）。</span>
+      </figcaption>
+    </figure>
 
     <!-- Example -->
     <div class="card example">
