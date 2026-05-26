@@ -457,9 +457,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計4項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識問題 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
       </div>
@@ -1538,189 +1538,6 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
       </div>
     </div>
 
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>チャットアプリにメッセージ永続化を追加する</h3>
-      </div>
-      <p>同じ <code>Web12</code> フォルダに以下の2ファイルを作成してください。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>ターミナルで <code>npm install express@4 socket.io</code> を実行（未インストールの場合）</li>
-        <li>新しいファイル <strong><code>server.js</code></strong> を作成</li>
-        <li>新しいファイル <strong><code>index.html</code></strong> を作成</li>
-      </ol>
-
-      <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
-<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
-
-<span class="cmt">// --- Express + Socket.IO セットアップ ---</span>
-<span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
-app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'.'</span>));
-
-<span class="cmt">// --- データベースセットアップ ---</span>
-<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'chat.db'</span>);
-
-db.<span class="fn">exec</span>(<span class="str">`
-  CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    text TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now', 'localtime'))
-  )
-`</span>);
-
-<span class="cmt">// プリペアドステートメントを事前に用意</span>
-<span class="kw">const</span> insertMsg = db.<span class="fn">prepare</span>(
-  <span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>
-);
-<span class="kw">const</span> getHistory = db.<span class="fn">prepare</span>(
-  <span class="str">'SELECT * FROM messages ORDER BY id DESC LIMIT 50'</span>
-);
-
-<span class="cmt">// --- Socket.IO イベント ---</span>
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
-  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
-
-  <span class="cmt">// 接続時に過去のチャット履歴を送信</span>
-  <span class="kw">const</span> history = getHistory.<span class="fn">all</span>().<span class="fn">reverse</span>();
-  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, history);
-
-  <span class="cmt">// メッセージ受信 → DB保存 → 全員に配信</span>
-  socket.<span class="fn">on</span>(<span class="str">'chat-message'</span>, (data) => {
-    <span class="cmt">// データベースに保存</span>
-    <span class="kw">const</span> result = insertMsg.<span class="fn">run</span>(data.name, data.text);
-
-    <span class="cmt">// 保存したメッセージ（IDと日時付き）を全員に配信</span>
-    <span class="kw">const</span> saved = {
-      id: result.lastInsertRowid,
-      name: data.name,
-      text: data.text,
-      created_at: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleString</span>(<span class="str">'ja-JP'</span>)
-    };
-    io.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, saved);
-  });
-
-  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () => {
-    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
-  });
-});
-
-<span class="cmt">// --- サーバ起動 ---</span>
-server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
-  console.<span class="fn">log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
-});</pre>
-
-      <pre><span class="code-label">HTML ── index.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>永続チャット<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;style&gt;</span>
-    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-    #chat-log { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;
-                margin-bottom: 1rem; border-radius: 8px; background: #f9f9f9; }
-    .msg { margin-bottom: 0.5rem; }
-    .msg .name { font-weight: bold; color: #333; }
-    .msg .time { font-size: 0.75rem; color: #999; margin-left: 0.5rem; }
-    .msg .text { margin-left: 0.5rem; }
-    #form { display: flex; gap: 0.5rem; }
-    #form input { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 6px; }
-    #form button { padding: 0.5rem 1.5rem; background: #76B900; color: white;
-                   border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    h1 { color: #333; margin-bottom: 1rem; }
-    .history-label { font-size: 0.8rem; color: #999; text-align: center;
-                     border-bottom: 1px dashed #ccc; margin-bottom: 1rem; padding-bottom: 0.5rem; }
-  <span class="kw">&lt;/style&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;h1&gt;</span>永続チャット<span class="kw">&lt;/h1&gt;</span>
-  <span class="kw">&lt;div</span> id=<span class="str">"chat-log"</span><span class="kw">&gt;&lt;/div&gt;</span>
-  <span class="kw">&lt;div</span> id=<span class="str">"form"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;input</span> id=<span class="str">"name"</span> placeholder=<span class="str">"名前"</span> value=<span class="str">"ゲスト"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;input</span> id=<span class="str">"text"</span> placeholder=<span class="str">"メッセージを入力..."</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;button</span> onclick=<span class="str">"send()"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
-
-  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;script&gt;</span>
-    <span class="kw">const</span> socket = <span class="fn">io</span>();
-    <span class="kw">const</span> chatLog = document.<span class="fn">getElementById</span>(<span class="str">'chat-log'</span>);
-
-    <span class="cmt">// 過去の履歴を受信して表示</span>
-    socket.<span class="fn">on</span>(<span class="str">'chat-history'</span>, (messages) => {
-      <span class="kw">const</span> hasHistory = messages.length > <span class="num">0</span>;
-      <span class="kw">if</span> (hasHistory) {
-        chatLog.innerHTML = <span class="str">'&lt;div class="history-label"&gt;--- 過去のメッセージ ---&lt;/div&gt;'</span>;
-        messages.<span class="fn">forEach</span>((msg) => {
-          <span class="fn">addMessage</span>(msg);
-        });
-      }
-    });
-
-    <span class="cmt">// 新しいメッセージを受信</span>
-    socket.<span class="fn">on</span>(<span class="str">'chat-message'</span>, (msg) => {
-      <span class="fn">addMessage</span>(msg);
-    });
-
-    <span class="kw">function</span> <span class="fn">addMessage</span>(msg) {
-      <span class="kw">const</span> div = document.<span class="fn">createElement</span>(<span class="str">'div'</span>);
-      div.className = <span class="str">'msg'</span>;
-      div.innerHTML = <span class="str">`&lt;span class="name"&gt;${msg.name}&lt;/span&gt;`</span>
-        + <span class="str">`&lt;span class="time"&gt;${msg.created_at || ''}&lt;/span&gt;`</span>
-        + <span class="str">`&lt;br&gt;&lt;span class="text"&gt;${msg.text}&lt;/span&gt;`</span>;
-      chatLog.<span class="fn">appendChild</span>(div);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    <span class="kw">function</span> <span class="fn">send</span>() {
-      <span class="cmt">// 中間変数で送信内容を組み立てる</span>
-      <span class="kw">const</span> nameInput = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>);
-      <span class="kw">const</span> textInput = document.<span class="fn">getElementById</span>(<span class="str">'text'</span>);
-      <span class="kw">const</span> name = nameInput.value || <span class="str">'ゲスト'</span>;
-      <span class="kw">const</span> text = textInput.value;
-
-      <span class="cmt">// 空文字列なら送信しない</span>
-      <span class="kw">if</span> (!text) {
-        <span class="kw">return</span>;
-      }
-
-      socket.<span class="fn">emit</span>(<span class="str">'chat-message'</span>, { name: name, text: text });
-      textInput.value = <span class="str">''</span>;
-    }
-
-    <span class="cmt">// Enter キーで送信できるようにする</span>
-    document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) => {
-      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) {
-        <span class="fn">send</span>();
-      }
-    });
-  <span class="kw">&lt;/script&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ターミナルで <code>node server.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
-        <li>メッセージを数件送信する</li>
-        <li>ターミナルで <strong>Ctrl+C</strong> でサーバを停止する</li>
-        <li>もう一度 <code>node server.js</code> でサーバを再起動する</li>
-        <li>ブラウザをリロードして<strong>過去のメッセージが表示されるか</strong>確認する</li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. サーバ再起動後、過去のメッセージは表示されましたか？<br>
-        Q2. 「--- 過去のメッセージ ---」というラベルは表示されましたか？<br>
-        Q3. データベースを使わなかった場合（前回までのチャット）との違いを説明してください</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1816,16 +1633,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
         <tr><td><strong>データ量の限界</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
       </table>
 
-      <p style="margin-top:1rem"><strong>問3.</strong> 以下の場面で、データをデータベースに保存すべきかメモリに保持すべきか選び、理由を書きなさい。</p>
-      <table>
-        <tr><th style="width:30px"></th><th>場面</th><th>DB or メモリ？</th><th>理由（空欄を埋める）</th></tr>
-        <tr><td>A</td><td>ユーザの登録情報（名前、メールアドレス）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>B</td><td>現在接続中のユーザ一覧</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>C</td><td>チャットの過去ログ</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>D</td><td>マウスカーソルの現在位置（リアルタイム表示用）</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問2の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1981,15 +1789,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 
 ---
 
-## コード体験 2: チャットアプリにメッセージ永続化を追加する
-### Q1. サーバ再起動後、過去のメッセージは表示されたか
-
-### Q2. 「--- 過去のメッセージ ---」というラベルは表示されたか
-
-### Q3. データベースを使わなかった場合（前回までのチャット）との違い
-
----
-
 ## グループ口頭試問
 ### Phase 1: あなたが考えた質問
 
@@ -2019,14 +1818,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
 | サーバ再起動時     |   |   |
 | アクセス速度       |   |   |
 | データ量の限界     |   |   |
-
-### 問3. DB or メモリ？
-| 場面 | DB or メモリ | 理由 |
-|------|-------------|------|
-| A. ユーザの登録情報（名前、メール）         |   |   |
-| B. 現在接続中のユーザ一覧                   |   |   |
-| C. チャットの過去ログ                       |   |   |
-| D. マウスカーソルの現在位置（リアルタイム） |   |   |
 
 ---
 
@@ -2112,17 +1903,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
           <li><strong>Q1:</strong> 全件として3件が表示された: [{id:1, name:'りんご', color:'赤', price:150}, {id:2, name:'バナナ', color:'黄', price:100}, {id:3, name:'ぶどう', color:'紫', price:300}]。150円以上はりんごとぶどうの2件。更新後はバナナの price が 200 になっていた。</li>
           <li><strong>Q2:</strong> 2回目の実行ではデータが<strong>6件</strong>になった。同じ INSERT が再実行されるため、りんご・バナナ・ぶどうがもう一度追加された。データベースは永続化されるので、前回のデータがそのまま残っている。</li>
           <li><strong>Q3:</strong> Web12 フォルダに test.db ファイルが作成されていた。このファイルがデータベースの実体である。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> はい。サーバを Ctrl+C で停止し、再度 node server.js で起動してブラウザをリロードしたところ、「--- 過去のメッセージ ---」のラベルとともに、停止前に送信したメッセージがすべて表示された。</li>
-          <li><strong>Q2:</strong> はい。過去のメッセージがある場合に「--- 過去のメッセージ ---」というラベルが表示された。</li>
-          <li><strong>Q3:</strong> 前回までのチャットアプリでは、サーバを再起動するとメッセージが全部消えていた。今回はデータベース（chat.db）に保存しているため、サーバを再起動してもメッセージが残る。また、新しく接続した人にも過去のメッセージを見せることができるようになった。</li>
         </ul>
       </div>
     </details>

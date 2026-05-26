@@ -486,9 +486,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1453,22 +1453,6 @@ pre { position: relative; }
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加の問いに答えてください。</div></div>
     </div>
 
-    <!-- Trace 2 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 2: カメラの位置と見え方</h3>
-      </div>
-      <p><strong>問題:</strong> 以下の3つのカメラ設定で、シーンがどう見えるか予測しなさい。シーンには <code>position="0 1 -4"</code> の赤い箱が1つあるとします。</p>
-      <table>
-        <tr><th>カメラ設定</th><th>カメラの位置と向き</th><th>予想される見え方（空欄を埋める）</th></tr>
-        <tr><td>A</td><td><code>position="0 1.6 0"</code>（デフォルト）</td><td class="blank-cell"></td></tr>
-        <tr><td>B</td><td><code>position="0 10 -4" rotation="-90 0 0"</code></td><td class="blank-cell"></td></tr>
-        <tr><td>C</td><td><code>position="5 1.6 -4"</code></td><td class="blank-cell"></td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 各カメラ設定での見え方の予測を記入してください。</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1557,70 +1541,6 @@ pre { position: relative; }
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
         Q1. 3つのオブジェクト（球・箱・円柱）の明暗の違いを観察して書く。左側と右側で明るさは違うか？<br>
         Q2. 上の「試してみよう」から1つ以上試した結果を書く</div></div>
-    </div>
-
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>影とカメラ ── <code>shadow-camera.html</code></h3>
-      </div>
-      <p>同じ <code>Web06</code> フォルダにもう1つファイルを作ります。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>新しいファイル <strong><code>shadow-camera.html</code></strong> を作成</li>
-        <li>下のコードをコピーして貼り付け、保存</li>
-      </ol>
-      <pre><span class="code-label">HTML ── shadow-camera.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>Shadow &amp; Camera<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;a-scene</span> shadow=<span class="str">"type: pcfsoft"</span><span class="kw">&gt;</span>
-    <span class="cmt">&lt;!-- ====== ライト ====== --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.8"</span>
-             position=<span class="str">"-2 4 2"</span> light=<span class="str">"castShadow: true"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-
-    <span class="cmt">&lt;!-- ====== 影を落とすオブジェクト ====== --&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"-1.5 1 -4"</span> color=<span class="str">"#FF5252"</span>
-           shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.2 -4"</span> radius=<span class="str">"0.8"</span> color=<span class="str">"#4FC3F7"</span>
-             shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"1.5 0.75 -4"</span> radius=<span class="str">"0.4"</span> height=<span class="str">"1.5"</span>
-               color=<span class="str">"#FFB800"</span> shadow=<span class="str">"cast: true"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
-
-    <span class="cmt">&lt;!-- ====== 影を受ける床 ====== --&gt;</span>
-    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
-             width=<span class="str">"12"</span> height=<span class="str">"12"</span> color=<span class="str">"#EEE"</span>
-             shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- ====== カメラ ====== --&gt;</span>
-    <span class="kw">&lt;a-camera</span> position=<span class="str">"0 3 4"</span> rotation=<span class="str">"-15 0 0"</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;a-cursor</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
-    <span class="kw">&lt;/a-camera&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>shadow-camera.html</code> を右クリック → 「Open with Live Server」</p>
-      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">試してみよう</p>
-        <ul class="point-list" style="font-size:0.9rem">
-          <li>カメラの <code>position</code> を <code>"0 1.6 0"</code>（デフォルト高さ、オブジェクトの手前）に変更 → 視点はどう変わるか？</li>
-          <li>カメラの <code>position</code> を <code>"0 8 -4"</code>、<code>rotation</code> を <code>"-90 0 0"</code> に変更 → 真上から見下ろす視点</li>
-          <li>directional light の <code>light="castShadow: true"</code> を削除 → 影はどうなるか？</li>
-        </ul>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 床に影は表示されましたか？ どの方向に影が伸びていましたか？<br>
-        Q2. カーソル（緑の小さな円）はどこに表示されていますか？ カーソルを箱や球に合わせるとどうなりますか？<br>
-        Q3. 上の「試してみよう」から1つ以上試した結果を書く</div></div>
     </div>
 
   </div>
@@ -1721,9 +1641,7 @@ pre { position: relative; }
         <tr><td>D</td><td><code>&lt;a-cursor fuse="true"&gt;</code> は一定時間見つめるとクリック扱いになる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
       </table>
 
-      <p style="margin-top:1rem"><strong>問4.</strong> <code>&lt;a-camera position="0 1.6 0"&gt;</code> の <code>1.6</code> は何を意味していますか？ なぜこの値がデフォルトなのか説明しなさい。</p>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1860,30 +1778,11 @@ pre { position: relative; }
 
 ---
 
-## トレース演習 2: カメラの位置と見え方
-| カメラ設定 | 位置と向き | 予想される見え方 |
-|---|---|---|
-| A | position="0 1.6 0"（デフォルト） |   |
-| B | position="0 10 -4" rotation="-90 0 0" |   |
-| C | position="5 1.6 -4" |   |
-
----
-
 ## コード体験 1: ライトの比較（light-compare.html）
 ### Q1. 3つのオブジェクト（球・箱・円柱）の明暗の違い
 - 左側と右側で明るさは違うか:
 
 ### Q2. 「試してみよう」から1つ以上試した結果
-（試した内容と結果を書く）
-
----
-
-## コード体験 2: 影とカメラ（shadow-camera.html）
-### Q1. 床に影は表示されたか／影の方向
-
-### Q2. カーソル（緑の小さな円）の位置と、箱や球に合わせたときの挙動
-
-### Q3. 「試してみよう」から1つ以上試した結果
 （試した内容と結果を書く）
 
 ---
@@ -1924,8 +1823,6 @@ pre { position: relative; }
 | B | 自分で &lt;a-light&gt; を追加すると、デフォルトライトは無効になる。 |   |   |
 | C | カメラの wasd-controls はマウスで視線を動かす機能である。 |   |   |
 | D | &lt;a-cursor fuse="true"&gt; は一定時間見つめるとクリック扱いになる。 |   |   |
-
-### 問4. &lt;a-camera position="0 1.6 0"&gt; の 1.6 の意味とデフォルト値の理由
 
 ---
 
@@ -1998,34 +1895,11 @@ pre { position: relative; }
     </details>
 
     <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th>カメラ設定</th><th>カメラの位置と向き</th><th>見え方</th></tr>
-          <tr><td>A</td><td><code>position="0 1.6 0"</code>（デフォルト）</td><td>人間の目の高さ（1.6m）から正面を見る。箱は z=-4 にあるので、4m 先に赤い箱が見える。</td></tr>
-          <tr><td>B</td><td><code>position="0 10 -4" rotation="-90 0 0"</code></td><td>箱の真上10mの位置から真下を見下ろす俯瞰視点。箱の上面だけが見える。</td></tr>
-          <tr><td>C</td><td><code>position="5 1.6 -4"</code></td><td>箱と同じ z=-4 だが、右に5mずれた位置。カメラはデフォルトで z=-方向を向くため、箱は視界の左端に見えるか、視界外になる可能性がある。</td></tr>
-        </table>
-      </div>
-    </details>
-
-    <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
           <li><strong>Q1:</strong> 3つのオブジェクトはすべて白色だが、左側の球は点光源（暖色）に近いため少し黄色みがかって見えた。右側の円柱は directional light（白）で照らされた面が最も明るかった。オブジェクトの裏側は暗い。</li>
           <li><strong>Q2:</strong> ambient light を削除すると、光が当たっていない面が完全に真っ暗になった。ambient light はシーン全体の最低限の明るさを保つ役割があることがわかった。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> 床に影が表示された。directional light が左上（position="-2 4 2"）から照らしているため、影は各オブジェクトの右下方向に伸びていた。</li>
-          <li><strong>Q2:</strong> カーソル（緑の小さな円）は画面中央に表示されていた。カーソルをオブジェクトに合わせると、カーソルがオブジェクトの表面に「くっつく」ように見えた（レイキャストが交差した位置）。</li>
-          <li><strong>Q3:</strong> カメラを <code>"0 8 -4"</code> + <code>rotation="-90 0 0"</code> にすると真上からの俯瞰視点になり、3つのオブジェクトの上面と床の影を一度に見渡せた。</li>
         </ul>
       </div>
     </details>

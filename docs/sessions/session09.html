@@ -455,9 +455,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1437,36 +1437,6 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加問題にも回答してください。</div></div>
     </div>
 
-    <!-- Trace 2 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 2: サーバ起動の流れを理解する</h3>
-      </div>
-      <p><strong>問題:</strong> 以下のサーバ起動コードを読み、空欄を埋めなさい。</p>
-      <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
-
-<span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
-app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>);</pre>
-      <table>
-        <tr><th style="width:40%">コード</th><th>何をしているか（空欄を埋める）</th></tr>
-        <tr><td><code>require('express')</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>http.createServer(app)</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>new Server(server)</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>express.static('public')</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>server.listen(3000)</code></td><td class="blank-cell"></td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた表を記入してください。</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1603,163 +1573,6 @@ node server.js</pre>
         Q3. ブラウザのタブを2つ開くと、ターミナルにはどんなログが出ましたか？ ID は同じでしたか？</div></div>
     </div>
 
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>テキストチャットアプリを作る</h3>
-      </div>
-      <p>接続確認ができたら、チャット機能を作ります。<strong>server.js と public/index.html の両方を書き換えてください。</strong></p>
-      <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.85rem;color:#FFB800">
-        <strong>重要:</strong> まずターミナルで <kbd>Ctrl+C</kbd> を押してサーバを停止してから、コードを書き換えてください。
-      </div>
-
-      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong>（上書き）</p>
-      <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
-
-<span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
-app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
-
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
-  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
-
-  <span class="cmt">// クライアントから 'chat' イベントを受け取ったとき</span>
-  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
-    console.<span class="fn">log</span>(<span class="str">'メッセージ:'</span>, msg);
-    <span class="cmt">// 全クライアントに転送する</span>
-    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
-  });
-
-  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
-    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
-  });
-});
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
-  console.<span class="fn">log</span>(<span class="str">'サーバ起動: http://localhost:3000'</span>);
-});</pre>
-
-      <p style="margin-top:1.5rem"><strong>ファイル2: <code>public/index.html</code></strong>（上書き）</p>
-      <pre><span class="code-label">HTML ── public/index.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>チャットアプリ<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;style&gt;</span>
-    body {
-      font-family: sans-serif;
-      background: <span class="str">#111</span>;
-      color: <span class="str">#eee</span>;
-      max-width: <span class="num">600</span>px;
-      margin: <span class="num">0</span> auto;
-      padding: <span class="num">1</span>rem;
-    }
-    h1 { color: <span class="str">#76B900</span>; }
-    <span class="str">#messages</span> {
-      list-style: none;
-      padding: <span class="num">0</span>;
-      height: <span class="num">400</span>px;
-      overflow-y: auto;
-      border: <span class="num">1</span>px solid <span class="str">#333</span>;
-      border-radius: <span class="num">8</span>px;
-      margin: <span class="num">1</span>rem <span class="num">0</span>;
-      background: <span class="str">#0A0A0A</span>;
-    }
-    <span class="str">#messages</span> li {
-      padding: <span class="num">0.5</span>rem <span class="num">1</span>rem;
-      border-bottom: <span class="num">1</span>px solid <span class="str">#222</span>;
-    }
-    <span class="str">#form</span> {
-      display: flex;
-      gap: <span class="num">0.5</span>rem;
-    }
-    <span class="str">#input</span> {
-      flex: <span class="num">1</span>;
-      padding: <span class="num">0.6</span>rem <span class="num">1</span>rem;
-      border: <span class="num">1</span>px solid <span class="str">#333</span>;
-      border-radius: <span class="num">8</span>px;
-      background: <span class="str">#1A1A1A</span>;
-      color: <span class="str">#eee</span>;
-      font-size: <span class="num">1</span>rem;
-    }
-    <span class="str">#send</span> {
-      padding: <span class="num">0.6</span>rem <span class="num">1.5</span>rem;
-      background: <span class="str">#76B900</span>;
-      color: white;
-      border: none;
-      border-radius: <span class="num">8</span>px;
-      font-size: <span class="num">1</span>rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    <span class="str">#send</span>:hover { background: <span class="str">#93D500</span>; }
-  <span class="kw">&lt;/style&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;h1&gt;</span>チャットアプリ<span class="kw">&lt;/h1&gt;</span>
-  <span class="kw">&lt;ul</span> id=<span class="str">"messages"</span><span class="kw">&gt;&lt;/ul&gt;</span>
-  <span class="kw">&lt;div</span> id=<span class="str">"form"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;input</span> id=<span class="str">"input"</span> type=<span class="str">"text"</span> placeholder=<span class="str">"メッセージを入力..."</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;button</span> id=<span class="str">"send"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
-
-  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;script&gt;</span>
-    <span class="kw">var</span> socket = <span class="fn">io</span>();
-    <span class="kw">var</span> input = document.<span class="fn">getElementById</span>(<span class="str">'input'</span>);
-    <span class="kw">var</span> sendBtn = document.<span class="fn">getElementById</span>(<span class="str">'send'</span>);
-    <span class="kw">var</span> messages = document.<span class="fn">getElementById</span>(<span class="str">'messages'</span>);
-
-    <span class="cmt">// 送信ボタンを押したとき</span>
-    sendBtn.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
-      <span class="kw">var</span> msg = input.value;
-      <span class="kw">if</span> (msg) {
-        socket.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
-        input.value = <span class="str">''</span>;
-      }
-    });
-
-    <span class="cmt">// Enterキーでも送信</span>
-    input.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(e) {
-      <span class="kw">if</span> (e.key === <span class="str">'Enter'</span>) {
-        sendBtn.<span class="fn">click</span>();
-      }
-    });
-
-    <span class="cmt">// サーバからメッセージを受け取ったとき</span>
-    socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
-      <span class="kw">var</span> li = document.<span class="fn">createElement</span>(<span class="str">'li'</span>);
-      li.textContent = msg;
-      messages.<span class="fn">appendChild</span>(li);
-      <span class="cmt">// 自動スクロール</span>
-      messages.scrollTop = messages.scrollHeight;
-    });
-  <span class="kw">&lt;/script&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-
-      <p style="margin-top:1rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ターミナルで <code>node server.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
-        <li>メッセージを入力して「送信」をクリック → メッセージが表示される</li>
-        <li><strong>ブラウザのタブをもう1つ開いて</strong> <code>http://localhost:3000</code> にアクセス</li>
-        <li>片方のタブでメッセージを送ると、<strong>もう片方のタブにもリアルタイムで表示される</strong></li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. タブ1で送ったメッセージが、タブ2にも表示されましたか？<br>
-        Q2. タブ2で送ったメッセージが、タブ1にも表示されましたか？<br>
-        Q3. ターミナル（サーバ側）のログには何が出力されていましたか？<br>
-        Q4. 片方のタブを閉じたとき、ターミナルにはどんなログが出ましたか？</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1857,12 +1670,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
         <tr><td><code>socket.emit('chat', msg)</code></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
       </table>
 
-      <p style="margin-top:1rem"><strong>問4.</strong> コード体験2のチャットアプリで、メッセージが送信されてから相手の画面に表示されるまでの流れを、以下の語句をすべて使って3〜5文で説明しなさい。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:8px;padding:0.8rem 1rem;margin:0.5rem 0;font-size:0.9rem">
-        使う語句: <strong>emit</strong>、<strong>on</strong>、<strong>io.emit</strong>、<strong>サーバ</strong>、<strong>全クライアント</strong>
-      </div>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1993,17 +1801,6 @@ socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="
 
 ---
 
-## トレース演習 2: サーバ起動の流れを理解する
-| コード | 何をしているか |
-|--------|----------------|
-| require('express')         |   |
-| http.createServer(app)     |   |
-| new Server(server)         |   |
-| express.static('public')   |   |
-| server.listen(3000)        |   |
-
----
-
 ## コード体験 1: Socket.IO の接続確認（最小構成）
 ### Q1. ブラウザに何が表示されたか（ID も含めて記録）
 
@@ -2012,21 +1809,6 @@ socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="
 
 
 ### Q3. ブラウザのタブを2つ開いたときのログと ID（同じだったか）
-
-
----
-
-## コード体験 2: テキストチャットアプリを作る
-### Q1. タブ1で送ったメッセージが、タブ2にも表示されたか
-
-
-### Q2. タブ2で送ったメッセージが、タブ1にも表示されたか
-
-
-### Q3. ターミナル（サーバ側）のログに出力された内容
-
-
-### Q4. 片方のタブを閉じたときのターミナルのログ
 
 
 ---
@@ -2066,9 +1848,6 @@ socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="
 | io.emit('chat', msg)              |   |   |
 | socket.broadcast.emit('chat', msg) |   |   |
 | socket.emit('chat', msg)          |   |   |
-
-### 問4. メッセージが送信されてから相手の画面に表示されるまでの流れ（emit / on / io.emit / サーバ / 全クライアント を使って3〜5文）
-
 
 ---
 
@@ -2163,38 +1942,12 @@ socket.broadcast.emit('chat', msg);</pre>
     </details>
 
     <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th style="width:40%">コード</th><th>何をしているか</th></tr>
-          <tr><td><code>require('express')</code></td><td><strong>Express フレームワーク</strong>を読み込む。Webサーバの機能（静的ファイル配信、ルーティング等）を提供する。</td></tr>
-          <tr><td><code>http.createServer(app)</code></td><td>Express アプリを使って<strong>HTTPサーバ</strong>を作成する。Socket.IO を同じサーバ上で動かすために必要。</td></tr>
-          <tr><td><code>new Server(server)</code></td><td>HTTPサーバに<strong>Socket.IO のリアルタイム通信機能</strong>を追加する。</td></tr>
-          <tr><td><code>express.static('public')</code></td><td><strong><code>public</code> フォルダ</strong>の中身（HTML, CSS, JS, 画像など）を静的ファイルとしてブラウザに配信する設定。</td></tr>
-          <tr><td><code>server.listen(3000)</code></td><td>サーバを<strong>ポート3000</strong>で起動し、クライアントからの接続を待ち受ける。</td></tr>
-        </table>
-      </div>
-    </details>
-
-    <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
           <li><strong>Q1:</strong> 黒い背景に「Socket.IO 接続テスト」という見出しと、「接続成功! ID: _abc123def」のような緑色のテキストが表示された。</li>
           <li><strong>Q2:</strong> ブラウザのタブを閉じると、ターミナルに「切断: _abc123def」のようなログが出た。</li>
           <li><strong>Q3:</strong> タブを2つ開くと、ターミナルに「接続: xxx」のログが2行出た。それぞれのIDは異なっていた（各接続に固有のIDが割り当てられる）。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> タブ1で送ったメッセージが、タブ2にもリアルタイムで表示された。</li>
-          <li><strong>Q2:</strong> タブ2で送ったメッセージも、タブ1にリアルタイムで表示された。双方向通信ができている。</li>
-          <li><strong>Q3:</strong> ターミナルに「メッセージ: こんにちは」のように、送信されたメッセージの内容がログとして出力された。</li>
-          <li><strong>Q4:</strong> 「切断: xxxxx」のようなログが出て、そのユーザのIDが表示された。</li>
         </ul>
       </div>
     </details>

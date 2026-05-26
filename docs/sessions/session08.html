@@ -455,9 +455,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1256,37 +1256,6 @@ pre { position: relative; }
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加問題にも回答してください。</div></div>
     </div>
 
-    <!-- Trace 2 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 2: a-assets を使う理由を考える</h3>
-      </div>
-      <p><strong>問題:</strong> 以下の2つのコードを比べて、空欄を埋めなさい。</p>
-      <p style="margin-top:0.5rem"><strong>コードA: a-assets なし</strong></p>
-      <pre><span class="code-label">HTML</span>
-<span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(tree.glb)"</span> position=<span class="str">"-3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(tree.glb)"</span> position=<span class="str">"3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-<span class="kw">&lt;/a-scene&gt;</span></pre>
-      <p style="margin-top:0.5rem"><strong>コードB: a-assets あり</strong></p>
-      <pre><span class="code-label">HTML</span>
-<span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-assets&gt;</span>
-    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"tree"</span> src=<span class="str">"tree.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
-  <span class="kw">&lt;/a-assets&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"-3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"3 0 -5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-<span class="kw">&lt;/a-scene&gt;</span></pre>
-      <table>
-        <tr><th style="width:30%">質問</th><th>回答（空欄を埋める）</th></tr>
-        <tr><td>コードAでは tree.glb を何回ダウンロードする？</td><td class="blank-cell"></td></tr>
-        <tr><td>コードBでは tree.glb を何回ダウンロードする？</td><td class="blank-cell"></td></tr>
-        <tr><td>a-assets を使うメリットは？</td><td class="blank-cell"></td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 空欄を埋めた表を記入してください。</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1366,78 +1335,6 @@ pre { position: relative; }
         Q1. ブラウザに何が表示されましたか？ モデルの見た目を説明してください。<br>
         Q2. <code>scale="0.5 0.5 0.5"</code> を <code>scale="2 2 2"</code> に変更して保存すると、モデルはどうなりましたか？<br>
         Q3. <code>position="0 0 -5"</code> を <code>position="3 2 -8"</code> に変更すると、モデルはどこに移動しましたか？</div></div>
-    </div>
-
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>複数モデル + プリミティブの組み合わせ ── <code>park.html</code></h3>
-      </div>
-      <p><code>Web08</code> フォルダにもう1つファイルを作ります。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
-        <li>ファイル名を <strong><code>park.html</code></strong> と入力して Enter</li>
-        <li>下のコードを<strong>「コピー」→ 貼り付け → 保存</strong></li>
-      </ol>
-      <pre><span class="code-label">HTML ── park.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>3Dモデル + プリミティブ<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;a-scene&gt;</span>
-    <span class="cmt">&lt;!-- アセットのプリロード --&gt;</span>
-    <span class="kw">&lt;a-assets&gt;</span>
-      <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span>
-        src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
-    <span class="kw">&lt;/a-assets&gt;</span>
-
-    <span class="cmt">&lt;!-- 3Dモデル: 恐竜（左側） --&gt;</span>
-    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
-              position=<span class="str">"-3 0 -6"</span>
-              scale=<span class="str">"0.4 0.4 0.4"</span>
-              rotation=<span class="str">"0 45 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-
-    <span class="cmt">&lt;!-- 3Dモデル: 恐竜（右側・大きめ） --&gt;</span>
-    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
-              position=<span class="str">"3 0 -8"</span>
-              scale=<span class="str">"0.8 0.8 0.8"</span>
-              rotation=<span class="str">"0 -30 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-
-    <span class="cmt">&lt;!-- プリミティブ: 岩（球を変形） --&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"1 0.3 -4"</span> radius=<span class="str">"0.4"</span>
-             scale=<span class="str">"1 0.6 0.8"</span> color=<span class="str">"#808080"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-1.5 0.2 -5"</span> radius=<span class="str">"0.3"</span>
-             scale=<span class="str">"1.2 0.5 1"</span> color=<span class="str">"#696969"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- プリミティブ: 木（円柱 + 球） --&gt;</span>
-    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"5 0.75 -7"</span> radius=<span class="str">"0.15"</span>
-               height=<span class="str">"1.5"</span> color=<span class="str">"#5C3317"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"5 1.8 -7"</span> radius=<span class="str">"0.8"</span>
-             color=<span class="str">"#2E7D32"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- 床（芝生） --&gt;</span>
-    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span>
-            width=<span class="str">"30"</span> height=<span class="str">"30"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-
-    <span class="cmt">&lt;!-- 光源 --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"1 4 2"</span> intensity=<span class="str">"1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.4"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>park.html</code> を右クリック → 「Open with Live Server」</p>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 同じ恐竜モデルが2体表示されましたか？ 大きさや向きの違いを説明してください。<br>
-        Q2. 3Dモデル（恐竜）とプリミティブ（岩、木）を見比べて、見た目の違いを説明してください。<br>
-        Q3. 左の恐竜の <code>rotation="0 45 0"</code> を <code>rotation="0 180 0"</code> に変えると、どう変わりましたか？</div></div>
     </div>
 
   </div>
@@ -1530,15 +1427,7 @@ pre { position: relative; }
 
       <p style="margin-top:1rem"><strong>問3.</strong> <code>&lt;a-assets&gt;</code> を使ってモデルをプリロードすることのメリットを2つ挙げなさい。</p>
 
-      <p style="margin-top:1rem"><strong>問4.</strong> Web向け3Dモデルのパフォーマンスに関する以下の文が正しいか誤りか答え、誤りの場合は正しい内容に直しなさい。</p>
-      <table>
-        <tr><th style="width:30px">#</th><th>文</th><th>正誤</th><th>訂正（誤りの場合）</th></tr>
-        <tr><td>A</td><td>ポリゴン数が多いほどWebでの表示は速くなる</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>B</td><td>GLBファイルはテクスチャを含む全データを1ファイルにまとめた形式である</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>C</td><td>同じモデルを10個配置しても、a-assets でプリロードすればダウンロードは1回で済む</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1672,30 +1561,12 @@ pre { position: relative; }
 
 ---
 
-## トレース演習 2: a-assets を使う理由を考える
-| 質問 | 回答 |
-|---|---|
-| コードAでは tree.glb を何回ダウンロードする？ |   |
-| コードBでは tree.glb を何回ダウンロードする？ |   |
-| a-assets を使うメリットは？                   |   |
-
----
-
 ## コード体験 1: GLBモデルを読み込んで配置する（index.html）
 ### Q1. ブラウザに何が表示されたか（モデルの見た目）
 
 ### Q2. scale="0.5 0.5 0.5" を "2 2 2" に変更するとどうなったか
 
 ### Q3. position="0 0 -5" を "3 2 -8" に変更するとモデルはどこに移動したか
-
----
-
-## コード体験 2: 複数モデル + プリミティブの組み合わせ（park.html）
-### Q1. 同じ恐竜モデルが2体表示されたか。大きさ・向きの違いを説明
-
-### Q2. 3Dモデル（恐竜）とプリミティブ（岩・木）の見た目の違い
-
-### Q3. 左の恐竜の rotation="0 45 0" を "0 180 0" に変えるとどう変わったか
 
 ---
 
@@ -1726,13 +1597,6 @@ pre { position: relative; }
 ### 問3. <a-assets> でプリロードするメリット 2つ
 1.
 2.
-
-### 問4. パフォーマンスに関する正誤
-| # | 文 | 正誤 | 訂正（誤りの場合） |
-|---|---|---|---|
-| A | ポリゴン数が多いほどWebでの表示は速くなる |   |   |
-| B | GLBファイルはテクスチャを含む全データを1ファイルにまとめた形式である |   |   |
-| C | 同じモデルを10個配置しても、a-assets でプリロードすればダウンロードは1回で済む |   |   |
 
 ---
 
@@ -1815,19 +1679,6 @@ pre { position: relative; }
       </div>
     </details>
 
-    <!-- トレース演習 2 解答 -->
-    <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th style="width:40%">質問</th><th>回答</th></tr>
-          <tr><td>コードAでは tree.glb を何回ダウンロードする？</td><td><strong>2回。</strong>各エンティティがそれぞれ個別にダウンロードする。</td></tr>
-          <tr><td>コードBでは tree.glb を何回ダウンロードする？</td><td><strong>1回。</strong>a-assets で1度だけダウンロードし、2つのエンティティが共有する。</td></tr>
-          <tr><td>a-assets を使うメリットは？</td><td><strong>1. 重複ダウンロードを防ぎ通信量を節約できる。 2. すべてのアセットを事前に読み込むため、シーン表示時にモデルが「ポンッ」と遅れて出現しない。</strong></td></tr>
-        </table>
-      </div>
-    </details>
-
     <!-- コード体験 1 解答 -->
     <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
@@ -1836,18 +1687,6 @@ pre { position: relative; }
           <li><strong>Q1:</strong> 緑色の芝生の上に、恐竜（トリケラトプス）の3Dモデルが表示された。背景は水色の空。プリミティブと違い、モデルにはテクスチャがあり立体的でリアルに見える。</li>
           <li><strong>Q2:</strong> <code>scale="2 2 2"</code> にすると恐竜が4倍の大きさ（各軸2倍）になり、画面いっぱいに広がった。</li>
           <li><strong>Q3:</strong> <code>position="3 2 -8"</code> にすると、恐竜が右方向（x=3）、上方向（y=2）、さらに奥（z=-8）に移動した。</li>
-        </ul>
-      </div>
-    </details>
-
-    <!-- コード体験 2 解答 -->
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> 2体の恐竜が表示された。左の恐竜は小さめ（scale 0.4）で45度回転しており、右の恐竜は大きめ（scale 0.8）で別の角度を向いている。同じモデルだが大きさと向きが異なる。</li>
-          <li><strong>Q2:</strong> 3Dモデル（恐竜）はテクスチャがあり形が細かくリアル。プリミティブ（岩、木）は単純な形状で単色だが、配置を工夫することでそれらしく見える。モデルとプリミティブを混ぜることでシーンの情報量が上がる。</li>
-          <li><strong>Q3:</strong> <code>rotation="0 180 0"</code> にすると、恐竜がこちら側を向いた（Y軸周りに180度回転）。</li>
         </ul>
       </div>
     </details>

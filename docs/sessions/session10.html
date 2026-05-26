@@ -455,9 +455,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1251,167 +1251,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
         Q2. WASDキーで移動すると、x, y, z のどの値が変化するか？</div></div>
     </div>
 
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>フルアバター同期 ── 他ユーザが箱として見える</h3>
-      </div>
-      <p>サーバとクライアントを改修し、<strong>他のユーザが色付きの箱として3D空間に表示される</strong>ようにします。</p>
-
-      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code> を以下で上書き</strong></p>
-      <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">var</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">var</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">var</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
-
-<span class="kw">var</span> app = <span class="fn">express</span>();
-<span class="kw">var</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">var</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
-app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
-
-<span class="cmt">// ユーザ管理用オブジェクト</span>
-<span class="kw">var</span> users = {};
-<span class="kw">var</span> colors = [<span class="str">'#FF5252'</span>, <span class="str">'#FFB800'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#76B900'</span>, <span class="str">'#E040FB'</span>, <span class="str">'#FF6E40'</span>];
-
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
-  <span class="cmt">// 新しいユーザに色を割り当てる</span>
-  <span class="kw">var</span> color = colors[Object.<span class="fn">keys</span>(users).length % colors.length];
-  users[socket.id] = { color: color };
-  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id, <span class="str">'色:'</span>, color);
-
-  <span class="cmt">// 接続したユーザに自分の色を通知</span>
-  socket.<span class="fn">emit</span>(<span class="str">'myColor'</span>, { color: color });
-
-  <span class="cmt">// 位置データを受信して他の全員に転送</span>
-  socket.<span class="fn">on</span>(<span class="str">'move'</span>, <span class="kw">function</span>(data) {
-    socket.broadcast.<span class="fn">emit</span>(<span class="str">'moved'</span>, {
-      id: socket.id,
-      position: data.position,
-      rotation: data.rotation,
-      color: users[socket.id].color
-    });
-  });
-
-  <span class="cmt">// 切断時: 全員に通知してアバター削除を依頼</span>
-  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
-    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
-    <span class="kw">delete</span> users[socket.id];
-    io.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, { id: socket.id });
-  });
-});
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
-  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
-});</pre>
-
-      <p style="margin-top:1rem"><strong>ファイル2: <code>public/index.html</code> を以下で上書き</strong></p>
-      <pre><span class="code-label">HTML ── public/index.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>Avatar Sync<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;a-scene&gt;</span>
-    <span class="cmt">&lt;!-- 床 --&gt;</span>
-    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
-            width=<span class="str">"30"</span> height=<span class="str">"30"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- 目印のオブジェクト --&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"0 0.5 -8"</span> color=<span class="str">"#4CC3D9"</span> width=<span class="str">"2"</span> height=<span class="str">"2"</span> depth=<span class="str">"2"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"5 1.5 -5"</span> radius=<span class="str">"0.3"</span> height=<span class="str">"3"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-5 1 -5"</span> radius=<span class="str">"1"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-
-  <span class="cmt">&lt;!-- 接続中ユーザ数の表示 --&gt;</span>
-  <span class="kw">&lt;div</span> id=<span class="str">"user-count"</span> style=<span class="str">"position:fixed;top:10px;left:10px;color:white;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:8px;font-family:sans-serif;font-size:14px;z-index:999"</span><span class="kw">&gt;</span>
-    接続中: 1人
-  <span class="kw">&lt;/div&gt;</span>
-
-  <span class="kw">&lt;script&gt;</span>
-    <span class="kw">var</span> socket = <span class="fn">io</span>();
-    <span class="kw">var</span> scene = document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
-    <span class="kw">var</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
-    <span class="kw">var</span> userCount = <span class="num">1</span>;
-
-    <span class="cmt">// 100msごとにカメラ位置を送信</span>
-    <span class="fn">setInterval</span>(<span class="kw">function</span>() {
-      <span class="kw">if</span> (!camera) {
-        <span class="kw">return</span>;
-      }
-      <span class="kw">var</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
-      <span class="kw">var</span> rotation = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
-      <span class="kw">var</span> moveData = {
-        position: { x: position.x, y: position.y, z: position.z },
-        rotation: { x: rotation.x, y: rotation.y, z: rotation.z }
-      };
-      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, moveData);
-    }, <span class="num">100</span>);
-
-    <span class="cmt">// 他ユーザの位置データを受信 → アバター生成/更新</span>
-    socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class="kw">function</span>(data) {
-      <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + data.id;
-      <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(avatarId);
-
-      <span class="kw">if</span> (!avatar) {
-        <span class="cmt">// 新しいアバターを生成</span>
-        avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
-        avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, avatarId);
-        avatar.<span class="fn">setAttribute</span>(<span class="str">'width'</span>, <span class="str">'0.5'</span>);
-        avatar.<span class="fn">setAttribute</span>(<span class="str">'height'</span>, <span class="str">'0.5'</span>);
-        avatar.<span class="fn">setAttribute</span>(<span class="str">'depth'</span>, <span class="str">'0.5'</span>);
-        avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
-        scene.<span class="fn">appendChild</span>(avatar);
-        userCount++;
-        document.<span class="fn">getElementById</span>(<span class="str">'user-count'</span>).textContent = <span class="str">'接続中: '</span> + userCount + <span class="str">'人'</span>;
-      }
-
-      <span class="cmt">// 位置と回転を更新</span>
-      avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
-      avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, {
-        x: <span class="num">0</span>,
-        y: data.rotation.y,
-        z: <span class="num">0</span>
-      });
-    });
-
-    <span class="cmt">// ユーザ離脱 → アバター削除</span>
-    socket.<span class="fn">on</span>(<span class="str">'userLeft'</span>, <span class="kw">function</span>(data) {
-      <span class="kw">var</span> avatar = document.<span class="fn">getElementById</span>(<span class="str">'avatar-'</span> + data.id);
-      <span class="kw">if</span> (avatar) {
-        avatar.<span class="fn">parentNode</span>.<span class="fn">removeChild</span>(avatar);
-        userCount--;
-        document.<span class="fn">getElementById</span>(<span class="str">'user-count'</span>).textContent = <span class="str">'接続中: '</span> + userCount + <span class="str">'人'</span>;
-      }
-    });
-  <span class="kw">&lt;/script&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ターミナルで <kbd>Ctrl+C</kbd> でサーバを停止し、再度 <code>node server.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く（タブ1）</li>
-        <li>もう1つタブを開いて <code>http://localhost:3000</code> を開く（タブ2）</li>
-        <li>タブ1でWASDキーで移動する → タブ2で色付きの箱が動くのを確認する</li>
-        <li>タブ2でも移動して、タブ1に箱が表示されるのを確認する</li>
-        <li>タブのどちらかを閉じて、アバターが消えるのを確認する</li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 2つ目のタブを開いたとき、3D空間に何が現れたか？<br>
-        Q2. 片方のタブで移動すると、もう片方のタブではどう見えたか？<br>
-        Q3. タブを閉じたとき、残ったタブで何が起きたか？<br>
-        Q4. サーバの <code>socket.broadcast.emit</code> を <code>io.emit</code> に変えたらどうなると思うか？理由も書く</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1512,9 +1351,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 
       <p style="margin-top:1rem"><strong>問3.</strong> <code>socket.broadcast.emit</code> と <code>io.emit</code> の違いを、アバター同期の文脈で説明しなさい。なぜ <code>broadcast.emit</code> を使うのか、理由も書きなさい。</p>
 
-      <p style="margin-top:1rem"><strong>問4.</strong> ユーザが切断したとき、クリーンアップ処理をしないとどうなるか説明しなさい。</p>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1628,17 +1465,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 
 ---
 
-## コード体験 2: フルアバター同期 ── 他ユーザが箱として見える
-### Q1. 2つ目のタブを開いたとき、3D空間に何が現れたか
-
-### Q2. 片方のタブで移動すると、もう片方のタブではどう見えたか
-
-### Q3. タブを閉じたとき、残ったタブで何が起きたか
-
-### Q4. サーバの socket.broadcast.emit を io.emit に変えたらどうなると思うか（理由も）
-
----
-
 ## グループ口頭試問
 ### Phase 1: あなたが考えた質問
 
@@ -1671,8 +1497,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 - disconnect :
 
 ### 問3. socket.broadcast.emit と io.emit の違い（アバター同期の文脈で）、broadcast.emit を使う理由
-
-### 問4. ユーザ切断時にクリーンアップ処理をしないとどうなるか
 
 ---
 
@@ -1731,18 +1555,6 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
         <ul class="point-list">
           <li><strong>Q1:</strong> ターミナルに <code>xK7-2abc... 位置: { x: 0.12, y: 1.6, z: 2.85 }</code> のような行が100msごとに表示された。</li>
           <li><strong>Q2:</strong> Wキー（前進）で z が減少、Sキー（後退）で z が増加した。Aキー（左移動）で x が減少、Dキー（右移動）で x が増加した。y はほぼ 1.6 のまま変わらなかった（y はジャンプしない限り変化しない）。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> 2つ目のタブを開くと、最初のタブの3D空間に色付きの小さな箱（アバター）が出現した。</li>
-          <li><strong>Q2:</strong> 片方のタブでWASDキーで移動すると、もう片方のタブでは対応する色の箱がリアルタイムに動いた。向きを変えると箱も回転した。</li>
-          <li><strong>Q3:</strong> タブを閉じると、残ったタブから対応する色のアバター（箱）が消えた。接続中の人数表示も減った。</li>
-          <li><strong>Q4:</strong> <code>io.emit</code> にすると自分自身にも位置データが送られるため、自分のアバターが自分の視点の位置に生成されてしまう。自分の箱が常に目の前にちらつくか、カメラに重なって見えなくなる。<code>broadcast.emit</code> なら送信者自身を除外するのでこの問題が起きない。</li>
         </ul>
       </div>
     </details>

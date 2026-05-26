@@ -486,9 +486,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1361,37 +1361,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋めてください。コード体験の後に実際の動きと比べます。</div></div>
     </div>
 
-    <!-- Trace 2 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 2: イベントトリガーの動作を予測する</h3>
-      </div>
-      <p><strong>問題:</strong> 以下のコードを読み、ユーザ操作に対する動作を予測しなさい。</p>
-      <pre><span class="code-label">HTML</span>
-<span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#76B900"</span>
-       animation=<span class="str">"property: scale;
-                  to: 1.5 1.5 1.5;
-                  dur: 400;
-                  startEvents: mouseenter;
-                  easing: easeOutElastic"</span>
-       animation__2=<span class="str">"property: scale;
-                     to: 1 1 1;
-                     dur: 300;
-                     startEvents: mouseleave"</span>
-       animation__3=<span class="str">"property: rotation;
-                     to: 0 360 0;
-                     dur: 800;
-                     startEvents: click"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
-      <table>
-        <tr><th>ユーザ操作</th><th>発生イベント</th><th>何が起こるか（空欄を埋める）</th></tr>
-        <tr><td>カーソルを箱に合わせる</td><td><code>mouseenter</code></td><td class="blank-cell"></td></tr>
-        <tr><td>カーソルを箱から外す</td><td><code>mouseleave</code></td><td class="blank-cell"></td></tr>
-        <tr><td>箱をクリックする</td><td><code>click</code></td><td class="blank-cell"></td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 各操作で何が起こるかを予測して記入してください。</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1496,94 +1465,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
         Q3. バウンドする球のイージングを <code>easeInOutQuad</code> に変えるとどう変わるか？ 試して記録する</div></div>
     </div>
 
-    <!-- Code Exp 2 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 2</span>
-        <h3>クリックでアニメーション ── <code>animation-click.html</code></h3>
-      </div>
-      <p>同じ <code>Web07</code> フォルダにもう1つファイルを作ります。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>新しいファイル <strong><code>animation-click.html</code></strong> を作成</li>
-        <li>下のコードをコピーして貼り付け、保存</li>
-      </ol>
-      <pre><span class="code-label">HTML ── animation-click.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>Click Animations<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;a-scene&gt;</span>
-    <span class="cmt">&lt;!-- ライト --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"-1 2 1"</span>
-             intensity=<span class="str">"0.6"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-
-    <span class="cmt">&lt;!-- カメラ + カーソル（クリック用） --&gt;</span>
-    <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 0"</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;a-cursor</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
-    <span class="kw">&lt;/a-camera&gt;</span>
-
-    <span class="cmt">&lt;!-- クリックすると回転する箱 --&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"-2 1 -4"</span> color=<span class="str">"#FF5252"</span>
-           animation=<span class="str">"property: rotation;
-                      to: 0 360 0;
-                      dur: 1000;
-                      startEvents: click"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-
-    <span class="cmt">&lt;!-- ホバーで大きくなり、離すと戻る球 --&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.2 -4"</span> radius=<span class="str">"0.8"</span> color=<span class="str">"#4FC3F7"</span>
-             animation=<span class="str">"property: scale;
-                        to: 1.4 1.4 1.4;
-                        dur: 300;
-                        startEvents: mouseenter;
-                        easing: easeOutElastic"</span>
-             animation__2=<span class="str">"property: scale;
-                           to: 1 1 1;
-                           dur: 300;
-                           startEvents: mouseleave"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- クリックで色が変わる円柱 --&gt;</span>
-    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"2 0.75 -4"</span> radius=<span class="str">"0.5"</span> height=<span class="str">"1.5"</span>
-               color=<span class="str">"#93D500"</span>
-               animation=<span class="str">"property: material.color;
-                          to: #FF5252;
-                          dur: 500;
-                          startEvents: click"</span>
-               animation__2=<span class="str">"property: position;
-                             to: 2 2 -4;
-                             dur: 600;
-                             startEvents: click;
-                             easing: easeOutElastic"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
-
-    <span class="cmt">&lt;!-- 床 --&gt;</span>
-    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"-90 0 0"</span>
-             width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#555"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong> <code>animation-click.html</code> を右クリック → 「Open with Live Server」</p>
-      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">試してみよう</p>
-        <ul class="point-list" style="font-size:0.9rem">
-          <li>赤い箱にカーソルを合わせてクリック → 回転するか確認</li>
-          <li>青い球にカーソルを乗せる → 大きくなるか確認。離すと戻るか？</li>
-          <li>緑の円柱をクリック → 色が変わり、同時にジャンプするか確認</li>
-          <li>球の <code>easeOutElastic</code> を <code>easeInOutQuad</code> に変えて比較してみる</li>
-        </ul>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 各オブジェクトのインタラクション（クリック・ホバー）の動作を説明する<br>
-        Q2. トレース演習2の予測と実際の動作を比べて、合っていたか？<br>
-        Q3. 円柱をクリックしたとき、2つのアニメーション（色変化 + ジャンプ）は同時に起こりましたか？</div></div>
-    </div>
-
   </div>
 </section>
 
@@ -1686,9 +1567,7 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 
       <p style="margin-top:1rem"><strong>問4.</strong> <code>material.opacity</code> をアニメーションするとき、オブジェクトに追加で必要な設定は何ですか？ コード例を書きなさい。</p>
 
-      <p style="margin-top:1rem"><strong>問5.</strong> <code>startEvents: click</code> を使ったアニメーションが動作しない場合、まず確認すべきことは何ですか？</p>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問5の回答を記入してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問4の回答を記入してください。</div></div>
     </div>
 
     <!-- 標準課題 2: コード改造 -->
@@ -1816,15 +1695,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 
 ---
 
-## トレース演習 2: イベントトリガーの動作を予測する
-| ユーザ操作 | 発生イベント | 何が起こるか（予測） |
-|---|---|---|
-| カーソルを箱に合わせる | mouseenter |   |
-| カーソルを箱から外す   | mouseleave |   |
-| 箱をクリックする       | click      |   |
-
----
-
 ## コード体験 1: 基本アニメーション（animation-basic.html）
 ### Q1. 4つのオブジェクトそれぞれの動きを1文ずつ
 - 赤い箱（rotation）     :
@@ -1835,18 +1705,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 ### Q2. トレース演習1の予測と実際の動きの比較（合っていたか、違った点）
 
 ### Q3. バウンドする球の easing を easeInOutQuad に変えたときの動きの違い
-
----
-
-## コード体験 2: クリックでアニメーション（animation-click.html）
-### Q1. 各オブジェクトのインタラクション
-- 赤い箱（click で回転）           :
-- 青い球（hover で拡大・離すと戻る）:
-- 緑の円柱（click で色変化＋ジャンプ）:
-
-### Q2. トレース演習2の予測と実際の動作の比較
-
-### Q3. 円柱をクリックしたとき、色変化とジャンプは同時に起こったか
 
 ---
 
@@ -1887,8 +1745,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 ```html
 （コード例を記入）
 ```
-
-### 問5. startEvents: click が動作しないときにまず確認すべきこと
 
 ---
 
@@ -1990,18 +1846,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
     </details>
 
     <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 2 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th>ユーザ操作</th><th>発生イベント</th><th>何が起こるか</th></tr>
-          <tr><td>カーソルを箱に合わせる</td><td><code>mouseenter</code></td><td>箱が 1.5倍に拡大する（scale: 1 1 1 → 1.5 1.5 1.5）。easeOutElastic でバネのように弾みながら大きくなる。0.4秒かけて拡大。</td></tr>
-          <tr><td>カーソルを箱から外す</td><td><code>mouseleave</code></td><td>箱が元のサイズに戻る（scale: 1 1 1）。0.3秒で縮小。</td></tr>
-          <tr><td>箱をクリックする</td><td><code>click</code></td><td>箱がY軸で360度回転する。0.8秒で1回転。</td></tr>
-        </table>
-      </div>
-    </details>
-
-    <details>
       <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
@@ -2012,16 +1856,6 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
       </div>
     </details>
 
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> (1) 赤い箱: クリックするとY軸で1回転する。(2) 青い球: カーソルを乗せると弾むように拡大し、離すと元に戻る。(3) 緑の円柱: クリックすると赤色に変わり、同時に上にジャンプする。</li>
-          <li><strong>Q2:</strong> トレース演習2の予測とほぼ合っていた。easeOutElastic の「バネ感」が想像より強く、拡大時に一瞬大きくなりすぎてから戻る動きが特徴的だった。</li>
-          <li><strong>Q3:</strong> はい、同時に起こった。animation と animation__2 の両方に startEvents: click が設定されているため、1回のクリックで色変化とジャンプが同時に発生した。</li>
-        </ul>
-      </div>
-    </details>
 
     </div>
 
