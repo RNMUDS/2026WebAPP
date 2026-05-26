@@ -466,9 +466,7 @@ pre { position: relative; }
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
-  <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
 </nav>
@@ -486,13 +484,16 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計3項目）</h3>
       <div class="submission-items">
+        <a class="sub-item" href="#sec-examples"><span class="sub-count">1</span><span class="tag tag-trace">トレース</span>表を埋めて記述</a>
         <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
-        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
-        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
-        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span><strong>ライトアップ作品</strong>のコード提出</a>
       </div>
+      <p style="margin-top:0.8rem;font-size:0.85rem;color:#999;line-height:1.7">
+        この回は <strong style="color:#76B900">「ライトアップ作品を作る」</strong> という1つのクリエイティブ課題に集中します。<br>
+        知識確認は「例題」「トレース演習」「コード体験」の中で行い、最後の標準課題で<strong>学んだ ambient／directional／point・影・カメラをすべて使って自分の作品</strong>に仕上げてください。
+      </p>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
       </div>
@@ -1546,178 +1547,125 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
-    </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
-
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
-      </div>
-      <p>今日学んだライト・影・カメラの内容をもとに、<strong>「ここを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
-          <tr><td>ambient light の color を <code>"#F00"</code>（赤）にする</td><td>「シーン全体はどう見える？ なぜ？」</td></tr>
-          <tr><td>directional light の position を <code>"0 -1 0"</code>（下から）にする</td><td>「光はどこから当たる？ オブジェクトの見え方は？」</td></tr>
-          <tr><td>箱の <code>shadow="cast: true"</code> を削除する</td><td>「床の影はどうなる？ なぜ？」</td></tr>
-          <tr><td>カメラの position を <code>"0 0.3 0"</code> にする</td><td>「どんな視点になる？ 何が見える？」</td></tr>
-          <tr><td>すべてのライトを削除する</td><td>「オブジェクトは見える？ なぜ？」</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 5. STANDARD TASK ============ -->
+<!-- ============ 4. STANDARD TASK ============ -->
 <section id="sec-standard">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#76B900">5</div>
+      <div class="section-num" style="background:#76B900">4</div>
       <h2>標準課題</h2>
     </div>
 
-    <!-- 標準課題 1: 知識 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>ライト・影・カメラの知識を整理する</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>ライトアップ作品を作る（クリエイティブ課題）</h3>
       </div>
-      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問1.</strong> 以下のライトの種類の表を完成させなさい。</p>
-      <table>
-        <tr><th>type</th><th>名称（日本語）</th><th>光の特徴（空欄を埋める）</th><th>影を作れるか？（空欄を埋める）</th></tr>
-        <tr><td><code>ambient</code></td><td>環境光</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>directional</code></td><td>平行光源</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>point</code></td><td>点光源</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>spot</code></td><td>スポットライト</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><code>hemisphere</code></td><td>半球光</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> A-Frame で影を表示するために必要な3つの設定を、具体的なコード例とともに書きなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問3.</strong> 以下の文が正しいか誤りかを答え、誤りの場合は正しい説明を書きなさい。</p>
-      <table>
-        <tr><th style="width:30px">#</th><th>文</th><th style="width:80px">正誤</th><th>誤りの場合の訂正（空欄を埋める）</th></tr>
-        <tr><td>A</td><td>ambient light は影を作ることができる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>B</td><td>自分で <code>&lt;a-light&gt;</code> を追加すると、デフォルトライトは無効になる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>C</td><td>カメラの <code>wasd-controls</code> はマウスで視線を動かす機能である。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td>D</td><td><code>&lt;a-cursor fuse="true"&gt;</code> は一定時間見つめるとクリック扱いになる。</td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
-    </div>
-
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>ライト・影・カメラを設定する（コード改造）</h3>
-      </div>
-      <p>コード体験2の <code>shadow-camera.html</code> を以下の指示どおりに改造しなさい。</p>
+      <p>VS Code で <code>Web06/public</code> フォルダの中に <strong><code>lightup.html</code></strong> を新規作成し（エクスプローラで <code>public</code> を選択 → 「新しいファイル」アイコン → ファイル名入力）、<strong>「光で魅せる」シーン</strong>を自由に作ってください。<br>
+      明るい昼間の風景ではなく ―― <strong>暗がりの中で光が主役になる空間</strong>を目指しましょう（例: 夜のミュージアム展示、幻想的なオブジェ、ステージ照明、イルミネーション、神秘的な祭壇 など）。</p>
+      <p style="margin-top:0.5rem;color:#93D500;font-size:0.9rem"><strong>この回はこの1課題に集中します。</strong>例題・トレース演習・コード体験で学んだ ambient／directional／point・影・カメラを、自分の作品の中ですべて使いましょう。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem"><strong>確認方法:</strong> コード体験で起動した <code>server.js</code> が動いていれば、ブラウザで <strong><code>http://localhost:3000/lightup.html</code></strong> を開くだけ（保存後に再読み込み）。サーバが止まっていたら、ターミナルで <code>node server.js</code> を実行してから開く。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td>ambient light の色を <code>"#330011"</code>（暗い赤紫）に変更する</td></tr>
-          <tr><td>2</td><td>directional light の色を <code>"#FFA500"</code>（オレンジ）に、position を <code>"3 5 -1"</code> に変更する</td></tr>
-          <tr><td>3</td><td>新しく <code>&lt;a-light type="point"&gt;</code> を1つ追加する。色は <code>"#4FC3F7"</code>（水色）、position は <code>"2 2 -2"</code></td></tr>
-          <tr><td>4</td><td>新しく <code>&lt;a-sphere&gt;</code> を1つ追加し、<code>shadow="cast: true; receive: true"</code> を設定する</td></tr>
-          <tr><td>5</td><td>カメラの position を <code>"3 2 2"</code> に、rotation を <code>"-10 -20 0"</code> に変更する（斜め横から見る視点）</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        1. 改造後のコード全体を貼り付ける<br>
-        2. 各改造について「どの行を変えたか」と「見え方がどう変わったか」を書く</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 6. ADVANCED TASK ============ -->
-<section id="sec-advanced">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#FFB800">6</div>
-      <h2>発展課題</h2>
-    </div>
-
-    <div class="card advanced">
-      <div class="card-header">
-        <span class="tag tag-advanced">発展課題</span>
-        <h3>ドラマチックなライティングシーンを作る</h3>
-      </div>
-      <p>VS Code で <code>Web06</code> フォルダに <strong><code>dramatic.html</code></strong> を新規作成し、ライティングとカメラを駆使した<strong>印象的な3Dシーン</strong>を作ってください。</p>
-
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
         <ul class="point-list">
-          <li><strong>3種類以上のライト</strong>を使う（ambient, directional, point, spot, hemisphere から選択）</li>
-          <li><strong>影</strong>を表示する（shadow の3つの設定をすべて含む）</li>
-          <li><strong>カメラ</strong>の位置をデフォルトから変更する</li>
-          <li><strong>カーソル</strong>（<code>&lt;a-cursor&gt;</code>）を配置する</li>
-          <li>テーマを決める（例: 「スポットライトステージ」「夕焼けの丘」「ホラー空間」「博物館」など）</li>
+          <li><code>&lt;a-scene shadow="type: pcfsoft"&gt;</code> でシャドウを有効化する</li>
+          <li><strong>環境光（ambient）＋平行光源（directional）＋点光源（point）</strong>を最低1つずつ使う</li>
+          <li>少なくとも1つの点光源を<strong>「光球」</strong>（<code>material="shader: flat"</code> の小さな <code>&lt;a-sphere&gt;</code>）で可視化する</li>
+          <li>影を落とす: directional に <code>light="castShadow: true"</code>、影を落とすオブジェクトに <code>shadow="cast: true"</code>、床に <code>shadow="receive: true"</code> を設定する</li>
+          <li>暗めの背景（<code>&lt;a-sky&gt;</code>）にして光を引き立てる</li>
+          <li>カメラの <code>position</code> と <code>look-at</code>（または <code>rotation</code>）で「見せたいアングル」を決める</li>
+          <li>光の <code>color</code> や <code>intensity</code> で雰囲気を作る（複数色のライトを推奨）</li>
         </ul>
       </div>
 
-      <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件</p>
         <table>
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
           <tr>
-            <td><strong style="color:#76B900">1. コード</strong></td>
-            <td><code>dramatic.html</code> のコード全体をNotionノートに貼り付ける</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#76B900">2. 音声説明</strong></td>
-            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
-            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
+            <td><strong style="color:#76B900">コード</strong></td>
+            <td><code>lightup.html</code> のコード全体をNotionノートに貼り付ける</td>
           </tr>
         </table>
-        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
-        <ul class="point-list" style="margin-top:0.3rem">
-          <li>どんなテーマ・雰囲気のシーンを作ったか</li>
-          <li>各ライトをなぜその色・位置・種類にしたか</li>
-          <li>カメラの位置をどう決めたか</li>
-          <li>影の使い方で工夫した点</li>
-        </ul>
+        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0">作品づくりに集中してください。完成した <code>lightup.html</code> のコードのみで提出完了です。</p>
       </div>
+
+      <details>
+        <summary>ヒント1: ライトアップの基本セット ── 暗い空＋台座＋スポット風ライト＋光球＋影</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">これをそのまま貼り付ければ、必須要件をすべて満たした「光が主役の最小シーン」ができます。ここから色・位置・オブジェクトを足して自分の作品にしてください。</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- ① シーンでシャドウを有効化 --&gt;</span>
+&lt;a-scene shadow="type: pcfsoft"&gt;
+
+  <span class="cmt">&lt;!-- ② 環境光: 暗めの下地（光球を引き立てるため弱く） --&gt;</span>
+  &lt;a-light type="ambient" color="#222244" intensity="0.3"&gt;&lt;/a-light&gt;
+
+  <span class="cmt">&lt;!-- ③ 平行光源: 上方からのスポット風。影を投射する --&gt;</span>
+  &lt;a-light type="directional" color="#FFE0B2" intensity="0.7"
+           position="2 5 1" light="castShadow: true"&gt;&lt;/a-light&gt;
+
+  <span class="cmt">&lt;!-- ④ 点光源: 台座の手前を青く照らす電球 --&gt;</span>
+  &lt;a-light type="point" color="#4FC3F7" intensity="1.0"
+           distance="8" position="-1.5 1.2 -2.5"&gt;&lt;/a-light&gt;
+
+  <span class="cmt">&lt;!-- ⑤ 光球: 点光源の位置を可視化（自分で光って見える） --&gt;</span>
+  &lt;a-sphere position="-1.5 1.2 -2.5" radius="0.12"
+            color="#4FC3F7" material="shader: flat"&gt;&lt;/a-sphere&gt;
+
+  <span class="cmt">&lt;!-- 主役のオブジェクト: 影を落とす --&gt;</span>
+  &lt;a-box position="0 1 -3" color="#FFFFFF"
+         shadow="cast: true"&gt;&lt;/a-box&gt;
+
+  <span class="cmt">&lt;!-- 床: 影を受け取る --&gt;</span>
+  &lt;a-plane position="0 0 -3" rotation="-90 0 0"
+           width="12" height="12" color="#333"
+           shadow="receive: true"&gt;&lt;/a-plane&gt;
+
+  <span class="cmt">&lt;!-- 暗い空で光を引き立てる --&gt;</span>
+  &lt;a-sky color="#0a0a14"&gt;&lt;/a-sky&gt;
+
+  <span class="cmt">&lt;!-- カメラ: 見せたいアングルを固定（やや斜め） --&gt;</span>
+  &lt;a-entity camera position="2 1.8 1" rotation="-10 30 0"&gt;&lt;/a-entity&gt;
+&lt;/a-scene&gt;</pre>
+          <figure class="exec-shot" style="margin-top:0.6rem">
+            <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000/lightup.html — ヒント1の実行結果</span></div>
+            <img src="images/session06-hint1-lightup.png" alt="ヒント1のコードの実行画面。暗い空間で、白い箱が暖色の平行光に照らされて床に影を落とし、左側の青く光る小さな光球（点光源）が床に青い光だまりを作っている。" loading="lazy">
+            <figcaption class="exec-caption">ヒント1をそのまま実行した結果。暖色の directional で主役を照らして影を落とし、青い point light＋光球で空間にアクセントを加えている。<br><span style="color:#888;font-size:0.85em">※ 上のコードを A-Frame で実行してキャプチャしたものです。</span></figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <details style="margin-top:0.4rem">
+        <summary>ヒント2: 展示台にスポットを当てる ── 複数色の光で雰囲気を作る</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">作品（展示物）の周りに<strong>違う色の点光源を2つ</strong>置くと、いっきにドラマチックになります。光球も色を合わせると「光っている演出」がはっきりします。</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- 展示台（円柱の台座） --&gt;</span>
+&lt;a-cylinder position="0 0.4 -3" radius="0.8" height="0.8"
+            color="#444" shadow="receive: true"&gt;&lt;/a-cylinder&gt;
+
+<span class="cmt">&lt;!-- 台の上の主役（影を落とす） --&gt;</span>
+&lt;a-dodecahedron position="0 1.3 -3" radius="0.5"
+                color="#FFFFFF" shadow="cast: true"&gt;&lt;/a-dodecahedron&gt;
+
+<span class="cmt">&lt;!-- 左から暖色の点光源＋光球 --&gt;</span>
+&lt;a-light type="point" color="#FF7043" intensity="0.9"
+         distance="6" position="-2 1.5 -2"&gt;&lt;/a-light&gt;
+&lt;a-sphere position="-2 1.5 -2" radius="0.1"
+          color="#FF7043" material="shader: flat"&gt;&lt;/a-sphere&gt;
+
+<span class="cmt">&lt;!-- 右から寒色の点光源＋光球 --&gt;</span>
+&lt;a-light type="point" color="#42A5F5" intensity="0.9"
+         distance="6" position="2 1.5 -2"&gt;&lt;/a-light&gt;
+&lt;a-sphere position="2 1.5 -2" radius="0.1"
+          color="#42A5F5" material="shader: flat"&gt;&lt;/a-sphere&gt;</pre>
+          <figure class="exec-shot" style="margin-top:0.6rem">
+            <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000/lightup.html — ヒント2の実行結果</span></div>
+            <img src="images/session06-hint2-spotlight.png" alt="ヒント2のコードの実行画面。暗い空間の円柱の台座の上に白い正十二面体が置かれ、左から暖色（オレンジ）、右から寒色（青）の点光源で照らされている。左右に同色に光る光球があり、床にもオレンジと青の光だまりができている。" loading="lazy">
+            <figcaption class="exec-caption">ヒント2の実行結果。左右から色違いの光を当て、白い主役の左面が暖色・右面が寒色に染まって立体感が際立つ。<br><span style="color:#888;font-size:0.85em">※ 上のコードを A-Frame で実行してキャプチャしたものです。</span></figcaption>
+          </figure>
+          <p style="margin-top:0.6rem;font-size:0.85rem;color:#93D500">左右から色違いの光を当てると、白い主役の左面が暖色・右面が寒色に染まり、暗い背景の中で立体感が際立ちます。<code>intensity</code> や <code>distance</code> を変えて、光の強さ・届く範囲を調整しましょう。</p>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -1787,71 +1735,11 @@ pre { position: relative; }
 
 ---
 
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
-
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
-
----
-
-## 標準課題 1: ライト・影・カメラの知識を整理する
-### 問1. ライトの種類の表
-| type | 名称 | 光の特徴 | 影を作れるか？ |
-|---|---|---|---|
-| ambient | 環境光 |   |   |
-| directional | 平行光源 |   |   |
-| point | 点光源 |   |   |
-| spot | スポットライト |   |   |
-| hemisphere | 半球光 |   |   |
-
-### 問2. A-Frame で影を表示するために必要な3つの設定（コード例つき）
-1.
-2.
-3.
-
-### 問3. 文の正誤判定
-| # | 文 | 正誤 | 誤りの場合の訂正 |
-|---|---|---|---|
-| A | ambient light は影を作ることができる。 |   |   |
-| B | 自分で &lt;a-light&gt; を追加すると、デフォルトライトは無効になる。 |   |   |
-| C | カメラの wasd-controls はマウスで視線を動かす機能である。 |   |   |
-| D | &lt;a-cursor fuse="true"&gt; は一定時間見つめるとクリック扱いになる。 |   |   |
-
----
-
-## 標準課題 2: ライト・影・カメラを設定する（コード改造）
-### ① 改造後のコード全体（shadow-camera.html）
-```html
-（ここに改造後のコードを貼り付け）
-```
-
-### ② 各改造について「どの行を変えたか」と「見え方がどう変わったか」
-1. ambient light の色を "#330011" に変更:
-2. directional light を "#FFA500" / position="3 5 -1" に変更:
-3. point light（"#4FC3F7" / position="2 2 -2"）を追加:
-4. a-sphere を追加（shadow="cast: true; receive: true"）:
-5. カメラ position="3 2 2" / rotation="-10 -20 0" に変更:
-
----
-
-## 発展課題: ドラマチックなライティングシーンを作る
-### 1. コード（dramatic.html 全体）
+## 標準課題: ライトアップ作品を作る（クリエイティブ課題）
+### コード（lightup.html 全体）
 ```html
 （ここに貼り付け）
 ```
-
-### 2. 音声説明（1〜2分の音声ファイルを添付）
-- テーマ・雰囲気:
-- 各ライトの色・位置・種類を選んだ理由:
-- カメラの位置の決め方:
-- 影の使い方で工夫した点:
 </pre>
 
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
@@ -1866,7 +1754,7 @@ pre { position: relative; }
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-06-10T16:20">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">7</div>
+      <div class="section-num" style="background:#616161">5</div>
       <h2>解答例</h2>
     </div>
 
@@ -1973,10 +1861,10 @@ position="-3 3 -2" → 左上から見下ろす。視線は箱を向く。</pre>
     </details>
     </div>
 
-    <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
-    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
-    <div id="answers-encrypted" data-cipher="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"></div>
+    <p style="color:#999;font-size:0.85rem;margin-top:1.5rem;line-height:1.7">
+      ※ 標準課題（ライトアップ作品）はクリエイティブ課題のため、固定解答はありません。<br>
+      ヒントは「標準課題」セクション内の「ライトアップの基本セット／展示台にスポットを当てる」を参照してください。
+    </p>
   </div>
 </section>
 
