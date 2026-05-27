@@ -580,6 +580,37 @@ pre { position: relative; }
         </svg>
       </div>
 
+      <!-- Light type preview gallery -->
+      <p style="color:#ccc;margin:1.5rem 0 0.6rem">各ライトタイプを実際にレンダリングするとこのような見た目になります（同じ球とボックスを置いて比較）。</p>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.6rem;margin-bottom:1.5rem">
+
+        <figure style="margin:0;text-align:center">
+          <img src="images/session06-light-ambient.png" alt="ambientライトのみ：全方向から均一な光が当たり、陰影がまったく出ない。球もボックスも平面的に見える。" loading="lazy" style="width:100%;border-radius:6px;border:1px solid #444">
+          <figcaption style="color:#76B900;font-weight:700;font-size:0.75rem;margin-top:0.3rem">ambient<br><span style="color:#999;font-weight:400">均一・陰影なし</span></figcaption>
+        </figure>
+
+        <figure style="margin:0;text-align:center">
+          <img src="images/session06-light-directional.png" alt="directionalライト：右上から平行光が当たり、球の右上が明るく左下が暗い。床に影が落ちている。" loading="lazy" style="width:100%;border-radius:6px;border:1px solid #444">
+          <figcaption style="color:#FFB800;font-weight:700;font-size:0.75rem;margin-top:0.3rem">directional<br><span style="color:#999;font-weight:400">一方向・影あり</span></figcaption>
+        </figure>
+
+        <figure style="margin:0;text-align:center">
+          <img src="images/session06-light-point.png" alt="pointライト：右上に電球（黄色い点）があり、球の右上が暖色に照らされ、離れるほど暗くなっている。" loading="lazy" style="width:100%;border-radius:6px;border:1px solid #444">
+          <figcaption style="color:#4FC3F7;font-weight:700;font-size:0.75rem;margin-top:0.3rem">point<br><span style="color:#999;font-weight:400">全方向放射・減衰</span></figcaption>
+        </figure>
+
+        <figure style="margin:0;text-align:center">
+          <img src="images/session06-light-spot.png" alt="spotライト：真上から円錐状の光が球だけを照らし、床に丸い影が落ちている。周囲は暗い。" loading="lazy" style="width:100%;border-radius:6px;border:1px solid #444">
+          <figcaption style="color:#E040FB;font-weight:700;font-size:0.75rem;margin-top:0.3rem">spot<br><span style="color:#999;font-weight:400">円錐状・影あり</span></figcaption>
+        </figure>
+
+        <figure style="margin:0;text-align:center">
+          <img src="images/session06-light-hemisphere.png" alt="hemisphereライト：空（青）と地面（茶色）の2色で照らされ、球の上面が青みがかり下面が暖色になる。影はない。" loading="lazy" style="width:100%;border-radius:6px;border:1px solid #444">
+          <figcaption style="color:#93D500;font-weight:700;font-size:0.75rem;margin-top:0.3rem">hemisphere<br><span style="color:#999;font-weight:400">空色＋地面色</span></figcaption>
+        </figure>
+
+      </div>
+
       <pre><span class="code-label">HTML</span>
 <span class="cmt">&lt;!-- 環境光: シーン全体をうっすら照らす --&gt;</span>
 <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#444"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
