@@ -465,7 +465,6 @@ pre { position: relative; }
 <nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
-  <a href="#sec-code-exp">体験</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
   <a href="#answers-section">解答</a>
@@ -484,15 +483,14 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計3項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計2項目）</h3>
       <div class="submission-items">
         <a class="sub-item" href="#sec-examples"><span class="sub-count">1</span><span class="tag tag-trace">トレース</span>表を埋めて記述</a>
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span><strong>ライトアップ作品</strong>のコード提出</a>
       </div>
       <p style="margin-top:0.8rem;font-size:0.85rem;color:#999;line-height:1.7">
         この回は <strong style="color:#76B900">「ライトアップ作品を作る」</strong> という1つのクリエイティブ課題に集中します。<br>
-        知識確認は「例題」「トレース演習」「コード体験」の中で行い、最後の標準課題で<strong>学んだ ambient／directional／point・影・カメラをすべて使って自分の作品</strong>に仕上げてください。
+        トレース演習で知識を確認し、最後の標準課題で<strong>学んだ ambient／directional／point・影・カメラをすべて使って自分の作品</strong>に仕上げてください。
       </p>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -627,11 +625,6 @@ pre { position: relative; }
 <span class="kw">&lt;a-light</span> type=<span class="str">"spot"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"1"</span>
          angle=<span class="str">"45"</span> penumbra=<span class="str">"0.2"</span>
          position=<span class="str">"0 4 -3"</span> target=<span class="str">"#stage-obj"</span><span class="kw">&gt;&lt;/a-light&gt;</span></pre>
-<div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-  <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem">コード体験の <code>light-compare.html</code> で、<code>type="spot"</code> のライトを追加し、<code>angle</code> と <code>penumbra</code> を変えてみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 追加したコードと、光の当たり方の変化を1文で書く</div></div>
-</div>
 
       <p style="margin-top:0.5rem"><strong>主な属性:</strong></p>
       <table>
@@ -674,6 +667,10 @@ pre { position: relative; }
            width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#CCC"</span>
            shadow=<span class="str">"receive: true"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 <span class="kw">&lt;/a-scene&gt;</span></pre>
+      <figure class="exec-shot" style="margin:1rem 0">
+        <img src="images/session06-shadow-demo.png" alt="赤いボックスが白い床の上に置かれ、左上からのdirectionalライトによってボックスの手前右側に影が落ちている実行画面。" loading="lazy">
+        <figcaption class="exec-caption">実行結果：<code>shadow="cast: true"</code>のボックスから床（<code>receive: true</code>）に向けて影が落ちる。</figcaption>
+      </figure>
 <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
   <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
   <p style="color:#ccc;font-size:0.9rem"><code>light="castShadow: true"</code> を削除して影が消えることを確認し、再度追加してみよう。</p>
@@ -716,6 +713,16 @@ pre { position: relative; }
 <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 4"</span>
           look-controls=<span class="str">"enabled: false"</span>
           wasd-controls=<span class="str">"enabled: false"</span><span class="kw">&gt;&lt;/a-camera&gt;</span></pre>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin:1rem 0">
+        <figure class="exec-shot" style="margin:0">
+          <img src="images/session06-camera-high.png" alt="position=0 5 8 / rotation=-30 0 0 のカメラ。高い位置から床を見下ろす俯瞰視点で、赤いボックス・青い球・緑の円柱・オレンジの円錐が床に並んでいる。" loading="lazy">
+          <figcaption class="exec-caption"><code>position="0 5 8" rotation="-30 0 0"</code>：高い位置から見下ろす俯瞰カメラ</figcaption>
+        </figure>
+        <figure class="exec-shot" style="margin:0">
+          <img src="images/session06-camera-fixed.png" alt="look-controls / wasd-controls を無効にした固定カメラ。通常の目線高さからオブジェクトを正面に見る。マウスやキーで動かせない。" loading="lazy">
+          <figcaption class="exec-caption"><code>look-controls="enabled:false" wasd-controls="enabled:false"</code>：移動不可の固定カメラ</figcaption>
+        </figure>
+      </div>
 <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
   <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
   <p style="color:#ccc;font-size:0.9rem">カメラの <code>fov</code> を <code>"40"</code>（望遠）と <code>"120"</code>（広角）に変えて、見え方の違いを確認してみよう。</p>
@@ -733,6 +740,10 @@ pre { position: relative; }
   <span class="cmt">&lt;!-- カメラの子要素としてカーソルを配置 --&gt;</span>
   <span class="kw">&lt;a-cursor</span> color=<span class="str">"#FF5252"</span> fuse=<span class="str">"true"</span> fuse-timeout=<span class="str">"1500"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
 <span class="kw">&lt;/a-camera&gt;</span></pre>
+      <figure class="exec-shot" style="margin:1rem 0">
+        <img src="images/session06-cursor-demo.png" alt="赤い小さな丸いカーソルが画面中央（青い球の上）に表示されている実行画面。カーソルはカメラの子要素として常に画面中央に固定されている。" loading="lazy">
+        <figcaption class="exec-caption">実行結果：赤い <code>&lt;a-cursor&gt;</code> が画面中央に固定表示される。オブジェクトを見つめると <code>mouseenter</code> イベントが発生する。</figcaption>
+      </figure>
 
       <table>
         <tr><th>属性</th><th>説明</th></tr>
@@ -779,6 +790,29 @@ pre { position: relative; }
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">2</div>
       <h2>例題とトレース演習</h2>
+    </div>
+
+    <!-- HTML基本テンプレート -->
+    <div style="background:#141414;border:2px solid #4A7A00;border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.8rem">
+      <p style="color:#93D500;font-weight:700;font-size:0.95rem;margin-bottom:0.6rem">&#x1F4CB; 例題のコードを試すときの基本テンプレート（A-Frame 1.7.0）</p>
+      <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.8rem">以下のコードは<strong>そのままコピーして <code>.html</code> ファイルに貼り付ければ動きます</strong>。各例題の <code>&lt;a-scene&gt;〜&lt;/a-scene&gt;</code> 部分だけを差し替えて使ってください。</p>
+      <pre><span class="code-label">HTML ── 基本テンプレート</span><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>A-Frame サンプル<span class="kw">&lt;/title&gt;</span>
+  <span class="cmt">&lt;!-- A-Frame 1.7.0 ライブラリ（CDN から読み込む） --&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.0/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+
+  <span class="cmt">&lt;!-- ↓ ここを例題のコードに差し替える --&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- ライト・オブジェクト等をここに書く --&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
     </div>
 
     <p style="margin-bottom:1.5rem">ライト・カメラの基本概念を <strong>5つの例題</strong> で順番に確認します。各例題には<strong>段階的に切り替わるアニメーション図</strong>と<strong>1分でできる「やってみよう」</strong>があり、最後に解答例が用意されています。</p>
@@ -1488,95 +1522,6 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 3. CODE EXPERIENCE ============ -->
-<section id="sec-code-exp">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
-      <h2>コード体験</h2>
-    </div>
-    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして保存するだけでOK。</strong>Live Server で開いて、結果を<strong>観察</strong>してください。</p>
-
-    <!-- Code Exp 1 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 1</span>
-        <h3>ライトの比較 ── <code>light-compare.html</code></h3>
-      </div>
-      <p><code>S:\Web_Prog\Web06</code> フォルダを作成し、以下のファイルを作ります。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>VS Code で <strong>「ファイル」→「フォルダーを開く」</strong> から <code>S:\Web_Prog\Web06</code> を開く</li>
-        <li>新しいファイル <strong><code>light-compare.html</code></strong> を作成</li>
-        <li>下のコードをコピーして貼り付け、保存</li>
-      </ol>
-      <pre><span class="code-label">HTML ── light-compare.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>Light Comparison<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;a-scene&gt;</span>
-    <span class="cmt">&lt;!-- ====== ライト設定 ====== --&gt;</span>
-    <span class="cmt">&lt;!-- 環境光: シーン全体の最低限の明るさ --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> color=<span class="str">"#222"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-
-    <span class="cmt">&lt;!-- 平行光源: 太陽のような光（右上から） --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> color=<span class="str">"#FFF"</span> intensity=<span class="str">"0.6"</span>
-             position=<span class="str">"2 4 1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-
-    <span class="cmt">&lt;!-- 点光源: 暖色の電球（左側） --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"point"</span> color=<span class="str">"#FFE082"</span> intensity=<span class="str">"0.8"</span>
-             distance=<span class="str">"10"</span> position=<span class="str">"-3 2 -3"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-
-    <span class="cmt">&lt;!-- 点光源の位置を示す小さな球 --&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-3 2 -3"</span> radius=<span class="str">"0.1"</span>
-             color=<span class="str">"#FFE082"</span>
-             material=<span class="str">"shader: flat"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- ====== オブジェクト ====== --&gt;</span>
-    <span class="cmt">&lt;!-- 左の球: 白 --&gt;</span>
-    <span class="kw">&lt;a-sphere</span> position=<span class="str">"-2 1.2 -5"</span> radius=<span class="str">"1"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
-
-    <span class="cmt">&lt;!-- 中央の箱: 白 --&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -5"</span> color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-
-    <span class="cmt">&lt;!-- 右の円柱: 白 --&gt;</span>
-    <span class="kw">&lt;a-cylinder</span> position=<span class="str">"2 1 -5"</span> radius=<span class="str">"0.6"</span> height=<span class="str">"2"</span>
-               color=<span class="str">"white"</span><span class="kw">&gt;&lt;/a-cylinder&gt;</span>
-
-    <span class="cmt">&lt;!-- 床 --&gt;</span>
-    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 -5"</span> rotation=<span class="str">"-90 0 0"</span>
-             width=<span class="str">"12"</span> height=<span class="str">"12"</span> color=<span class="str">"#555"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#111"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
-        <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
-        <li>3Dオブジェクトの明暗を観察する</li>
-      </ol>
-      <div style="background:#1A1A1A;border:2px solid #4FC3F7;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">試してみよう</p>
-        <ul class="point-list" style="font-size:0.9rem">
-          <li><code>&lt;a-light type="ambient"&gt;</code> の行を削除（またはコメントアウト）して保存 → 暗くなるか？</li>
-          <li><code>&lt;a-light type="directional"&gt;</code> の行だけ残して他のライトを削除 → どう変わるか？</li>
-          <li>点光源の <code>position</code> を <code>"3 2 -3"</code>（右側）に変更 → オブジェクトの明暗はどう変わるか？</li>
-        </ul>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 3つのオブジェクト（球・箱・円柱）の明暗の違いを観察して書く。左側と右側で明るさは違うか？<br>
-        Q2. 上の「試してみよう」から1つ以上試した結果を書く</div></div>
-    </div>
-
-  </div>
-</section>
 
 <!-- ============ 4. STANDARD TASK ============ -->
 <section id="sec-standard">
@@ -1810,16 +1755,6 @@ pre { position: relative; }
             <span style="color:#888;font-size:0.85em">※ 上の3ライト構成を A-Frame でレンダリングしてキャプチャしたものです。</span>
           </figcaption>
         </figure>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> 3つのオブジェクトはすべて白色だが、左側の球は点光源（暖色）に近いため少し黄色みがかって見えた。右側の円柱は directional light（白）で照らされた面が最も明るかった。オブジェクトの裏側は暗い。</li>
-          <li><strong>Q2:</strong> ambient light を削除すると、光が当たっていない面が完全に真っ暗になった。ambient light はシーン全体の最低限の明るさを保つ役割があることがわかった。</li>
-        </ul>
       </div>
     </details>
 
