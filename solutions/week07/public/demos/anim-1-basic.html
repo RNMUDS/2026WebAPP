@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>1.1 animation の基本（回転する箱）</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene background="color: #111" vr-mode-ui="enabled: false">
+    <a-light type="ambient" color="#666"></a-light>
+    <a-light type="directional" position="-1 2 1" intensity="0.7"></a-light>
+
+    <!-- 1.1 の例: Y軸で360度回転し続ける箱 -->
+    <a-box position="0 1.6 -4" color="#FF5252" rotation="20 0 0"
+           animation="property: rotation;
+                      to: 20 360 0;
+                      dur: 3000;
+                      loop: true;
+                      easing: linear"></a-box>
+
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="14" height="14" color="#1a1a1a"></a-plane>
+  </a-scene>
+</body>
+</html>

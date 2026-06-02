@@ -597,78 +597,17 @@ pre { position: relative; }
         </svg>
       </div>
 
-      <!-- R7 #1: requestAnimationFrame loop アニメーション (animated step diagram) -->
-      <div class="diagram-container" style="margin:1.5rem 0">
-        <svg viewBox="0 0 680 320" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">requestAnimationFrame ループ ── 毎フレーム値を更新</text>
-
-          <!-- Step badges (rotate ① → ② → ③ → ④ → ⑤) -->
-          <g>
-            <rect x="500" y="46" width="150" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="575" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ① t=0 / from
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ② フレーム更新中
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ③ easing で補間
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ④ t=dur / to に到達
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.28;0.36;0.44;0.52;0.60;0.72;0.84;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ⑤ loop で from に戻る
-            </text>
-          </g>
-
-          <!-- Time axis -->
-          <line x1="60" y1="180" x2="620" y2="180" stroke="#444" stroke-width="1.5"/>
-          <text x="60" y="200" text-anchor="middle" fill="#888" font-size="11">t=0</text>
-          <text x="340" y="200" text-anchor="middle" fill="#888" font-size="11">t=dur/2</text>
-          <text x="620" y="200" text-anchor="middle" fill="#888" font-size="11">t=dur</text>
-
-          <!-- "value" trace dots -->
-          <circle cx="60" cy="160" r="6" fill="#76B900"/>
-          <text x="60" y="148" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">from</text>
-          <circle cx="620" cy="100" r="6" fill="#4FC3F7"/>
-          <text x="620" y="92" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="700">to</text>
-
-          <!-- Animated rect that travels from from→to (highlight ring) -->
-          <g>
-            <circle cx="60" cy="160" r="14" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
-              <animate attributeName="cx" values="60;200;340;480;620;620" keyTimes="0;0.20;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="cy" values="160;145;130;115;100;100" keyTimes="0;0.20;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0;1;1;1;1;0" keyTimes="0;0.05;0.45;0.65;0.85;1" dur="16s" repeatCount="indefinite"/>
-            </circle>
-          </g>
-
-          <!-- Frame ticks every "frame" -->
-          <g stroke="#FFB800" stroke-width="1.5" opacity="0.5">
-            <line x1="130" y1="176" x2="130" y2="184"/>
-            <line x1="200" y1="176" x2="200" y2="184"/>
-            <line x1="270" y1="176" x2="270" y2="184"/>
-            <line x1="340" y1="176" x2="340" y2="184"/>
-            <line x1="410" y1="176" x2="410" y2="184"/>
-            <line x1="480" y1="176" x2="480" y2="184"/>
-            <line x1="550" y1="176" x2="550" y2="184"/>
-          </g>
-          <text x="340" y="222" text-anchor="middle" fill="#FFB800" font-size="11">毎フレーム（約 60 回/秒）に requestAnimationFrame で値が更新される</text>
-
-          <!-- Bottom legend -->
-          <rect x="60" y="252" width="560" height="50" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
-          <circle cx="90" cy="270" r="5" fill="#76B900"/><text x="105" y="274" fill="#ccc" font-size="11">from の値</text>
-          <circle cx="190" cy="270" r="5" fill="#FFB800"/><text x="205" y="274" fill="#ccc" font-size="11">中間値（補間）</text>
-          <circle cx="320" cy="270" r="5" fill="#4FC3F7"/><text x="335" y="274" fill="#ccc" font-size="11">to の値</text>
-          <circle cx="420" cy="270" r="5" fill="#93D500"/><text x="435" y="274" fill="#ccc" font-size="11">loop で繰り返し</text>
-          <text x="340" y="293" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">A-Frame の animation は requestAnimationFrame を内部で呼び、毎フレーム from→to を補間する</text>
-        </svg>
-      </div>
+      <!-- 実機デモ動画（session07-anim-1-basic） -->
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">solutions/week07/demos/anim-1-basic.html</span>
+        </div>
+        <video src="videos/session07-anim-1-basic.mp4" poster="images/session07-anim-1-basic.jpg"
+               autoplay loop muted playsinline controls
+               aria-label="回転する赤い箱の実行動画。Y軸まわりに3秒で1周し、等速で回転を繰り返す。"></video>
+        <figcaption class="exec-caption"><strong>実機での実行動画</strong>：1.1 の例と同じ <code>animation="property: rotation; to: 0 360 0; dur: 3000; loop: true; easing: linear"</code> を実際に動かしたもの。3秒で1周する回転が等速でずっと続く。</figcaption>
+      </figure>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">🖐 やってみよう（1分）</p>
@@ -708,96 +647,17 @@ pre { position: relative; }
         <p style="color:#ccc;font-size:0.9rem"><code>property: rotation</code> + <code>to: 0 360 0</code> は「<strong>Y軸まわりに360度回す</strong>」。<code>property: scale</code> + <code>to: 2 2 2</code> は「<strong>縦横奥行きすべて2倍に拡大</strong>」。プロパティ名はドット記法でネストもできる（<code>material.color</code>, <code>material.opacity</code>）。</p>
       </div>
 
-      <!-- R7 #2: mesh.rotation 更新の段階表示 -->
-      <div class="diagram-container" style="margin:1.5rem 0">
-        <svg viewBox="0 0 680 320" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">プロパティ別の変化 ── 同じオブジェクトを5通りに変化させる</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="500" y="46" width="150" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="575" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              ① position
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              ② rotation
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              ③ scale
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              ④ color
-            </text>
-            <text x="575" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              ⑤ opacity
-            </text>
-          </g>
-
-          <!-- Stage box -->
-          <rect x="60" y="90" width="380" height="180" rx="10" fill="#0d0d0d" stroke="#333" stroke-width="1"/>
-
-          <!-- The animated box (highlight ring + transformations) -->
-          <g transform="translate(250, 180)">
-            <!-- Highlight ring -->
-            <circle cx="0" cy="0" r="48" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
-            <!-- The box itself: each phase changes one thing -->
-            <rect x="-32" y="-32" width="64" height="64" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
-              <!-- position phase: slide left/right -->
-              <animate attributeName="x" values="-32;-32;-100;0;-32;-32;-32;-32;-32;-32" keyTimes="0;0.05;0.10;0.16;0.20;0.40;0.60;0.80;0.95;1" dur="18s" repeatCount="indefinite"/>
-              <!-- scale phase: width 64 → 96 -->
-              <animate attributeName="width" values="64;64;64;64;64;64;96;48;64;64" keyTimes="0;0.20;0.36;0.40;0.50;0.56;0.60;0.72;0.80;1" dur="18s" repeatCount="indefinite"/>
-              <animate attributeName="height" values="64;64;64;64;64;64;96;48;64;64" keyTimes="0;0.20;0.36;0.40;0.50;0.56;0.60;0.72;0.80;1" dur="18s" repeatCount="indefinite"/>
-              <!-- color phase -->
-              <animate attributeName="fill" values="#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#4FC3F7;#FF5252;#FF5252;#FF5252" keyTimes="0;0.10;0.20;0.30;0.40;0.50;0.60;0.70;0.80;0.90;1" dur="18s" repeatCount="indefinite"/>
-              <!-- opacity phase -->
-              <animate attributeName="opacity" values="1;1;1;1;1;1;1;1;1;0.2;1" keyTimes="0;0.10;0.20;0.30;0.40;0.50;0.60;0.70;0.80;0.90;1" dur="18s" repeatCount="indefinite"/>
-              <!-- rotation phase -->
-              <animateTransform attributeName="transform" type="rotate" values="0;0;0;180;360;0;0;0;0" keyTimes="0;0.16;0.20;0.28;0.36;0.40;0.60;0.80;1" dur="18s" repeatCount="indefinite"/>
-            </rect>
-          </g>
-
-          <!-- Property panel on right -->
-          <g>
-            <rect x="460" y="90" width="180" height="180" rx="10" fill="#0d0d0d" stroke="#76B900" stroke-width="1"/>
-            <text x="550" y="115" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">現在のプロパティ</text>
-            <text x="475" y="148" fill="#FFB800" font-size="12" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              position: -2 0 0 → 2 0 0
-            </text>
-            <text x="475" y="148" fill="#FFB800" font-size="12" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              rotation: 0 0 0 → 0 0 360
-            </text>
-            <text x="475" y="148" fill="#4FC3F7" font-size="12" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              scale: 1 1 1 → 1.5 1.5 1.5
-            </text>
-            <text x="475" y="148" fill="#FF5252" font-size="12" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              material.color: 青 → 赤
-            </text>
-            <text x="475" y="148" fill="#93D500" font-size="12" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;1" dur="18s" repeatCount="indefinite"/>
-              material.opacity: 1 → 0.2
-            </text>
-            <text x="475" y="200" fill="#999" font-size="11">どのプロパティも</text>
-            <text x="475" y="218" fill="#999" font-size="11">同じ仕組みで</text>
-            <text x="475" y="236" fill="#999" font-size="11">アニメーション可能</text>
-          </g>
-
-          <!-- Bottom legend -->
-          <rect x="60" y="284" width="560" height="22" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
-          <circle cx="80" cy="297" r="4" fill="#FFB800"/><text x="92" y="301" fill="#ccc" font-size="11">変位系（position/rotation）</text>
-          <circle cx="260" cy="297" r="4" fill="#4FC3F7"/><text x="272" y="301" fill="#ccc" font-size="11">スケール</text>
-          <circle cx="350" cy="297" r="4" fill="#FF5252"/><text x="362" y="301" fill="#ccc" font-size="11">色</text>
-          <circle cx="420" cy="297" r="4" fill="#93D500"/><text x="432" y="301" fill="#ccc" font-size="11">透明度</text>
-        </svg>
-      </div>
+      <!-- 実機デモ動画（session07-anim-2-properties） -->
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">solutions/week07/demos/anim-2-properties.html</span>
+        </div>
+        <video src="videos/session07-anim-2-properties.mp4" poster="images/session07-anim-2-properties.jpg"
+               autoplay loop muted playsinline controls
+               aria-label="5つの箱がそれぞれ別のプロパティをアニメーションしている実行動画。"></video>
+        <figcaption class="exec-caption"><strong>実機での実行動画</strong>：5つの箱が、それぞれ別のプロパティをアニメーションしている。<br><span style="color:#888;font-size:0.85em">左から position（上下移動）／ rotation（回転）／ scale（拡大縮小）／ material.color（色変化）／ material.opacity（透明度・要 <code>transparent: true</code>）。</span></figcaption>
+      </figure>
     </div>
 
     <!-- 1.3 イージング -->
@@ -829,81 +689,17 @@ pre { position: relative; }
         <p style="color:#ccc;font-size:0.9rem"><code>linear</code> は<strong>等速</strong>（時計の秒針）、<code>easeOutElastic</code> は<strong>終わり際に行き過ぎてバネのように揺れ戻る</strong>動き、<code>easeInOutElastic</code> は<strong>始めと終わりの両方でゴムが伸び縮みする</strong>ような動き。同じ <code>dur</code>（合計時間）でも、easing が違うと「印象」が大きく変わる。</p>
       </div>
 
-      <!-- R7 #3: Clock-based easing curve visualization -->
-      <div class="diagram-container" style="margin:1.5rem 0">
-        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">Clock ベースのイージング ── 時間（t）と値（v）の対応</text>
-
-          <!-- Step badges (which easing) -->
-          <g>
-            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ① linear（等速）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ② easeInQuad
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ③ easeInOutQuad
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ④ easeOutElastic
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-              ⑤ easeInOutElastic
-            </text>
-          </g>
-
-          <!-- Axes -->
-          <line x1="80" y1="240" x2="540" y2="240" stroke="#666" stroke-width="1.5"/>
-          <line x1="80" y1="100" x2="80" y2="240" stroke="#666" stroke-width="1.5"/>
-          <text x="540" y="258" text-anchor="middle" fill="#888" font-size="11">t (時間)</text>
-          <text x="68" y="100" text-anchor="end" fill="#888" font-size="11">v</text>
-          <text x="68" y="244" text-anchor="end" fill="#888" font-size="11">0</text>
-          <text x="68" y="104" text-anchor="end" fill="#888" font-size="11">1</text>
-
-          <!-- Curve area: switches between 5 easings via opacity -->
-          <!-- ① linear -->
-          <polyline points="80,240 540,100" fill="none" stroke="#76B900" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </polyline>
-          <!-- ② easeInQuad (slow start) -->
-          <path d="M 80 240 Q 380 240 540 100" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </path>
-          <!-- ③ easeInOutQuad (S curve) -->
-          <path d="M 80 240 C 240 240 380 100 540 100" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </path>
-          <!-- ④ easeOutElastic (overshoot then settle) -->
-          <path d="M 80 240 Q 150 60 210 78 Q 260 92 300 108 Q 340 96 390 101 Q 460 100 540 100" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </path>
-          <!-- ⑤ easeInOutElastic -->
-          <path d="M 80 240 Q 180 250 240 200 Q 280 80 320 170 Q 360 250 400 120 Q 460 60 540 100" fill="none" stroke="#93D500" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </path>
-
-          <!-- Highlight ring on moving dot -->
-          <circle cx="80" cy="240" r="9" fill="none" stroke="#FFB800" stroke-width="2.5" opacity="0.85">
-            <animate attributeName="cx" values="80;540;80;540;80;540;80;540;80;540" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-            <animate attributeName="cy" values="240;100;240;100;240;100;240;100;240;100" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="18s" repeatCount="indefinite"/>
-          </circle>
-
-          <!-- Bottom legend -->
-          <rect x="60" y="294" width="560" height="32" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
-          <circle cx="80" cy="310" r="5" fill="#76B900"/><text x="92" y="314" fill="#ccc" font-size="11">linear</text>
-          <circle cx="160" cy="310" r="5" fill="#FFB800"/><text x="172" y="314" fill="#ccc" font-size="11">easeInQuad</text>
-          <circle cx="270" cy="310" r="5" fill="#4FC3F7"/><text x="282" y="314" fill="#ccc" font-size="11">easeInOutQuad</text>
-          <circle cx="390" cy="310" r="5" fill="#FF5252"/><text x="402" y="314" fill="#ccc" font-size="11">easeOutElastic</text>
-          <circle cx="510" cy="310" r="5" fill="#93D500"/><text x="522" y="314" fill="#ccc" font-size="11">easeInOutElastic</text>
-        </svg>
-      </div>
+      <!-- 実機デモ動画（session07-anim-3-easing） -->
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">solutions/week07/demos/anim-3-easing.html</span>
+        </div>
+        <video src="videos/session07-anim-3-easing.mp4" poster="images/session07-anim-3-easing.jpg"
+               autoplay loop muted playsinline controls
+               aria-label="5つの球が同じ移動・同じ所要時間で、異なるeasingで上下する実行動画。"></video>
+        <figcaption class="exec-caption"><strong>実機での実行動画</strong>：5つの球は<strong>同じ移動・同じ所要時間（dur: 2000）</strong>で、<code>easing</code> だけが違う。同じ瞬間でも高さがずれるのは、合計時間は同じでも「速度の配分」が違うため。<br><span style="color:#888;font-size:0.85em">左から linear（等速）／ easeInQuad（だんだん速く）／ easeOutQuad（だんだん遅く）／ easeInOutQuad（緩急つき）／ easeOutElastic（行き過ぎて揺れ戻る）。</span></figcaption>
+      </figure>
     </div>
 
     <!-- 1.4 複数アニメーション -->
@@ -945,100 +741,17 @@ pre { position: relative; }
         <p style="color:#ccc;font-size:0.9rem">1つの箱に <code>animation</code>（回転）と <code>animation__2</code>（上下移動）を書くと、<strong>同時に両方が再生</strong>される。それぞれの <code>dur</code>, <code>easing</code>, <code>loop</code> は独立に設定できる。これは Three.js の AnimationMixer で複数 clip を <code>play()</code> するのと同じ発想。</p>
       </div>
 
-      <!-- R7 #4: Multiple tween (AnimationMixer) layered animations -->
-      <div class="diagram-container" style="margin:1.5rem 0">
-        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">複数アニメーションの合成 ── animation__N が同時に動く</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ① animation（回転）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ② + animation__2（移動）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ③ + animation__3（拡縮）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ④ + animation__4（色）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ⑤ すべて合成
-            </text>
-          </g>
-
-          <!-- Animation tracks on left -->
-          <g>
-            <text x="80" y="100" fill="#76B900" font-size="11" font-weight="700">animation:</text>
-            <rect x="170" y="90" width="280" height="16" rx="4" fill="#1a2e0a" stroke="#76B900" stroke-width="1.2"/>
-            <text x="310" y="102" text-anchor="middle" fill="#76B900" font-size="11">property: rotation, dur: 2000, loop</text>
-
-            <text x="80" y="132" fill="#FFB800" font-size="11" font-weight="700">animation__2:</text>
-            <rect x="170" y="122" width="280" height="16" rx="4" fill="#2e2300" stroke="#FFB800" stroke-width="1.2" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </rect>
-            <text x="310" y="134" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              property: position, dur: 1500
-            </text>
-
-            <text x="80" y="164" fill="#4FC3F7" font-size="11" font-weight="700">animation__3:</text>
-            <rect x="170" y="154" width="280" height="16" rx="4" fill="#06283c" stroke="#4FC3F7" stroke-width="1.2" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </rect>
-            <text x="310" y="166" text-anchor="middle" fill="#4FC3F7" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              property: scale, dur: 1000
-            </text>
-
-            <text x="80" y="196" fill="#FF5252" font-size="11" font-weight="700">animation__4:</text>
-            <rect x="170" y="186" width="280" height="16" rx="4" fill="#3a0d0d" stroke="#FF5252" stroke-width="1.2" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </rect>
-            <text x="310" y="198" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              property: material.color, dur: 800
-            </text>
-          </g>
-
-          <!-- Mixer arrow + Output preview -->
-          <line x1="450" y1="148" x2="490" y2="148" stroke="#93D500" stroke-width="2" marker-end="url(#mix-arr)"/>
-          <text x="470" y="138" text-anchor="middle" fill="#93D500" font-size="10" font-weight="700">mixer</text>
-
-          <g transform="translate(540, 148)">
-            <!-- Highlight ring -->
-            <circle cx="0" cy="0" r="44" fill="none" stroke="#93D500" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
-            <rect x="-26" y="-26" width="52" height="52" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
-              <animateTransform attributeName="transform" type="rotate" values="0;360" dur="2s" repeatCount="indefinite" additive="sum"/>
-              <animate attributeName="x" values="-26;-26;-40;-12;-26" keyTimes="0;0.22;0.5;0.78;1" dur="3s" repeatCount="indefinite"/>
-              <animate attributeName="width" values="52;52;72;36;52" keyTimes="0;0.5;0.62;0.84;1" dur="3s" repeatCount="indefinite"/>
-              <animate attributeName="height" values="52;52;72;36;52" keyTimes="0;0.5;0.62;0.84;1" dur="3s" repeatCount="indefinite"/>
-              <animate attributeName="fill" values="#4FC3F7;#76B900;#FF5252;#FFB800;#4FC3F7" dur="4s" repeatCount="indefinite"/>
-            </rect>
-          </g>
-
-          <defs>
-            <marker id="mix-arr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#93D500"/></marker>
-          </defs>
-
-          <!-- Bottom legend -->
-          <rect x="60" y="262" width="560" height="56" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
-          <text x="340" y="282" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700">animation, animation__2, animation__3, … は独立したトラック。すべて並列に進む（mixer 方式）</text>
-          <circle cx="80" cy="304" r="4" fill="#76B900"/><text x="92" y="308" fill="#ccc" font-size="11">回転</text>
-          <circle cx="170" cy="304" r="4" fill="#FFB800"/><text x="182" y="308" fill="#ccc" font-size="11">移動</text>
-          <circle cx="260" cy="304" r="4" fill="#4FC3F7"/><text x="272" y="308" fill="#ccc" font-size="11">拡縮</text>
-          <circle cx="340" cy="304" r="4" fill="#FF5252"/><text x="352" y="308" fill="#ccc" font-size="11">色</text>
-          <circle cx="410" cy="304" r="4" fill="#93D500"/><text x="422" y="308" fill="#ccc" font-size="11">合成済みオブジェクト</text>
-        </svg>
-      </div>
+      <!-- 実機デモ動画（session07-anim-4-multi） -->
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">solutions/week07/demos/anim-4-multi.html</span>
+        </div>
+        <video src="videos/session07-anim-4-multi.mp4" poster="images/session07-anim-4-multi.jpg"
+               autoplay loop muted playsinline controls
+               aria-label="1つの箱が回転・移動・拡縮・色変化を同時に行う実行動画。"></video>
+        <figcaption class="exec-caption"><strong>実機での実行動画</strong>：1つの箱に <code>animation</code>（回転）＋ <code>animation__2</code>（上下移動）＋ <code>animation__3</code>（拡大縮小）＋ <code>animation__4</code>（色変化）を同時に適用。サフィックスを付けた複数のアニメーションが並列に動く。</figcaption>
+      </figure>
     </div>
 
     <!-- 1.5 イベントトリガー -->
@@ -1093,114 +806,17 @@ pre { position: relative; }
         <p style="color:#ccc;font-size:0.9rem"><code>startEvents: click</code> を書くと、アニメーションは「<strong>クリックされるまで待機</strong>」状態になる。クリックすると 1回だけ再生（<code>loop: true</code> ならその後繰り返し）。<code>mouseenter</code> と <code>mouseleave</code> をペアで使うと「ホバー中だけ大きくなる」効果が作れる。</p>
       </div>
 
-      <!-- R7 #5: GLTFLoader animation mixer / event-driven trigger -->
-      <div class="diagram-container" style="margin:1.5rem 0">
-        <svg viewBox="0 0 680 340" width="680" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="340" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">イベントトリガー ── startEvents でアニメを「待機 → 再生」</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="500" y="46" width="160" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="580" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ① 待機中（停止）
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ② mouseenter 発火
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ③ scale up 再生
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ④ click 発火
-            </text>
-            <text x="580" y="62" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ⑤ rotation 再生
-            </text>
-          </g>
-
-          <!-- Cursor (camera-attached) -->
-          <g>
-            <circle cx="120" cy="170" r="8" fill="none" stroke="#FF5252" stroke-width="2"/>
-            <circle cx="120" cy="170" r="3" fill="#FF5252"/>
-            <text x="120" y="200" text-anchor="middle" fill="#FF5252" font-size="10" font-weight="700">a-cursor</text>
-            <!-- Cursor moves: hover → leave → click -->
-            <animate attributeName="cx" values="120;120;310;310;310;310;310;310;310;310" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite" attributeType="XML"
-              additive="replace"/>
-          </g>
-
-          <!-- Target box -->
-          <g transform="translate(330, 170)">
-            <!-- Highlight ring (appears when triggered) -->
-            <circle cx="0" cy="0" r="48" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </circle>
-            <rect x="-30" y="-30" width="60" height="60" rx="6" fill="#4FC3F7" stroke="#fff" stroke-width="1">
-              <!-- scale on mouseenter -->
-              <animate attributeName="width" values="60;60;60;90;60;60;60;60;60;60" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="height" values="60;60;60;90;60;60;60;60;60;60" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="x" values="-30;-30;-30;-45;-30;-30;-30;-30;-30;-30" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="y" values="-30;-30;-30;-45;-30;-30;-30;-30;-30;-30" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-              <!-- rotation on click -->
-              <animateTransform attributeName="transform" type="rotate" values="0;0;0;0;0;0;0;360;360;360" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </rect>
-          </g>
-
-          <!-- Event pulse animation -->
-          <g>
-            <circle cx="220" cy="170" r="0" fill="none" stroke="#FFB800" stroke-width="2" opacity="0">
-              <animate attributeName="r" values="0;0;0;30;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0;0;1;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.30;0.40;0.44;0.62;0.66;0.84;1" dur="16s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="220" cy="170" r="0" fill="none" stroke="#FF5252" stroke-width="2" opacity="0">
-              <animate attributeName="r" values="0;0;0;0;0;0;0;30;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-            </circle>
-          </g>
-
-          <!-- Event log on right -->
-          <g>
-            <rect x="430" y="90" width="220" height="160" rx="10" fill="#0d0d0d" stroke="#76B900" stroke-width="1"/>
-            <text x="540" y="115" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">イベントログ</text>
-            <text x="445" y="148" fill="#888" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              （何も起きていない）
-            </text>
-            <text x="445" y="148" fill="#FFB800" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ▶ mouseenter → animation
-            </text>
-            <text x="445" y="148" fill="#4FC3F7" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ▶ scale 1 → 1.5 を再生
-            </text>
-            <text x="445" y="148" fill="#FF5252" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ▶ click → animation__2
-            </text>
-            <text x="445" y="148" fill="#93D500" font-size="11" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.18;0.22;0.40;0.44;0.62;0.66;0.84;0.88;1" dur="16s" repeatCount="indefinite"/>
-              ▶ rotation 0 → 360 を再生
-            </text>
-            <text x="445" y="200" fill="#999" font-size="10">startEvents が指定されると</text>
-            <text x="445" y="216" fill="#999" font-size="10">該当イベント発火まで停止。</text>
-            <text x="445" y="232" fill="#999" font-size="10">これは GLTFLoader+mixer の</text>
-            <text x="445" y="248" fill="#999" font-size="10">action.play() と同じ動作。</text>
-          </g>
-
-          <!-- Bottom legend -->
-          <rect x="60" y="284" width="560" height="42" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
-          <circle cx="80" cy="298" r="4" fill="#76B900"/><text x="92" y="302" fill="#ccc" font-size="11">待機（自動再生なし）</text>
-          <circle cx="220" cy="298" r="4" fill="#FFB800"/><text x="232" y="302" fill="#ccc" font-size="11">mouseenter pulse</text>
-          <circle cx="360" cy="298" r="4" fill="#FF5252"/><text x="372" y="302" fill="#ccc" font-size="11">click pulse</text>
-          <circle cx="460" cy="298" r="4" fill="#93D500"/><text x="472" y="302" fill="#ccc" font-size="11">アニメ実行</text>
-          <text x="340" y="320" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">A-Frame の startEvents は Three.js の mixer.clipAction(clip).play() の宣言版</text>
-        </svg>
-      </div>
+      <!-- 実機デモ動画（session07-anim-5-events） -->
+      <figure class="exec-shot">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">solutions/week07/demos/anim-5-events.html</span>
+        </div>
+        <video src="videos/session07-anim-5-events.mp4" poster="images/session07-anim-5-events.jpg"
+               autoplay loop muted playsinline controls
+               aria-label="マウスを乗せると箱が赤くなり、クリックで球が拡大・回転する実行動画。"></video>
+        <figcaption class="exec-caption"><strong>実機での実行動画</strong>：左の箱は <code>startEvents: mouseenter</code> で、マウス（カーソル）を乗せると赤に変化（離すと戻る）。右の球は <code>startEvents: click</code> で、クリックすると拡大＋回転する。中央のリングは視点カーソル（<code>&lt;a-cursor&gt;</code>）。</figcaption>
+      </figure>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">🖐 やってみよう（1分）</p>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>1.3 イージング比較（同じ動きを5通りのカーブで）</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene background="color: #111" vr-mode-ui="enabled: false">
+    <a-light type="ambient" color="#777"></a-light>
+    <a-light type="directional" position="-1 2 1" intensity="0.7"></a-light>
+
+    <!-- 5つの球: 同じ position・同じ dur(2000) で easing だけ違う。同時に上下移動させて差を見る -->
+    <!-- linear -->
+    <a-sphere position="-3.4 1 -5" radius="0.35" color="#76B900"
+              animation="property: position; from: -3.4 1 -5; to: -3.4 2.8 -5;
+                         dur: 2000; loop: true; dir: alternate; easing: linear"></a-sphere>
+
+    <!-- easeInQuad -->
+    <a-sphere position="-1.7 1 -5" radius="0.35" color="#FFB800"
+              animation="property: position; from: -1.7 1 -5; to: -1.7 2.8 -5;
+                         dur: 2000; loop: true; dir: alternate; easing: easeInQuad"></a-sphere>
+
+    <!-- easeOutQuad -->
+    <a-sphere position="0 1 -5" radius="0.35" color="#4FC3F7"
+              animation="property: position; from: 0 1 -5; to: 0 2.8 -5;
+                         dur: 2000; loop: true; dir: alternate; easing: easeOutQuad"></a-sphere>
+
+    <!-- easeInOutQuad -->
+    <a-sphere position="1.7 1 -5" radius="0.35" color="#FF5252"
+              animation="property: position; from: 1.7 1 -5; to: 1.7 2.8 -5;
+                         dur: 2000; loop: true; dir: alternate; easing: easeInOutQuad"></a-sphere>
+
+    <!-- easeOutElastic -->
+    <a-sphere position="3.4 1 -5" radius="0.35" color="#93D500"
+              animation="property: position; from: 3.4 1 -5; to: 3.4 2.8 -5;
+                         dur: 2000; loop: true; dir: alternate; easing: easeOutElastic"></a-sphere>
+
+    <a-plane position="0 0.9 -5.2" rotation="0 0 0" width="9" height="0.02" color="#444"></a-plane>
+    <a-plane position="0 0 -5" rotation="-90 0 0" width="18" height="14" color="#161616"></a-plane>
+  </a-scene>
+</body>
+</html>

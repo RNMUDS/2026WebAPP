@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>1.4 複数アニメーションの同時実行（animation__N）</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene background="color: #111" vr-mode-ui="enabled: false">
+    <a-light type="ambient" color="#777"></a-light>
+    <a-light type="directional" position="-1 2 1" intensity="0.8"></a-light>
+
+    <!-- 1つの箱に4つのアニメーションを同時適用: 回転 + 上下移動 + 拡縮 + 色変化 -->
+    <a-box position="0 1.6 -4" color="#4FC3F7"
+           animation="property: rotation; to: 0 360 0;
+                      dur: 2000; loop: true; easing: linear"
+           animation__2="property: position; from: 0 1.2 -4; to: 0 2.2 -4;
+                         dur: 1500; loop: true; dir: alternate; easing: easeInOutQuad"
+           animation__3="property: scale; from: 1 1 1; to: 1.4 1.4 1.4;
+                         dur: 1000; loop: true; dir: alternate; easing: easeInOutQuad"
+           animation__4="property: material.color; from: #4FC3F7; to: #FF5252;
+                         dur: 1800; loop: true; dir: alternate"></a-box>
+
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="14" height="14" color="#1a1a1a"></a-plane>
+  </a-scene>
+</body>
+</html>

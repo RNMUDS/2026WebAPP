@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>1.2 アニメーションできるプロパティ（5種）</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene background="color: #111" vr-mode-ui="enabled: false">
+    <a-light type="ambient" color="#777"></a-light>
+    <a-light type="directional" position="-1 2 1" intensity="0.7"></a-light>
+
+    <!-- position -->
+    <a-box position="-3.4 1.4 -5" color="#76B900"
+           animation="property: position; from: -3.4 1.1 -5; to: -3.4 2.1 -5;
+                      dur: 1200; loop: true; dir: alternate; easing: easeInOutQuad"></a-box>
+
+    <!-- rotation -->
+    <a-box position="-1.7 1.5 -5" color="#FFB800"
+           animation="property: rotation; to: 0 360 0; dur: 2500; loop: true; easing: linear"></a-box>
+
+    <!-- scale -->
+    <a-box position="0 1.5 -5" color="#4FC3F7"
+           animation="property: scale; from: 1 1 1; to: 1.6 1.6 1.6;
+                      dur: 1200; loop: true; dir: alternate; easing: easeInOutQuad"></a-box>
+
+    <!-- material.color -->
+    <a-box position="1.7 1.5 -5" color="#FF5252"
+           animation="property: material.color; from: #FF5252; to: #4FC3F7;
+                      dur: 1500; loop: true; dir: alternate"></a-box>
+
+    <!-- material.opacity -->
+    <a-box position="3.4 1.5 -5" color="#E040FB"
+           material="transparent: true; opacity: 1"
+           animation="property: material.opacity; from: 1; to: 0.1;
+                      dur: 1500; loop: true; dir: alternate; easing: easeInOutQuad"></a-box>
+
+    <a-plane position="0 0 -5" rotation="-90 0 0" width="18" height="14" color="#1a1a1a"></a-plane>
+  </a-scene>
+</body>
+</html>
