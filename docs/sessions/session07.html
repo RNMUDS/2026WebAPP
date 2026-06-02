@@ -486,12 +486,12 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計7項目）</h3>
       <div class="submission-items">
         <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
-        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
+        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">3</span><span class="tag tag-group">口頭試問</span>3問に記述で回答</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -515,7 +515,7 @@ pre { position: relative; }
 
     <!-- 1.1 animation コンポーネント -->
     <div class="concept-box">
-      <h4>1.1 animation コンポーネントの基本 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.1 animation コンポーネントの基本</h4>
       <div class="analogy">
         パラパラ漫画は、少しずつ違う絵を高速で切り替えて動きを表現します。A-Frame の animation も同じで、ある値を少しずつ変化させることで<strong>滑らかな動き</strong>を作ります。
       </div>
@@ -532,7 +532,7 @@ pre { position: relative; }
 
       <table>
         <tr><th>属性</th><th>説明</th><th>例</th></tr>
-        <tr><td><code>property</code></td><td>変化させる対象のプロパティ <span class="exam-alert">課題に出ます</span></td><td>rotation, position, scale, color, opacity</td></tr>
+        <tr><td><code>property</code></td><td>変化させる対象のプロパティ</td><td>rotation, position, scale, color, opacity</td></tr>
         <tr><td><code>from</code></td><td>開始値（省略するとオブジェクトの現在値）</td><td><code>0 0 0</code></td></tr>
         <tr><td><code>to</code></td><td>終了値</td><td><code>0 360 0</code></td></tr>
         <tr><td><code>dur</code></td><td>所要時間（ミリ秒）</td><td><code>3000</code>（3秒）</td></tr>
@@ -679,7 +679,7 @@ pre { position: relative; }
 
     <!-- 1.2 アニメーション可能なプロパティ -->
     <div class="concept-box">
-      <h4>1.2 アニメーションできるプロパティ <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.2 アニメーションできるプロパティ</h4>
       <p>以下のプロパティをアニメーションで変化させられます。</p>
       <table>
         <tr><th>property</th><th>変化の内容</th><th>値の書き方</th></tr>
@@ -691,7 +691,7 @@ pre { position: relative; }
         <tr><td><code>light.intensity</code></td><td>ライトの明るさを変える</td><td><code>to: 0</code></td></tr>
       </table>
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">opacity を使うときの注意 <span class="exam-alert">課題に出ます</span></p>
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">opacity を使うときの注意</p>
         <p style="font-size:0.9rem"><code>material.opacity</code> をアニメーションするには、オブジェクトに <code>material="transparent: true"</code> を追加する必要があります。これがないと透明度が変化しません。</p>
       </div>
 
@@ -802,7 +802,7 @@ pre { position: relative; }
 
     <!-- 1.3 イージング -->
     <div class="concept-box">
-      <h4>1.3 イージング関数 ── 動きの「味付け」 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.3 イージング関数 ── 動きの「味付け」</h4>
       <div class="analogy">
         ボールを投げると、最初は速く、頂点で一瞬止まり、また加速します。イージング関数は、こうした<strong>自然な動き</strong>を数学的に表現する仕組みです。
       </div>
@@ -908,7 +908,7 @@ pre { position: relative; }
 
     <!-- 1.4 複数アニメーション -->
     <div class="concept-box">
-      <h4>1.4 複数アニメーションの同時実行 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.4 複数アニメーションの同時実行</h4>
       <p>1つのオブジェクトに複数のアニメーションを同時に適用するには、<code>animation__2</code>, <code>animation__3</code> のように<strong>サフィックス</strong>（接尾辞）を付けます。</p>
       <pre><span class="code-label">HTML</span>
 <span class="cmt">&lt;!-- 回転しながら上下に移動する箱 --&gt;</span>
@@ -1043,7 +1043,7 @@ pre { position: relative; }
 
     <!-- 1.5 イベントトリガー -->
     <div class="concept-box">
-      <h4>1.5 イベントトリガー ── クリックで動かす <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.5 イベントトリガー ── クリックで動かす</h4>
       <div class="analogy">
         エレベーターのボタンを押すとドアが開くように、ユーザの操作をきっかけにアニメーションを開始できます。
       </div>
@@ -1076,7 +1076,7 @@ pre { position: relative; }
         <tr><td><code>mouseleave</code></td><td>カーソル/マウスがオブジェクトから離れたとき</td></tr>
       </table>
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">click イベントを使うには <span class="exam-alert">課題に出ます</span></p>
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">click イベントを使うには</p>
         <p style="font-size:0.9rem">A-Frame の 3D空間で click イベントを発生させるには、カメラの中に <code>&lt;a-cursor&gt;</code> を配置する必要があります。第6回で学んだカーソルがここで活きてきます。</p>
       </div>
 
@@ -1468,59 +1468,34 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
   </div>
 </section>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
+<!-- ============ 4. ORAL EXAM → INDIVIDUAL ASSIGNMENT (台風のため個人課題化) ============ -->
 <section id="sec-group-exam">
   <div class="container">
     <div class="section-header">
       <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
+      <h2>口頭試問（個人課題）</h2>
     </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+    <div style="background:#0a1a2e;border:1px solid #2a4a6a;border-radius:8px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.9rem;color:#9BD1FF">
+      <strong>今回は台風の影響で対面授業がないため、グループワークは行いません。</strong>本来はグループで口頭で問い合う「口頭試問」を行う予定でしたが、その代わりに、下の3問を<strong>一人で</strong>考え、自分の言葉で<strong>Notionノートに記述して</strong>提出してください。
+    </div>
 
-    <!-- Phase 1 -->
     <div class="card" style="border-left:4px solid #4FC3F7">
       <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
+        <span class="tag tag-group">口頭試問</span>
+        <h3>3つの問いに自分の言葉で答える</h3>
       </div>
-      <p>今日学んだアニメーションの内容をもとに、<strong>「ここを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
+      <p>暗記した言葉を写すのではなく、<strong>「なぜそう動くのか」を順を追って</strong>説明してください。3問すべてに回答します。</p>
       <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
         <table>
-          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
-          <tr><td>回転アニメーションの <code>dur</code> を <code>500</code> にする</td><td>「回転の速さはどう変わる？」</td></tr>
-          <tr><td><code>loop: true</code> を <code>loop: false</code> にする</td><td>「アニメーションはどうなる？」</td></tr>
-          <tr><td><code>easing: linear</code> を <code>easeOutElastic</code> にする</td><td>「動き方はどう変わる？」</td></tr>
-          <tr><td><code>startEvents: click</code> を削除する</td><td>「アニメーションはいつ始まる？」</td></tr>
-          <tr><td><code>&lt;a-cursor&gt;</code> を削除する</td><td>「クリックアニメーションは動く？ なぜ？」</td></tr>
-          <tr><td><code>direction: alternate</code> を <code>normal</code> にする</td><td>「オブジェクトの動き方はどう変わる？」</td></tr>
+          <tr><th style="width:22%">カテゴリ</th><th>問い（すべて回答）</th></tr>
+          <tr><td><strong style="color:#76B900">Q1<br>動き予測</strong></td><td>次の球は時間とともにどう動くか、<strong>開始から繰り返しまでを順を追って</strong>説明しなさい（<code>direction: alternate</code>・<code>easeOutElastic</code>・<code>loop: true</code> がそれぞれ動きにどう効くかも必ず含めること）。<br><code>&lt;a-sphere position="0 1.5 -3" animation="property: position; to: 0 3 -3; dur: 1000; loop: true; direction: alternate; easing: easeOutElastic"&gt;</code></td></tr>
+          <tr><td><strong style="color:#FFB800">Q2<br>理由説明</strong></td><td>同じ <code>from</code> / <code>to</code>・同じ <code>dur</code> のアニメーションでも、<code>easing</code> を <code>linear</code> から <code>easeInOutQuad</code> に変えると見え方が変わる。<strong>所要時間（dur）は同じなのに、なぜ動きの印象が変わるのか</strong>を、自分の言葉で説明しなさい。</td></tr>
+          <tr><td><strong style="color:#FF5252">Q3<br>改造提案</strong></td><td><code>startEvents: click</code> で「クリックすると始まる」アニメーションを、<strong>ページを開いた瞬間に自動で1回だけ再生される</strong>ように変えたい。どこをどう変えればよいか述べ、さらにこの変更による<strong>メリットとデメリットを1つずつ</strong>挙げて説明しなさい。</td></tr>
         </table>
       </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> Q1・Q2・Q3 それぞれの回答を、自分の言葉で記述してください（Q1は途中の動きの変化も必ず書くこと）。</div></div>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>ヒント:</strong> ここで整理する「属性を変えると動きがどう変わるか」の考え方は、次の「標準課題」のコード改造にそのまま役立ちます。口に出して説明できるくらい整理してから書くと、考えがまとまりやすくなります。
       </div>
     </div>
 
@@ -1708,17 +1683,15 @@ box.setAttribute(<span class="str">'animation'</span>, isSpinning ? <span class=
 
 ---
 
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
+## 口頭試問（個人課題）
+※ 今回は台風の影響で対面授業がないため、グループワークは行いません。下の3問に一人で記述で回答します。
 
-### Phase 2: グループメンバー（氏名）:
+### Q1. 動き予測（球のアニメーションは時間とともにどう動くか）
+（direction: alternate / easeOutElastic / loop: true がそれぞれどう効くかも含めて、開始から繰り返しまで順を追って説明）
 
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
+### Q2. 理由説明（dur が同じなのに easing を変えると印象が変わるのはなぜか）
+
+### Q3. 改造提案（startEvents: click を「読み込み時に自動で1回再生」に変える方法と、メリット・デメリット各1つ）
 
 ---
 
