@@ -433,9 +433,7 @@ pre { position: relative; }
 <!-- ============ SECTION NAV ============ -->
 <nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
   <a href="#sec-explanation">説明</a>
-  <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
@@ -455,13 +453,15 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計2項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
-        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
-        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
-        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span><strong>アニメ付きモデル作品</strong>のコード提出</a>
+        <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>歩いて移動するキャラ + 説明</a>
       </div>
+      <p style="margin-top:0.8rem;font-size:0.85rem;color:#999;line-height:1.7">
+        この回は <strong style="color:#76B900">「Sketchfab のアニメーション付き3Dモデルを、自分の世界の中で動かす」</strong> という1つのクリエイティブ課題に集中します。<br>
+        コード体験で <code>animation-mixer</code> の使い方を体験し、標準課題で<strong>自分で選んだモデルのアニメーションを再生する作品</strong>に仕上げてください。発展課題では<strong>内蔵アニメと移動アニメを組み合わせて</strong>キャラクターを歩かせます。
+      </p>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
       </div>
@@ -482,9 +482,21 @@ pre { position: relative; }
       今回は、外部の<strong>3Dモデルファイル</strong>を読み込んで、よりリアルなシーンを作る方法を学びます。
     </p>
 
+    <figure class="exec-shot">
+      <div class="exec-mock-bar">
+        <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="url">localhost:3000 — Sketchfab の glTF を A-Frame 空間に配置</span>
+      </div>
+      <img src="images/session08-sketchfab-aframe.png" alt="A-Frame の3D空間。グレーの床の上に円柱の台座があり、その上に Sketchfab からダウンロードしたSF風ヘルメットの3Dモデル（glTF）が置かれている。ヘルメットのバイザーには青緑色に光るホログラム表示があり、金属の質感（PBR）がリアルに描画されている。" style="width:100%;display:block;border-radius:0 0 12px 12px">
+      <figcaption class="exec-caption">
+        <strong>実機での実行画面</strong>：<a href="https://sketchfab.com" target="_blank" style="color:#76B900">Sketchfab</a> からダウンロードした実際の glTF モデル（PBRマテリアル付きのヘルメット）を、<code>&lt;a-entity gltf-model="..."&gt;</code> で A-Frame 空間の台座に配置したもの。<strong>プリミティブでは作れない、写実的な質感と細部</strong>が一気に手に入ります ── これが「3Dアセットを活用する」ということです。<br>
+        <span style="color:#888;font-size:0.85em">※ A-Frame にこの glb を読み込み、ブラウザで描画した画面をそのままキャプチャしたものです。今回の演習で、あなたもこのように好きなモデルを自分の空間に置けるようになります。</span>
+      </figcaption>
+    </figure>
+
     <!-- 1.1 3Dモデルのファイル形式 -->
     <div class="concept-box">
-      <h4>1.1 3Dモデルのファイル形式 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.1 3Dモデルのファイル形式</h4>
       <div class="analogy">
         画像に JPEG, PNG, GIF などの形式があるように、3Dモデルにも複数のファイル形式があります。Web向けには <strong>glTF</strong> が標準です。
       </div>
@@ -580,7 +592,7 @@ pre { position: relative; }
 
     <!-- 1.2 glTF形式の構造 -->
     <div class="concept-box">
-      <h4>1.2 glTF形式の構造 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.2 glTF形式の構造</h4>
       <p>glTF には2つのバリエーションがあります。</p>
       <table>
         <tr><th>形式</th><th>構成</th><th>特徴</th></tr>
@@ -620,7 +632,133 @@ pre { position: relative; }
         </svg>
       </div>
 
-      <p style="margin-top:0.5rem">この授業では、管理が簡単な <strong>.glb 形式</strong> を主に使います。 <span class="exam-alert">課題に出ます</span></p>
+      <p style="margin-top:0.5rem">この授業では、管理が簡単な <strong>.glb 形式</strong> を主に使います。</p>
+
+      <!-- glTFの中身を具体的に見る -->
+      <h4 style="margin-top:1.8rem">glTF ファイルの中身を覗いてみる</h4>
+      <p><strong>glTF</strong> は「<strong>GL Transmission Format</strong>」の略で、Khronos Group という団体が策定した<strong>3Dデータの標準フォーマット</strong>です。一番のポイントは、<code>.gltf</code> ファイルの正体が <strong>ただの JSON テキスト</strong>だということです。皆さんが普段 API のやり取りで見ている JSON と、まったく同じ形をしています。</p>
+      <div class="analogy">
+        HTML が「ページの構造」を文字で書き表すように、glTF は「3Dシーンの構造」を JSON で書き表したものです。<strong>「何が」「どこに」「どんな色・形で」置かれているか</strong>を、人間にも読めるテキストで記述します。
+      </div>
+
+      <p style="margin-top:0.8rem">下は、<strong>赤い箱（Cube）を1つ置いただけ</strong>の最小の glTF を簡略化したものです（<span class="cmt">// </span> の行は説明用のコメントで、実際の JSON には含まれません）。</p>
+      <pre><span class="code-label">JSON ── 赤い箱1つの glTF（簡略版）</span>
+{
+  <span class="cmt">// このファイル自体の情報（バージョンや作成ソフト）</span>
+  <span class="kw">"asset"</span>: { <span class="kw">"version"</span>: <span class="str">"2.0"</span>, <span class="kw">"generator"</span>: <span class="str">"Blender 4.0"</span> },
+
+  <span class="cmt">// ① シーン：表示する node 番号のリスト</span>
+  <span class="kw">"scene"</span>: 0,
+  <span class="kw">"scenes"</span>: [ { <span class="kw">"nodes"</span>: [ 0 ] } ],
+
+  <span class="cmt">// ② node：「位置・回転・大きさ」と、表示する mesh 番号</span>
+  <span class="kw">"nodes"</span>: [
+    { <span class="kw">"name"</span>: <span class="str">"Cube"</span>, <span class="kw">"mesh"</span>: 0, <span class="kw">"translation"</span>: [ 0, 1, 0 ] }
+  ],
+
+  <span class="cmt">// ③ mesh：形そのもの。どの頂点データと material を使うか</span>
+  <span class="kw">"meshes"</span>: [
+    {
+      <span class="kw">"name"</span>: <span class="str">"Cube"</span>,
+      <span class="kw">"primitives"</span>: [
+        {
+          <span class="kw">"attributes"</span>: { <span class="kw">"POSITION"</span>: 0, <span class="kw">"NORMAL"</span>: 1, <span class="kw">"TEXCOORD_0"</span>: 2 },
+          <span class="kw">"indices"</span>: 3,
+          <span class="kw">"material"</span>: 0
+        }
+      ]
+    }
+  ],
+
+  <span class="cmt">// ④ material：色や質感（PBR）。ここでは赤色</span>
+  <span class="kw">"materials"</span>: [
+    {
+      <span class="kw">"name"</span>: <span class="str">"Red"</span>,
+      <span class="kw">"pbrMetallicRoughness"</span>: {
+        <span class="kw">"baseColorFactor"</span>: [ 0.8, 0.1, 0.1, 1.0 ],
+        <span class="kw">"metallicFactor"</span>: 0.0,
+        <span class="kw">"roughnessFactor"</span>: 0.5
+      }
+    }
+  ],
+
+  <span class="cmt">// ⑤ accessor / bufferView / buffer：頂点の数値データの場所を示す</span>
+  <span class="kw">"accessors"</span>: [ <span class="cmt">/* POSITION, NORMAL, UV, indices の4つ … */</span> ],
+  <span class="kw">"bufferViews"</span>: [ <span class="cmt">/* バイナリのどこからどこまで使うか … */</span> ],
+  <span class="kw">"buffers"</span>: [ { <span class="kw">"uri"</span>: <span class="str">"cube.bin"</span>, <span class="kw">"byteLength"</span>: 840 } ]
+}</pre>
+
+      <p style="margin-top:0.8rem">このように glTF は、<strong>役割ごとに分かれた配列（リスト）の集まり</strong>です。そして各要素は、お互いを<strong>「番号（インデックス）」で参照し合う</strong>のが最大の特徴です。たとえば上の例では <code>node</code> が <code>"mesh": 0</code> と書くことで「<code>meshes</code> 配列の0番目を使う」と指しています。</p>
+
+      <table>
+        <tr><th>キー</th><th>役割</th><th>具体例（上のファイルでは）</th></tr>
+        <tr><td><code>scenes</code> / <code>scene</code></td><td>表示する一番外側の入れ物。どの node を出すか</td><td>node[0]（Cube）を表示</td></tr>
+        <tr><td><code>nodes</code></td><td>シーン内の「もの」。<strong>位置・回転・拡大率</strong>を持つ。階層（親子）も作れる</td><td>位置 (0, 1, 0) に mesh[0] を置く</td></tr>
+        <tr><td><code>meshes</code></td><td>実際の<strong>形（頂点の集まり）</strong>。どの material を使うかも指定</td><td>Cube の形 + material[0]</td></tr>
+        <tr><td><code>materials</code></td><td><strong>色・金属感・ざらつき</strong>などの質感（PBR）</td><td>赤色（baseColor = 0.8,0.1,0.1）</td></tr>
+        <tr><td><code>textures</code> / <code>images</code></td><td>表面に貼る<strong>画像</strong>（今回の例では未使用）</td><td>―</td></tr>
+        <tr><td><code>accessors</code></td><td>頂点座標などの数値を「どう読むか」（型・個数）</td><td>POSITION / NORMAL / UV / indices</td></tr>
+        <tr><td><code>bufferViews</code> / <code>buffers</code></td><td>頂点の<strong>生データ本体</strong>（バイナリ <code>.bin</code>）の場所</td><td>cube.bin（840バイト）</td></tr>
+      </table>
+
+      <p style="margin-top:0.8rem">座標やUVといった<strong>大量の数値</strong>は、JSON に直接書くと巨大になるため、別ファイル（<code>.bin</code>）に<strong>バイナリ</strong>でまとめて保存します。JSON 側の <code>accessors</code>／<code>bufferViews</code> は「その bin ファイルの何バイト目から、float が何個並んでいるか」という<strong>地図</strong>の役割だけを持ちます。<code>.glb</code> は、この JSON と bin と画像を <strong>1つのファイルに連結</strong>したものです。</p>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 700 250" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">glTF は「番号」でお互いを参照し合う</text>
+
+          <!-- scene -->
+          <rect x="30" y="55" width="120" height="48" rx="8" fill="#1A1A1A" stroke="#4A7A00" stroke-width="2"/>
+          <text x="90" y="76" text-anchor="middle" fill="#93D500" font-weight="700" font-size="12">scene</text>
+          <text x="90" y="93" text-anchor="middle" fill="#999" font-size="10">nodes: [0]</text>
+
+          <!-- node -->
+          <rect x="200" y="55" width="120" height="48" rx="8" fill="#1A1A1A" stroke="#4A7A00" stroke-width="2"/>
+          <text x="260" y="76" text-anchor="middle" fill="#93D500" font-weight="700" font-size="12">node[0]</text>
+          <text x="260" y="93" text-anchor="middle" fill="#999" font-size="10">mesh: 0 / 位置</text>
+
+          <!-- mesh -->
+          <rect x="370" y="55" width="120" height="48" rx="8" fill="#1A1A1A" stroke="#4A7A00" stroke-width="2"/>
+          <text x="430" y="76" text-anchor="middle" fill="#93D500" font-weight="700" font-size="12">mesh[0]</text>
+          <text x="430" y="93" text-anchor="middle" fill="#999" font-size="10">material: 0</text>
+
+          <!-- material -->
+          <rect x="540" y="30" width="130" height="44" rx="8" fill="#1A1A1A" stroke="#4A7A00" stroke-width="2"/>
+          <text x="605" y="50" text-anchor="middle" fill="#93D500" font-weight="700" font-size="12">material[0]</text>
+          <text x="605" y="66" text-anchor="middle" fill="#999" font-size="10">色 (PBR)</text>
+
+          <!-- accessor -->
+          <rect x="540" y="86" width="130" height="44" rx="8" fill="#1A1A1A" stroke="#4A7A00" stroke-width="2"/>
+          <text x="605" y="106" text-anchor="middle" fill="#93D500" font-weight="700" font-size="12">accessors</text>
+          <text x="605" y="122" text-anchor="middle" fill="#999" font-size="10">POSITION 等</text>
+
+          <!-- arrows -->
+          <line x1="150" y1="79" x2="195" y2="79" stroke="#666" stroke-width="2" marker-end="url(#gltf-arr)"/>
+          <line x1="320" y1="79" x2="365" y2="79" stroke="#666" stroke-width="2" marker-end="url(#gltf-arr)"/>
+          <line x1="490" y1="72" x2="535" y2="55" stroke="#666" stroke-width="2" marker-end="url(#gltf-arr)"/>
+          <line x1="490" y1="86" x2="535" y2="103" stroke="#666" stroke-width="2" marker-end="url(#gltf-arr)"/>
+
+          <!-- buffer row -->
+          <rect x="200" y="165" width="470" height="50" rx="8" fill="#111" stroke="#555" stroke-width="1.5"/>
+          <text x="220" y="185" fill="#aaa" font-size="11" font-weight="700">cube.bin（バイナリ本体）</text>
+          <text x="220" y="203" fill="#999" font-size="10">頂点座標・法線・UV・面の並び … 数値がぎっしり詰まっている</text>
+          <line x1="605" y1="130" x2="605" y2="163" stroke="#666" stroke-width="2" marker-end="url(#gltf-arr)"/>
+          <text x="90" y="190" fill="#666" font-size="10">accessors が</text>
+          <text x="90" y="205" fill="#666" font-size="10">「地図」になる</text>
+
+          <text x="350" y="240" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">JSON（構造）＝ scene→node→mesh→material／accessor ＋ bin（数値本体）</text>
+
+          <defs>
+            <marker id="gltf-arr" markerWidth="7" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 7 3, 0 6" fill="#666"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（2分）</p>
+        <p style="color:#ccc;font-size:0.9rem">無料の3Dモデル（<code>.gltf</code>）をダウンロードし、テキストエディタで開いてみよう。<code>"meshes"</code> や <code>"materials"</code> がJSONで書かれていることを自分の目で確認できます。<a href="https://github.khronos.org/glTF-Sample-Viewer-Release/" target="_blank" style="color:#4FC3F7">公式サンプルビューア</a>で見た目とデータを見比べるのもおすすめ。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 開いた glTF の中で見つけた配列キー（例: meshes, nodes…）を1つ書き、それが何を表すか1文で説明する</div></div>
+      </div>
 
       <!-- DIAGRAM 3: Bone構造とスキニング (animated) -->
       <div class="diagram-container">
@@ -721,7 +859,7 @@ pre { position: relative; }
 <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"url(model.glb)"</span>
           position=<span class="str">"0 0 -3"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
 
-      <p style="margin-top:0.8rem"><strong>方法2: a-assets でプリロード（推奨）</strong> <span class="exam-alert">課題に出ます</span></p>
+      <p style="margin-top:0.8rem"><strong>方法2: a-assets でプリロード（推奨）</strong></p>
       <pre><span class="code-label">HTML</span>
 <span class="kw">&lt;a-scene&gt;</span>
   <span class="cmt">&lt;!-- アセットを事前に読み込む --&gt;</span>
@@ -895,9 +1033,43 @@ pre { position: relative; }
       </div>
     </div>
 
-    <!-- 1.5 無料3Dモデルの入手先 -->
+    <!-- 1.5 アニメーション付きモデルを再生する -->
     <div class="concept-box">
-      <h4>1.5 無料3Dモデルの入手先</h4>
+      <h4>1.5 アニメーション付きモデルを再生する <span class="exam-alert">コード体験に直結</span></h4>
+      <div class="analogy">
+        glTF には、形や色だけでなく <strong>「動き（アニメーション）」も一緒に保存</strong>できます。たとえば「猫が歩く」「鳥が羽ばたく」「キャラクターが踊る」といった動きです（1.2 で見た Bone を時間に沿って回転させたものが Animation でした）。<br>
+        ただし注意：<strong>A-Frame は標準では、この内蔵アニメーションを自動再生しません</strong>。読み込んだだけだとモデルは止まったままです。再生するための部品を1つ足します。
+      </div>
+      <p>内蔵アニメーションを再生するには、<code>aframe-extras</code> というアドオンに含まれる <code>animation-mixer</code> コンポーネントを使います。手順は2つだけです。</p>
+
+      <p style="margin-top:0.8rem"><strong>手順1: アドオンを読み込む（<code>&lt;head&gt;</code> に1行追加）</strong></p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- A-Frame 本体の下に追加する --&gt;</span>
+<span class="kw">&lt;script</span> src=<span class="str">"https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>手順2: モデルに <code>animation-mixer</code> を付ける</strong></p>
+      <pre><span class="code-label">HTML</span>
+<span class="cmt">&lt;!-- モデルに含まれる全アニメーションを再生 --&gt;</span>
+<span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#cat"</span> animation-mixer<span class="kw">&gt;&lt;/a-entity&gt;</span>
+
+<span class="cmt">&lt;!-- 「Walk」という名前のアニメだけをループ再生したいとき --&gt;</span>
+<span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#cat"</span> animation-mixer=<span class="str">"clip: Walk"</span><span class="kw">&gt;&lt;/a-entity&gt;</span></pre>
+
+      <p style="margin-top:0.5rem">これだけでモデルが動き出します。<code>animation-mixer</code> の主なオプションは次のとおりです。</p>
+      <table>
+        <tr><th>プロパティ</th><th>意味</th><th>例</th></tr>
+        <tr><td><code>clip</code></td><td>再生するアニメ名。<strong>省略すると全アニメ再生</strong></td><td><code>clip: Walk</code></td></tr>
+        <tr><td><code>loop</code></td><td>繰り返し方（<code>repeat</code>=ずっと / <code>once</code>=1回 / <code>pingpong</code>=往復）</td><td><code>loop: repeat</code></td></tr>
+        <tr><td><code>timeScale</code></td><td>再生速度（1=標準、2=2倍速、0.5=スロー）</td><td><code>timeScale: 0.5</code></td></tr>
+      </table>
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
+        <strong>clip名（アニメの名前）の調べ方:</strong> モデルごとに名前が違います（<code>Walk</code>, <code>Run</code>, <code>Idle</code>, <code>Armature|Take 001</code> など）。まずは <code>animation-mixer</code> だけ（clip指定なし）で動かし、Sketchfab のモデルページの「Animations」欄や、ダウンロードした <code>.gltf</code> 内の <code>"animations"</code> 配列で名前を確認しましょう。
+      </div>
+    </div>
+
+    <!-- 1.6 無料3Dモデルの入手先 -->
+    <div class="concept-box">
+      <h4>1.6 無料3Dモデルの入手先</h4>
       <p>インターネット上には、無料で使える3Dモデルが多数公開されています。glTF / GLB 形式でダウンロードできるサイトを紹介します。</p>
       <table>
         <tr><th>サイト名</th><th>URL</th><th>特徴</th></tr>
@@ -911,9 +1083,9 @@ pre { position: relative; }
       </div>
     </div>
 
-    <!-- 1.6 パフォーマンス考慮 -->
+    <!-- 1.7 パフォーマンス考慮 -->
     <div class="concept-box">
-      <h4>1.6 パフォーマンス考慮 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.7 パフォーマンス考慮</h4>
       <div class="analogy">
         解像度の高すぎる写真を何十枚もWebページに並べると読み込みが遅くなるように、ポリゴン数の多い3Dモデルを大量に配置するとブラウザの動作が重くなります。
       </div>
@@ -1011,7 +1183,7 @@ pre { position: relative; }
     <!-- R8: 読み方 (Pronunciation guide) -->
     <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
       <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F50A; 読み方ガイド</p>
-      <p style="font-size:0.85rem;color:#aaa;margin-bottom:0.6rem">3D アセット用語の読み方を一覧にしました。グループ口頭試問で正しく発音できるように確認しておきましょう。</p>
+      <p style="font-size:0.85rem;color:#aaa;margin-bottom:0.6rem">3D アセット用語の読み方を一覧にしました。作品づくりやモデル探しのときに正しく読めるよう確認しておきましょう。</p>
       <table style="font-size:0.88rem">
         <tr><th>用語</th><th>読み方</th><th>意味</th></tr>
         <tr><td><strong>glTF</strong></td><td><strong style="color:#FFB800">ジーエルティーエフ</strong>（gee-el-tee-eff）</td><td>Web向け3D標準フォーマット</td></tr>
@@ -1067,206 +1239,15 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section id="sec-examples">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">2</div>
-      <h2>例題とトレース演習</h2>
-    </div>
-
-    <p style="margin-bottom:1rem">この回で作る<strong>ミニ展示館</strong>（標準課題の解答例）を実機で動かした動画です。3つの台座の上で展示物が回転・浮遊・色変化しています。<br><span style="color:#888;font-size:0.9em">※ この解答例は glb モデルが無くても動くよう<strong>プリミティブ（多面体・球・トーラス）で代替</strong>しています。実際の課題では <code>&lt;a-gltf-model&gt;</code> に差し替えて Sketchfab 等の glb を読み込みます。</span></p>
-    <figure class="exec-shot">
-      <div class="exec-mock-bar">
-        <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
-        <span class="url">localhost:3000 — ミニ展示館 GEOMETRY GALLERY（解答例）</span>
-      </div>
-      <video src="videos/session08-gallery.mp4" poster="images/session08-gallery-poster.jpg"
-             autoplay loop muted playsinline controls
-             aria-label="ミニ展示館の実行動画。暗い展示室の壁にGEOMETRY GALLERYの文字、3つの台座の上で赤い正十二面体が回転し、青緑に色を変える球が浮遊し、金色のトーラスが回転している。床に青とピンクの点光源の光が広がる。"></video>
-      <figcaption class="exec-caption">
-        <strong>実機での実行動画</strong>：回転（rotation）・浮遊（position）・色変化（material.color）の animation と、2つの点光源によるライティングで「展示館」らしい空間を構成している。<br>
-        <span style="color:#888;font-size:0.85em">※ solutions/week08 を実際にブラウザで動かし、画面を録画したものです（自動再生・ループ）。</span>
-      </figcaption>
-    </figure>
-
-    <!-- Example 1 -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題 1</span>
-        <h3>glTFモデルの読み込みコードを読む</h3>
-      </div>
-      <p>以下のHTMLコードがどのようにモデルを読み込んで表示するか確認しましょう。1行にまとめず、属性ごとに改行することで「位置・スケール・回転」が一目で分かるようにしています。</p>
-      <pre><span class="code-label">HTML</span>
-<span class="cmt">&lt;!-- ① モデルのURL（中間変数のように分かりやすく一旦定数として書く） --&gt;</span>
-<span class="cmt">&lt;!-- MODEL_URL = "https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf" --&gt;</span>
-
-<span class="kw">&lt;a-scene&gt;</span>
-  <span class="cmt">&lt;!-- ② a-assets でプリロード（id=dino で名前付け） --&gt;</span>
-  <span class="kw">&lt;a-assets&gt;</span>
-    <span class="kw">&lt;a-asset-item</span>
-      id=<span class="str">"dino"</span>
-      src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
-  <span class="kw">&lt;/a-assets&gt;</span>
-
-  <span class="cmt">&lt;!-- ③ モデル配置: 属性を1行ずつ書く（1行に詰めず、変数のように分けて読みやすく） --&gt;</span>
-  <span class="kw">&lt;a-entity</span>
-    gltf-model=<span class="str">"#dino"</span>
-    position=<span class="str">"0 0 -5"</span>     <span class="cmt">&lt;!-- x=0, y=0, z=-5 → 正面・床面・少し奥 --&gt;</span>
-    scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-
-  <span class="cmt">&lt;!-- ④ 背景（空） --&gt;</span>
-  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-<span class="kw">&lt;/a-scene&gt;</span></pre>
-      <table>
-        <tr><th>コード</th><th>役割</th></tr>
-        <tr><td><code>&lt;a-assets&gt;</code></td><td>メディアファイルを事前にまとめて読み込む領域</td></tr>
-        <tr><td><code>&lt;a-asset-item id="dino" src="..."&gt;</code></td><td>glTFモデルを <code>dino</code> という名前で読み込む</td></tr>
-        <tr><td><code>gltf-model="#dino"</code></td><td>読み込んだモデルを <code>#dino</code> で参照して表示する</td></tr>
-        <tr><td><code>scale="0.5 0.5 0.5"</code></td><td>モデルを半分のサイズに縮小する</td></tr>
-      </table>
-
-      <!-- DIAGRAM 1: GLTFLoader ロード進捗 (animated) -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 700 320" width="700" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="350" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">GLTFLoader: モデル読み込みの5ステップ</text>
-
-          <!-- Step badge -->
-          <rect x="500" y="46" width="170" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-            ① fetch 要求
-          </text>
-          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-            ② バイナリ受信
-          </text>
-          <text x="585" y="62" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-            ③ JSON 解析
-          </text>
-          <text x="585" y="62" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-            ④ GPUへ転送
-          </text>
-          <text x="585" y="62" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-            ⑤ シーン描画
-          </text>
-
-          <!-- Pipeline stages -->
-          <rect x="40" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="95" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">① fetch</text>
-          <text x="95" y="142" text-anchor="middle" fill="#aaa" font-size="11">model.glb</text>
-
-          <rect x="172" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <text x="227" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">② バイナリ</text>
-          <text x="227" y="142" text-anchor="middle" fill="#aaa" font-size="11">ArrayBuffer</text>
-
-          <rect x="304" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="359" y="125" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">③ 解析</text>
-          <text x="359" y="142" text-anchor="middle" fill="#aaa" font-size="11">parseJSON</text>
-
-          <rect x="436" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <text x="491" y="125" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">④ GPU</text>
-          <text x="491" y="142" text-anchor="middle" fill="#aaa" font-size="11">VBO/Texture</text>
-
-          <rect x="568" y="100" width="110" height="56" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="623" y="125" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">⑤ 描画</text>
-          <text x="623" y="142" text-anchor="middle" fill="#aaa" font-size="11">render()</text>
-
-          <!-- Arrows -->
-          <line x1="150" y1="128" x2="172" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
-          <line x1="282" y1="128" x2="304" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
-          <line x1="414" y1="128" x2="436" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
-          <line x1="546" y1="128" x2="568" y2="128" stroke="#666" stroke-width="2" marker-end="url(#g1arr)"/>
-
-          <!-- Highlight ring - animated -->
-          <rect x="40" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="172" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="304" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="436" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="568" y="100" width="110" height="56" rx="10" fill="none" stroke="#FFB800" stroke-width="4" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.16;0.20;0.36;0.40;0.56;0.60;0.76;0.80;0.96;0.99;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Progress bar -->
-          <rect x="40" y="190" width="638" height="22" rx="11" fill="#222" stroke="#333" stroke-width="1"/>
-          <rect x="42" y="192" height="18" rx="9" fill="#76B900" opacity="0.85">
-            <animate attributeName="width" values="0;128;256;384;512;634" keyTimes="0;0.20;0.40;0.60;0.80;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <text x="359" y="206" text-anchor="middle" fill="#000" font-size="12" font-weight="700">progress %</text>
-
-          <!-- Legend / size info -->
-          <rect x="40" y="246" width="638" height="50" rx="10" fill="#111" stroke="#333" stroke-width="1"/>
-          <text x="60" y="268" fill="#76B900" font-size="12" font-weight="700">ロード時間目安:</text>
-          <text x="60" y="285" fill="#aaa" font-size="11">サイズ 1MB → 約 0.3 秒 (高速回線) / 5MB → 約 1.5 秒 / 20MB → 約 6 秒  ─  ファイルサイズが大きいほどロード時間は線形に O(n)</text>
-
-          <defs>
-            <marker id="g1arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#666"/></marker>
-          </defs>
-        </svg>
-      </div>
-
-      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-        <p style="color:#ccc;font-size:0.9rem">例題のコードをそのまま実行した後、<code>position</code> の z 値を <code>-5</code> から <code>-10</code> に変えて保存しよう。モデルはどちらに移動して、見かけの大きさはどう変わる？</p>
-        <p style="color:#888;font-size:0.85rem;margin-top:0.3rem">→ z はカメラから離れる方向（負）/近づく方向（正）。-10 にすると奥に下がるので、見かけは小さく見える。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> z 値の変化と見かけの大きさの関係を1文で書く</div></div>
-      </div>
-    </div>
-
-    <!-- Trace 1 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 1: モデル読み込みコードを読む</h3>
-      </div>
-      <p><strong>問題:</strong> 以下のコードを読み、各エンティティの表示内容を予測して表を埋めなさい。</p>
-      <pre><span class="code-label">HTML</span>
-<span class="kw">&lt;a-scene&gt;</span>
-  <span class="kw">&lt;a-assets&gt;</span>
-    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"tree"</span> src=<span class="str">"tree.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
-    <span class="kw">&lt;a-asset-item</span> id=<span class="str">"bench"</span> src=<span class="str">"bench.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
-  <span class="kw">&lt;/a-assets&gt;</span>
-
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"-3 0 -5"</span> scale=<span class="str">"2 2 2"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#tree"</span> position=<span class="str">"3 0 -5"</span> scale=<span class="str">"1.5 1.5 1.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-  <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#bench"</span> position=<span class="str">"0 0 -4"</span> rotation=<span class="str">"0 90 0"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
-  <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-  <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-<span class="kw">&lt;/a-scene&gt;</span></pre>
-      <table>
-        <tr><th>エンティティ</th><th>何が表示されるか</th><th>位置 (x, y, z)</th><th>拡大率</th><th>回転</th></tr>
-        <tr><td>1つ目の <code>#tree</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td>なし</td></tr>
-        <tr><td>2つ目の <code>#tree</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td><td>なし</td></tr>
-        <tr><td><code>#bench</code></td><td class="blank-cell"></td><td class="blank-cell"></td><td>1倍（デフォルト）</td><td class="blank-cell"></td></tr>
-        <tr><td><code>&lt;a-plane&gt;</code></td><td class="blank-cell"></td><td>原点</td><td>—</td><td class="blank-cell"></td></tr>
-        <tr><td><code>&lt;a-sky&gt;</code></td><td class="blank-cell"></td><td>—</td><td>—</td><td>—</td></tr>
-      </table>
-      <p style="margin-top:0.5rem"><strong>追加問題:</strong> 同じモデル <code>#tree</code> を2回使っていますが、見た目は同じになりますか？ 違うとしたらどこが違いますか？</p>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋め、追加問題にも回答してください。</div></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 3. CODE EXPERIENCE ============ -->
+<!-- ============ 2. CODE EXPERIENCE ============ -->
 <section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
+      <div class="section-num" style="background:#93D500">2</div>
       <h2>コード体験</h2>
     </div>
-    <p style="margin-bottom:1rem">以下のコードをコピーして実行し、結果を<strong>観察</strong>してください。</p>
+    <p style="margin-bottom:1rem">この回は <strong style="color:#93D500">「Sketchfab のアニメーション付き3Dモデルを、自分の世界の中で動かす」</strong> という1つのクリエイティブ課題に挑戦します。<br>
+    まずはここで、課題に必要な<strong>たった1つの新しい技</strong> ── <code>animation-mixer</code> でモデルの内蔵アニメーションを再生する ── を、実際に手を動かして体験しましょう。ここで作る <code>index.html</code> が、課題作品の<strong>土台</strong>になります。</p>
 
     <div class="card" style="border-left:4px solid #76B900;margin-bottom:1.5rem">
       <div class="card-header">
@@ -1282,10 +1263,10 @@ pre { position: relative; }
     <!-- Code Exp 1 -->
     <div class="card code-exp">
       <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 1</span>
-        <h3>GLBモデルを読み込んで配置する ── <code>index.html</code></h3>
+        <span class="tag tag-code-exp">コード体験</span>
+        <h3>アニメーション付きモデルを読み込んで「歩かせる」 ── <code>index.html</code></h3>
       </div>
-      <p><code>Web08</code> フォルダに <strong><code>index.html</code></strong> を作成し、以下のコードを貼り付けてください。</p>
+      <p><code>Web08</code> フォルダに <strong><code>index.html</code></strong> を作成し、以下のコードを貼り付けてください。ここでは、歩行アニメーションを内蔵した有名なサンプルモデル「<strong>Fox（キツネ）</strong>」を読み込んで歩かせます。</p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
         <li>VS Code 左側のエクスプローラで <strong>「新しいファイル」アイコン</strong> をクリック</li>
         <li>ファイル名を <strong><code>index.html</code></strong> と入力して Enter</li>
@@ -1296,32 +1277,31 @@ pre { position: relative; }
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
   <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>3Dモデルを読み込む<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;title&gt;</span>アニメーション付きモデル<span class="kw">&lt;/title&gt;</span>
+  <span class="cmt">&lt;!-- ① A-Frame 本体 --&gt;</span>
   <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="cmt">&lt;!-- ② アニメ再生アドオン（animation-mixer が使えるようになる） --&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
   <span class="kw">&lt;a-scene&gt;</span>
-    <span class="cmt">&lt;!-- アセットのプリロード --&gt;</span>
+    <span class="cmt">&lt;!-- アニメ付きモデルをプリロード --&gt;</span>
     <span class="kw">&lt;a-assets&gt;</span>
-      <span class="kw">&lt;a-asset-item</span> id=<span class="str">"dino"</span>
-        src=<span class="str">"https://cdn.aframe.io/examples/ar/models/triceratops/scene.gltf"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
+      <span class="kw">&lt;a-asset-item</span> id=<span class="str">"fox"</span>
+        src=<span class="str">"https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/Fox/glTF-Binary/Fox.glb"</span><span class="kw">&gt;&lt;/a-asset-item&gt;</span>
     <span class="kw">&lt;/a-assets&gt;</span>
 
-    <span class="cmt">&lt;!-- 3Dモデルの配置 --&gt;</span>
-    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#dino"</span>
+    <span class="cmt">&lt;!-- ★ animation-mixer="clip: Walk" で「歩く」アニメを再生 --&gt;</span>
+    <span class="kw">&lt;a-entity</span> gltf-model=<span class="str">"#fox"</span>
+              animation-mixer=<span class="str">"clip: Walk"</span>
               position=<span class="str">"0 0 -5"</span>
-              scale=<span class="str">"0.5 0.5 0.5"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
+              scale=<span class="str">"0.035 0.035 0.035"</span><span class="kw">&gt;&lt;/a-entity&gt;</span>
 
-    <span class="cmt">&lt;!-- 床 --&gt;</span>
-    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span>
-            width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#4A7A00"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-
-    <span class="cmt">&lt;!-- 空 --&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-
-    <span class="cmt">&lt;!-- 光源 --&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"1 4 2"</span> intensity=<span class="str">"1"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
-    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.5"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+    <span class="cmt">&lt;!-- 草地・空・光 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"60"</span> height=<span class="str">"60"</span> color=<span class="str">"#7CB342"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#CFE8F5"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"ambient"</span> intensity=<span class="str">"0.8"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
+    <span class="kw">&lt;a-light</span> type=<span class="str">"directional"</span> position=<span class="str">"3 6 4"</span> intensity=<span class="str">"0.9"</span><span class="kw">&gt;&lt;/a-light&gt;</span>
   <span class="kw">&lt;/a-scene&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
@@ -1329,185 +1309,179 @@ pre { position: relative; }
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
         <li>エディタ上で<strong>右クリック → 「Open with Live Server」</strong></li>
-        <li>ブラウザに3Dモデル（恐竜）が表示される（読み込みに数秒かかる場合があります）</li>
+        <li>キツネが<strong>その場で足を動かして歩くアニメーション</strong>が再生される（読み込みに数秒かかります）</li>
       </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
-        Q1. ブラウザに何が表示されましたか？ モデルの見た目を説明してください。<br>
-        Q2. <code>scale="0.5 0.5 0.5"</code> を <code>scale="2 2 2"</code> に変更して保存すると、モデルはどうなりましたか？<br>
-        Q3. <code>position="0 0 -5"</code> を <code>position="3 2 -8"</code> に変更すると、モデルはどこに移動しましたか？</div></div>
-    </div>
 
-  </div>
-</section>
+      <figure class="exec-shot" style="margin-top:1rem">
+        <div class="exec-mock-bar">
+          <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="url">localhost:3000 — index.html（animation-mixer="clip: Walk"）</span>
+        </div>
+        <img src="images/session08-fox-animated.png" alt="A-Frameの実行画面。青空と緑の草地の上で、ローポリゴンのキツネの3Dモデルが、四肢を歩行ポーズに動かして歩いている。" style="width:100%;display:block;border-radius:0 0 12px 12px">
+        <figcaption class="exec-caption">
+          <strong>実機での実行結果</strong>：<code>animation-mixer="clip: Walk"</code> によって、キツネに内蔵された「歩く」アニメーションが再生され、四肢が交互に動く。<code>animation-mixer</code> を外すと、同じモデルでも<strong>ピタッと止まったまま</strong>になる ── これが「内蔵アニメーションを再生する」ということ。<br>
+          <span style="color:#888;font-size:0.85em">※ 上のコードを A-Frame で実行してキャプチャしたものです（実機では足が動き続けます）。</span>
+        </figcaption>
+      </figure>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
-    </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
-
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
-      </div>
-      <p>今回のコード体験で動かしたコードを元に、<strong>「ここを変えたらどうなる？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:40%">変更内容</th><th>質問例</th></tr>
-          <tr><td><code>scale="0.5 0.5 0.5"</code> を <code>"10 10 10"</code> にする</td><td>「モデルはどうなる？ パフォーマンスへの影響は？」</td></tr>
-          <tr><td><code>&lt;a-assets&gt;</code> を削除して <code>gltf-model="url(...)"</code> に書き換える</td><td>「動作は変わる？ メリット・デメリットは？」</td></tr>
-          <tr><td><code>scale="1 2 1"</code> のようにYだけ大きくする</td><td>「モデルの形はどうなる？」</td></tr>
-          <tr><td><code>src</code> のURLを存在しないファイルにする</td><td>「何が起こる？ エラーは出る？」</td></tr>
-          <tr><td>同じモデルを10個並べる</td><td>「表示速度はどうなる？」</td></tr>
-          <tr><td><code>&lt;a-light&gt;</code> を削除する</td><td>「モデルの見え方はどう変わる？」</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（2分）</p>
+        <p style="color:#ccc;font-size:0.9rem">Fox モデルには <code>Survey</code>（見回す）・<code>Walk</code>（歩く）・<code>Run</code>（走る）の3つのアニメーションが入っています。<code>animation-mixer="clip: Walk"</code> の <code>Walk</code> を <strong><code>Run</code></strong> に書き換えて保存し、動きがどう変わるか観察しよう。さらに <code>animation-mixer</code> だけにして <code>clip</code> を消すとどうなる？</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> clip を Walk → Run に変えたときの動きの違いを1文で書く</div></div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ============ 5. STANDARD TASK ============ -->
+<!-- ============ 3. STANDARD TASK ============ -->
 <section id="sec-standard">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#76B900">5</div>
+      <div class="section-num" style="background:#76B900">3</div>
       <h2>標準課題</h2>
     </div>
 
-    <!-- 標準課題 1: 知識 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>3Dアセットの知識を確認する</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>Sketchfab のアニメーション付きモデルを、自分の世界に登場させる（クリエイティブ課題）</h3>
       </div>
-      <p>セクション1の説明をもとに、以下の問いに答えなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問1.</strong> 以下の3Dモデル形式の比較表を埋めなさい。</p>
-      <table>
-        <tr><th>形式</th><th>拡張子</th><th>Web向きか？</th><th>理由（空欄を埋める）</th></tr>
-        <tr><td><strong>glTF / GLB</strong></td><td>.gltf / .glb</td><td>最適</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>OBJ</strong></td><td>.obj</td><td>可</td><td class="blank-cell"></td></tr>
-        <tr><td><strong>FBX</strong></td><td>.fbx</td><td>不向き</td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> <code>.gltf</code> 形式と <code>.glb</code> 形式の違いを説明しなさい。それぞれどんな場面で使い分けるか、1〜2文で述べなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問3.</strong> <code>&lt;a-assets&gt;</code> を使ってモデルをプリロードすることのメリットを2つ挙げなさい。</p>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
-    </div>
-
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>3Dモデルのシーンを改造する（コード改造）</h3>
-      </div>
-      <p>コード体験1の <code>index.html</code> を以下の指示どおりに改造しなさい。</p>
+      <p>VS Code で <code>Web08</code> フォルダに <strong><code>original.html</code></strong> を新規作成し、<strong>Sketchfab からダウンロードした「アニメーション付き」の3Dモデル</strong>を主役にした、あなただけの小さな世界を作ってください。<br>
+      テーマは自由です（例: 「歩く恐竜のいる原始時代」「羽ばたく鳥のいる森」「踊るキャラクターのステージ」「泳ぐ魚の水族館」など）。</p>
+      <p style="margin-top:0.5rem;color:#93D500;font-size:0.9rem"><strong>この回はこの1課題に集中します。</strong>コード体験で動かした <code>animation-mixer</code> を使って、自分で選んだモデルのアニメーションを再生するのがゴールです。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
+        <ul class="point-list">
+          <li><strong>Sketchfab でアニメーション付きモデルを探す</strong>：検索後、左の絞り込みで <strong>「Animated」</strong> と <strong>「Downloadable」</strong> にチェックを入れる</li>
+          <li>モデルを <strong>glTF 形式</strong>でダウンロードする（ZIP を解凍すると <code>.gltf</code>＋<code>.bin</code>＋テクスチャ、または <code>.glb</code> が入っている）</li>
+          <li>ダウンロードしたファイルを <code>Web08</code> フォルダに置き、<code>&lt;a-assets&gt;</code> でプリロードする</li>
+          <li><strong><code>animation-mixer</code> を付けて、内蔵アニメーションを再生する</strong>（これが必須）</li>
+          <li>モデルの周りに<strong>3つ以上のプリミティブ</strong>（床・空・木・建物など a-box / a-sphere / a-cylinder 等）を置いて「世界」を作る</li>
+          <li><code>position</code> / <code>scale</code> / <code>rotation</code> でモデルの大きさ・向き・位置を整える</li>
+          <li>光源（<code>&lt;a-light&gt;</code>）を置いてモデルが見えるようにする</li>
+        </ul>
+      </div>
+
+      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0;font-size:0.9rem;color:#93D500">
+        <strong>アニメ名（clip）が分からないときは？</strong> <code>animation-mixer</code> を <strong><code>clip</code> 指定なし</strong>で書くと、モデルに入っている<strong>すべてのアニメが再生</strong>されます。まずは <code>animation-mixer</code> だけで動かし、Sketchfab のモデルページの「Animations」欄でクリップ名を確認してから <code>clip: 名前</code> で絞り込みましょう。
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件</p>
         <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td>恐竜モデルの <code>position</code> を <code>"0 0 -8"</code> に変更する（奥に移動）</td></tr>
-          <tr><td>2</td><td>恐竜モデルの <code>scale</code> を <code>"1 1 1"</code> に変更する（原寸表示）</td></tr>
-          <tr><td>3</td><td>恐竜モデルに <code>rotation="0 180 0"</code> を追加する（こちら向きにする）</td></tr>
-          <tr><td>4</td><td>恐竜モデルに以下のアニメーションを追加する:<br><code>animation="property: rotation; to: 0 540 0; dur: 5000; loop: true"</code></td></tr>
-          <tr><td>5</td><td>プリミティブで「柵」を追加する（<code>&lt;a-box&gt;</code> を3〜4個並べて棒状にする）</td></tr>
+          <tr><th style="width:30%">提出物</th><th>内容</th></tr>
+          <tr><td><strong style="color:#76B900">1. コード</strong></td><td><code>original.html</code> のコード全体をNotionノートに貼り付ける</td></tr>
+          <tr><td><strong style="color:#76B900">2. モデルの入手元</strong></td><td>使った Sketchfab モデルの<strong>ページURL</strong>と<strong>ライセンス</strong>（CC BY / CC0 など）を記録する</td></tr>
+          <tr><td><strong style="color:#76B900">3. 作品の説明</strong></td><td>どんなテーマの世界を作ったか、何のアニメが再生されるかを2〜3文で書く</td></tr>
         </table>
       </div>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント（柵の例）:</strong> <code>&lt;a-box position="-2 0.5 -4" width="0.1" height="1" depth="0.1" color="#8B4513"&gt;&lt;/a-box&gt;</code> を x の値を変えて複数配置し、<code>&lt;a-box position="0 0.9 -4" width="4" height="0.1" depth="0.1" color="#A0522D"&gt;&lt;/a-box&gt;</code> で横棒を渡す</p>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「なぜその値にしたか」を書く</div></div>
+
+      <details>
+        <summary>ヒント: アニメ付きモデル＋世界の最小セット（これを土台に作る）</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">下はサンプルとして Fox モデルを使った「最小の世界」です。<code>src</code> を<strong>自分がダウンロードしたモデルのファイル名</strong>（例: <code>scene.gltf</code> や <code>cat.glb</code>）に差し替え、世界を足していってください。</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!DOCTYPE html&gt;</span>
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+  <span class="cmt">&lt;!-- animation-mixer を使うためのアドオン --&gt;</span>
+  &lt;script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;a-assets&gt;
+      <span class="cmt">&lt;!-- ↓ ここを自分のモデルに差し替える --&gt;</span>
+      &lt;a-asset-item id="hero" src="scene.gltf"&gt;&lt;/a-asset-item&gt;
+    &lt;/a-assets&gt;
+
+    <span class="cmt">&lt;!-- 主役: animation-mixer でアニメ再生（clipを消すと全アニメ再生） --&gt;</span>
+    &lt;a-entity gltf-model="#hero" animation-mixer
+              position="0 0 -5" scale="1 1 1"&gt;&lt;/a-entity&gt;
+
+    <span class="cmt">&lt;!-- 世界づくり: プリミティブを3つ以上 --&gt;</span>
+    &lt;a-cylinder position="-2 0.5 -4" radius="0.3" height="1" color="#8D6E63"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere   position="-2 1.4 -4" radius="0.7" color="#66BB6A"&gt;&lt;/a-sphere&gt;
+    &lt;a-box      position="2 0.5 -4" color="#90A4AE"&gt;&lt;/a-box&gt;
+
+    &lt;a-plane rotation="-90 0 0" width="60" height="60" color="#7CB342"&gt;&lt;/a-plane&gt;
+    &lt;a-sky color="#CFE8F5"&gt;&lt;/a-sky&gt;
+    &lt;a-light type="ambient" intensity="0.8"&gt;&lt;/a-light&gt;
+    &lt;a-light type="directional" position="3 6 4" intensity="0.9"&gt;&lt;/a-light&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+          <p style="margin-top:0.6rem;font-size:0.85rem;color:#93D500"><strong>モデルが巨大／極小のとき</strong>は <code>scale</code> を <code>"0.01 0.01 0.01"</code> ～ <code>"10 10 10"</code> の範囲で調整。<strong>地面に埋まる／浮く</strong>ときは <code>position</code> の y を上下に動かして合わせます。</p>
+        </div>
+      </details>
     </div>
   </div>
 </section>
 
-<!-- ============ 6. ADVANCED TASK ============ -->
+<!-- ============ 4. ADVANCED TASK ============ -->
 <section id="sec-advanced">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#FFB800">6</div>
+      <div class="section-num" style="background:#FFB800">4</div>
       <h2>発展課題</h2>
     </div>
 
     <div class="card advanced">
       <div class="card-header">
         <span class="tag tag-advanced">発展課題</span>
-        <h3>3Dモデルとプリミティブを組み合わせたシーンを作る</h3>
+        <h3>内蔵アニメ × A-Frameアニメ ── 「歩いて移動する」キャラクターを作る</h3>
       </div>
-      <p>VS Code で <code>Web08</code> フォルダに <strong><code>original.html</code></strong> を新規作成し、3Dモデルとプリミティブを組み合わせた<strong>オリジナルシーン</strong>を作ってください。</p>
+      <p>標準課題の <code>original.html</code> を発展させます。モデルの<strong>内蔵アニメ（足を動かす）</strong>と、A-Frame の <code>animation</code> 機能による<strong>位置の移動</strong>を<strong>組み合わせて</strong>、キャラクターが<strong>実際に歩いて移動する</strong>ように見せてください。</p>
+
+      <div class="analogy" style="margin:1rem 0">
+        <strong>2種類のアニメは役割が違います。</strong><br>
+        ・<code>animation-mixer</code>（内蔵アニメ）＝ その場で<strong>足を交互に動かす</strong>（歩く「フリ」）。これだけだと<strong>その場で足踏み</strong>。<br>
+        ・A-Frame の <code>animation</code>（移動）＝ エンティティ全体を<strong>position で移動</strong>させる。これだけだと<strong>棒立ちのまま滑って移動</strong>。<br>
+        → <strong>2つを同時にかける</strong>と、足を動かしながら前に進む＝「本当に歩いている」キャラクターになります。これがゲームの歩行表現の基本です。
+      </div>
 
       <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
         <ul class="point-list">
-          <li><strong>1つ以上の3Dモデル</strong>（glTF / GLB）を <code>&lt;a-assets&gt;</code> でプリロードして使用する</li>
-          <li><strong>3つ以上のプリミティブ</strong>（a-box, a-sphere, a-cylinder など）と組み合わせる</li>
-          <li>テーマを決める（例: 「恐竜のいる公園」「展示室」「宇宙基地」など）</li>
-          <li>モデルの <code>position</code>, <code>scale</code>, <code>rotation</code> を適切に調整する</li>
-          <li>光源（<code>&lt;a-light&gt;</code>）を配置する</li>
+          <li>モデルに <code>animation-mixer</code> で<strong>歩く／走るアニメ</strong>を再生させる（標準課題のまま）</li>
+          <li>同じモデルに A-Frame の <code>animation</code> 属性を追加し、<strong><code>position</code> を移動</strong>させる</li>
+          <li><code>loop: true</code> でずっと動き続けるようにする</li>
+          <li><strong>進む向きと、内蔵アニメの正面を合わせる</strong>（<code>rotation</code> で調整。後ろ向きに進んでいたら 180度回す）</li>
+          <li>余裕があれば <code>dir: alternate</code> で往復させ、折り返しで <code>rotation</code> も反転させて「向きを変えて歩く」を表現する</li>
         </ul>
       </div>
 
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0;font-size:0.9rem;color:#93D500">
-        <strong>モデルの入手先:</strong> コード体験で使った A-Frame 公式の恐竜モデルをそのまま使ってもOKです。余裕があれば <a href="https://poly.pizza" style="color:#76B900">poly.pizza</a> や <a href="https://sketchfab.com" style="color:#76B900">Sketchfab</a> から別のモデルをダウンロードして使ってみましょう。
-      </div>
+      <details>
+        <summary>ヒント: 「足を動かしながら左右に往復する」サンプル</summary>
+        <div class="answer-content">
+          <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">内蔵の <code>Walk</code> を再生しつつ、<code>animation</code> で x 座標を <code>-4 → 4</code> に動かして横切らせます。Fox で試せます（自分のモデルに差し替え可）。</p>
+          <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333"><span class="cmt">&lt;!-- ① 内蔵アニメ: 足を動かす（その場の歩行モーション）
+     ② animation: position の x を -4→4 へ8秒かけて移動、往復ループ
+     ③ rotation の y=90 で「進行方向（右）」に正面を向ける --&gt;</span>
+&lt;a-entity gltf-model="#fox"
+          animation-mixer="clip: Walk"
+          position="-4 0 -5"
+          rotation="0 90 0"
+          scale="0.03 0.03 0.03"
+          animation="property: position;
+                     to: 4 0 -5;
+                     dur: 8000;
+                     dir: alternate;
+                     loop: true;
+                     easing: linear"&gt;&lt;/a-entity&gt;</pre>
+          <p style="margin-top:0.6rem;font-size:0.85rem;color:#93D500"><strong>もっと自然にするなら：</strong> 折り返したときにキツネが「後ろ歩き」に見えてしまいます。これを直すには、<code>rotation</code> も <code>animation__turn</code> のように<strong>2つ目の animation</strong> で <code>0 90 0</code> ↔ <code>0 -90 0</code> に切り替えると、端で向きを変えてから歩き出すように見えます（A-Frame は <code>animation__名前</code> で複数のアニメを1つのエンティティに付けられます）。</p>
+        </div>
+      </details>
 
       <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件（2点セット）</p>
+        <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">提出要件</p>
         <table>
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
-          <tr>
-            <td><strong style="color:#76B900">1. コード</strong></td>
-            <td><code>original.html</code> のコード全体をNotionノートに貼り付ける</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#76B900">2. 音声説明</strong></td>
-            <td>以下の内容を<strong>1〜2分の音声</strong>で録音し、Notionノートに添付する<br>
-            <span style="color:#999;font-size:0.85rem">スマホの録音アプリやPCの機能で録音 → Notionに <code>/audio</code> で添付</span></td>
-          </tr>
+          <tr><td><strong style="color:#76B900">1. コード</strong></td><td><code>original.html</code>（発展版）のコード全体をNotionノートに貼り付ける</td></tr>
+          <tr><td><strong style="color:#76B900">2. 説明</strong></td><td><code>animation-mixer</code>（内蔵アニメ）と <code>animation</code>（移動）が<strong>それぞれ何を担当しているか</strong>、2つを組み合わせた結果どう見えるかを3〜4文で書く</td></tr>
         </table>
-        <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
-        <ul class="point-list" style="margin-top:0.3rem">
-          <li>どんなテーマ・シーンを作ったか</li>
-          <li>使用した3Dモデルとその入手元</li>
-          <li>モデルとプリミティブをどのように組み合わせたか</li>
-          <li>scale や position の調整で工夫した点</li>
-        </ul>
       </div>
     </div>
   </div>
@@ -1536,100 +1510,39 @@ pre { position: relative; }
 
 ---
 
-## 説明 1.3: A-Frameでのモデル読み込み
-### やってみよう（直接指定 vs a-assets プリロードの違い）
-（読み込み方法の違いで気づいたことを1文で書く）
+## コード体験（練習メモ・提出対象外）: アニメ付きモデルを動かす（index.html）
+### やってみよう（clip を Walk → Run に変えたときの動きの違い）
+（1文で書く）
 
 ---
 
-## 説明 1.4: モデルの位置・回転・スケール調整
-### やってみよう（scale="1 3 1" で Y軸だけ3倍にした結果）
-（不均等スケールの結果を1文で書く）
-
----
-
-## トレース演習 1: モデル読み込みコードを読む
-| エンティティ | 何が表示されるか | 位置 (x, y, z) | 拡大率 | 回転 |
-|---|---|---|---|---|
-| 1つ目の #tree |   |   |   | なし |
-| 2つ目の #tree |   |   |   | なし |
-| #bench        |   |   | 1倍 |   |
-| <a-plane>     |   | 原点 | — |   |
-| <a-sky>       |   | — | — | — |
-
-### 追加問題: 同じモデル #tree を2回使っているが、見た目は同じか？ 違うとしたらどこが違うか。
-
----
-
-## コード体験 1: GLBモデルを読み込んで配置する（index.html）
-### Q1. ブラウザに何が表示されたか（モデルの見た目）
-
-### Q2. scale="0.5 0.5 0.5" を "2 2 2" に変更するとどうなったか
-
-### Q3. position="0 0 -5" を "3 2 -8" に変更するとモデルはどこに移動したか
-
----
-
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
-
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
-
----
-
-## 標準課題 1: 3Dアセットの知識を確認する
-### 問1. 3Dモデル形式の比較表
-| 形式 | 拡張子 | Web向きか？ | 理由 |
-|---|---|---|---|
-| glTF / GLB | .gltf / .glb | 最適 |   |
-| OBJ        | .obj         | 可   |   |
-| FBX        | .fbx         | 不向き |   |
-
-### 問2. .gltf 形式と .glb 形式の違い（使い分け）
-
-### 問3. <a-assets> でプリロードするメリット 2つ
-1.
-2.
-
----
-
-## 標準課題 2: 3Dモデルのシーンを改造する
-### ① 改造後のコード全体（index.html）
-```html
-（ここに改造後のコードを貼り付け）
-```
-
-### ② 各改造について「どの行を変えたか」と「なぜその値にしたか」
-1. position を "0 0 -8" に変更:
-2. scale を "1 1 1" に変更:
-3. rotation="0 180 0" を追加:
-4. animation 属性を追加:
-5. プリミティブで「柵」を追加:
-
----
-
-## 発展課題: 3Dモデルとプリミティブを組み合わせたオリジナルシーン
-### 1. テーマ（例: 恐竜のいる公園 / 展示室 / 宇宙基地 など）
-
-### 2. 使用した3Dモデルと入手元URL
-
-### 3. コード（original.html 全体）
+## 【提出1】標準課題: Sketchfab のアニメ付きモデルを自分の世界に登場させる
+### ① コード（original.html 全体）
 ```html
 （ここに貼り付け）
 ```
 
-### 4. 音声説明（1〜2分の音声ファイルを添付）
-- どんなテーマ・シーンを作ったか
-- 使用した3Dモデルとその入手元
-- モデルとプリミティブをどのように組み合わせたか
-- scale や position の調整で工夫した点
+### ② 使用したモデルの入手元
+- Sketchfab ページURL:
+- ライセンス（CC BY / CC0 など）:
+- 再生したアニメ名（clip）:
+
+### ③ 作品の説明（2〜3文）
+- どんなテーマの世界を作ったか（例: 歩く恐竜の原始時代 / 羽ばたく鳥の森 / 踊るキャラのステージ など）:
+- 何のアニメが再生されるか:
+
+---
+
+## 【提出2】発展課題: 内蔵アニメ × A-Frameアニメ（歩いて移動するキャラ）
+### ① コード（original.html 発展版 全体）
+```html
+（ここに貼り付け）
+```
+
+### ② 説明（3〜4文）
+- animation-mixer（内蔵アニメ）が担当していること:
+- A-Frame の animation（移動）が担当していること:
+- 2つを組み合わせた結果、どう見えるか:
 </pre>
 
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
@@ -1640,63 +1553,90 @@ pre { position: relative; }
   </div>
 </section>
 
-<!-- ============ 7. ANSWERS ============ -->
-<section style="background:#0A0A0A" id="answers-section" data-release="2026-06-17T16:20">
+<!-- ============ 5. ANSWERS ============ -->
+<section style="background:#0A0A0A" id="answers-section">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">7</div>
-      <h2>解答例</h2>
+      <div class="section-num" style="background:#616161">5</div>
+      <h2>解答例・参考作例</h2>
     </div>
 
-    <!-- ── 例題・トレース演習・コード体験の解答（常に公開） ── -->
-    <div id="answers-examples">
+    <p style="margin-bottom:1rem;color:#999;font-size:0.9rem">標準課題・発展課題は<strong>自由制作</strong>のため、決まった正解はありません。ここでは、必須要件をすべて満たした<strong>参考作例</strong>を公開します。これをそのまま動かして仕組みを確認し、自分の作品づくりの出発点にしてください。</p>
 
-    <!-- 例題1 解答 -->
+    <!-- コード体験 やってみよう 解答 -->
     <details>
-      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 1 やってみよう 解答</summary>
-      <div class="answer-content">
-        <p><code>position="0 0 -5"</code> を <code>position="0 0 -10"</code> に変更した場合の挙動:</p>
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">変更前: z = -5 → 恐竜はカメラから5メートル奥
-変更後: z = -10 → 恐竜はカメラから10メートル奥（さらに遠く）
-見かけの大きさ: 約 1/2 になる（距離が2倍 → 視覚的に半分）</pre>
-        <p>3D空間では <strong>z 軸の負方向がカメラから離れる方向</strong>。距離が2倍になると、遠近法により見かけの大きさは約 1/2 になる（人間の目の遠近感と同じ）。つまり <code>scale</code> を変えずに <code>position</code> の z だけ動かしても、<strong>カメラから遠ざけば小さく見える</strong>。これは「絶対サイズは変わらないが、相対サイズが変わる」現象。</p>
-      </div>
-    </details>
-
-    <!-- トレース演習 1 解答 -->
-    <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
-      <div class="answer-content">
-        <table>
-          <tr><th>エンティティ</th><th>何が表示されるか</th><th>位置 (x, y, z)</th><th>拡大率</th><th>回転</th></tr>
-          <tr><td>1つ目の <code>#tree</code></td><td>木の3Dモデル（大きめ）</td><td>(-3, 0, -5)</td><td>2倍</td><td>なし</td></tr>
-          <tr><td>2つ目の <code>#tree</code></td><td>木の3Dモデル（やや小さめ）</td><td>(3, 0, -5)</td><td>1.5倍</td><td>なし</td></tr>
-          <tr><td><code>#bench</code></td><td>ベンチの3Dモデル</td><td>(0, 0, -4)</td><td>1倍（デフォルト）</td><td>Y軸に90度回転</td></tr>
-          <tr><td><code>&lt;a-plane&gt;</code></td><td>芝生色の床</td><td>原点</td><td>—</td><td>X軸に-90度（水平に倒す）</td></tr>
-          <tr><td><code>&lt;a-sky&gt;</code></td><td>水色の空</td><td>—</td><td>—</td><td>—</td></tr>
-        </table>
-        <p style="margin-top:1rem"><strong>追加問題の解答:</strong> 同じモデル <code>#tree</code> を使っているので形は同じですが、<code>scale</code> が異なる（2倍 vs 1.5倍）ため、大きさが違って見えます。また <code>position</code> が異なるので配置位置も違います。</p>
-      </div>
-    </details>
-
-    <!-- コード体験 1 解答 -->
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 やってみよう 解答（clip: Walk → Run）</summary>
       <div class="answer-content">
         <ul class="point-list">
-          <li><strong>Q1:</strong> 緑色の芝生の上に、恐竜（トリケラトプス）の3Dモデルが表示された。背景は水色の空。プリミティブと違い、モデルにはテクスチャがあり立体的でリアルに見える。</li>
-          <li><strong>Q2:</strong> <code>scale="2 2 2"</code> にすると恐竜が4倍の大きさ（各軸2倍）になり、画面いっぱいに広がった。</li>
-          <li><strong>Q3:</strong> <code>position="3 2 -8"</code> にすると、恐竜が右方向（x=3）、上方向（y=2）、さらに奥（z=-8）に移動した。</li>
+          <li><code>clip: Walk</code>（歩く）→ <code>clip: Run</code>（走る）に変えると、四肢の動きが<strong>速く・大きく</strong>なり、走っているモーションになる。</li>
+          <li><code>animation-mixer</code> だけ（<code>clip</code> なし）にすると、Fox の<strong>全アニメ（Survey→Walk→Run）が順番に再生</strong>される。</li>
+          <li><code>animation-mixer</code> 自体を消すと、モデルは<strong>完全に静止</strong>する（A-Frame は内蔵アニメを自動再生しないため）。</li>
         </ul>
       </div>
     </details>
 
-    </div>
-    <!-- ── /answers-examples ── -->
+    <!-- 標準課題 参考作例 -->
+    <details>
+      <summary><span class="tag tag-standard" style="font-size:0.7rem">標準</span> 標準課題の参考作例（アニメ付きモデル＋世界）</summary>
+      <div class="answer-content">
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">Fox を主役に、プリミティブで「森」を作った最小作例です。<code>src</code> を自分の Sketchfab モデルに差し替えれば、そのまま自分の作品になります。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;script src="https://aframe.io/releases/1.7.1/aframe.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;a-scene&gt;
+    &lt;a-assets&gt;
+      &lt;a-asset-item id="hero"
+        src="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models/2.0/Fox/glTF-Binary/Fox.glb"&gt;&lt;/a-asset-item&gt;
+    &lt;/a-assets&gt;
 
-    <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
-    <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
-    <div id="answers-encrypted" data-cipher="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"></div>
+    &lt;!-- 主役: 歩くアニメを再生 --&gt;
+    &lt;a-entity gltf-model="#hero" animation-mixer="clip: Walk"
+              position="0 0 -5" scale="0.035 0.035 0.035"&gt;&lt;/a-entity&gt;
+
+    &lt;!-- 世界づくり: 木（幹＋葉）と岩 --&gt;
+    &lt;a-cylinder position="-3 0.8 -6" radius="0.3" height="1.6" color="#8D6E63"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere   position="-3 2.0 -6" radius="1"   color="#66BB6A"&gt;&lt;/a-sphere&gt;
+    &lt;a-cylinder position="3 0.6 -6" radius="0.25" height="1.2" color="#8D6E63"&gt;&lt;/a-cylinder&gt;
+    &lt;a-sphere   position="3 1.6 -6" radius="0.8"  color="#43A047"&gt;&lt;/a-sphere&gt;
+    &lt;a-box      position="1.5 0.3 -3" depth="1.2" width="1.2" height="0.6" color="#9E9E9E"&gt;&lt;/a-box&gt;
+
+    &lt;a-plane rotation="-90 0 0" width="60" height="60" color="#7CB342"&gt;&lt;/a-plane&gt;
+    &lt;a-sky color="#CFE8F5"&gt;&lt;/a-sky&gt;
+    &lt;a-light type="ambient" intensity="0.8"&gt;&lt;/a-light&gt;
+    &lt;a-light type="directional" position="3 6 4" intensity="0.9"&gt;&lt;/a-light&gt;
+  &lt;/a-scene&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </details>
+
+    <!-- 発展課題 参考作例 -->
+    <details style="margin-top:0.4rem">
+      <summary><span class="tag tag-advanced" style="font-size:0.7rem">発展</span> 発展課題の参考作例（歩いて往復するキャラ）</summary>
+      <div class="answer-content">
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">標準課題の主役エンティティを、下のように書き換えるだけです。内蔵の <code>Walk</code> と、<code>animation</code> による <code>position</code> 移動を<strong>同時に</strong>かけています。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">&lt;!-- 足を動かしながら（animation-mixer）、左右に往復移動（animation）--&gt;
+&lt;a-entity gltf-model="#hero"
+          animation-mixer="clip: Walk"
+          position="-4 0 -5"
+          rotation="0 90 0"
+          scale="0.03 0.03 0.03"
+          animation="property: position; to: 4 0 -5;
+                     dur: 8000; dir: alternate;
+                     loop: true; easing: linear"&gt;&lt;/a-entity&gt;</pre>
+        <ul class="point-list" style="margin-top:0.6rem">
+          <li><strong>animation-mixer（内蔵アニメ）</strong>：足を交互に動かす「歩くモーション」を担当。これだけだと<strong>その場で足踏み</strong>。</li>
+          <li><strong>animation（A-Frame）</strong>：<code>position</code> の x を −4→4 へ動かし、エンティティ全体を<strong>移動</strong>させる担当。これだけだと<strong>棒立ちのまま滑る</strong>。</li>
+          <li><strong>組み合わせた結果</strong>：足を動かしながら前進するので、<strong>本当に歩いて画面を横切る</strong>ように見える。<code>dir: alternate</code> で端まで行くと折り返す。</li>
+        </ul>
+      </div>
+    </details>
+
   </div>
 </section>
 

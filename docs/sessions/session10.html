@@ -552,7 +552,7 @@ pre { position: relative; }
 
     <!-- 1.1 A-Frame + Socket.IO の組み合わせ -->
     <div class="concept-box">
-      <h4>1.1 A-Frame + Socket.IO の組み合わせ <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.1 A-Frame + Socket.IO の組み合わせ</h4>
       <div class="analogy">
         オンラインゲームでは、自分のキャラクターを動かすと、他のプレイヤーの画面でもそのキャラクターが動きます。<br>
         今回作るのは、まさにその仕組みの<strong>Web版</strong>です。ブラウザで3D空間に入り、他の人のアバターがリアルタイムに動くのが見えます。
@@ -660,7 +660,7 @@ pre { position: relative; }
 
     <!-- 1.2 アバターの概念 -->
     <div class="concept-box">
-      <h4>1.2 アバターの概念 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.2 アバターの概念</h4>
       <div class="analogy">
         ビデオ会議ではカメラの映像で相手の存在がわかります。3D空間では映像の代わりに<strong>アバター</strong>（箱や人型の3Dモデル）で「そこに誰かがいる」ことを表現します。
       </div>
@@ -675,7 +675,7 @@ pre { position: relative; }
 
     <!-- 1.3 position/rotation データの送信 -->
     <div class="concept-box">
-      <h4>1.3 位置・回転データの送信 <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.3 位置・回転データの送信</h4>
       <p>A-Frame のカメラ（ユーザの視点）の <strong>position</strong>（位置: x, y, z）と <strong>rotation</strong>（回転: x, y, z）を定期的にサーバに送信します。</p>
       <table>
         <tr><th>データ</th><th>内容</th><th>例</th></tr>
@@ -684,7 +684,7 @@ pre { position: relative; }
       </table>
       <p style="margin-top:0.5rem">これらのデータを <strong>一定間隔（例: 100ms ごと）</strong>で <code>socket.emit('move', data)</code> してサーバに送り、サーバが全クライアントに配信します。</p>
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ定期送信なのか？ <span class="exam-alert">課題に出ます</span></p>
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">なぜ定期送信なのか？</p>
         <p style="font-size:0.9rem">マウスやキーボードの入力イベントは<strong>非常に高頻度</strong>で発生します。すべてのイベントで送信すると、通信量が膨大になりサーバに負荷がかかります。<strong>setInterval</strong> で一定間隔に間引くことで、滑らかさと通信効率のバランスを取ります。</p>
       </div>
 
@@ -884,7 +884,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
 
     <!-- 1.5 ユーザID管理 -->
     <div class="concept-box">
-      <h4>1.5 ユーザID管理 ── socket.id <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.5 ユーザID管理 ── socket.id</h4>
       <p>Socket.IO では、接続するたびに各クライアントに<strong>一意の ID（socket.id）</strong>が自動で割り当てられます。</p>
       <ul class="point-list">
         <li><code>socket.id</code> は <code>"xK7-2abc..."</code> のようなランダム文字列</li>
@@ -954,7 +954,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
 
     <!-- 1.6 ユーザ離脱時のクリーンアップ -->
     <div class="concept-box">
-      <h4>1.6 ユーザ離脱時のクリーンアップ <span class="exam-alert">課題に出ます</span></h4>
+      <h4>1.6 ユーザ離脱時のクリーンアップ</h4>
       <div class="analogy">
         ビデオ会議で誰かが退室すると、その人の映像枠が消えます。3D空間でも同じように、ユーザが切断したら<strong>そのアバターを削除</strong>しないと、動かない幽霊アバターが残り続けます。
       </div>
