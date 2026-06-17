@@ -435,7 +435,6 @@ pre { position: relative; }
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
   <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
@@ -455,12 +454,11 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計3項目）</h3>
       <div class="submission-items">
         <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
-        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span>アバター同期を完成</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
-        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
         <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
@@ -482,21 +480,17 @@ pre { position: relative; }
       今回は<strong>A-Frame の3D空間</strong>と <strong>Socket.IO のリアルタイム通信</strong>を組み合わせ、<strong>複数ユーザが同じ3D空間を共有し、互いのアバターが見える</strong>仕組みを作ります。
     </p>
 
-    <!-- ====== 読み方（用語の発音と語源） ====== -->
+    <!-- ====== 段階ロードマップ ====== -->
     <div class="concept-box" style="border-left:4px solid #76B900;background:#0f1a05">
-      <h4 style="color:#76B900">読み方 ── アバター同期の用語ガイド</h4>
-      <p style="font-size:0.95rem;margin-bottom:0.8rem">3D空間のリアルタイム同期では、ゲーム業界・ネットワーク工学の用語が多数登場します。発音と意味を先に押さえておくと、後のコード読解がぐっと楽になります。</p>
+      <h4 style="color:#76B900">この回の進め方 ── 3ステップで段階的に作る</h4>
+      <p style="font-size:0.95rem;margin-bottom:0.8rem">いきなり完成形を作ると難しいので、<strong>小さく動かして少しずつ足していく</strong>進め方をします。例題でそれぞれの完全なコードを示します。</p>
       <table style="font-size:0.92rem">
-        <tr><th style="width:30%">英単語</th><th style="width:24%">カタカナ読み</th><th>意味と語源</th></tr>
-        <tr><td><code>avatar</code></td><td><strong style="color:#76B900">アバター</strong></td><td>サンスクリット語「アヴァターラ（化身）」が語源。3D空間内で「自分の化身」として動くキャラクタ。</td></tr>
-        <tr><td><code>position / rotation</code></td><td><strong style="color:#76B900">ポジション / ローテーション</strong></td><td>位置 (x, y, z) と回転 (x, y, z)。両方をセットで送らないと「向き」が表現できない。</td></tr>
-        <tr><td><code>interpolation</code></td><td><strong style="color:#76B900">インターポレーション</strong>（補間）</td><td>「inter-（間に）＋ polate（差し込む）」＝ 受信した飛び飛びのデータの「間を埋める」処理。</td></tr>
-        <tr><td><code>slerp</code></td><td><strong style="color:#76B900">スラープ</strong></td><td>"Spherical Linear intERPolation"（球面線形補間）の略。回転の補間で使う。</td></tr>
-        <tr><td><code>prediction</code></td><td><strong style="color:#76B900">プレディクション</strong>（予測）</td><td>「次にデータが届くまで、今までの動きから先回りで位置を予想する」処理。</td></tr>
-        <tr><td><code>dead reckoning</code></td><td><strong style="color:#76B900">デッドレコニング</strong>（推測航法）</td><td>もとは航海用語。最後に受信した位置と速度から、その後の位置を「推測で延長」する技法。</td></tr>
-        <tr><td><code>broadcast</code></td><td><strong style="color:#76B900">ブロードキャスト</strong></td><td>「broad（広く）＋ cast（投げる）」＝ 送信者以外の全員に配信。</td></tr>
-        <tr><td><code>serialize</code></td><td><strong style="color:#76B900">シリアライズ</strong>（直列化）</td><td>オブジェクトを通信できる文字列（JSON）に変換すること。逆は <strong>デシリアライズ</strong>。</td></tr>
+        <tr><th style="width:14%">段階</th><th style="width:30%">作るもの</th><th>新しく学ぶこと</th></tr>
+        <tr><td><strong style="color:#4FC3F7">Step 1</strong><br>シングルプレイ</td><td>Node.js のサーバを立て、3D空間に<strong>スフィアを1つ</strong>置いて表示する</td><td>Express で <code>public</code> フォルダを配信する／A-Frame で1人で3D空間に入る</td></tr>
+        <tr><td><strong style="color:#FFB800">Step 2</strong><br>マルチプレイ</td><td>複数人が接続し、互いの位置を<strong>色違いのスフィア</strong>で同期する</td><td>Socket.IO で位置を送受信する／受信したら<strong>スフィアを作る・動かす・消す</strong></td></tr>
+        <tr><td><strong style="color:#76B900">Step 3</strong><br>ゴール</td><td>スフィアを<strong>四角柱（胴体）＋スフィア（頭）</strong>の単純なアバターに置き換えて同期する</td><td>複数パーツのアバターを <code>a-entity</code> でまとめる／<strong>向き（rotation）</strong>も同期する</td></tr>
       </table>
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#aaa">この <strong>Step 3</strong> の完成（四角柱＋スフィアのアバター同期）が、この回の<strong>ゴール</strong>であり<strong>標準課題</strong>です。</p>
     </div>
 
     <!-- ====== 具体例（身近なシーンで理解する） ====== -->
@@ -528,24 +522,20 @@ pre { position: relative; }
       <h4 style="color:#FFB800">よくある質問 (Q&amp;A) ── アバター同期の疑問</h4>
       <table style="font-size:0.92rem">
         <tr>
-          <td style="width:38%;color:#FFB800;font-weight:700;vertical-align:top">Q1. 100msごとに送信したらカクカクしませんか？</td>
-          <td>はい、そのままだと毎秒10コマで動くので確かにカクつきます。実用ではクライアント側で<strong>補間（interpolation）</strong>を入れて、受信した位置の「間」を滑らかにつなぎます。本資料の発展で扱います。</td>
+          <td style="width:38%;color:#FFB800;font-weight:700;vertical-align:top">Q1. なぜ位置を「定期的に」送るの？</td>
+          <td>キーやマウスの入力は非常に高頻度で発生するため、毎回送るとサーバに負荷がかかります。<code>setInterval</code> で <strong>100ミリ秒ごと（毎秒10回）</strong>に間引いて送ることで、滑らかさと通信量のバランスを取ります。</td>
         </tr>
         <tr>
-          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q2. 通信が遅れたらアバターはどうなる？</td>
-          <td>受信が止まると、そのアバターは止まったままになります。これを補うのが<strong>プレディクション（予測）</strong>と<strong>デッドレコニング（推測航法）</strong>です。直前の速度から「たぶんこの辺にいるはず」と推測して動かし続けます。</td>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q2. なぜ <code>broadcast.emit</code> で「送信者以外」に送るの？</td>
+          <td>自分の位置は自分がすでに知っているからです。自分のアバターを自分の画面に出す必要もないので、サーバは「送信者本人を除いた全員」にだけ転送するのが効率的です。</td>
         </tr>
         <tr>
-          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q3. なぜ <code>broadcast.emit</code> で「送信者以外」に送るの？</td>
-          <td>自分の位置データは自分自身ですでに知っているからです。自分のアバターを自分の画面に出す必要もないので、サーバは「送信者本人を除いた全員」にだけ転送するのが効率的です。</td>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q3. <code>position</code> と <code>rotation</code> の単位は？</td>
+          <td>A-Frame では <strong>position</strong> はメートル単位の数値 <code>(x, y, z)</code>、<strong>rotation</strong> は度数法の角度 <code>(x, y, z)</code> です。Step 3 のアバターでは、向きを合わせるために <strong>rotation の y</strong>（左右の首振り）を使います。</td>
         </tr>
         <tr>
-          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q4. position と rotation の単位は？</td>
-          <td>A-Frame では <strong>position</strong> はメートル単位の数値、<strong>rotation</strong> はオイラー角（度数法、°）です。Three.js 内部ではラジアンと四元数 (Quaternion) に変換されています。</td>
-        </tr>
-        <tr>
-          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q5. たくさん人が入ったら通信量は爆発しない？</td>
-          <td>します。10人なら 10×10 = 100通信／秒、100人なら 100×100 = 10000通信／秒と<strong>O(n²)</strong>で増えます。実用では <strong>関心領域 (Area of Interest)</strong> や <strong>更新頻度の段階化</strong>で削減します。</td>
+          <td style="color:#FFB800;font-weight:700;vertical-align:top">Q4. 接続している人が増えたらどうなる？</td>
+          <td>接続したぶんだけアバターが増えていきます。今回は人数が増えても「<strong>受信したら作る・動かす・消す</strong>」という同じ処理を繰り返すだけで対応できます。</td>
         </tr>
       </table>
     </div>
@@ -658,24 +648,133 @@ pre { position: relative; }
       </div>
     </div>
 
-    <!-- 1.2 アバターの概念 -->
+    <!-- 1.2 サーバ側の同期エンジン -->
+    <div class="concept-box" style="border-left:4px solid #93D500">
+      <h4>1.2 サーバ側の同期エンジン ── <code>io.on</code> / <code>socket.on</code> / <code>socket.broadcast.emit</code></h4>
+      <p>同期の心臓部は、サーバ（<code>server.js</code>）のたった3つの命令です。この3つがどう連携して「1人の動きを他の全員に伝える」のかを、まず仕組みから理解しましょう。</p>
+      <table style="font-size:0.92rem">
+        <tr><th style="width:34%">命令</th><th>意味（いつ・何をする）</th></tr>
+        <tr><td><code>io.on('connection', socket =&gt; {…})</code></td><td><strong>誰かが接続するたび</strong>に1回呼ばれる。中の <code>socket</code> は「その接続した1人」を指す。以降の <code>socket.on</code> はこの人専用の受信窓口。</td></tr>
+        <tr><td><code>socket.on('move', data =&gt; {…})</code></td><td><strong>その1人から <code>'move'</code> が届くたび</strong>に呼ばれる。<code>data</code> に位置・向きが入っている。</td></tr>
+        <tr><td><code>socket.broadcast.emit('moved', …)</code></td><td>受け取ったデータを<strong>「送信者本人を除いた」全員</strong>へ転送する。これで他の人の画面にだけアバターが反映される。</td></tr>
+      </table>
+      <p style="font-size:0.9rem;color:#aaa;margin:0.5rem 0">参考: <code>io.emit</code> は「自分も含めた全員」、<code>socket.broadcast.emit</code> は「自分以外の全員」、<code>socket.emit</code> は「その本人だけ」に送ります。アバター同期では<strong>自分以外の全員</strong>に送りたいので <code>socket.broadcast.emit</code> を使います。</p>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 440" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="28" text-anchor="middle" fill="#93D500" font-weight="700" font-size="15">同期の流れ ── 1人の move を、サーバが他の全員へ broadcast する</text>
+
+          <!-- phase badge -->
+          <rect x="210" y="40" width="300" height="24" rx="12" fill="#0f1a05" stroke="#76B900" stroke-width="1"/>
+          <text x="360" y="57" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.19;0.20;1" dur="16s" repeatCount="indefinite"/>① 接続：io.on('connection') が各クライアントで発火</text>
+          <text x="360" y="57" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.19;0.20;0.38;0.39;1" dur="16s" repeatCount="indefinite"/>② Aが動く：socket.emit('move') でサーバへ送信</text>
+          <text x="360" y="57" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.37;0.38;0.56;0.57;1" dur="16s" repeatCount="indefinite"/>③ 受信：サーバの socket.on('move') が発火</text>
+          <text x="360" y="57" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.55;0.56;0.80;0.81;1" dur="16s" repeatCount="indefinite"/>④ 転送：socket.broadcast.emit('moved') で A以外へ</text>
+          <text x="360" y="57" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0"><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.79;0.80;1" dur="16s" repeatCount="indefinite"/>⑤ 反映：B・Cの socket.on('moved') でアバター更新</text>
+
+          <!-- code panel (server.js) -->
+          <rect x="28" y="78" width="320" height="150" rx="10" fill="#141414" stroke="#444" stroke-width="1.5"/>
+          <text x="44" y="98" fill="#888" font-size="11" font-family="monospace">// server.js</text>
+          <!-- line1 highlight -->
+          <rect x="36" y="106" width="304" height="22" rx="5" fill="#0a1a2e" opacity="0"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.19;0.20;1" dur="16s" repeatCount="indefinite"/></rect>
+          <text x="44" y="121" fill="#4FC3F7" font-size="12" font-family="monospace">io.on('connection', (socket) =&gt; {</text>
+          <!-- line2 highlight -->
+          <rect x="36" y="146" width="304" height="22" rx="5" fill="#2e1a0a" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.37;0.38;0.56;0.57;1" dur="16s" repeatCount="indefinite"/></rect>
+          <text x="60" y="161" fill="#FFB800" font-size="12" font-family="monospace">socket.on('move', (data) =&gt; {</text>
+          <!-- line3 highlight -->
+          <rect x="36" y="186" width="304" height="22" rx="5" fill="#1a2e0a" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.55;0.56;0.80;0.81;1" dur="16s" repeatCount="indefinite"/></rect>
+          <text x="76" y="201" fill="#76B900" font-size="12" font-family="monospace">socket.broadcast.emit('moved',…)</text>
+          <text x="60" y="220" fill="#666" font-size="12" font-family="monospace">  }); });</text>
+
+          <!-- server node -->
+          <rect x="470" y="92" width="180" height="58" rx="12" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
+          <text x="560" y="116" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">サーバ (Socket.IO)</text>
+          <text x="560" y="135" text-anchor="middle" fill="#E0E0E0" font-size="11">受信→他全員へ転送</text>
+          <rect x="464" y="86" width="192" height="70" rx="14" fill="none" stroke="#93D500" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.37;0.38;0.56;0.57;1" dur="16s" repeatCount="indefinite"/></rect>
+
+          <!-- connecting lines -->
+          <line x1="120" y1="332" x2="540" y2="150" stroke="#4FC3F7" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+          <line x1="360" y1="332" x2="555" y2="152" stroke="#76B900" stroke-width="1" stroke-dasharray="3,3" opacity="0.35"/>
+          <line x1="600" y1="332" x2="580" y2="152" stroke="#76B900" stroke-width="1" stroke-dasharray="3,3" opacity="0.35"/>
+
+          <!-- Client A (sender) -->
+          <rect x="50" y="332" width="140" height="74" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="120" y="356" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">クライアント A</text>
+          <text x="120" y="375" text-anchor="middle" fill="#E0E0E0" font-size="11">動いた人（送信者）</text>
+          <text x="120" y="394" text-anchor="middle" fill="#888" font-size="10">自分には来ない</text>
+          <rect x="44" y="326" width="152" height="86" rx="13" fill="none" stroke="#FFB800" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.19;0.20;0.38;0.39;1" dur="16s" repeatCount="indefinite"/></rect>
+
+          <!-- Client B -->
+          <rect x="290" y="332" width="140" height="74" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="360" y="356" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">クライアント B</text>
+          <text x="360" y="378" text-anchor="middle" fill="#E0E0E0" font-size="11">Aのアバター更新</text>
+          <rect x="284" y="326" width="152" height="86" rx="13" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.79;0.80;1" dur="16s" repeatCount="indefinite"/></rect>
+
+          <!-- Client C -->
+          <rect x="530" y="332" width="140" height="74" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
+          <text x="600" y="356" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">クライアント C</text>
+          <text x="600" y="378" text-anchor="middle" fill="#E0E0E0" font-size="11">Aのアバター更新</text>
+          <rect x="524" y="326" width="152" height="86" rx="13" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.79;0.80;1" dur="16s" repeatCount="indefinite"/></rect>
+
+          <!-- packet A -> server (phase 2) -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.19;0.20;0.38;0.39;1" dur="16s" repeatCount="indefinite"/>
+            <circle r="8" fill="#FFB800" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="120;120;560;560" keyTimes="0;0.20;0.38;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="332;332;150;150" keyTimes="0;0.20;0.38;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <text font-size="10" fill="#FFB800" font-weight="700">move</text>
+          </g>
+
+          <!-- packets server -> B and server -> C (phase 4), NOT to A -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.55;0.56;0.80;0.81;1" dur="16s" repeatCount="indefinite"/>
+            <circle r="8" fill="#76B900" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="560;560;360;360" keyTimes="0;0.56;0.80;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="150;150;332;332" keyTimes="0;0.56;0.80;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="8" fill="#76B900" stroke="#fff" stroke-width="1.5">
+              <animate attributeName="cx" values="560;560;600;600" keyTimes="0;0.56;0.80;1" dur="16s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="150;150;332;332" keyTimes="0;0.56;0.80;1" dur="16s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- "Aには送らない" mark during phase 4 -->
+          <g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.55;0.56;0.80;0.81;1" dur="16s" repeatCount="indefinite"/>
+            <line x1="300" y1="240" x2="340" y2="280" stroke="#FF5252" stroke-width="2"/>
+            <text x="250" y="262" fill="#FF5252" font-size="11" font-weight="700">A には送らない</text>
+          </g>
+
+          <!-- legend -->
+          <rect x="60" y="420" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
+          <text x="360" y="431" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 青=送信者A / 黄=move パケット・他クライアント / 緑=broadcast 転送・サーバ</text>
+        </svg>
+      </div>
+      <ol style="padding-left:1.3rem;font-size:0.93rem;line-height:1.9;margin-top:0.6rem">
+        <li><strong>接続</strong>：A・B・Cが入室すると、それぞれに対して <code>io.on('connection')</code> が1回ずつ呼ばれ、各人専用の <code>socket</code> ができる。</li>
+        <li><strong>送信</strong>：Aが動くと、Aのブラウザが <code>socket.emit('move', …)</code> で位置をサーバへ送る。</li>
+        <li><strong>受信</strong>：サーバで「Aの <code>socket</code>」の <code>socket.on('move')</code> が発火し、<code>data</code> を受け取る。</li>
+        <li><strong>転送</strong>：<code>socket.broadcast.emit('moved', …)</code> が、<strong>A以外</strong>のB・Cへ同じデータを配る。</li>
+        <li><strong>反映</strong>：B・Cの <code>socket.on('moved')</code> が発火し、Aのアバターを生成・移動する。</li>
+      </ol>
+    </div>
+
+    <!-- 1.3 アバターの概念 -->
     <div class="concept-box">
-      <h4>1.2 アバターの概念</h4>
+      <h4>1.3 アバターの概念</h4>
       <div class="analogy">
         ビデオ会議ではカメラの映像で相手の存在がわかります。3D空間では映像の代わりに<strong>アバター</strong>（箱や人型の3Dモデル）で「そこに誰かがいる」ことを表現します。
       </div>
-      <p><strong>アバター</strong>とは、3D空間内で各ユーザを表すエンティティです。今回は<strong>色付きの箱（a-box）</strong>をアバターとして使います。</p>
+      <p><strong>アバター</strong>とは、3D空間内で各ユーザを表すエンティティです。今回はまず<strong>色違いのスフィア（a-sphere）</strong>から始め、最終的に<strong>四角柱（胴体）＋スフィア（頭）</strong>の単純なアバターに育てます。</p>
       <ul class="point-list">
-        <li>サーバに接続したユーザ1人につき、<strong>1つのアバター（a-box）</strong>が3D空間に生成される</li>
+        <li>サーバに接続したユーザ1人につき、<strong>1つのアバター</strong>が3D空間に生成される</li>
         <li>自分のアバターは表示しない（自分のカメラ視点で見ているため）</li>
-        <li>他のユーザが移動すると、そのアバターの位置・回転がリアルタイムに更新される</li>
+        <li>他のユーザが移動すると、そのアバターの位置（と Step 3 では向き）がリアルタイムに更新される</li>
         <li>ユーザが切断すると、そのアバターは3D空間から削除される</li>
       </ul>
     </div>
 
-    <!-- 1.3 position/rotation データの送信 -->
+    <!-- 1.4 position/rotation データの送信 -->
     <div class="concept-box">
-      <h4>1.3 位置・回転データの送信</h4>
+      <h4>1.4 位置・回転データの送信</h4>
       <p>A-Frame のカメラ（ユーザの視点）の <strong>position</strong>（位置: x, y, z）と <strong>rotation</strong>（回転: x, y, z）を定期的にサーバに送信します。</p>
       <table>
         <tr><th>データ</th><th>内容</th><th>例</th></tr>
@@ -767,194 +866,68 @@ pre { position: relative; }
       </div>
     </div>
 
-    <!-- 1.4 他ユーザのアバター生成 -->
+    <!-- 1.5 他ユーザのアバター生成 -->
     <div class="concept-box">
-      <h4>1.4 他ユーザのアバター生成と更新</h4>
-      <p>他のユーザから位置データを受信したとき、そのユーザのアバターがまだ存在しなければ<strong>新規生成</strong>し、存在すれば<strong>位置を更新</strong>します。</p>
-      <p style="font-size:0.92rem;color:#aaa;margin-bottom:0.6rem">処理を「<strong>探す</strong>」「<strong>無ければ作る</strong>」「<strong>位置を反映する</strong>」の3つの関数に分解すると、各ステップが何をしているか明確になります。</p>
+      <h4>1.5 他ユーザのアバター生成と更新（まずは色違いのスフィア）</h4>
+      <p><strong>Step 2</strong> ではアバターをシンプルに保つため、まず<strong>色違いのスフィアだけ</strong>を同期します。他のユーザから位置データを受信したとき、そのユーザのスフィアがまだ無ければ<strong>新規生成</strong>し、すでにあれば<strong>位置を更新</strong>します。</p>
+      <p style="font-size:0.92rem;color:#aaa;margin-bottom:0.6rem">処理を「<strong>探す</strong>」「<strong>無ければ作る</strong>」「<strong>位置を反映する</strong>」の3つの関数に分けると、各ステップが何をしているか明確になります。<br>※ JavaScript の変数は古い <code>var</code> ではなく、現在標準の <code>const</code>（再代入しない）／<code>let</code>（再代入する）を使います。</p>
       <pre><span class="code-label">JavaScript（概念コード ── 関数に分割した版）</span>
 <span class="cmt">// ① 既存アバターを ID で探す</span>
 <span class="kw">function</span> <span class="fn">findAvatar</span>(userId) {
-  <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + userId;
+  <span class="kw">const</span> avatarId = <span class="str">'avatar-'</span> + userId;
   <span class="kw">return</span> document.<span class="fn">getElementById</span>(avatarId);
 }
 
-<span class="cmt">// ② アバターが無ければ新規作成して scene に追加</span>
+<span class="cmt">// ② アバターが無ければ新しいスフィアを作って scene に追加</span>
 <span class="kw">function</span> <span class="fn">createAvatar</span>(userId, color) {
-  <span class="kw">var</span> avatarId = <span class="str">'avatar-'</span> + userId;
-  <span class="kw">var</span> avatar = document.<span class="fn">createElement</span>(<span class="str">'a-box'</span>);
-  avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, avatarId);
+  <span class="kw">const</span> avatar = document.<span class="fn">createElement</span>(<span class="str">'a-sphere'</span>);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, <span class="str">'avatar-'</span> + userId);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'radius'</span>, <span class="str">'0.5'</span>);
   avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, color);
   scene.<span class="fn">appendChild</span>(avatar);
   <span class="kw">return</span> avatar;
 }
 
-<span class="cmt">// ③ 位置と回転を反映する</span>
-<span class="kw">function</span> <span class="fn">applyTransform</span>(avatar, position, rotation) {
+<span class="cmt">// ③ 位置を反映する</span>
+<span class="kw">function</span> <span class="fn">applyPosition</span>(avatar, position) {
   avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, position);
-  avatar.<span class="fn">setAttribute</span>(<span class="str">'rotation'</span>, rotation);
 }
 
-<span class="cmt">// メイン処理: 「探す → 無ければ作る → 反映する」</span>
-socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class="kw">function</span>(data) {
-  <span class="kw">var</span> userId = data.id;                       <span class="cmt">// 中間変数で読みやすく</span>
-  <span class="kw">var</span> position = data.position;
-  <span class="kw">var</span> rotation = data.rotation;
-  <span class="kw">var</span> color = data.color;
+<span class="cmt">// メイン処理: 「探す → 無ければ作る → 位置を反映する」</span>
+socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> userId = data.id;          <span class="cmt">// 中間変数で読みやすく</span>
+  <span class="kw">const</span> color = data.color;
+  <span class="kw">const</span> position = data.position;
 
-  <span class="kw">var</span> avatar = <span class="fn">findAvatar</span>(userId);
-
-  <span class="kw">var</span> isFirstTime = !avatar;
-  <span class="kw">if</span> (isFirstTime) {
+  <span class="kw">let</span> avatar = <span class="fn">findAvatar</span>(userId);
+  <span class="kw">if</span> (!avatar) {
     avatar = <span class="fn">createAvatar</span>(userId, color);
   }
-
-  <span class="fn">applyTransform</span>(avatar, position, rotation);
+  <span class="fn">applyPosition</span>(avatar, position);
 });</pre>
-
-      <!-- Diagram 3: 補間（Linear vs Slerp） animation -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">補間（Interpolation）── Linear と Slerp の違い</text>
-          <!-- Top: Linear interpolation lane -->
-          <text x="60" y="70" fill="#4FC3F7" font-weight="700" font-size="13">Linear 線形補間（位置）</text>
-          <!-- Track for linear -->
-          <line x1="100" y1="110" x2="620" y2="110" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
-          <!-- Endpoints -->
-          <circle cx="100" cy="110" r="9" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
-          <text x="100" y="135" text-anchor="middle" fill="#76B900" font-size="11">受信 t=0</text>
-          <circle cx="620" cy="110" r="9" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
-          <text x="620" y="135" text-anchor="middle" fill="#76B900" font-size="11">受信 t=100ms</text>
-          <!-- Moving box on linear -->
-          <rect width="22" height="22" rx="4" fill="#4FC3F7" stroke="#fff" stroke-width="1.5">
-            <animate attributeName="x" values="89;609;89" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
-            <animate attributeName="y" values="99;99;99" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
-          </rect>
-          <!-- Step badge top -->
-          <rect x="490" y="55" width="190" height="22" rx="11" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-          <text x="585" y="71" text-anchor="middle" fill="#4FC3F7" font-size="11" font-weight="700">① 受信間を直線で埋める</text>
-          <!-- Middle: Slerp lane -->
-          <text x="60" y="180" fill="#FFB800" font-weight="700" font-size="13">Slerp 球面線形補間（回転）</text>
-          <!-- Arc for slerp -->
-          <path d="M 100 240 A 260 130 0 0 1 620 240" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="4,4"/>
-          <circle cx="100" cy="240" r="9" fill="#1a1404" stroke="#FFB800" stroke-width="2"/>
-          <text x="100" y="265" text-anchor="middle" fill="#FFB800" font-size="11">回転 0°</text>
-          <circle cx="620" cy="240" r="9" fill="#1a1404" stroke="#FFB800" stroke-width="2"/>
-          <text x="620" y="265" text-anchor="middle" fill="#FFB800" font-size="11">回転 90°</text>
-          <!-- Moving rotating object along arc -->
-          <g>
-            <rect x="-11" y="-11" width="22" height="22" rx="4" fill="#FFB800" stroke="#fff" stroke-width="1.5">
-              <animateMotion path="M 100 240 A 260 130 0 0 1 620 240" dur="14s" repeatCount="indefinite" rotate="auto"/>
-            </rect>
-          </g>
-          <!-- Step badge middle -->
-          <rect x="490" y="170" width="190" height="22" rx="11" fill="#1a1404" stroke="#FFB800" stroke-width="1"/>
-          <text x="585" y="186" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">② 球面に沿って滑らかに回転</text>
-          <!-- Step badges showing keyframes -->
-          <g>
-            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ③ 100ms ごとの受信を 60fps（16ms）の描画に「水増し」する処理
-            </text>
-            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ④ Linear: 位置 = start + (end - start) × t
-            </text>
-            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ⑤ Slerp: 回転は「四元数 (Quaternion)」で球面補間
-            </text>
-            <text x="360" y="295" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ⑥ どちらも見た目を滑らかにする
-            </text>
-          </g>
-          <!-- Bottom legend -->
-          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
-          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 青=Linear（位置）/ 黄=Slerp（回転）/ 緑=受信点（飛び飛びデータ）</text>
-        </svg>
-      </div>
+      <p style="font-size:0.92rem;color:#aaa;margin-top:0.6rem"><strong>Step 3</strong> では、この <code>createAvatar</code> を「四角柱＋スフィア」を作る関数に差し替え、さらに <code>rotation</code>（向き）も反映するように拡張します。仕組みは同じ「探す → 無ければ作る → 反映する」のままです。</p>
 
 <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
   <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">&#x1F590; やってみよう（1分）</p>
-  <p style="color:#ccc;font-size:0.9rem">アバターの色 (<code>data.color</code>) を <code>"#FF5252"</code> から別の色に変えて、3D空間内のアバターの見た目が変わることを確認してみよう。</p>
-  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した色とアバターの見え方を1文で書く</div></div>
+  <p style="color:#ccc;font-size:0.9rem">スフィアの半径 (<code>radius</code>) を <code>'0.5'</code> から <code>'1'</code> に変えると、他ユーザのスフィアの大きさがどう変わるか想像してみよう。</p>
+  <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 変更した値と、アバターの見え方の予想を1文で書く</div></div>
 </div>
     </div>
 
-    <!-- 1.5 ユーザID管理 -->
+    <!-- 1.6 ユーザID管理 -->
     <div class="concept-box">
-      <h4>1.5 ユーザID管理 ── socket.id</h4>
+      <h4>1.6 ユーザID管理 ── socket.id</h4>
       <p>Socket.IO では、接続するたびに各クライアントに<strong>一意の ID（socket.id）</strong>が自動で割り当てられます。</p>
       <ul class="point-list">
         <li><code>socket.id</code> は <code>"xK7-2abc..."</code> のようなランダム文字列</li>
         <li>この ID を使って「誰の位置データか」「誰のアバターか」を識別する</li>
         <li>サーバ側でユーザ一覧を管理し、新規接続・切断を追跡する</li>
       </ul>
-
-      <!-- Diagram 4: 遅延補正（Prediction / Dead Reckoning） animation -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">遅延補正 ── プレディクション / デッドレコニング</text>
-          <!-- Timeline axis -->
-          <line x1="80" y1="200" x2="660" y2="200" stroke="#333" stroke-width="2"/>
-          <text x="80" y="225" fill="#888" font-size="11">t=0</text>
-          <text x="660" y="225" fill="#888" font-size="11" text-anchor="end">t=400ms</text>
-          <!-- Received packets (tick marks) -->
-          <line x1="80"  y1="195" x2="80"  y2="205" stroke="#76B900" stroke-width="3"/>
-          <line x1="225" y1="195" x2="225" y2="205" stroke="#76B900" stroke-width="3"/>
-          <line x1="370" y1="195" x2="370" y2="205" stroke="#FF5252" stroke-width="3"/>
-          <line x1="515" y1="195" x2="515" y2="205" stroke="#FF5252" stroke-width="3"/>
-          <text x="80"  y="245" text-anchor="middle" fill="#76B900" font-size="10">受信</text>
-          <text x="225" y="245" text-anchor="middle" fill="#76B900" font-size="10">受信</text>
-          <text x="370" y="245" text-anchor="middle" fill="#FF5252" font-size="10">遅延</text>
-          <text x="515" y="245" text-anchor="middle" fill="#FF5252" font-size="10">遅延</text>
-          <!-- Actual real avatar position (dashed) -->
-          <text x="60" y="100" fill="#76B900" font-size="11" font-weight="700">実際の位置</text>
-          <line x1="80" y1="120" x2="660" y2="120" stroke="#76B900" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
-          <circle r="9" fill="#76B900" stroke="#fff" stroke-width="1.5">
-            <animate attributeName="cx" values="80;660;80" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
-            <animate attributeName="cy" values="120;120;120" keyTimes="0;0.5;1" dur="14s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Naive: stops at last received packet -->
-          <text x="60" y="160" fill="#FF5252" font-size="11" font-weight="700">何もしない</text>
-          <circle cy="160" r="8" fill="#FF5252" stroke="#fff" stroke-width="1.5">
-            <animate attributeName="cx" values="80;225;225;370;370;515;515;80" keyTimes="0;0.18;0.40;0.42;0.65;0.67;0.95;1" dur="14s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Predicted: continues at last velocity -->
-          <text x="60" y="290" fill="#4FC3F7" font-size="11" font-weight="700">プレディクション</text>
-          <circle cy="310" r="8" fill="#4FC3F7" stroke="#fff" stroke-width="1.5">
-            <animate attributeName="cx" values="80;225;370;515;660;515;370;225;80" keyTimes="0;0.18;0.40;0.60;0.50;0.70;0.85;0.95;1" dur="14s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Step badges -->
-          <g>
-            <text x="360" y="70" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ① パケットが定期到着 (100msごと) → アバターは緑のとおり動く
-            </text>
-            <text x="360" y="70" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ② パケット遅延発生 → 「何もしない」と赤いアバターが止まる
-            </text>
-            <text x="360" y="70" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ③ プレディクション: 直前の速度から「たぶんこの辺」と推測
-            </text>
-            <text x="360" y="70" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ④ 新パケット到着で正解と少しずれる → 滑らかに補正
-            </text>
-          </g>
-          <!-- Bottom legend -->
-          <rect x="60" y="340" width="600" height="14" rx="7" fill="#111" stroke="#333" stroke-width="0.8"/>
-          <text x="360" y="351" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">凡例: 緑=実際の位置 / 赤=何もしないと停止 / 青=プレディクションで継続</text>
-        </svg>
-      </div>
     </div>
 
-    <!-- 1.6 ユーザ離脱時のクリーンアップ -->
+    <!-- 1.7 ユーザ離脱時のクリーンアップ -->
     <div class="concept-box">
-      <h4>1.6 ユーザ離脱時のクリーンアップ</h4>
+      <h4>1.7 ユーザ離脱時のクリーンアップ</h4>
       <div class="analogy">
         ビデオ会議で誰かが退室すると、その人の映像枠が消えます。3D空間でも同じように、ユーザが切断したら<strong>そのアバターを削除</strong>しないと、動かない幽霊アバターが残り続けます。
       </div>
@@ -1079,7 +1052,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
     <div style="background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1.5rem 0">
       <p style="color:#76B900;font-weight:700;font-size:0.9rem;margin-bottom:0.6rem">&#x1F4D6; キーワード</p>
       <table style="font-size:0.88rem">
-        <tr><td style="width:160px;color:#FFB800;font-weight:600">アバター</td><td style="color:#ccc">3D空間内で各ユーザを表すエンティティ。ここでは色付きの箱（a-box）を使用。他ユーザの存在と位置を視覚的に示す。</td></tr>
+        <tr><td style="width:160px;color:#FFB800;font-weight:600">アバター</td><td style="color:#ccc">3D空間内で各ユーザを表すエンティティ。まず色違いのスフィア、最終的に四角柱（胴体）＋スフィア（頭）を使用。他ユーザの存在と位置・向きを視覚的に示す。</td></tr>
         <tr><td style="color:#FFB800;font-weight:600">setInterval</td><td style="color:#ccc">一定間隔でコールバック関数を実行するJavaScript関数。ここでは100msごとにカメラ位置をサーバに送信する用途で使う。</td></tr>
         <tr><td style="color:#FFB800;font-weight:600">position / rotation</td><td style="color:#ccc">3D空間内のオブジェクトの位置(x,y,z)と回転角度(x,y,z)。カメラのこれらの値を送受信してアバターを同期する。</td></tr>
         <tr><td style="color:#FFB800;font-weight:600">クリーンアップ</td><td style="color:#ccc">ユーザ切断時にアバターをDOMから削除する処理。これを怠ると動かない「幽霊アバター」が残り続ける。</td></tr>
@@ -1097,7 +1070,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
       <h2>例題</h2>
     </div>
 
-    <p style="margin-bottom:1rem">この回で作る<strong>マルチユーザ3D空間</strong>（標準課題の解答例）を、2つのブラウザで同時に動かした動画です。各画面は<strong>自分の視点</strong>で、相手の動きは<strong>色付きアバター</strong>として表示され、移動が<strong>リアルタイムに同期</strong>されます。</p>
+    <p style="margin-bottom:1rem">このゴール（<strong>四角柱＋スフィアのアバター同期</strong>）を、2つのブラウザで同時に動かした動画です。各画面は<strong>自分の視点</strong>で、相手の動きは<strong>色付きアバター</strong>として表示され、移動が<strong>リアルタイムに同期</strong>されます。</p>
     <figure class="exec-shot">
       <div class="exec-mock-bar">
         <span class="dot"></span><span class="dot y"></span><span class="dot g"></span>
@@ -1107,44 +1080,18 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, <span class=
              autoplay loop muted playsinline controls
              aria-label="2つのブラウザを並べたマルチユーザ3D空間の実行動画。緑の地面と水色の空、赤い箱・青い球・橙の円柱の目印がある共有空間で、左画面には相手プレイヤーの青いアバター、右画面には相手の緑のアバターが表示され、互いの移動がリアルタイムに同期して動いている。"></video>
       <figcaption class="exec-caption">
-        <strong>実機での実行動画</strong>：カメラ位置を <code>socket.emit('move', ...)</code> で送信し、<code>socket.broadcast.emit('user-moved', ...)</code> で他クライアントのアバターを更新する。移動が両画面で同期している。<br>
-        <span style="color:#888;font-size:0.85em">※ solutions/week10 のサーバを起動し、2つのブラウザ画面を並べて録画したものです（自動再生・ループ）。</span>
+        <strong>完成イメージ（実機動画）</strong>：カメラの位置を <code>socket.emit('move', ...)</code> で送り、<code>socket.broadcast.emit('moved', ...)</code> で他クライアントのアバターを更新する。移動が両画面で同期している。<br>
+        <span style="color:#888;font-size:0.85em">※ 自動再生・ループ。これから <strong>Step 1 → 2 → 3</strong> の順に、ここまで作ります。</span>
       </figcaption>
     </figure>
 
-    <!-- Example -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>アバター同期のデータフロー</h3>
-      </div>
-      <p>ユーザAが3D空間内で移動したとき、ユーザBの画面でアバターが動くまでの流れを追います。</p>
-      <table>
-        <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容</th></tr>
-        <tr><td>1</td><td>ユーザA（ブラウザ）</td><td>WASDキーで移動 → カメラの position/rotation が変わる</td></tr>
-        <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で100msごとにカメラ位置を取得し、<code>socket.emit('move', data)</code> で送信</td></tr>
-        <tr><td>3</td><td>サーバ（Node.js）</td><td><code>socket.on('move')</code> で受信 → <code>socket.broadcast.emit('moved', data)</code> で他全員に転送</td></tr>
-        <tr><td>4</td><td>ユーザB（JavaScript）</td><td><code>socket.on('moved')</code> で受信 → ユーザAのアバターを生成/位置更新</td></tr>
-        <tr><td>5</td><td>ユーザB（A-Frame）</td><td>ユーザAのアバター（a-box）が3D空間内で移動して見える</td></tr>
-      </table>
-    </div>
+    <p style="margin:1rem 0">以下に <strong>Step 1〜3 の完全なコード</strong>を示します。まずは読んで流れをつかみ、次の「コード体験」で実際に作って動かします。</p>
 
-  </div>
-</section>
-
-<!-- ============ 3. CODE EXPERIENCE ============ -->
-<section id="sec-code-exp">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
-      <h2>コード体験</h2>
-    </div>
-    <p style="margin-bottom:1rem">以下のコードをコピーしてファイルを作成し、Node.js で実行します。</p>
-
+    <!-- ============ 準備 ============ -->
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
         <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
-        <h3>作業フォルダの準備</h3>
+        <h3>作業フォルダの準備（最初に1回だけ）</h3>
       </div>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li><code>S:\Web_Prog</code> の中に <strong><code>Web10</code></strong> フォルダを作成する</li>
@@ -1157,51 +1104,35 @@ npm install express@4 socket.io</pre>
       <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく、古い Node.js でも動く <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてインストールしてください。</p>
     </div>
 
-    <!-- Code Exp 1 -->
-    <div class="card code-exp">
+    <!-- ============ STEP 1 ============ -->
+    <div class="card example">
       <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 1</span>
-        <h3>A-Frameページを配信し、位置データをログに表示する</h3>
+        <span class="tag" style="background:#0a1a2e;color:#4FC3F7">Step 1</span>
+        <h3>シングルプレイ ── スフィアを1つ置く</h3>
       </div>
-      <p>まずはシンプルな構成で、クライアントのカメラ位置をサーバのコンソールに表示します。</p>
+      <p>まずは通信なしの一番シンプルな構成です。<strong>Express で <code>public</code> フォルダを配信するサーバ</strong>を立て、<strong>A-Frame の3D空間にスフィアを1つ</strong>置きます。これだけで、1人で3D空間を歩き回れます。</p>
 
-      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong></p>
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code>（フォルダ直下に作成）</strong></p>
       <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">var</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">var</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">var</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app = <span class="fn">express</span>();
 
-<span class="kw">var</span> app = <span class="fn">express</span>();
-<span class="kw">var</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">var</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
+<span class="cmt">// public フォルダの中身をそのままブラウザに配信する</span>
 app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
 
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
-  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
-
-  socket.<span class="fn">on</span>(<span class="str">'move'</span>, <span class="kw">function</span>(data) {
-    console.<span class="fn">log</span>(socket.id, <span class="str">'位置:'</span>, data.position);
-  });
-
-  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
-    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
-  });
-});
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
+<span class="cmt">// 3000番ポートでサーバを起動する</span>
+app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
   console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
 });</pre>
 
-      <p style="margin-top:1rem"><strong>ファイル2:</strong> <code>public</code> フォルダを作成し、その中に <code>index.html</code> を作成</p>
+      <p style="margin-top:1rem"><strong>ファイル2:</strong> <code>public</code> フォルダを作り、その中に <code>index.html</code> を作成</p>
       <pre><span class="code-label">HTML ── public/index.html</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
   <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>Avatar Sync - Step 1<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;title&gt;</span>アバター同期 Step 1 シングルプレイ<span class="kw">&lt;/title&gt;</span>
   <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
   <span class="kw">&lt;a-scene&gt;</span>
@@ -1209,105 +1140,269 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
     <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
             width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
 
-    <span class="cmt">&lt;!-- 目印の箱 --&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"0 0.5 -5"</span> color=<span class="str">"#4CC3D9"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"3 0.5 -3"</span> color=<span class="str">"#FFC65D"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"-3 0.5 -3"</span> color=<span class="str">"#EF2D5E"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="cmt">&lt;!-- スフィアを1つ置く --&gt;</span>
+    <span class="kw">&lt;a-sphere</span> position=<span class="str">"0 1.25 -3"</span> radius=<span class="str">"0.5"</span> color=<span class="str">"#4CC3D9"</span><span class="kw">&gt;&lt;/a-sphere&gt;</span>
 
     <span class="cmt">&lt;!-- 空 --&gt;</span>
     <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
   <span class="kw">&lt;/a-scene&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <ul class="point-list" style="margin-top:0.6rem">
+        <li><code>express.static('public')</code> … <code>public</code> フォルダの中の <code>index.html</code> などを自動で配信する</li>
+        <li><code>&lt;a-sphere&gt;</code> … 球を1つ置くタグ。<code>position</code>（位置）、<code>radius</code>（半径）、<code>color</code>（色）を指定</li>
+        <li>ブラウザでは <strong>WASDキーで移動</strong>、<strong>マウスドラッグで視点回転</strong>ができる（A-Frame の標準機能）</li>
+      </ul>
+      <figure class="exec-shot" style="margin-top:1rem">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — Step 1 シングルプレイ</span></div>
+        <img src="images/session10-step1.png" alt="Step 1 の実行画面。水色の空と緑の地面の3D空間に、水色のスフィアが1つ表示されている。">
+        <figcaption class="exec-caption"><strong>Step 1 の実行結果</strong>：1人で3D空間に入り、スフィアが1つ見える（まだ通信なし）。</figcaption>
+      </figure>
+      <div style="background:#0a1a22;border:1px solid #4FC3F7;border-radius:8px;padding:0.7rem 1rem;margin-top:0.8rem;font-size:0.9rem;color:#cde">
+        <strong>確認:</strong> <code>node server.js</code> → ブラウザで <code>http://localhost:3000</code> を開き、水色のスフィアが見えればOK。まだ通信はしていません。
+      </div>
+    </div>
+
+    <!-- ============ STEP 2 ============ -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag" style="background:#2e1a0a;color:#FFB800">Step 2</span>
+        <h3>マルチプレイ ── 色違いのスフィアを同期する</h3>
+      </div>
+      <p>ここで <strong>Socket.IO</strong> を足します。各ユーザに色を割り当て、<strong>自分のカメラ位置を100msごとに送信</strong>。受け取った他ユーザの位置に<strong>色違いのスフィア</strong>を出し、動かし、抜けたら消します。</p>
+
+      <p style="margin-top:1rem"><strong><code>server.js</code> を次のように書き換える（全文）</strong></p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
+<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
+<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
+
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// 接続したユーザに割り当てる色の候補</span>
+<span class="kw">const</span> colors = [<span class="str">'#EF2D5E'</span>, <span class="str">'#4CC3D9'</span>, <span class="str">'#FFC65D'</span>, <span class="str">'#7BC8A4'</span>, <span class="str">'#A24CD9'</span>];
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
+  <span class="cmt">// このユーザの色を1つ決める</span>
+  <span class="kw">const</span> color = colors[Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>() * colors.length)];
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id, <span class="str">'色:'</span>, color);
+
+  <span class="cmt">// 移動データを受信 → 送信者以外の全員へ転送</span>
+  socket.<span class="fn">on</span>(<span class="str">'move'</span>, (data) <span class="op">=&gt;</span> {
+    socket.broadcast.<span class="fn">emit</span>(<span class="str">'moved'</span>, {
+      id: socket.id,
+      color: color,
+      position: data.position
+    });
+  });
+
+  <span class="cmt">// 切断 → そのユーザのアバターを全員から消すよう通知</span>
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () <span class="op">=&gt;</span> {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+    socket.broadcast.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, { id: socket.id });
+  });
+});
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});</pre>
+
+      <p style="margin-top:1rem"><strong><code>public/index.html</code> を次のように書き換える（全文）</strong></p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>アバター同期 Step 2 スフィア同期<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#7BC8A4"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#87CEEB"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
 
   <span class="kw">&lt;script&gt;</span>
-    <span class="kw">var</span> socket = <span class="fn">io</span>();
-    <span class="kw">var</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+    <span class="kw">const</span> scene = document.<span class="fn">querySelector</span>(<span class="str">'a-scene'</span>);
 
-    <span class="cmt">// 100msごとにカメラ位置を送信</span>
-    <span class="fn">setInterval</span>(<span class="kw">function</span>() {
-      <span class="kw">if</span> (!camera) {
-        <span class="kw">return</span>;
-      }
-      <span class="kw">var</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
-      <span class="kw">var</span> rotation = camera.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>);
-      <span class="kw">var</span> moveData = {
-        position: { x: position.x, y: position.y, z: position.z },
-        rotation: { x: rotation.x, y: rotation.y, z: rotation.z }
-      };
-      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, moveData);
+    <span class="cmt">// 100ミリ秒ごとに自分のカメラ位置を送る</span>
+    <span class="fn">setInterval</span>(() <span class="op">=&gt;</span> {
+      <span class="kw">const</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>);
+      <span class="kw">if</span> (!camera) <span class="kw">return</span>;
+      <span class="kw">const</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
+      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+        position: { x: position.x, y: position.y, z: position.z }
+      });
     }, <span class="num">100</span>);
+
+    <span class="cmt">// 他ユーザの移動を受信 → スフィアを作る or 動かす</span>
+    socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) <span class="op">=&gt;</span> {
+      <span class="kw">const</span> id = <span class="str">'avatar-'</span> + data.id;
+      <span class="kw">let</span> avatar = document.<span class="fn">getElementById</span>(id);
+      <span class="kw">if</span> (!avatar) {
+        avatar = document.<span class="fn">createElement</span>(<span class="str">'a-sphere'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, id);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'radius'</span>, <span class="str">'0.5'</span>);
+        avatar.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
+        scene.<span class="fn">appendChild</span>(avatar);
+      }
+      avatar.<span class="fn">setAttribute</span>(<span class="str">'position'</span>, data.position);
+    });
+
+    <span class="cmt">// 他ユーザが切断 → そのスフィアを消す</span>
+    socket.<span class="fn">on</span>(<span class="str">'userLeft'</span>, (data) <span class="op">=&gt;</span> {
+      <span class="kw">const</span> avatar = document.<span class="fn">getElementById</span>(<span class="str">'avatar-'</span> + data.id);
+      <span class="kw">if</span> (avatar) avatar.parentNode.<span class="fn">removeChild</span>(avatar);
+    });
   <span class="kw">&lt;/script&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
 
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>VS Code のターミナルで <code>node server.js</code> を実行</li>
-        <li>ブラウザで <code>http://localhost:3000</code> を開く</li>
-        <li>WASDキーで移動してみる</li>
-        <li>ターミナルに位置データが流れるのを確認する</li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. ターミナルに表示された位置データの形式を書き写す（1行分）<br>
-        Q2. WASDキーで移動すると、x, y, z のどの値が変化するか？</div></div>
+      <p style="margin-top:1rem"><strong>データの流れ（まとめ）</strong></p>
+      <table>
+        <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容</th></tr>
+        <tr><td>1</td><td>ユーザA（ブラウザ）</td><td>WASDキーで移動 → カメラの position が変わる</td></tr>
+        <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で100msごとに位置を取得し、<code>socket.emit('move', ...)</code> で送信</td></tr>
+        <tr><td>3</td><td>サーバ（Node.js）</td><td><code>socket.on('move')</code> で受信 → <code>socket.broadcast.emit('moved', ...)</code> で他全員に転送</td></tr>
+        <tr><td>4</td><td>ユーザB（JavaScript）</td><td><code>socket.on('moved')</code> で受信 → ユーザAのスフィアを生成/位置更新</td></tr>
+        <tr><td>5</td><td>ユーザB（A-Frame）</td><td>ユーザAの色違いスフィアが3D空間内で移動して見える</td></tr>
+      </table>
+      <figure class="exec-shot" style="margin-top:1rem">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — Step 2 マルチプレイ（左:プレイヤーA / 右:プレイヤーB）</span></div>
+        <img src="images/session10-step2.gif" alt="Step 2 の実行GIF。左がプレイヤーAの画面、右がプレイヤーBの画面。互いの色違いのスフィア（紫と赤）が、相手の動きに合わせてリアルタイムに左右へ同期して動いている。">
+        <figcaption class="exec-caption"><strong>Step 2 の実行結果（GIF）</strong>：2画面で色違いのスフィアが同期して動く。左の画面には相手Bのスフィア、右の画面には相手Aのスフィアが映り、動きが伝わっている。</figcaption>
+      </figure>
+      <div style="background:#1a1404;border:1px solid #FFB800;border-radius:8px;padding:0.7rem 1rem;margin-top:0.8rem;font-size:0.9rem;color:#eed">
+        <strong>確認:</strong> サーバを再起動し、ブラウザを<strong>2つ</strong>開いて両方で <code>http://localhost:3000</code> にアクセス。片方で動くと、もう片方に色違いのスフィアが現れて追従すればOK。
+      </div>
+    </div>
+
+    <!-- ============ STEP 3 ============ -->
+    <div class="card example" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">Step 3（ゴール＝標準課題）</span>
+        <h3>四角柱＋スフィアのアバターを同期する ── ここは自分で組み立てる</h3>
+      </div>
+      <p>Step 3 は<strong>コピペせず、Step 2 を土台に自分で書き換えて</strong>完成させます。スフィアを<strong>四角柱（胴体）＋スフィア（頭）</strong>のアバターに置き換え、<strong>向き（rotation）も同期</strong>させましょう。下の設計図・やること・ヒントを手がかりに考えてください。<span style="color:#888">（完成コードは「解答例」セクションに、公開日以降に表示されます）</span></p>
+
+      <figure class="exec-shot" style="margin-top:1rem">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — Step 3 ゴール（左:プレイヤーA / 右:プレイヤーB）</span></div>
+        <img src="images/session10-step3.gif" alt="Step 3 の実行GIF。左がプレイヤーAの画面、右がプレイヤーBの画面。四角柱（胴体）とスフィア（頭）で作った色違いのアバターが地面に立ち、相手の移動と左右の向きがリアルタイムに同期している。">
+        <figcaption class="exec-caption"><strong>Step 3 の完成イメージ（GIF）</strong>：四角柱＋スフィアのアバターが地面に立ち、移動と向き（左右）が2画面で同期する。これを自分で組み立てるのが目標。</figcaption>
+      </figure>
+
+      <!-- 設計図 -->
+      <p style="margin-top:1rem"><strong>アバターの設計図</strong>（<code>a-entity</code> の中に、胴体と頭を相対位置で組み立てる）</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 460 260" width="460" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:12px;border:1px solid #333">
+          <!-- ground -->
+          <line x1="40" y1="220" x2="420" y2="220" stroke="#7BC8A4" stroke-width="2"/>
+          <text x="46" y="238" fill="#7BC8A4" font-size="11">地面 (y = 0)</text>
+          <!-- body box -->
+          <rect x="150" y="120" width="60" height="100" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
+          <text x="180" y="175" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">胴体</text>
+          <text x="180" y="190" text-anchor="middle" fill="#93D500" font-size="10">a-box</text>
+          <!-- head sphere -->
+          <circle cx="180" cy="92" r="26" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="180" y="96" text-anchor="middle" fill="#4FC3F7" font-size="10" font-weight="700">頭(球)</text>
+          <!-- dimension labels -->
+          <text x="225" y="178" fill="#aaa" font-size="10">大きさはデフォルト</text>
+          <text x="225" y="192" fill="#888" font-size="10">position: 0 0.5 0（親基準）</text>
+          <text x="225" y="92" fill="#aaa" font-size="10">radius: 0.4</text>
+          <text x="225" y="106" fill="#888" font-size="10">position: 0 1.3 0（親基準）</text>
+          <!-- entity bracket -->
+          <text x="60" y="92" fill="#FFB800" font-size="11" font-weight="700">a-entity</text>
+          <text x="60" y="107" fill="#888" font-size="10">＝親。これを</text>
+          <text x="60" y="120" fill="#888" font-size="10">position/rotation</text>
+          <text x="60" y="133" fill="#888" font-size="10">で動かす</text>
+          <path d="M 130 70 L 130 220" stroke="#FFB800" stroke-width="1.5" stroke-dasharray="4,3"/>
+        </svg>
+      </div>
+
+      <!-- やること -->
+      <p style="margin-top:0.6rem"><strong>やること（Step 2 からの差分）</strong></p>
+      <table>
+        <tr><th style="width:32%">ファイル</th><th>変更内容</th></tr>
+        <tr><td><code>server.js</code></td><td><code>'moved'</code> で転送するデータに <code>rotation: data.rotation</code> を1行足す（向きも配るため）</td></tr>
+        <tr><td><code>public/index.html</code> ①</td><td>送信する <code>setInterval</code> で、<code>position</code> に加えて <code>rotation</code> も <code>emit</code> する</td></tr>
+        <tr><td><code>public/index.html</code> ②</td><td>スフィア1個を作っていた部分を、<strong>箱＋スフィアを <code>innerHTML</code> で作る <code>createAvatar(id, color)</code> 関数</strong>に置き換える（大きさはデフォルトでOK）</td></tr>
+        <tr><td><code>public/index.html</code> ③</td><td>受信処理で、位置は <strong>y を 0</strong> にして反映し、向きは <strong><code>rotation.y</code> だけ</strong>反映する</td></tr>
+      </table>
+
+      <!-- スケルトン -->
+      <p style="margin-top:1rem"><strong>穴あきスケルトン</strong>（<code>// TODO</code> を自分で埋める。丸写しではなく、Step 2 と設計図から考える）</p>
+      <pre><span class="code-label">JavaScript ── public/index.html の script（穴あき）</span>
+<span class="cmt">// 箱（胴体）＋スフィア（頭）のアバターを作る（大きさはデフォルトでOK）</span>
+<span class="kw">function</span> <span class="fn">createAvatar</span>(id, color) {
+  <span class="kw">const</span> avatar = document.<span class="fn">createElement</span>(<span class="str">'a-entity'</span>);
+  avatar.<span class="fn">setAttribute</span>(<span class="str">'id'</span>, id);
+  <span class="cmt">// TODO: avatar.innerHTML に &lt;a-box&gt;（胴体, position="0 0.5 0"）と</span>
+  <span class="cmt">//       &lt;a-sphere&gt;（頭, radius="0.4" position="0 1.3 0"）を入れる。色は両方 color。</span>
+  <span class="kw">return</span> avatar;
+}
+
+socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> id = <span class="str">'avatar-'</span> + data.id;
+  <span class="kw">let</span> avatar = document.<span class="fn">getElementById</span>(id);
+  <span class="kw">if</span> (!avatar) {
+    <span class="cmt">// TODO: createAvatar(id, data.color) で作って scene に appendChild</span>
+  }
+  <span class="cmt">// TODO: position を { x: …, y: 0, z: … } で反映（y は 0 にする）</span>
+  <span class="cmt">// TODO: rotation を { x: 0, y: data.rotation.y, z: 0 } で反映</span>
+});</pre>
+
+      <!-- ヒント -->
+      <div style="background:#1a1404;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin-top:0.8rem;font-size:0.9rem">
+        <p style="color:#FFB800;font-weight:700;margin-bottom:0.4rem">考えるヒント</p>
+        <ul class="point-list" style="margin:0">
+          <li><code>innerHTML</code> にタグを文字列で入れるだけなので、Step 2 の <code>createElement</code> より短く書ける。色は <code>${'$'}{color}</code> のように差し込む。</li>
+          <li>子要素の <code>position</code> は<strong>親からの相対位置</strong>。だから胴体 <code>0 0.5 0</code>・頭 <code>0 1.3 0</code> で「胴体の上に頭」になる。<strong>大きさはほぼデフォルトでよい</strong>（頭だけ <code>radius="0.4"</code> で少し小さくするとバランスがよい）。</li>
+          <li>なぜ <code>y</code> を 0 に？ なぜ <code>rotation.y</code> だけ？ → 1.5・1.7 と上の設計図を読み返そう。</li>
+        </ul>
+      </div>
+      <div style="background:#0a1a0a;border:1px solid #76B900;border-radius:8px;padding:0.7rem 1rem;margin-top:0.8rem;font-size:0.9rem;color:#cfe">
+        <strong>ゴール。</strong> 2画面で動かし、相手が四角柱＋スフィアのアバターとして表示され、移動と向きが同期すれば完成です。<strong>この Step 3 を自分で組み立てることが標準課題</strong>です。
+      </div>
     </div>
 
   </div>
 </section>
 
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
+<!-- ============ 3. CODE EXPERIENCE ============ -->
+<section id="sec-code-exp">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
+      <div class="section-num" style="background:#93D500">3</div>
+      <h2>コード体験</h2>
     </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
+    <p style="margin-bottom:1rem">例題の <strong>Step 1 → 2 → 3</strong> を、自分の手で順番に作って動かします。各 Step のコードは上の「例題」からコピーできます。</p>
 
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
+    <!-- Code Exp -->
+    <div class="card code-exp">
       <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
+        <span class="tag tag-code-exp">コード体験</span>
+        <h3>3つの Step を実際に作って動かす</h3>
       </div>
-      <p>今回のコード体験で動かしたアバター同期のコードを元に、<strong>「ここを変えたらどうなる？」「この仕組みはなぜ必要？」という質問を1つ</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:40%">変更・質問内容</th><th>質問例</th></tr>
-          <tr><td>setInterval の間隔を <code>1000</code> に変える</td><td>「アバターの動きはどう変わる？ なぜ？」</td></tr>
-          <tr><td><code>broadcast.emit</code> を <code>io.emit</code> に変える</td><td>「自分自身にも送信される。何が起こる？」</td></tr>
-          <tr><td><code>disconnect</code> イベントのハンドラを削除する</td><td>「ユーザが離脱したらどうなる？」</td></tr>
-          <tr><td><code>socket.id</code> の代わりに固定文字列を使う</td><td>「複数ユーザのアバターは区別できる？」</td></tr>
-          <tr><td>アバターの <code>height</code> を <code>1.6</code> にする</td><td>「見え方はどう変わる？ 人っぽくなる？」</td></tr>
-          <tr><td>position だけ送って rotation を送らない</td><td>「アバターは何が表現できなくなる？」</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
+      <p>例題のコードをそのまま使い、Step を1つずつ完成させていきます。各 Step が動いたことを確認してから次へ進みましょう。</p>
+      <table>
+        <tr><th style="width:60px">Step</th><th>やること</th><th>動作確認</th></tr>
+        <tr><td><strong>1</strong></td><td><code>server.js</code> と <code>public/index.html</code> を作り、スフィアを1つ表示する</td><td>1つのブラウザで水色のスフィアが見え、WASDで歩ける</td></tr>
+        <tr><td><strong>2</strong></td><td>Step 2 のコードに書き換え、サーバを再起動する</td><td><strong>2つ</strong>のブラウザを開くと、互いに色違いのスフィアが現れて追従する</td></tr>
+        <tr><td><strong>3</strong></td><td>Step 3 を<strong>自分で組み立てて</strong>書き換える（ゴール＝標準課題）</td><td>相手が四角柱＋スフィアのアバターになり、向きも同期する</td></tr>
       </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
-      </div>
+
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#aaa">※ サーバ（<code>server.js</code>）を変更したら、ターミナルで <kbd>Ctrl+C</kbd> → もう一度 <code>node server.js</code> で<strong>再起動</strong>が必要です。<code>index.html</code> だけの変更は、ブラウザの再読み込み（<kbd>F5</kbd>）でOK。2つ目のブラウザは、別ウィンドウや<strong>シークレットウィンドウ</strong>で開くと2人として扱われます。</p>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. Step 2 で、もう一方のブラウザを動かしたとき、自分の画面のスフィアはどう動いたか（1〜2文）<br>
+        Q2. Step 3 で、四角柱＋スフィアのアバターの「向き」は、相手が視点を左右に回すとどう変わったか（1〜2文）</div></div>
     </div>
 
   </div>
@@ -1321,60 +1416,44 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
       <h2>標準課題</h2>
     </div>
 
-    <!-- 標準課題 1: 知識 -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>アバター同期の仕組みを説明する</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>四角柱＋スフィアのアバター同期を完成させる</h3>
       </div>
-      <p>セクション1の内容とコード体験の経験をもとに、以下の問いに答えなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問1.</strong> 以下のアバター同期のデータフロー図の空欄を埋めなさい。</p>
-      <table>
-        <tr><th style="width:50px">手順</th><th>場所</th><th>処理内容（空欄を埋める）</th></tr>
-        <tr><td>1</td><td>ユーザA（ブラウザ）</td><td class="blank-cell"></td></tr>
-        <tr><td>2</td><td>ユーザA（JavaScript）</td><td><code>setInterval</code> で <span class="blank-cell" style="display:inline-block;min-width:50px;padding:0.2rem 0.5rem"></span> msごとにカメラの <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> を取得して送信</td></tr>
-        <tr><td>3</td><td>サーバ</td><td>受信した位置データを <code>socket.<span class="blank-cell" style="display:inline-block;min-width:100px;padding:0.2rem 0.5rem"></span></code> で <span class="blank-cell" style="display:inline-block;min-width:80px;padding:0.2rem 0.5rem"></span> に転送</td></tr>
-        <tr><td>4</td><td>ユーザB（JavaScript）</td><td>受信したデータでアバターの <span class="blank-cell" style="display:inline-block;min-width:100px;padding:0.2rem 0.5rem"></span> を更新</td></tr>
-        <tr><td>5</td><td>ユーザB（A-Frame）</td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> Socket.IO の以下のイベントについて、それぞれの役割を説明しなさい。</p>
-      <table>
-        <tr><th>イベント名</th><th>役割（空欄を埋める）</th></tr>
-        <tr><td><code>connection</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>move</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>moved</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>userLeft</code></td><td class="blank-cell"></td></tr>
-        <tr><td><code>disconnect</code></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問3.</strong> <code>socket.broadcast.emit</code> と <code>io.emit</code> の違いを、アバター同期の文脈で説明しなさい。なぜ <code>broadcast.emit</code> を使うのか、理由も書きなさい。</p>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問3の回答を記入してください。</div></div>
-    </div>
-
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>アバターを改造する（コード改造）</h3>
-      </div>
-      <p>コード体験2のアバター同期プログラムを以下の指示どおりに改造しなさい。</p>
+      <p>例題の <strong>Step 1・Step 2</strong> を作って動かしたうえで、<strong>Step 3 は穴あきスケルトンとヒントを手がかりに自分で組み立て</strong>、四角柱（胴体）＋スフィア（頭）のアバターが同期するゴールまで完成させなさい。さらに、下記の小さな改造を加え、理解問題に答えなさい。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">① 必須 ── Step 3 を自分で組み立てて完成させる</p>
+        <ul class="point-list">
+          <li>例題の穴あきスケルトンの <code>// TODO</code> を自分で埋めて、<code>server.js</code> と <code>public/index.html</code> を完成させる（丸写し禁止）</li>
+          <li>ブラウザを<strong>2つ</strong>開き、片方を動かすと、もう片方にアバターが現れて<strong>位置と向きが同期</strong>することを確認する</li>
+        </ul>
+      </div>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">② 小改造 ── 次の2つを行う</p>
         <table>
           <tr><th style="width:30px">#</th><th>指示</th><th>ヒント</th></tr>
-          <tr><td>1</td><td>アバターの形を <code>a-box</code> から <code>a-sphere</code>（球）に変更する</td><td>クライアント側の <code>createElement</code> を変更し、<code>radius</code> を設定する</td></tr>
-          <tr><td>2</td><td>送信間隔を <code>200</code> msに変更する</td><td><code>setInterval</code> の第2引数を変える</td></tr>
-          <tr><td>3</td><td>3D空間に目印となるオブジェクトを2つ以上追加する</td><td><code>&lt;a-scene&gt;</code> 内にタグを追加する（位置や色は自由）</td></tr>
+          <tr><td>1</td><td>アバターの見た目を変える（胴体の <code>height</code> か <code>width</code>、または頭の <code>radius</code> を変更）</td><td><code>createAvatar</code> 内の <code>setAttribute</code> の値を変える</td></tr>
+          <tr><td>2</td><td>3D空間に目印となるオブジェクトを2つ以上追加する</td><td><code>&lt;a-scene&gt;</code> 内に <code>&lt;a-box&gt;</code> や <code>&lt;a-cylinder&gt;</code> などのタグを追加（位置・色は自由）</td></tr>
         </table>
       </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後の <code>public/index.html</code> のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「なぜその値にしたか」を書く<br>
-        ③ 送信間隔を <code>200</code> msにしたとき、<code>100</code> msのときと比べてアバターの動きはどう変わったか</div></div>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">③ 理解問題 ── 文章で答える</p>
+        <ul class="point-list">
+          <li><strong>問1.</strong> サーバはなぜ <code>io.emit</code> ではなく <code>socket.broadcast.emit</code> で「送信者以外」に転送するのか。理由を説明しなさい。</li>
+          <li><strong>問2.</strong> Step 3 の受信処理で、受信した位置の <code>y</code> を使わず <code>0</code> にしているのはなぜか。説明しなさい。</li>
+          <li><strong>問3.</strong> アバターを <code>a-entity</code> でまとめ、その中に胴体と頭を入れているのはなぜか。「親を動かすと…」という観点で説明しなさい。</li>
+        </ul>
+      </div>
+
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を提出してください。<br>
+        ① 完成した <code>server.js</code> と <code>public/index.html</code> のコード全体<br>
+        ② 2つのブラウザでアバターが同期している<strong>スクリーンショット</strong>（2画面が分かるもの）<br>
+        ③ 小改造で「どこをどう変えたか」を各1文<br>
+        ④ 理解問題 問1〜問3 の回答</div></div>
     </div>
   </div>
 </section>
@@ -1425,7 +1504,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
         </ul>
       </div>
 
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>&lt;a-text value="名前" position="0 0.8 0" align="center" color="white" width="3"&gt;</code> をアバターのエンティティの子要素として追加すると、アバターの上に名前が表示されます。アバターを <code>a-entity</code> でラップし、その中に <code>a-box</code> と <code>a-text</code> を配置する構成が簡単です。</p>
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> Step 3 の <code>createAvatar</code> はすでにアバターを <code>a-entity</code> でまとめ、その中に胴体(<code>a-box</code>)と頭(<code>a-sphere</code>)を入れています。ここに <code>a-text</code> を子要素として足すだけで名前ラベルになります。<br>例: <code>const label = document.createElement('a-text'); label.setAttribute('value', name); label.setAttribute('position', '0 1.8 0'); label.setAttribute('align', 'center'); label.setAttribute('color', 'white'); label.setAttribute('width', '3'); avatar.appendChild(label);</code><br>ユーザ名は接続時に <code>prompt</code> で入力し、<code>socket.emit('move', ...)</code> に名前も含めてサーバへ送り、サーバが <code>moved</code> で他クライアントへ転送します。</p>
     </div>
   </div>
 </section>
@@ -1453,65 +1532,41 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
 
 ---
 
-## 説明: やってみよう（アバターの色を変える）
-（変更した色と、3D空間内のアバターの見え方を1文で書く）
+## 説明: やってみよう（スフィアの半径を変える）
+（変更した値と、アバターの見え方の予想を1文で書く）
 
 ---
 
-## コード体験 1: A-Frameページを配信し、位置データをログに表示する
-### Q1. ターミナルに表示された位置データの形式（1行分を書き写す）
+## コード体験: 3つの Step を実際に作って動かす
+### Q1. Step 2 で、もう一方のブラウザを動かしたとき、自分の画面のスフィアはどう動いたか（1〜2文）
 
-### Q2. WASDキーで移動すると、x, y, z のどの値が変化するか
-
----
-
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
-
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
+### Q2. Step 3 で、アバターの「向き」は、相手が視点を左右に回すとどう変わったか（1〜2文）
 
 ---
 
-## 標準課題 1: アバター同期の仕組みを説明する
-### 問1. データフロー図の空欄
-| 手順 | 場所 | 処理内容 |
-|---|---|---|
-| 1 | ユーザA（ブラウザ） |   |
-| 2 | ユーザA（JavaScript） | setInterval で (　) msごとにカメラの (　) を取得して送信 |
-| 3 | サーバ | 受信した位置データを socket.(　) で (　) に転送 |
-| 4 | ユーザB（JavaScript） | 受信したデータでアバターの (　) を更新 |
-| 5 | ユーザB（A-Frame） |   |
+## 標準課題: 四角柱＋スフィアのアバター同期を完成させる
+### ① 完成したコード
+#### server.js
+```javascript
+（ここに貼り付け）
+```
 
-### 問2. Socket.IO イベントの役割
-- connection :
-- move       :
-- moved      :
-- userLeft   :
-- disconnect :
-
-### 問3. socket.broadcast.emit と io.emit の違い（アバター同期の文脈で）、broadcast.emit を使う理由
-
----
-
-## 標準課題 2: アバターを改造する（コード改造）
-### ① 改造後の public/index.html のコード全体
+#### public/index.html
 ```html
 （ここに貼り付け）
 ```
 
-### ② 各改造について「どの行を変えたか」と「なぜその値にしたか」
-1. a-box → a-sphere への変更:
-2. 送信間隔を 200 msに変更:
-3. 目印オブジェクトを2つ以上追加:
+### ② 2画面で同期しているスクリーンショット
+（画像を貼り付け。2つのブラウザ画面が分かるもの）
 
-### ③ 送信間隔を 200 msにしたとき、100 msのときと比べてアバターの動きはどう変わったか
+### ③ 小改造（各1文）
+1. アバターの見た目（height / width / radius のどれをどう変えたか）:
+2. 追加した目印オブジェクト（2つ以上）:
+
+### ④ 理解問題
+- 問1. なぜ io.emit ではなく socket.broadcast.emit で「送信者以外」に転送するのか:
+- 問2. 受信した位置の y を使わず 0 にしているのはなぜか:
+- 問3. アバターを a-entity でまとめ、中に胴体と頭を入れているのはなぜか（親を動かすと…）:
 
 ---
 
@@ -1550,11 +1605,11 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
     </div>
 
     <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 解答（記録例）</summary>
       <div class="answer-content">
         <ul class="point-list">
-          <li><strong>Q1:</strong> ターミナルに <code>xK7-2abc... 位置: { x: 0.12, y: 1.6, z: 2.85 }</code> のような行が100msごとに表示された。</li>
-          <li><strong>Q2:</strong> Wキー（前進）で z が減少、Sキー（後退）で z が増加した。Aキー（左移動）で x が減少、Dキー（右移動）で x が増加した。y はほぼ 1.6 のまま変わらなかった（y はジャンプしない限り変化しない）。</li>
+          <li><strong>Q1:</strong> もう一方のブラウザで前後左右に動くと、自分の画面では相手の色違いスフィアが同じ方向に動き、少し遅れて（100msごとに）追従した。</li>
+          <li><strong>Q2:</strong> 相手が視点を左右に回すと、アバターの胴体（四角柱）と頭がその場で左右に向きを変えた。<code>rotation.y</code> だけを反映しているため、上下を向いてもアバターは傾かず、左右の向きだけが同期した。</li>
         </ul>
       </div>
     </details>
@@ -1562,15 +1617,15 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
     <!-- ── 例題の解答（常に公開） ── -->
     <div id="answers-examples">
     <details>
-      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題1 やってみよう 解答</summary>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> Step 3 データフロー トレース 解答</summary>
       <div class="answer-content">
-        <p>ユーザAが3D空間内で前方（z軸マイナス方向）に1単位だけ移動した場合、各手順で何が起きるかを具体的にトレースした例です。</p>
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">手順1: ユーザA がWキーを押す → カメラ position が { x:0, y:1.6, z:3 } → { x:0, y:1.6, z:2 } に変化
-手順2: setInterval が100ms後に発火 → socket.emit('move', { position:{x:0,y:1.6,z:2}, rotation:{x:0,y:0,z:0} })
-手順3: サーバが受信 → socket.broadcast.emit('moved', { id:'xK7-2abc', position:{...}, rotation:{...}, color:'#FF5252' })
-手順4: ユーザB が受信 → document.getElementById('avatar-xK7-2abc') が存在 → setAttribute('position', {x:0,y:1.6,z:2})
-手順5: A-Frame が次フレームで再描画 → 赤い箱が z=3 から z=2 に移動して見える</pre>
-        <p><strong>重要ポイント:</strong> サーバは <code>broadcast.emit</code> を使うことで「送信者本人以外の全員」に転送します。これにより、ユーザA は自分の箱を自分の視界に作る必要がなく、カメラに重なって見えなくなる問題を回避できます。また、ユーザB側ではアバター ID（<code>avatar-</code> + <code>socket.id</code>）で一意性を担保し、初回受信時のみ <code>createElement</code> で生成、それ以降は <code>setAttribute</code> で位置を更新するだけ。これにより毎秒10回（100msごと）の更新でも DOM 操作が最小限に抑えられます。</p>
+        <p>ユーザAが前方（z軸マイナス方向）へ1だけ移動し、少し左を向いた場合に、各手順で何が起きるかを具体的にトレースした例です（Step 3）。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">手順1: ユーザA がWキーで前進＋左を向く → カメラ position {x:0,y:1.6,z:3}→{x:0,y:1.6,z:2}, rotation.y 0→30
+手順2: setInterval が100ms後に発火 → socket.emit('move', { position:{x:0,y:1.6,z:2}, rotation:{x:0,y:30,z:0} })
+手順3: サーバが受信 → socket.broadcast.emit('moved', { id:'xK7-2abc', color:'#EF2D5E', position:{...}, rotation:{...} })
+手順4: ユーザB が受信 → getElementById('avatar-xK7-2abc') が存在 → position は {x:0,y:0,z:2}（y=0で地面に）, rotation は {x:0,y:30,z:0}
+手順5: A-Frame が次フレームで再描画 → 赤い四角柱＋スフィアのアバターが z=3 から z=2 に移動し、少し左を向いて見える</pre>
+        <p><strong>重要ポイント:</strong> サーバは <code>broadcast.emit</code> を使い「送信者本人以外の全員」に転送します。これにより、ユーザA は自分のアバターを自分の視界に作る必要がなく、カメラに重なる問題を回避できます。ユーザB側ではアバター ID（<code>avatar-</code> + <code>socket.id</code>）で一意性を担保し、初回のみ <code>createAvatar</code> で生成、それ以降は <code>setAttribute</code> で位置・向きを更新するだけ。受信した位置の <code>y</code> は使わず <code>0</code> にして足元を地面に合わせ、向きは <code>rotation.y</code>（左右）だけを反映します。これにより毎秒10回の更新でも DOM 操作が最小限に抑えられます。</p>
       </div>
     </details>
     </div>
@@ -1578,7 +1633,7 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
     <!-- ── 標準課題・発展課題の解答（暗号化） ── -->
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
-    <div id="answers-encrypted" data-cipher="EkHArlgg+rT3OfTiAOcqQD3c/GFg5EGmFTRAaP7aCULBb4VE40JCzOJSmwS/OExGlJoQR7Mz+FB1JHVZ8QdAeDnVUWWaCzfu30gapCRnSRkljaLfrGiQ+UCdf4k5RzovuRjqmQKwvF/nrHyNbgRPz27p9XEbnbdPtUjivaVJUieSS2lytJO0mCsM8NqN/lfMoJxSWK4yCqzFol+CTJHqS6XhS75ne0AZLUatjVZ4VDv/HguhzCkcI1G6qV7EKR5hcd0CZGMUeUTnv5c5jg8QlxMH4rDhUtMWbGQ69mBgbKB804Tik/rjoB7UbwPxNWWBvzWzx5i911iSOjPBBAmV9yKlNUQexqp51+PHdy6zbN1H3OT4qUGLUFU4dMYcCjAzRB0yHtUgmYKFJVYw3OMOFP1B/carc+C0LrdrPZ79s8Sqo0Kqyp/TRe4oPogEVqUjJBJVlmsW4ibhxc4PmVF9bHqj0rN5r4TG7/lq/raUYadHzny0wwb7EFvMRkyKyDyGEVlOg48bMCuIA8Jaq+BG6WY+smSrQGU7ttxbvbEZbK5LvZfyoDbcmUOADQsEGJADDl0soGmYpifI2TEnjhy2CeucirZmTcNZmCyD2d7xwWKBCLv6BVk4aS2vcXIFfsBd/+31/tVFXAwNI/wtw4KFBrnrG/eXEX/3mEte7zzzElW1tNtTrgniflL2/Vc5BrPY5OXyhCoVCbXE4d2aRNe973COM4rjruAUHD+uoOWzaYb0X6VcQWMxwQ2BHUFWwHD9mfc1VL2GRkev0a0vvgyy9XhkIoxBbksA565iKW+pWkb29bJndPIKs7wIkOzX4UuTAuDeWwzS1JFOhx9Fz9/bYkbhsPdGv1o/lXsXK3f/oEfXdCzPwVPO+DCxX5VZK+oEVzZxNR/yZWr/+yGjJcnBrNyrN7zsSoV1UgYZ6e+xAMXhtjISYZkl0ua+Gu640V4nCBR0KBxk37G2pCPBQKRPeYAa5PXXZJ4pehsT8Df8aa1tVSzQe8HwydyDwEfC7mxUM7opG5YwnpTAsyKoQayrVrow+v1a+DfweF76FdYIrafC/HDKXrEB0NN2Z8vzmgGnLDwMf7wE7ifileGD7vjnGY8JMrLHow4Yz+ft4WrdsNiWJfcRn8y9SYs+JFlSF/X5W0lcuLyVYdKF+DbqmVbY0y2MafNzp+WMX8XoMwWBOS25eOeR9zlLr1ZBOqpCrgqTJ2hGZZpXkiyeUQ0fPpUVonhvP57ASnTBrDkjkq0vwMvsm4Ev4eTWpQXOKZU4FYYemTEzGwRWdy2wGtZfhgVKuku9g0QDG2dLTPjmDg1wb6TL7q9Mnj8qanoV1uQsq86uOTSt+OFiHErKhp7scQv12+oYWhwlMS2NxA8ORHbLfvO1Qnjmh0n/IVhMPvgvQoOyhy6E8WHVglKU/3zTFeVnFGY0lUXSg1AJZboW9LHWRwzbc2y3X2j8E8sb+a9unpOs3iVFxL9RKUCJ1t7UlpAnsAm21/0zvMRp+QiU+beG+SpIpT50pzq5FWLwdEZuPtpRn8Ny614IdG0OSGJqAtrMiTmqm5pXKO8SqP2O9f0MglDaQ49rlTcSFYGv/k/hvwcRb1AUm7fSxeOwo5tMgGVdk/Pn6lr9YTqvhZki3crgsfgkOyFljBqbTXH/vyzlHksxIYtxv+sRGHkMto9RHBP7ElxpBJr0X4uyQNkZE8UHWqzqBACoNVfIIm3kpmLwK5nm6R6DRyUIU/7/fwAk0k0WgSUNqeMSwEQ+nzU6ZUMObEd4yK0r1hxVltZAZENJr7SSt/UVu0yQQ6dFMFDRkK3axZEXB9gbj+f72QjvrVorAsUDY5BLJXtAZIWVnY7DNiq2itOsmdPiyJ7120Eb8Mp22P4RPi2DlaMI4/GVFNbJGvU1wUVexPNnuNCrlazSzO2UmzMT6aiczqeay8Qw7dNH1sYtuOQmaePLM2yol3ZI5d+Cj/BraVis/Durw2qvvoTc5VpJEf13Os6WCGSCr6Ng7oavHK7UcP5veqgYDzP8kd35jXJMKRxJuLsKUqcVrZDaBHqaba5V8XcKlAPdKEAoLATMcYE2qbo2bH+utRHzU1JOa/6gWCviz1BrWPc7wlpCEoSBamQMDx4xOIN9Z7nSsa4h4i1RA1htD6O9w6wkVU8USFKFXuTDGiS9JyfPGKSoBYZvlVYahjrvlJs91/y82GlwxFweCeUA9wBF3iwsp0ODRvLCRWr4B5XTYzZhA34xqxrvQ4msv630iqO5GoK1UYEs9ff0vvw4HfetBiWMycRvyZO7JLWS8BPey5K/ym9xce48P4uiIbytF6BZRxDHvci8/5kO9LDVffdlP+DSaTWSHqah4tdLliu0yViG1xjKR/utc2b037so3lUBETxF6XfRKhCCOsj9a37AFiH42G+0lahS43NEIDp8qKelOR4WydxLCGtsBXpRH4CS0/NipYgPMl72EbTAR10oJuwL4/LHWt+6j9DpUihbSZE0qbLK/xzp2pKF/11J9s3nxlc3S8+P5LboBmJz7hLwOEfwjrrEaXCajsbufwasb06ZMkjc2pGtggiKXI6GTLOI4EBGDII1sGWFBwhtKc177GnacADEQpPKNTqDRgIG8kF2g98upUO3pXbQmbA4GHl/rUJGFP9BkAdmhPxAou0V51zcMcTG8tev6sqg1N/biTR7OahfHUKILwIkhPNNQEqoWjCKl0+SEBewmydRjpAVRi6mHVgNFzewnzysCC18FRFGggZ1JG1Jy2TR8KxkLWPVat9+aS8RBk82IiXxqz+7Ex8/y2SkFvARsCgyYpVFxiVpVG8GP0HlyOEwAbUIusREcfmK+LkxSidFooy9YChjmNZJuN9PopwQ6ASsfQjGAOPsBq0H1d+75OPV1+//NESSXknt/fz155RSb0Tuwi7J7ZfmUzPPXr/j5TCeHEDOBHX20KU1Kd7ufBZeE6WkGHwgq2GRZMsXXBn85J1duJX7CoS3SEfyQsq3kTNR5JH5uGRd2zcINst+nntZWZEJbcTpl1kRcQMA+cQmXg9tuWbtjWNVkVLkTe9Cxgw2kuIjdqxOIYGQt2RwHzKY6dwj8UQp6VJY8oAhvXgBsT7vVX++YDpHiu1BHEcYo5pqCfTOO+CWliMET81yJSgdb/jFdQ3QcR8Hr6JI51idTD9HkFe+jnGTjjNAQPIcsDfBXdhBBfNqA9Sxiv7FN7NlPt7qafloVcuk/cIziF6yx+I+enBW4sbzLhAaex9STJAv2GhM/85DPFi54tyXxId1ry3xl2NbnLANwyLd/mkWLI9QOzMg1tEV2LKn+GlccUecmLMLB62isyOFmN1KFr3h5u9V3B93y07ggyIxbsYshYtXvgUpgVCuXQM+obpG651VhVx8K21Eg4UgcYPVZsoByLGe7x9MbWpRyC9eM09B/QZUP192kr/Rba0dgMwBGwewSlgO9oIbfxecO7uM1/h6OrRFzvpYituBfP+ZJcCg7gE02zuj6Pl3xDMfmFzchWpy744fjVaWPWG7zDk3bQSsCFYCkyGatCvEfqQKwhP7AL/qVddqLoMuM2yhobgdE49flBFAQek51yGCOhjE1+qAdRbsC8XsvlmtntcwUoitIcdjyPyitcZ8CLXMMfoOp+mpMa9xCl12GguJ3zxyYt2NOCY5wV0IZyDwDde/jP5MydX+a5Khf1aHiScmQ+zFCnc4kSF3UDK3lyPwtBFtj+FZN/rudLVUU6uOJxrmxgDHsZDD0Qi++E4To08KBjvNJUwaZqJs6D+9z4Ujv3aO48ORV9OwsHVN71yUzGMqwkjHpKFAevW6CSXQFQW7uzypBr9beZ6eyf0w1bZx2ZtYgVWFRWt+K2xLiv9uTDtmNz8IMBx4eTE0t1vYniu7AyzmVGfF8Qi2WrgIyoY5+Al1UeQd4JgvSAcVMLkZTZNKBQ2jKq19n+X6Y/7BxNt+vTkNLY9bu+9tEkr25Xy1lCc4f8m68pa2OtZNplA2HSDl0EMGyauF/IQ4Px3fBvPB6dsKv1aiFw+w7arUjVyJmMbYPVpgT7eTD1j64kcyeSsQjYzSUFwLKbJ0upPQFV37IMQZ+Xno38GoqJUISL9i3ru1Veku+u0dIFi5gD8FSeYMcC3DmNjpeH2z9ZVkpOves3EeTIr77nhTaox/AxMoiLCG9Sk3MtEvmMtXg9t209Y4hrzQcQEiBk0xc6yzXhnoP+kTr01B+gPkJT9kMmzwTf3SsMrLQw7dPB8IfMXjsBkArVALgrxjvregHYco6J3VTD47SH8xGz1PCjNsax655ZOP3TjwHwPRRmmESP7aG+z2wUnotY5tSMHVl5vhfz5SwL3we69i638NMWFeouXm81krfivFzSeS5G8f4I6N+kNnctqLxxHa65mrCtNgy9BG5PClOlSpPLgRupFNiEwZ/8TnEZLVdqxY7Nt4M8xzXQl1kcI0oDrPKON8MyTSUTOCxlED3urB7GRpZ7Pd5wWKputZc8AYQs1q0Z8hFR41cLGJ1+XCASHzk5SujpUQ0mdjdngQnyJBHqd7Qjm7XOVD+coUloHa051SXuM5WbnzCIdfhTSwG0OGx1XKAD1XX4iLd744Cd472rVxbLBiaL6OtU8jvDZsF0Qq0Ip6kzfCbknezt3TWvOqKaMvE9QiUjA19YJSAYW2FMPyLdEJ58argrAfdOWAPSN1fw2FyzWPgOYtQMhR+oddO/6AmVjllEfMvqnVLiq8pa+e6eoyUFnQKAm6JxxL7G8CuI5FH2tEDTm0x6XuxjEnR9sgAdu7dLNo0wkULD3glfWkZOslXjBjFJqtD8dOJQqmQj08yBzAtNuFv9gMJCbw2R8hNR80RqinsoLHAF8UntzMWz/XP3duiwBZZKPRX1pVGO6O4PvLdgorWvWnmIJfocjG2EAzPj7EjAUsQz+rxopCKPtClT/5GaWuUzYv85av/wqsRlzftFd2jE+ZRw2YjUAy7Oy7CVOmsdNUcKSls6HI2+2T1m5Py3zLDkRVyB21ZDcJXiG46/11t3gNid0wO3i7Igzqu+3fkBAyQqYmBkdJQStw/VaDT+UAFMgXuVYMDFY/0GSrRAEKJRRq7aAL7L7OfsKMnmBdZgaiSvOtbPNZUT36pzEiY40MmJMdnhWf3b/yuH8vMkZrzMcMiNju4WvpVu9yAKFhBNrr2Gd18/gRMrFdw7vhn4qCXOLAT/cKvOzjpFtBKYSaP8eai3XcgdBzTahP5PmBHjZb2XBnIVpQqt0wCtvi0t39z8/mwG6oYEOXj1at3yHsAS8EJuelAe0jpUe6t1TOXGoNH1DI0KhIDCSINlRmUtr3pGCUaVQi3fFn6ex/F2IKuMIMb69PSfRtFW1/hMBN/eOjWaSIc44X5QRKXlWNboQlaajeQAnNgs555Epzz7Kt1/2oVt7ncpBkjjHetDX8Ky+sX6A0XqvtZz5MWpLpx6Hx2KDwYLKSX1l9+KCIScO6iMlkY/Bkw/faaEA5VxtXPMVHwmG0MFdo+x7LX4Q69LEq13HJX2k8CdlR/jjwYUB9RPMH1jCzuEFUWijgYEAAJivKiHXijhpS/AU1i3gNkGXvphpwNxWL0SnOezoLUezY3HX54b9rqlpY6ZdgwYn3W5LzKBO1DWszmDywZr7ost1KD9zZRRBEbLVJNrXGrKLl7c+drsuf+oxqeU7UkaLqlVifaY9MI1l/Rx1Fy9GURLPoDaqqXCpGOOU3FqBCrNv+TFJPeyLkub0a7pyW/NuHgb9H5fmlSc1hCv6AvfRaP+1/Zwgbrqlze+wQqiN6YAcCWma8p3BTVCp/SKaC/baFHWvUHw9MpfZ7atVYFrHjoozubQR6+CnIieHjdGDHB3AFPIGWA+vFNofak9c+vKyOYwXpEErJzbOIfO2BijZd2+6O6SyneG40ueDTRKJWoxKuMB9shB90ch1w5sVheCPv90B8qKLOD8/Bjt9V0KHn6Mozt4LF7F5VuJkGAAHj3ANqZHmQfxhVul1GvA8c6mGHMLPAx+3TCzZjfW5xy8UsQegaK1akALewAejGOxqYitoqe1qVfL74IcJ9jk4BFNVsMX9HOF9KQTC423Lr6qVcV2zTIyYhD7OJhmAkn7qxMEF08jrxFm7lIVHijFqns2Rr99+A4nUxnNGbVKQ+Qowm+HEVbQXcL8ERTDpB256cz/i7ClfZY1v1x3nq+UsPtR7de2AIyiFTR3nTUr3XbGph9XI8ZZHLpguQwRcgiplPemb0mZhxi0LRVxyrfZ9aV+Q2l94wm/YNoe3o2e05Jlp7wx8pWCSwGLqzch7x5WTHMFEOHFzZE+snZ8WGpQwiJYpwZpw4bdf1szRhM4kkPOb12amREkf7MqYh4pdVmOm3c37DcrTS1VDChR/1gAXkDiFPN4soz351tHpaydPjPpo8jMVA/HFSYZIKlZUTCSAxDQPGzoRkl4Cs+VZdpj5z1eIUKpwQsK7WTenLcr1d66DcE5Ydd8WzIb9x51lJFiV7699BkocP6oly+GoXw4pg6aZkZZBvz5EBx2OmC/YRQIntuCqmEY4JXx/b7cjanQR1E0OMoazefnd0Et9omkNTQd1l2KXQtvjwiywrYF1qhYh62yx82WjJL/Cz1DLjvJgz2W6o4e6BWEtWd3OWtvK6IXjzf3+pS8vryEvzLtKz+tr/9A0UYgmtSPwnllqLmnUbYWO5YyD5RJD9nPUBLaAHA0lNJaoYtTIhA+sSGw6ibuSTFNfn1cbduvfeb3CaxMWGgK6Qf5Qz0LTbTyKYMLx+ZuIEWfC56/26tiDrHMkDsSb36V+JWmOKol/fP12JYckAEeeUD2VYGYWYbysAkUsG307XzKs1tpVWqZ+9XmOobiORHgXl7BIZ8ktek/Hx9b2OERPUEYG3kvaKKSmXdqHYIURxFHmAajMuDTOumkHHPS31DN22X48f/ompDsEdGN0SxKNKzOo9hiBbWdCST2RiIxhQrP+M25R9awtJcnxErxDlr9QiHeOw31WDNUmblnVzbiJRaEG/tQfzyYqtVBD46WzYpVaDmTojixtH9xh5lZeH/IbSooIZYtLcp/NxshavZNeLeNSYkRZVHXIuECP6+G2uvDzSaO6h26I5sWBhDc5pKiesczc5GormrzUtV5f6VihVE/H+0ybj6oy07v6bsMQ+vWcL8/+1aUQHtop5+bcZ69O9Y3bf2C31ImOv7aSziC3LlBkol3VfsNejDxeMNCWAZ32KrFIzHshu7IlF5WpPq/Lz/4g/5QpZkbcWGULV7BYkWJkbP/jNTdT209ZGVrvPVrFP6vGjY5/mrO8oFyiM4k6XCQ1AMQGre0jQZ3achLb7L7KIjR+Rfr43uaZXi0yC6YjwmuhCu53qkJIBsNq0Ygj+JKEYC89Zn4U9KIAK/pGVSi18CIdhhhcK572Dpk7hBosmuCCrec39T9Tcgx5L4HZeGebuWmNqx+DL0LWydqmUfWW3izfiHk/vYZStQoM7too+b3sqIHbEOM4uEkldIJhB3HxuX040uQfZZK2IPn0qDDPRRRzeiMJlC8zC5Dnf0ghCN+OzML5R7b29tUAQw55/PFvBheVr7HADQPhqqXNFS00NmbWWEoF1jBkTV+RgCZr1r/bqm/nD1flOhkKZGp6QTz5UU/NA5ZHJZ+e+Bk4DiQ4VJaRabFPdNI9rca2oVKabOYsvQI32jlbMZXdnl1THCrJPnA9dynpBBQKxVWlnNQvQ1H7t8m/rnRfIW0A+Fjjv8dlHB2iiITU6yISo9fRPe/Nun0zPmRTwBkoDLV3//zL2jE3doxMNyf/9lPksdfCbX687qfphJcQeu5bxvLRVQrcifUZy59c5eTGr4CudiqDhzKcJ5ZoCd7JihBfjF5evW1sQ+4D/nz9nPI+FpDueUrLC1JSk/QE6ntUfOKNCP8AMbJlpK7TOiIKNWGVMIUZwdjCmcjeFgnM22N2iqr2MI36uUiM3DWeWoXDDYnuDRx9d9/jZdPFeFtX/7V1XqJKDgpB3QoiO75pmtipQI77i97BFsV2unKr8Ngxb63t3VfkXJM/ox2SHgwrYZH46YxK04NcG9W6k6pe3McsOQVXPxWB5Y3TXuAW7mRc7K5cpqNA8DVCrZzsOD3P3BPzxndrTKPl8aULBwSaAXHWMOv4nakOKgwGsEQ6EOcRnl09DIPqjO+dK+9rhKPQ6A0gpKLPIh5pUlzFmSyFHXTj7lpItrQpuZGqzwMGUdsv+eBsszkSiBnof5BlHFZ7//M2X+hl9wBmbYAuAs+LNo/ZoMRhEI7qBXYUVt8hFTuG+2ki2Ok/GDes711mTSOJcEr5NOmvZ9YQTwTV0WxqnHKxGRj0c2M7ATtEPHIfm6Z87ky2RkkicIRyBHWHi6N63FmmcZzTzS0zCWEA28bQKSs54TfSgeKSuMl/P2To81u6rNnCPL5fFSdA5K0+zlZ5iNbu5Jy1wRxQ5TuNZGgAurAzhOQ3hQ5bZZ+CmRgs5hBBb8ZgVRPI7M6Va6cLsebb9AEhFRifGzV4+eFaiSolICr6TJ0taIqc4ktvyyyeRliMWdGwx1WOgNKT99J2qlbMEzpcnAUwOj/MMD+lZOPOUt8z0ORsHjdX/Wok9cmw7pMsHb+fn0dfLAFcOdf3gdrAxyMXbEweDCQn88X+y5ifNXuBbuhPl4tPRVwtpUsvgEFiwSWGe0ccgJBFyammBNcKoRLkS630RUkULlPHsOfkXRz9IPQ2WJf4S1L2IRuxDFGcL/53BD5greyQR9RO018Rf/bCXLzPMIVtIZUZFm6QIozyRDI/NvOJLemWw2s3VNge6U6Dasqikgmhvq9wJPcbcOCr+BtKPvkmaXmAJ9AQBZUfJrwKh9upuNv1DKI8FIO+F0zi/AJqgCvYe58UvtUNOR5hx5/Bxedop1XlHioXEAHHVr4Ji2gbd5uuBObUyOVwDfk6N/u9MXyvn3R0HJsKXLc9F8cS4QpmmMRl9fRKh+iBrStHEtDH8ENIzTQuCexoswrGq+DpwuZ283zKsq47CTe41BuBHq8H2khG7EPE15qjn/u3oIHWkax6G5inkse3tN6W0aqxalNKjnkuy40CZB4gCTpHk/k46fdzD5xWdlFu9o+lsTjykQ3S+8R2BYs/kfHK0nLGYHJ29lYTjPGvk9D+GZpiBn7gKG2wr8p/oM2cN5cmuGZYPLZXChjFIJTpF++xWvvqOlDkIFgYn9Fn/gaVVmawaVKoCzYxv2toF0ixP23P5AAHIuWk4c5WciR5W5nZBhNtlz1wL8utfGrGw1DGKAv4WchAzClRwCBm6cw6Eac9gZ3WlT8YRsnR7gp09ZedA0rVuV/4JE4I8YC7ccOP8/SzvUYKlyZZmbvNjXbldXq+RShoyezNSkenDQ0fZRV2DD2Cg9oucc+vR5mUBaBGNOpS9DtNBI72dkSij1pVRcxKw54vrS9Mx88crafLzMd/GWW6RmjikoX5LhxBpi/xKAAOCuxGbN4z5OtI3eGD7GrotAsgWEPlcqQGFGtlpENFppluuXPim+3g8q/NsSQnzD4AuZqG/wlzBTf4/1YCZu0VsqIz/Ybj8HbdEyJ8pkQicmCcGWQpeGj114R+nBvIBv9w/R27ExlO52+6V4febwmp2/+y118PtT7rDRnHR1Qnrye0D6rJzCdRxH9znUISGbkq9u3xTzohTiYy34FeTs2EFMF+T5CVdCadafE9GULFOkCgTciXqwfvl4pMBNC8LbZzK9o+e0cBB9ARPw6hihVVu3y09jFq07GLYI3uWixAKwDiIsPfwPhFuquajcB7yDKSbfEcBYJviSrDK2SjNALgqwDn44Zz3Pvx2L7QH2rTnOYljTSvo4h7OJQPEhyINFim4AzDjcnD/QzMTHEdLLJVlR3Mp1RaZ87pPEn+A8BXn/gMyf+pOtyAoN1JJ2Flm6o0fgVEtHe4UDZmBhUWXFFNGkEeyiR/CgNmwUw0e+rfw+ue9ud8YD+kEpfJCcgyzsiE9Rgn2cTBJL3Gq1jCCBo1JgMkLZV7Fr/IB+70vlbVBIZdZfEHp/FRj5JQ4Uh2KV4wMBY5J7CFC2H0eO5SmkStJJXaQRfALhEnCBhycV8QR703uqyTfLe0RxGuQesTBZGKYUISk0o5x3D5Z67jShXWapdU7uWX/VtDCnbDfutsV3GBU0S/1kGHXUBuICwqRWzQgHGe89S5hq8PpJYwACUuCSifURdHPk/d3Ji3iK8Jd8xBeW8d+10DdNbANEbp+F7hzNl7ESnO8AzL9N9OKZw8EdrY8TVuxzSSAICXChm4JtFFxVCXozSqrQ3BmJD7iWNA+1V9qKS6CwKMyePPuwM+VqS4cuKYFxrVyND3h4jOyuF/xetHNtxuEfg9MABHDL3JteqpcNu6yY+BUJndm2TAySzGtRHIt8abxkGYP35hdhCz9qh+zTmi8dfTkQM4MUTlqLZOTnTlXdvvrfCCHxmC9ap66e/eJ94WYNsARKuR0flJADrjN0TY1N3KBAHWklXc3E/A3GOskmRURXLGEVdBlORw7x+QMkjxe8OMyVixCXeP/I2V2HEYiRybYjXFcMX5fKuH6HKH+E8eTrQ75P8/IzUy4+wB9aTAY7Bozk1rkL+R+RKh07TXd8MPiV1QmXFAeHtz2Y3n+7VqM+EdthxuWaAJpOcd8pa+MZpn7L684HaEyOukkW05D7zl7/SkOlHtID/M1z//5rXXaD3tqVlJfUkHptzBQqMa5NTuz0n3MwXYabVphMNTeQEmvKp+xnpXOW5LmgmHmagKrFoeV1wnx7hFoum4pVT4Na17P8v08uZWmJMgH9NbVm0z3vZzzImkLeJ3w2MwXU6enqhbBo7rnFgv6fq8NWztAbMvyZcdMDOIHbl6QeV+qfkJqXIr7TL+X/KbLrpLQE89Ie8p3D50WQWnMJ1NhnST80SM1gMC/Yxt2wi4v9T4TSfQ373l379MHJWYEIKFZb7EZBBi/l3VAN4v36nRX+ANeeurPOus/hOwyvvJs4f7eA3G/XtITQbQZ9l7Vxdsjeq0uzuWtF4i4Hsl4SwUhVYYmgAT28mB0pmLY4z8sV4jakJFPYfakaG+uF7008HBgjV0oV6COyFu7SF+XaIIMD12rngAVqYKH9GtuuzLQd7rn0Lla8nmlIW0twyzv3pwmsMcyxubTxT4tyBBvhgZmf6thscSHsXBWpq2e2XbANeh2MfjTUIKOdwa/eur3whGSFMm+LBRfsn+AFSM16Q1KTyoomHja74su/RBLSF9Up9Y5v2k00RCq1A9fovAoGTS6d69SYky3OhBBOYWnWh4NbhYC3aTDasc4fMiqsifeKXAnEo368gNcq2NzxoEFsy8USmZe3tHvBkYMVEgkKHuDoMdSglyp/UaaHSQHlQFvX+xTW9XGId73oLTUQ+yCVju3JKClSNDNipVQOPppUbLLXsVMm8Z983y1T8AF2mX2U083uLWa1rsuFACf06dHqpDnYXZ9ygvAEXo80WhJZHrITUUcBZP2DNe/KnE9DvVy+0Re2THbUa4NbLWksudKt8FSmmCis7Si9m8KhVkFZFjJ3t9pdKs/DeRs4QJ9YBGo3b/juQAQatwpso0fQwCckY8vTFKh676IH39k1v3+CE+pDhTtIVhF5nXeQfDpGBUcQlU2PAUt6v8gPTr9i9hnqU8z3Kj96vmdvsQm7vRDsDfGtSAoPNVUFjpKkRfqtCJaeyBmMPjWFyxpPl6Jrjg0+WtgV7f2We43Ejd+yQ9SzdkBrpOUXYIozuLLbSv+0sSYjFXYXctO+43XmOL8BG9XHsPyVhm75+hFv4qgpwGbR7UHN5izT4wevNc442KMAoLgZLuMdKrbDovM8QcH7Z4oiJDRcYdkMfIgFp4J1eZjIlkknmgj8WwZ/0feLgF6Q59QpIqwJYpBhCaNtWg3MA4wxTVz1JC7FZ3QMfWxkwjA/qYcIGBWkdlFAjk7hx+7CRQrYFVBIUeMGY+oLFBXZ+7/kTHUJdO3ie62Nf3H/4Jz2vLLx+D2rUsXm76wMZyh9fwh+bTmWfZ1iXMZq12qVymtZ2LJy2q9Ln0Iw/XDjftfzfq4invb6ocISQktFGvjK9mpyivJCD4km5GXZlMpkXsW6+DKuz9lSJELkSu6oCaHxC+7IQbzhLKQdMGCdPgqMczm91IVcNGGaEgnVsgglrT8/Jm354nRjSDwmEBYu3d5yef67TTOy9s50/nLfQzFEqa73oH6HihZKdCFPO+683IwGDqOVYiBvbT7y1trsN7xOKDGDPoxZ+xu5oBr43H+5VLUdNhddjqNCER3C+X1SYt1DEuYpevuspP8h+77WfY9dbViBejZAPw6xtTWUZPzPQH9QsDASDfza2qvWYFto4Ue/eae/tmEKwIotuslZ1+NjK5w54JxtYUj5TRqbiF1zOFUFZpbu9xWo0iHKvtyTybV5opCTES51Xae8EndBsJ9527VBHu69VaZlXB/O8qQw3xoh1HXjb8c/btny8SzSea8TQ3Dbnj3CN5aACWJ2/cDdaXWt1rVEmsHfHft6CSm4J8gI7A01Str/GpZydAIN7Bxe4vlXZEIwd8DG/vDD9OIW3TNj+u/ngMDeMLjz1jl11kg0n64JMr65MVf8mEeR5Zw5jjUtEg/4XqUNBfKGgoz01YA2C9pde5VxYcdbBiWzjc0fL2SVgPB"></div>
+    <div id="answers-encrypted" data-cipher="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"></div>
   </div>
 </section>
 
