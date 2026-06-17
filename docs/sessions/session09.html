@@ -1064,10 +1064,17 @@ node server.js</pre>
 app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
 
 io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);  <span class="cmt">// 誰が接続したか（タブごとに別ID）</span>
+
   <span class="cmt">// クライアントから 'chat' が届いたら…</span>
   socket.<span class="fn">on</span>(<span class="str">'chat'</span>, <span class="kw">function</span>(msg) {
     <span class="cmt">// 全員（自分を含む）へ転送する</span>
     io.<span class="fn">emit</span>(<span class="str">'chat'</span>, msg);
+  });
+
+  <span class="cmt">// このタブが切断したとき</span>
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
   });
 });
 
