@@ -1236,7 +1236,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
 
     <span class="cmt">// 100ミリ秒ごとに自分のカメラ位置を送る</span>
     <span class="fn">setInterval</span>(() <span class="op">=&gt;</span> {
-      <span class="kw">const</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'[camera]'</span>); <span class="cmt">// 上の &lt;a-camera&gt; を取得</span>
+      <span class="kw">const</span> camera = document.<span class="fn">querySelector</span>(<span class="str">'a-camera'</span>); <span class="cmt">// 上の &lt;a-camera&gt; を取得</span>
       <span class="kw">if</span> (!camera) <span class="kw">return</span>;
       <span class="kw">const</span> position = camera.<span class="fn">getAttribute</span>(<span class="str">'position'</span>);
       socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
