@@ -477,7 +477,7 @@ pre { position: relative; }
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
       第9回では Socket.IO でテキストチャットを実装しました。<br>
-      今回は<strong>A-Frame の3D空間</strong>と <strong>Socket.IO のリアルタイム通信</strong>を組み合わせ、<strong>複数ユーザが同じ3D空間を共有し、互いのアバターが見える</strong>仕組みを作ります。
+      今回は<strong>A-Frame の3D空間</strong>と <strong>Socket.IO のリアルタイム通信</strong>を組み合わせ、<strong>複数ユーザが同じ3D空間を共有し、互いのアバターが見える</strong>仕組みを作ります（実際は自分で2つのWebブラウザを開いて、片方を動かすともう片方の画面でアバターが動く、というように動作を確認します）。
     </p>
 
     <!-- ====== 段階ロードマップ ====== -->
@@ -1100,7 +1100,7 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) <span
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express@4 socket.io</pre>
+npm install express@4 socket.io@1.7.4</pre>
       <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく、古い Node.js でも動く <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてインストールしてください。</p>
     </div>
 
