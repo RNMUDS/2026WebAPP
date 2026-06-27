@@ -1208,6 +1208,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
     socket.broadcast.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, { id: socket.id });
   });
 });</pre>
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x1F4A1; なぜ <code>const server = app.listen(...)</code> と書くの？</strong> これまでの回では <code>app.listen(3000, ...)</code> とだけ書いていました。今回は <strong>Socket.IO を起動したサーバの上に載せる</strong>ため、<code>app.listen()</code> が返す<strong>サーバ本体を <code>server</code> で受け取り</strong>、それを <code>socketIo(server)</code> に渡しています。やっていることは同じ「3000番でサーバ起動」ですが、戻り値を捨てずに使う点だけが違います。</p>
 
       <p style="margin-top:1rem"><strong><code>public/index.html</code> を次のように書き換える（全文）</strong></p>
       <pre><span class="code-label">HTML ── public/index.html</span>
