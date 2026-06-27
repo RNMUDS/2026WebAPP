@@ -1174,17 +1174,19 @@ app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class
       <p style="margin-top:1rem"><strong><code>server.js</code> を次のように書き換える（全文）</strong></p>
       <pre><span class="code-label">JavaScript ── server.js</span>
 <span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
 app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
 
 <span class="cmt">// 接続したユーザに割り当てる色の候補</span>
 <span class="kw">const</span> colors = [<span class="str">'#EF2D5E'</span>, <span class="str">'#4CC3D9'</span>, <span class="str">'#FFC65D'</span>, <span class="str">'#7BC8A4'</span>, <span class="str">'#A24CD9'</span>];
+
+<span class="cmt">// サーバを起動し、その上に Socket.IO を載せる</span>
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
 
 io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
   <span class="cmt">// このユーザの色を1つ決める</span>
@@ -1205,10 +1207,6 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
     console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
     socket.broadcast.<span class="fn">emit</span>(<span class="str">'userLeft'</span>, { id: socket.id });
   });
-});
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
-  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
 });</pre>
 
       <p style="margin-top:1rem"><strong><code>public/index.html</code> を次のように書き換える（全文）</strong></p>
