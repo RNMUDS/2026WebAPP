@@ -583,14 +583,14 @@ pre { position: relative; }
       <pre><span class="code-label">JavaScript ── クライアント側を関数として整理</span>
 <span class="cmt">// (1) クリックされた時に呼ばれる関数</span>
 <span class="kw">function</span> <span class="fn">handleBoxClick</span>(element) {
-  <span class="kw">var</span> clickedId = element.id;            <span class="cmt">// ← 中間変数で意図を明確に</span>
-  <span class="kw">var</span> message = { id: clickedId };
+  <span class="kw">const</span> clickedId = element.id;            <span class="cmt">// ← 中間変数で意図を明確に</span>
+  <span class="kw">const</span> message = { id: clickedId };
   socket.<span class="fn">emit</span>(<span class="str">'objectClick'</span>, message);
 }
 
 <span class="cmt">// (2) サーバから更新通知が来た時に呼ばれる関数</span>
 <span class="kw">function</span> <span class="fn">applyObjectUpdate</span>(data) {
-  <span class="kw">var</span> target = document.<span class="fn">getElementById</span>(data.id);
+  <span class="kw">const</span> target = document.<span class="fn">getElementById</span>(data.id);
   <span class="kw">if</span> (target === <span class="kw">null</span>) {              <span class="cmt">// ← 1行 if ではなくブロックで</span>
     <span class="kw">return</span>;
   }
@@ -599,9 +599,9 @@ pre { position: relative; }
 
 <span class="cmt">// (3) クリック対象に (1) を登録</span>
 <span class="kw">function</span> <span class="fn">setupClickListeners</span>() {
-  <span class="kw">var</span> clickables = document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>);
-  clickables.<span class="fn">forEach</span>(<span class="kw">function</span>(el) {
-    el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() { <span class="fn">handleBoxClick</span>(el); });
+  <span class="kw">const</span> clickables = document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>);
+  clickables.<span class="fn">forEach</span>((el) <span class="op">=&gt;</span> {
+    el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () <span class="op">=&gt;</span> { <span class="fn">handleBoxClick</span>(el); });
   });
 }
 
@@ -729,7 +729,24 @@ socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, appl
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">上のコードで <code>class="clickable"</code> を削除した場合、カーソルを合わせたときの挙動はどう変わるか予測してみよう。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した内容と、その理由（raycaster の <code>objects</code> 属性との関係）を書いてください。</div></div>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実験のしかた（コード体験1のファイルで試す）</p>
+        <p style="color:#ccc;font-size:0.85rem;margin-bottom:0.4rem"><code>public/index.html</code> の3つの <code>&lt;a-box&gt;</code> から <code>class="clickable"</code> を消して保存し、ブラウザを再読み込みして箱をクリックしてみる。</p>
+        <pre style="margin:0.4rem 0"><span class="code-label">変更箇所 ── public/index.html</span>
+<span class="cmt">// 変更前（クリックできる）</span>
+<span class="kw">&lt;a-box</span> id=<span class="str">"box-1"</span> class=<span class="str">"clickable"</span> position=<span class="str">"-2 1 -3"</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+<span class="cmt">// 変更後（class を削除 → raycaster="objects: .clickable" の対象から外れる）</span>
+<span class="kw">&lt;a-box</span> id=<span class="str">"box-1"</span> position=<span class="str">"-2 1 -3"</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-box&gt;</span></pre>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実機での実行結果</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — 左:class あり ／ 右:class 削除（同じ箱を3回クリック）</span></div>
+          <img src="images/session11-clickable.png" alt="左の画面は class=clickable がある状態で box-1 を3回クリックして黄色に変化。右の画面は class=clickable を削除した状態で同じく3回クリックしても赤のまま変化していない。">
+          <figcaption class="exec-caption"><strong>結果:</strong> <code>class="clickable"</code> を消すとカーソルの <code>raycaster="objects: .clickable"</code> が箱を当たり判定の対象にできず、<strong>クリック自体が成立しない（色が変わらない）</strong>。</figcaption>
+        </figure>
+
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 自分の予測と上の実行結果を照らし合わせ、その理由（raycaster の <code>objects</code> 属性との関係）を書いてください。</div></div>
       </div>
     </div>
 
@@ -747,7 +764,7 @@ socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, appl
       </table>
       <pre><span class="code-label">JavaScript（サーバ側の概念コード）── 関数として整理</span>
 <span class="cmt">// サーバでオブジェクトの状態を管理（唯一の正解）</span>
-<span class="kw">var</span> objectStates = {
+<span class="kw">const</span> objectStates = {
   <span class="str">'box-1'</span>: { color: <span class="str">'red'</span> },
   <span class="str">'box-2'</span>: { color: <span class="str">'blue'</span> },
   <span class="str">'box-3'</span>: { color: <span class="str">'green'</span> }
@@ -769,15 +786,15 @@ socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, appl
 
 <span class="cmt">// (3) クリック受信: 状態を更新して全員に配信</span>
 <span class="kw">function</span> <span class="fn">handleObjectClick</span>(data) {
-  <span class="kw">var</span> updated = <span class="fn">updateObjectColor</span>(data.id, data.newColor);
+  <span class="kw">const</span> updated = <span class="fn">updateObjectColor</span>(data.id, data.newColor);
   <span class="kw">if</span> (updated === <span class="kw">null</span>) {
     <span class="kw">return</span>;
   }
-  <span class="kw">var</span> payload = { id: data.id, color: updated.color };  <span class="cmt">// ← 中間変数</span>
+  <span class="kw">const</span> payload = { id: data.id, color: updated.color };  <span class="cmt">// ← 中間変数</span>
   io.<span class="fn">emit</span>(<span class="str">'objectUpdated'</span>, payload);
 }
 
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
   <span class="fn">sendInitialState</span>(socket);
   socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, handleObjectClick);
 });</pre>
@@ -895,7 +912,32 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem">上のコードで <code>socket.emit('initState', objectStates)</code> の行を削除した場合、途中から接続したユーザの画面はどうなるか考えてみよう。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した結果と、サーバ側での状態保持の役割を書いてください。</div></div>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実験のしかた（コード体験1のファイルで試す）</p>
+        <p style="color:#ccc;font-size:0.85rem;margin-bottom:0.4rem"><code>server.js</code> の新規接続時に状態を送る1行をコメントアウト（または削除）して <code>node server.js</code> を再起動する。<br>① 1つ目のタブで箱を何回かクリックして色を変える → ② <strong>そのあと</strong>2つ目のタブを開く（＝途中参加）。</p>
+        <pre style="margin:0.4rem 0"><span class="code-label">変更箇所 ── server.js（io.on('connection') の中）</span>
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
+  <span class="cmt">// この1行を削除すると、途中参加ユーザに現在の状態が届かなくなる</span>
+  <span class="cmt">// socket.emit('initState', objectStates);   ← 削除（コメントアウト）</span>
+
+  socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, (data) <span class="op">=&gt;</span> { <span class="cmt">/* ...（変更なし）... */</span> });
+});</pre>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実機での実行結果 ①：行を残した場合（正常）</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — 左:既存ユーザ ／ 右:途中参加ユーザ</span></div>
+          <img src="images/session11-initstate-ok.png" alt="initState を送る行が残っている場合。左の既存ユーザが箱をクリックして青・黄・黄に変えた後、右の途中参加ユーザが接続すると、同じ青・黄・黄が表示されている。">
+          <figcaption class="exec-caption"><strong>結果:</strong> 接続した瞬間に <code>initState</code> で最新状態を受信するため、<strong>途中参加でも全員の色が一致</strong>する。</figcaption>
+        </figure>
+
+        <p style="color:#FF8a8a;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実機での実行結果 ②：行を削除した場合（バグ）</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — 左:既存ユーザ ／ 右:途中参加ユーザ（initState 削除）</span></div>
+          <img src="images/session11-initstate-removed.png" alt="initState を送る行を削除した場合。左の既存ユーザは青・黄・黄に変わっているが、右の途中参加ユーザは初期色の赤・青・緑のまま表示され、画面の状態がズレている。">
+          <figcaption class="exec-caption"><strong>結果:</strong> 途中参加ユーザは<strong>初期色（赤・青・緑）のまま</strong>。クリック後の <code>objectUpdated</code> しか受け取れず、<strong>接続前に起きた変更を知らない</strong>ため既存ユーザと画面がズレる。</figcaption>
+        </figure>
+
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 自分の予測と上の実行結果を照らし合わせ、サーバ側で状態を保持して <code>initState</code> で送る役割を書いてください。</div></div>
       </div>
     </div>
 
@@ -920,11 +962,11 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
       <pre><span class="code-label">JavaScript ── アニメーションも関数として整理</span>
 <span class="cmt">// (1) アニメーション再生関数（クライアント側）</span>
 <span class="kw">function</span> <span class="fn">playRotateAnimation</span>(elementId) {
-  <span class="kw">var</span> box = document.<span class="fn">getElementById</span>(elementId);
+  <span class="kw">const</span> box = document.<span class="fn">getElementById</span>(elementId);
   <span class="kw">if</span> (box === <span class="kw">null</span>) {
     <span class="kw">return</span>;
   }
-  <span class="kw">var</span> animationConfig = {        <span class="cmt">// ← 中間変数で意図を明確に</span>
+  <span class="kw">const</span> animationConfig = {        <span class="cmt">// ← 中間変数で意図を明確に</span>
     property: <span class="str">'rotation'</span>,
     to: <span class="str">'0 360 0'</span>,
     dur: <span class="num">1000</span>,
@@ -934,7 +976,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
 }
 
 <span class="cmt">// (2) サーバが「再生せよ」と命令してきたら (1) を呼ぶ</span>
-socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <span class="kw">function</span>(data) {
+socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, (data) <span class="op">=&gt;</span> {
   <span class="fn">playRotateAnimation</span>(data.id);
 });</pre>
 
@@ -1042,7 +1084,28 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
         <p style="color:#ccc;font-size:0.9rem"><code>dur</code>（duration）の値を <code>1000</code> から <code>3000</code> に変えた場合、アニメーションの見え方はどう変わるか予測してみよう。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した結果を書いてください。</div></div>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実験のしかた（<code>animationConfig</code> の dur を変える）</p>
+        <pre style="margin:0.4rem 0"><span class="code-label">変更箇所 ── playRotateAnimation() の中</span>
+<span class="kw">const</span> animationConfig = {
+  property: <span class="str">'rotation'</span>,
+  to: <span class="str">'0 0 360'</span>,
+  dur: <span class="num">1000</span>,        <span class="cmt">// ← これを 3000 にすると1回転に3秒かかる（＝ゆっくり）</span>
+  easing: <span class="str">'linear'</span>,
+  loop: <span class="kw">true</span>
+};
+box.<span class="fn">setAttribute</span>(<span class="str">'animation'</span>, animationConfig);</pre>
+
+        <p style="color:#93D500;font-weight:600;font-size:0.85rem;margin:0.9rem 0 0.3rem">実機での実行結果（左右を同時に再生して比較）</p>
+        <figure class="exec-shot">
+          <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">A-Frame animation — 左:dur 1000（速い） ／ 右:dur 3000（遅い）</span></div>
+          <video src="videos/session11-dur.mp4" poster="images/session11-dur-poster.jpg"
+                 autoplay loop muted playsinline controls
+                 aria-label="同じ回転アニメーションを左右に並べた動画。左の緑のコーンは dur 1000 で速く回転し、右の黄のコーンは dur 3000 でゆっくり回転する。左が3回転する間に右は1回転しかしない。"></video>
+          <figcaption class="exec-caption"><strong>結果:</strong> <code>dur</code> は<strong>1回のアニメーションにかかる時間（ミリ秒）</strong>。<code>3000</code> にすると同じ1回転に3倍の時間がかかり<strong>ゆっくり動く</strong>（左が3回転する間に右は1回転）。動き自体や最終的な角度は同じ。<br><span style="color:#888;font-size:0.85em">※ 違いが分かりやすいようコーンを Z軸で連続回転（loop）させたデモです。</span></figcaption>
+        </figure>
+
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 自分の予測と上の実行結果を照らし合わせて書いてください。</div></div>
       </div>
     </div>
 
@@ -1072,10 +1135,10 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
       <pre><span class="code-label">JavaScript ── throttle と debounce の最小実装</span>
 <span class="cmt">// (1) throttle: 100msに1回しか実行しない</span>
 <span class="kw">function</span> <span class="fn">createThrottle</span>(fn, intervalMs) {
-  <span class="kw">var</span> lastTime = <span class="num">0</span>;                       <span class="cmt">// ← 中間変数</span>
-  <span class="kw">return</span> <span class="kw">function</span>(data) {
-    <span class="kw">var</span> now = Date.<span class="fn">now</span>();
-    <span class="kw">var</span> elapsed = now - lastTime;
+  <span class="kw">let</span> lastTime = <span class="num">0</span>;                       <span class="cmt">// ← 中間変数</span>
+  <span class="kw">return</span> (data) <span class="op">=&gt;</span> {
+    <span class="kw">const</span> now = Date.<span class="fn">now</span>();
+    <span class="kw">const</span> elapsed = now - lastTime;
     <span class="kw">if</span> (elapsed &lt; intervalMs) {
       <span class="kw">return</span>;                         <span class="cmt">// ← 早期return、1行 if は避ける</span>
     }
@@ -1086,12 +1149,12 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
 
 <span class="cmt">// (2) debounce: 連続イベントの最後の1回だけ実行</span>
 <span class="kw">function</span> <span class="fn">createDebounce</span>(fn, waitMs) {
-  <span class="kw">var</span> timerId = <span class="kw">null</span>;
-  <span class="kw">return</span> <span class="kw">function</span>(data) {
+  <span class="kw">let</span> timerId = <span class="kw">null</span>;
+  <span class="kw">return</span> (data) <span class="op">=&gt;</span> {
     <span class="kw">if</span> (timerId !== <span class="kw">null</span>) {
       <span class="fn">clearTimeout</span>(timerId);
     }
-    timerId = <span class="fn">setTimeout</span>(<span class="kw">function</span>() {
+    timerId = <span class="fn">setTimeout</span>(() <span class="op">=&gt;</span> {
       <span class="fn">fn</span>(data);
       timerId = <span class="kw">null</span>;
     }, waitMs);
@@ -1099,11 +1162,11 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
 }
 
 <span class="cmt">// (3) 使用例: ドラッグ位置は throttle、入力確定は debounce</span>
-<span class="kw">var</span> sendPosition = <span class="fn">createThrottle</span>(<span class="kw">function</span>(pos) {
+<span class="kw">const</span> sendPosition = <span class="fn">createThrottle</span>((pos) <span class="op">=&gt;</span> {
   socket.<span class="fn">emit</span>(<span class="str">'movePosition'</span>, pos);
 }, <span class="num">50</span>);
 
-<span class="kw">var</span> sendQuery = <span class="fn">createDebounce</span>(<span class="kw">function</span>(text) {
+<span class="kw">const</span> sendQuery = <span class="fn">createDebounce</span>((text) <span class="op">=&gt;</span> {
   socket.<span class="fn">emit</span>(<span class="str">'search'</span>, text);
 }, <span class="num">300</span>);</pre>
 
@@ -1228,11 +1291,11 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
 
       <pre><span class="code-label">JavaScript ── 共有オブジェクトのロック（サーバ側）</span>
 <span class="cmt">// ロック状態を管理</span>
-<span class="kw">var</span> locks = {};   <span class="cmt">// { 'box-1': 'socket-id-of-locker', ... }</span>
+<span class="kw">const</span> locks = {};   <span class="cmt">// { 'box-1': 'socket-id-of-locker', ... }</span>
 
 <span class="cmt">// (1) ロック取得を試みる</span>
 <span class="kw">function</span> <span class="fn">tryAcquireLock</span>(objectId, socketId) {
-  <span class="kw">var</span> currentLocker = locks[objectId];
+  <span class="kw">const</span> currentLocker = locks[objectId];
   <span class="kw">if</span> (currentLocker !== <span class="kw">undefined</span> &amp;&amp; currentLocker !== socketId) {
     <span class="kw">return</span> <span class="kw">false</span>;        <span class="cmt">// ← 既に他人が握っている</span>
   }
@@ -1248,8 +1311,8 @@ socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, <spa
 }
 
 <span class="cmt">// (3) クリック処理にロック判定を追加</span>
-socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span class="kw">function</span>(data) {
-  <span class="kw">var</span> acquired = <span class="fn">tryAcquireLock</span>(data.id, socket.id);
+socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, (data) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> acquired = <span class="fn">tryAcquireLock</span>(data.id, socket.id);
   <span class="kw">if</span> (acquired === <span class="kw">false</span>) {
     socket.<span class="fn">emit</span>(<span class="str">'lockDenied'</span>, { id: data.id });
     <span class="kw">return</span>;
@@ -1442,7 +1505,7 @@ socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span 
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express@4 socket.io</pre>
+npm install express@4 socket.io@1.7.4</pre>
       <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく、古い Node.js でも動く <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてインストールしてください。</p>
     </div>
 
@@ -1456,38 +1519,40 @@ npm install express@4 socket.io</pre>
 
       <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong></p>
       <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">var</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">var</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">var</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
 
-<span class="kw">var</span> app = <span class="fn">express</span>();
-<span class="kw">var</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">var</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
+<span class="kw">const</span> app = <span class="fn">express</span>();
 app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
 
 <span class="cmt">// オブジェクトの状態を管理</span>
-<span class="kw">var</span> objectStates = {
+<span class="kw">const</span> objectStates = {
   <span class="str">'box-1'</span>: { color: <span class="str">'#FF5252'</span> },
   <span class="str">'box-2'</span>: { color: <span class="str">'#4FC3F7'</span> },
   <span class="str">'box-3'</span>: { color: <span class="str">'#76B900'</span> }
 };
 
 <span class="cmt">// クリック時に巡回する色リスト</span>
-<span class="kw">var</span> colorCycle = [<span class="str">'#FF5252'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#76B900'</span>, <span class="str">'#FFB800'</span>, <span class="str">'#E040FB'</span>, <span class="str">'#FF6E40'</span>];
+<span class="kw">const</span> colorCycle = [<span class="str">'#FF5252'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#76B900'</span>, <span class="str">'#FFB800'</span>, <span class="str">'#E040FB'</span>, <span class="str">'#FF6E40'</span>];
 
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class="kw">function</span>(socket) {
+<span class="cmt">// サーバを起動し、その上に Socket.IO を載せる</span>
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
   console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
 
   <span class="cmt">// 新規接続時: 現在のオブジェクト状態を送信</span>
   socket.<span class="fn">emit</span>(<span class="str">'initState'</span>, objectStates);
 
   <span class="cmt">// オブジェクトクリック: 状態を更新して全員に配信</span>
-  socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, <span class="kw">function</span>(data) {
+  socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, (data) <span class="op">=&gt;</span> {
     <span class="kw">if</span> (objectStates[data.id]) {
       <span class="cmt">// 次の色に巡回</span>
-      <span class="kw">var</span> currentIndex = colorCycle.<span class="fn">indexOf</span>(objectStates[data.id].color);
-      <span class="kw">var</span> nextColor = colorCycle[(currentIndex + <span class="num">1</span>) % colorCycle.length];
+      <span class="kw">const</span> currentIndex = colorCycle.<span class="fn">indexOf</span>(objectStates[data.id].color);
+      <span class="kw">const</span> nextColor = colorCycle[(currentIndex + <span class="num">1</span>) % colorCycle.length];
       objectStates[data.id].color = nextColor;
 
       console.<span class="fn">log</span>(<span class="str">'色変更:'</span>, data.id, <span class="str">'->'</span>, nextColor);
@@ -1495,14 +1560,11 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
     }
   });
 
-  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, <span class="kw">function</span>() {
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () <span class="op">=&gt;</span> {
     console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
   });
-});
-
-server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class="kw">function</span>() {
-  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
 });</pre>
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x1F4A1; なぜ <code>const server = app.listen(...)</code> と書くの？</strong> 第10回と同じく、<strong>Socket.IO を起動したサーバの上に載せる</strong>ため、<code>app.listen()</code> が返す<strong>サーバ本体を <code>server</code> で受け取り</strong>、それを <code>socketIo(server)</code> に渡しています。</p>
 
       <p style="margin-top:1rem"><strong>ファイル2:</strong> <code>public</code> フォルダを作成し、その中に <code>index.html</code> を作成</p>
       <pre><span class="code-label">HTML ── public/index.html</span>
@@ -1544,12 +1606,12 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
   <span class="kw">&lt;/div&gt;</span>
 
   <span class="kw">&lt;script&gt;</span>
-    <span class="kw">var</span> socket = <span class="fn">io</span>();
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
 
     <span class="cmt">// 初期状態の受信</span>
-    socket.<span class="fn">on</span>(<span class="str">'initState'</span>, <span class="kw">function</span>(states) {
-      <span class="kw">for</span> (<span class="kw">var</span> id <span class="kw">in</span> states) {
-        <span class="kw">var</span> el = document.<span class="fn">getElementById</span>(id);
+    socket.<span class="fn">on</span>(<span class="str">'initState'</span>, (states) <span class="op">=&gt;</span> {
+      <span class="kw">for</span> (<span class="kw">const</span> id <span class="kw">in</span> states) {
+        <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(id);
         <span class="kw">if</span> (el) {
           el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, states[id].color);
         }
@@ -1557,15 +1619,15 @@ server.<span class="fn">listen</span>(<span class="num">3000</span>, <span class
     });
 
     <span class="cmt">// クリック対象にイベントリスナを設定</span>
-    document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>).<span class="fn">forEach</span>(<span class="kw">function</span>(el) {
-      el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+    document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>).<span class="fn">forEach</span>((el) <span class="op">=&gt;</span> {
+      el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () <span class="op">=&gt;</span> {
         socket.<span class="fn">emit</span>(<span class="str">'objectClick'</span>, { id: el.id });
       });
     });
 
     <span class="cmt">// オブジェクト更新の受信</span>
-    socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, <span class="kw">function</span>(data) {
-      <span class="kw">var</span> el = document.<span class="fn">getElementById</span>(data.id);
+    socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, (data) <span class="op">=&gt;</span> {
+      <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(data.id);
       <span class="kw">if</span> (el) {
         el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.color);
       }

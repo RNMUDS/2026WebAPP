@@ -700,23 +700,20 @@ app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span cla
         <strong style="color:#FF5252">エラーメッセージ:</strong><br>
         <code style="color:#E0E0E0">GET http://localhost:3000/socket.io/?... 404 (Not Found)</code>
       </div>
-      <p><strong>原因:</strong> Socket.IOがサーバ側で正しく設定されていない。Expressだけ起動してSocket.IOを紐づけていない。</p>
-      <p style="margin-top:0.5rem"><strong>解決方法:</strong> <code>http.createServer</code> でHTTPサーバを作り、Socket.IOをそこに紐づける。</p>
+      <p><strong>原因:</strong> Socket.IOがサーバ側で正しく設定されていない。Expressだけ起動して Socket.IO をサーバに紐づけていない（<code>const io = socketIo(server)</code> を書いていない）。</p>
+      <p style="margin-top:0.5rem"><strong>解決方法:</strong> 第10回・第11回と同じく、<code>app.listen()</code> が返す<strong>サーバ本体</strong>を <code>socketIo()</code> に渡して Socket.IO を紐づける。</p>
       <pre><span class="code-label">JavaScript ── server.js</span>
 <span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> http = <span class="fn">require</span>(<span class="str">'http'</span>);
-<span class="kw">const</span> { Server } = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
-<span class="kw">const</span> server = http.<span class="fn">createServer</span>(app);
-<span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(server);
-
 app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
 
-<span class="cmt">// app.listen() ではなく server.listen() を使う</span>
-server.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+<span class="cmt">// app.listen() の戻り値（サーバ本体）を socketIo() に渡す</span>
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
   console.<span class="fn">log</span>(<span class="str">'Server running on http://localhost:3000'</span>);
-});</pre>
+});
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);</pre>
     </div>
 
     <div class="card" style="border-left:4px solid #FF5252">
