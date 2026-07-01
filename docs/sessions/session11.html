@@ -455,9 +455,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1809,10 +1809,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
         <li>箱が回転しながら色が変わり、大きさが 1倍 ↔ 1.5倍 で切り替わることを確認する</li>
         <li>タブ2でも同じ回転・色・大きさが同期されるのを確認する</li>
       </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
-        Q1. 箱をクリックしたとき、回転・色・大きさはどう変化したか？<br>
-        Q2. もう一方のタブでも同時に回転・色・大きさが変わったか？<br>
-        Q3. 大きさを切り替えている「三項演算子」はサーバ側とクライアント側のどこにあるか？</div></div>
+      <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500">このコード体験2のプログラムは、<strong>標準課題2</strong>で改造します。</p>
     </div>
 
   </div>
@@ -2037,15 +2034,6 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
 
 ---
 
-## コード体験 2: クリックで回転＋拡大する共有オブジェクト
-### Q1. 箱をクリックしたとき、回転・色・大きさはどう変化したか？
-
-### Q2. もう一方のタブでも同時に回転・色・大きさが変わったか？
-
-### Q3. 大きさを切り替えている「三項演算子」はサーバ側とクライアント側のどこにあるか？
-
----
-
 ## グループ口頭試問
 ### Phase 1: あなたが考えた質問
 
@@ -2133,17 +2121,6 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
           <li><strong>Q1:</strong> 赤い箱をクリックすると水色に変わった。もう一度クリックすると緑に変わった。色がリスト順に巡回していた（赤 → 水色 → 緑 → 黄 → 紫 → オレンジ → 赤...）。</li>
           <li><strong>Q2:</strong> はい。片方のタブでクリックすると、もう一方のタブでもほぼ同時に色が変わった。</li>
           <li><strong>Q3:</strong> 3つ目のタブを開いたとき、箱は最新の色で表示された（初期色ではない）。これはサーバが <code>objectStates</code> で現在の状態を保持しており、新規接続時に <code>initState</code> イベントで最新の状態を送信するため。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> クリックすると箱が Y軸まわりに1回転し、同時に色が次の色へ巡回した。さらに大きさが 1倍 → 1.5倍（もう一度クリックで 1.5倍 → 1倍）に切り替わった。</li>
-          <li><strong>Q2:</strong> はい。片方のタブでクリックすると、もう一方のタブでも同じ回転・色・大きさがほぼ同時に再生された。サーバが <code>playAnimation</code> と <code>objectUpdated</code> を <code>io.emit</code> で全員に配信しているため。</li>
-          <li><strong>Q3:</strong> 大きさを「次に何倍にするか」決める三項演算子は <strong>サーバ側</strong>（<code>server.js</code> の <code>objectStates[data.id].big ? '1.5 1.5 1.5' : '1 1 1'</code>）にある。クライアント側の <code>initState</code> 内の三項演算子は、途中参加時に「保存された状態を復元して表示する」ためのもので、大きさ自体を決めているのはサーバ。これが server-authoritative（サーバ権威）の考え方。</li>
         </ul>
       </div>
     </details>
