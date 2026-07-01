@@ -455,9 +455,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計5項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計6項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
+        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">2</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
         <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識 + コード改造</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
         <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">口頭試問</span>グループ記録</a>
@@ -1651,6 +1651,170 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
         Q3. 3つ目のタブを開いたとき、箱の色はどうなっていたか？（初期色？ 最新の色？）</div></div>
     </div>
 
+    <!-- Code Exp 2 -->
+    <div class="card code-exp">
+      <div class="card-header">
+        <span class="tag tag-code-exp">コード体験 2</span>
+        <h3>クリックで回転＋拡大する共有オブジェクト</h3>
+      </div>
+      <p>コード体験1を発展させ、オブジェクトをクリックすると<strong>色が変わる＋回転アニメーションが再生される＋大きさが切り替わる</strong>仕組みを作ります。「いつ回転するか」「次の大きさは何倍か」は<strong>サーバが決定</strong>し（server-authoritative）、全ユーザの画面で同期されます。</p>
+
+      <p style="margin-top:1rem"><strong>ファイル1: <code>server.js</code></strong></p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="cmt">// オブジェクトの状態を管理（色 + 拡大しているか）</span>
+<span class="kw">const</span> objectStates = {
+  <span class="str">'obj-1'</span>: { color: <span class="str">'#FF5252'</span>, big: <span class="kw">false</span> },
+  <span class="str">'obj-2'</span>: { color: <span class="str">'#4FC3F7'</span>, big: <span class="kw">false</span> },
+  <span class="str">'obj-3'</span>: { color: <span class="str">'#76B900'</span>, big: <span class="kw">false</span> }
+};
+
+<span class="cmt">// クリック時に巡回する色リスト</span>
+<span class="kw">const</span> colorCycle = [<span class="str">'#FF5252'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#76B900'</span>, <span class="str">'#FFB800'</span>, <span class="str">'#E040FB'</span>, <span class="str">'#FF6E40'</span>];
+
+<span class="cmt">// サーバを起動し、その上に Socket.IO を載せる</span>
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">'接続:'</span>, socket.id);
+
+  <span class="cmt">// 新規接続時: 現在のオブジェクト状態を送信</span>
+  socket.<span class="fn">emit</span>(<span class="str">'initState'</span>, objectStates);
+
+  <span class="cmt">// オブジェクトクリック: 状態を更新して全員に配信</span>
+  socket.<span class="fn">on</span>(<span class="str">'objectClick'</span>, (data) <span class="op">=&gt;</span> {
+    <span class="kw">if</span> (objectStates[data.id]) {
+      <span class="cmt">// (1) 色を次の色に巡回</span>
+      <span class="kw">const</span> currentIndex = colorCycle.<span class="fn">indexOf</span>(objectStates[data.id].color);
+      <span class="kw">const</span> nextColor = colorCycle[(currentIndex + <span class="num">1</span>) % colorCycle.length];
+      objectStates[data.id].color = nextColor;
+
+      <span class="cmt">// (2) 拡大状態を反転し、三項演算子で次の大きさを決める</span>
+      objectStates[data.id].big = !objectStates[data.id].big;
+      <span class="kw">const</span> nextScale = objectStates[data.id].big ? <span class="str">'1.5 1.5 1.5'</span> : <span class="str">'1 1 1'</span>;
+
+      console.<span class="fn">log</span>(<span class="str">'更新:'</span>, data.id, <span class="str">'->'</span>, nextColor, nextScale);
+
+      <span class="cmt">// (3) 色と大きさを全員に配信</span>
+      io.<span class="fn">emit</span>(<span class="str">'objectUpdated'</span>, { id: data.id, color: nextColor, scale: nextScale });
+      <span class="cmt">// (4) 「回転アニメーションを再生せよ」と全員に命令</span>
+      io.<span class="fn">emit</span>(<span class="str">'playAnimation'</span>, { id: data.id });
+    }
+  });
+
+  socket.<span class="fn">on</span>(<span class="str">'disconnect'</span>, () <span class="op">=&gt;</span> {
+    console.<span class="fn">log</span>(<span class="str">'切断:'</span>, socket.id);
+  });
+});</pre>
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x1F4A1; ポイント:</strong> クライアントは「クリックした」ことだけを伝え、<strong>次の色・次の大きさ・回転の合図はすべてサーバが決定</strong>します。これにより全員の画面が必ず一致します（server-authoritative）。</p>
+
+      <p style="margin-top:1rem"><strong>ファイル2:</strong> <code>public</code> フォルダの中の <code>index.html</code></p>
+      <pre><span class="code-label">HTML ── public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>Shared Animation<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;a-scene&gt;</span>
+    <span class="cmt">&lt;!-- カーソル（クリック検知用） --&gt;</span>
+    <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 4"</span><span class="kw">&gt;</span>
+      <span class="kw">&lt;a-cursor</span> color=<span class="str">"white"</span> fuse=<span class="str">"false"</span> raycaster=<span class="str">"objects: .clickable"</span><span class="kw">&gt;&lt;/a-cursor&gt;</span>
+    <span class="kw">&lt;/a-camera&gt;</span>
+
+    <span class="cmt">&lt;!-- クリック対象の箱3つ（animation__rot で回転アニメを定義） --&gt;</span>
+    <span class="cmt">&lt;!-- startEvents: rotate → 'rotate' イベントが来たときだけ回転する --&gt;</span>
+    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-1"</span> class=<span class="str">"clickable"</span> position=<span class="str">"-2 1 -3"</span> color=<span class="str">"#FF5252"</span>
+           animation__rot=<span class="str">"property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-2"</span> class=<span class="str">"clickable"</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#4FC3F7"</span>
+           animation__rot=<span class="str">"property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-3"</span> class=<span class="str">"clickable"</span> position=<span class="str">"2 1 -3"</span> color=<span class="str">"#76B900"</span>
+           animation__rot=<span class="str">"property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+
+    <span class="cmt">&lt;!-- ラベル --&gt;</span>
+    <span class="kw">&lt;a-text</span> value=<span class="str">"Click to rotate &amp; resize!"</span> position=<span class="str">"0 2.5 -3"</span>
+            align=<span class="str">"center"</span> color=<span class="str">"white"</span> width=<span class="str">"6"</span><span class="kw">&gt;&lt;/a-text&gt;</span>
+
+    <span class="cmt">&lt;!-- 床と空 --&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span>
+            width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+  <span class="kw">&lt;div</span> style=<span class="str">"position:fixed;bottom:10px;left:10px;color:white;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:8px;font-family:sans-serif;font-size:14px;z-index:999"</span><span class="kw">&gt;</span>
+    箱をクリックすると回転して大きさが変わります（全ユーザに反映）
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+
+    <span class="cmt">// 状態を画面に反映する共通関数（色と大きさ）</span>
+    <span class="kw">function</span> <span class="fn">applyState</span>(id, color, scale) {
+      <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(id);
+      <span class="kw">if</span> (el === <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+      }
+      el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, color);
+      el.<span class="fn">setAttribute</span>(<span class="str">'scale'</span>, scale);
+    }
+
+    <span class="cmt">// 初期状態の受信（途中参加でも最新の色・大きさを復元）</span>
+    socket.<span class="fn">on</span>(<span class="str">'initState'</span>, (states) <span class="op">=&gt;</span> {
+      <span class="kw">for</span> (<span class="kw">const</span> id <span class="kw">in</span> states) {
+        <span class="kw">const</span> scale = states[id].big ? <span class="str">'1.5 1.5 1.5'</span> : <span class="str">'1 1 1'</span>;
+        <span class="fn">applyState</span>(id, states[id].color, scale);
+      }
+    });
+
+    <span class="cmt">// クリック対象にイベントリスナを設定</span>
+    document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>).<span class="fn">forEach</span>((el) <span class="op">=&gt;</span> {
+      el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () <span class="op">=&gt;</span> {
+        socket.<span class="fn">emit</span>(<span class="str">'objectClick'</span>, { id: el.id });
+      });
+    });
+
+    <span class="cmt">// オブジェクト更新の受信（色と大きさ）</span>
+    socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, (data) <span class="op">=&gt;</span> {
+      <span class="fn">applyState</span>(data.id, data.color, data.scale);
+    });
+
+    <span class="cmt">// アニメーション再生命令の受信 → 'rotate' イベントを発火させて回転させる</span>
+    socket.<span class="fn">on</span>(<span class="str">'playAnimation'</span>, (data) <span class="op">=&gt;</span> {
+      <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(data.id);
+      <span class="kw">if</span> (el) {
+        el.<span class="fn">emit</span>(<span class="str">'rotate'</span>);
+      }
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code のターミナルで <code>node server.js</code> を実行</li>
+        <li>ブラウザで <code>http://localhost:3000</code> を開く（タブ1）</li>
+        <li>もう1つタブを開いて <code>http://localhost:3000</code> を開く（タブ2）</li>
+        <li>タブ1で箱をクリック（画面中央のカーソルを箱に合わせてクリック）</li>
+        <li>箱が回転しながら色が変わり、大きさが 1倍 ↔ 1.5倍 で切り替わることを確認する</li>
+        <li>タブ2でも同じ回転・色・大きさが同期されるのを確認する</li>
+      </ol>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。<br>
+        Q1. 箱をクリックしたとき、回転・色・大きさはどう変化したか？<br>
+        Q2. もう一方のタブでも同時に回転・色・大きさが変わったか？<br>
+        Q3. 大きさを切り替えている「三項演算子」はサーバ側とクライアント側のどこにあるか？</div></div>
+    </div>
+
   </div>
 </section>
 
@@ -1873,6 +2037,15 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
 
 ---
 
+## コード体験 2: クリックで回転＋拡大する共有オブジェクト
+### Q1. 箱をクリックしたとき、回転・色・大きさはどう変化したか？
+
+### Q2. もう一方のタブでも同時に回転・色・大きさが変わったか？
+
+### Q3. 大きさを切り替えている「三項演算子」はサーバ側とクライアント側のどこにあるか？
+
+---
+
 ## グループ口頭試問
 ### Phase 1: あなたが考えた質問
 
@@ -1960,6 +2133,17 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
           <li><strong>Q1:</strong> 赤い箱をクリックすると水色に変わった。もう一度クリックすると緑に変わった。色がリスト順に巡回していた（赤 → 水色 → 緑 → 黄 → 紫 → オレンジ → 赤...）。</li>
           <li><strong>Q2:</strong> はい。片方のタブでクリックすると、もう一方のタブでもほぼ同時に色が変わった。</li>
           <li><strong>Q3:</strong> 3つ目のタブを開いたとき、箱は最新の色で表示された（初期色ではない）。これはサーバが <code>objectStates</code> で現在の状態を保持しており、新規接続時に <code>initState</code> イベントで最新の状態を送信するため。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 2 解答（記録例）</summary>
+      <div class="answer-content">
+        <ul class="point-list">
+          <li><strong>Q1:</strong> クリックすると箱が Y軸まわりに1回転し、同時に色が次の色へ巡回した。さらに大きさが 1倍 → 1.5倍（もう一度クリックで 1.5倍 → 1倍）に切り替わった。</li>
+          <li><strong>Q2:</strong> はい。片方のタブでクリックすると、もう一方のタブでも同じ回転・色・大きさがほぼ同時に再生された。サーバが <code>playAnimation</code> と <code>objectUpdated</code> を <code>io.emit</code> で全員に配信しているため。</li>
+          <li><strong>Q3:</strong> 大きさを「次に何倍にするか」決める三項演算子は <strong>サーバ側</strong>（<code>server.js</code> の <code>objectStates[data.id].big ? '1.5 1.5 1.5' : '1 1 1'</code>）にある。クライアント側の <code>initState</code> 内の三項演算子は、途中参加時に「保存された状態を復元して表示する」ためのもので、大きさ自体を決めているのはサーバ。これが server-authoritative（サーバ権威）の考え方。</li>
         </ul>
       </div>
     </details>
