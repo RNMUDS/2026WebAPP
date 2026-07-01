@@ -1809,6 +1809,13 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) <s
         <li>箱が回転しながら色が変わり、大きさが 1倍 ↔ 1.5倍 で切り替わることを確認する</li>
         <li>タブ2でも同じ回転・色・大きさが同期されるのを確認する</li>
       </ol>
+
+      <figure class="exec-shot" style="margin-top:1rem">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — 左:クリック操作をしたタブ ／ 右:別ユーザのタブ</span></div>
+        <img src="images/session11-codeexp2.png" alt="左のタブで左の箱を2回・右の箱を1回クリックした結果。左の箱は緑（標準サイズ）、中央の箱は青（標準サイズ）、右の箱は黄色で一回り大きく（1.5倍）表示されている。右の別ユーザのタブでもまったく同じ色・大きさが同期されている。">
+        <figcaption class="exec-caption"><strong>結果:</strong> 片方のタブでクリックすると、色の変化・回転・大きさの切り替え（右の黄色い箱が <code>1.5倍</code>）が<strong>もう一方のタブにも同期</strong>される。次の色・次の大きさ・回転の合図はすべて<strong>サーバが決定</strong>し <code>io.emit</code> で全員に配信するため、両タブの見た目が一致する。</figcaption>
+      </figure>
+
       <p style="margin-top:0.8rem;font-size:0.9rem;color:#93D500">このコード体験2のプログラムは、<strong>標準課題2</strong>で改造します。</p>
     </div>
 
