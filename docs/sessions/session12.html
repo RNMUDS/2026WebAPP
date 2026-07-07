@@ -259,6 +259,14 @@ pre .op { color: #4FC3F7; }
   font-size: 0.7rem;
   font-weight: 500;
 }
+.hl-line {
+  display: inline-block;
+  width: 100%;
+  background: rgba(255,184,0,0.16);
+  border-left: 3px solid #FFB800;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+}
 
 /* ============ EXPLANATION BLOCKS ============ */
 .concept-box {
@@ -436,8 +444,6 @@ pre { position: relative; }
 <nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
   <a href="#sec-explanation">説明</a>
   <a href="#sec-examples">例題</a>
-  <a href="#sec-code-exp">体験</a>
-  <a href="#sec-group-exam" class="nav-advanced">試問</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
@@ -449,7 +455,7 @@ pre { position: relative; }
   <div class="container">
     <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
     <h1>第12回: リアルタイムWebプログラミング④</h1>
-    <p>空間内オブジェクトの共有状態管理、データベースとの連携</p>
+    <p>アバタのデータ（position・rotation・id）をJSON形式で理解する</p>
   </div>
 </header>
 
@@ -457,10 +463,9 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計4項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計2項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-code-exp"><span class="sub-count">1</span><span class="tag tag-code-exp">コード体験</span>観察記録を記述</a>
-        <a class="sub-item" href="#sec-standard"><span class="sub-count">2</span><span class="tag tag-standard">標準課題</span>知識問題 + コード改造</a>
+        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">標準課題</span>コード改造 + 確認</a>
         <a class="sub-item" href="#sec-advanced"><span class="sub-count">1</span><span class="tag tag-advanced">発展課題</span>コード + 音声添付</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
@@ -479,695 +484,474 @@ pre { position: relative; }
     </div>
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
-      前回までにSocket.IOでリアルタイム通信を実装しました。<br>
-      しかし、サーバを再起動すると<strong>すべてのデータが消えてしまう</strong>問題があります。今回は<strong>データベース（SQLite）</strong>を導入し、データを永続化する方法を学びます。
+      第10回・第11回で、アバタの<strong>position（位置）・rotation（回転）・id（識別子）</strong>をSocket.IOでサーバとやり取りしてきました。<br>
+      今回は、そのデータを<strong>JSON（JavaScript Object Notation）</strong>という共通の形式で整理し、<strong>サーバに蓄積し、最後にそれを分析する「ダッシュボード」を作る</strong>、という流れで進めます。
     </p>
 
-    <!-- Real-time Architecture Overview SVG -->
-    <div class="diagram-container">
-      <svg viewBox="0 0 760 320" width="760" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif">
-        <rect x="20" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="2"/>
-        <text x="120" y="45" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">クライアント（ブラウザ）</text>
-        <text x="120" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">A-Frame + Socket.IO Client</text>
-        <rect x="280" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#76B900" stroke-width="2"/>
-        <text x="380" y="45" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">サーバ（Node.js）</text>
-        <text x="380" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">Express + Socket.IO Server</text>
-        <rect x="540" y="20" width="200" height="60" rx="10" fill="#1A1A1A" stroke="#FFB800" stroke-width="2"/>
-        <text x="640" y="45" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">データベース（SQLite）</text>
-        <text x="640" y="63" text-anchor="middle" fill="#E0E0E0" font-size="11">better-sqlite3 / ファイル保存</text>
-        <line x1="220" y1="50" x2="280" y2="50" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arr12a)"/>
-        <line x1="480" y1="50" x2="540" y2="50" stroke="#76B900" stroke-width="2" marker-end="url(#arr12b)"/>
-        <rect x="20" y="120" width="720" height="1" fill="#333"/>
-        <text x="100" y="110" text-anchor="middle" fill="#888" font-size="11">メッセージ送信フロー</text>
-        <rect x="20" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#4FC3F7" stroke-width="1.5"/>
-        <text x="100" y="158" text-anchor="middle" fill="#4FC3F7" font-weight="700" font-size="11">1. メッセージ送信</text>
-        <text x="100" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('chat', data)</text>
-        <rect x="210" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="290" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">2. DBに保存</text>
-        <text x="290" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">INSERT INTO messages</text>
-        <rect x="400" y="140" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="480" y="158" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">3. 全員に配信</text>
-        <text x="480" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">io.emit('chat', saved)</text>
-        <rect x="590" y="140" width="150" height="45" rx="8" fill="#1A1A1A" stroke="#93D500" stroke-width="1.5"/>
-        <text x="665" y="158" text-anchor="middle" fill="#93D500" font-weight="700" font-size="11">4. 画面に表示</text>
-        <text x="665" y="173" text-anchor="middle" fill="#E0E0E0" font-size="8">DOM 更新</text>
-        <line x1="180" y1="162" x2="210" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <line x1="370" y1="162" x2="400" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <line x1="560" y1="162" x2="590" y2="162" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <text x="100" y="210" text-anchor="middle" fill="#888" font-size="11">新規ユーザ接続フロー</text>
-        <rect x="20" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#E040FB" stroke-width="1.5"/>
-        <text x="100" y="238" text-anchor="middle" fill="#E040FB" font-weight="700" font-size="11">新規ユーザ接続</text>
-        <text x="100" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">connection イベント</text>
-        <rect x="210" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#FFB800" stroke-width="1.5"/>
-        <text x="290" y="238" text-anchor="middle" fill="#FFB800" font-weight="700" font-size="11">DBから読み込み</text>
-        <text x="290" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">SELECT * FROM messages</text>
-        <rect x="400" y="220" width="160" height="45" rx="8" fill="#1A1A1A" stroke="#76B900" stroke-width="1.5"/>
-        <text x="480" y="238" text-anchor="middle" fill="#76B900" font-weight="700" font-size="11">履歴を送信</text>
-        <text x="480" y="253" text-anchor="middle" fill="#E0E0E0" font-size="8">socket.emit('history', rows)</text>
-        <line x1="180" y1="242" x2="210" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <line x1="370" y1="242" x2="400" y2="242" stroke="#555" stroke-width="1.5" marker-end="url(#arr12c)"/>
-        <text x="380" y="300" text-anchor="middle" fill="#888" font-size="11">データベースにより、サーバ再起動後もデータが保持され、新規ユーザにも過去の状態を送信できる</text>
-        <defs>
-          <marker id="arr12a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
-          <marker id="arr12b" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-          <marker id="arr12c" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555"/></marker>
-        </defs>
-      </svg>
-    </div>
-
-    <!-- 1.1 なぜデータベースが必要か -->
+    <!-- 1.1 これまでの復習 -->
     <div class="concept-box">
-      <h4>1.1 なぜデータベースが必要か</h4>
+      <h4>1.1 これまでの復習 ── アバタのデータ構造</h4>
+      <p>第10回では、自分の位置や回転が変わるたびに、次のようなオブジェクトをサーバに送信していました。</p>
+      <pre><span class="code-label">JavaScript ── public/app.js（第10回の抜粋、そのまま貼り付けて動く形）</span>
+<span class="kw">const</span> socket = <span class="fn">io</span>();
+
+<span class="cmt">// 0.1秒ごとに、自分の位置と回転をサーバへ送信する</span>
+<span class="fn">setInterval</span>(() => {
+<span class="hl-line">  socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+    id: socket.id,
+    position: { x: <span class="num">1.2</span>, y: <span class="num">0</span>, z: <span class="num">-3.4</span> },
+    rotation: { x: <span class="num">0</span>, y: <span class="num">90</span>, z: <span class="num">0</span> }
+  });</span>
+}, <span class="num">100</span>);</pre>
+      <p style="margin-top:0.5rem">この <code>{ id, position, rotation }</code> という形――<strong>キーと値の組み合わせ</strong>――こそが、これから学ぶ<strong>JSON</strong>の基本形です。今回は「なぜこの形で送るのか」「サーバとブラウザの間で何が起きているのか」を掘り下げます。</p>
       <div class="analogy">
-        メモ帳に書いた内容は、メモ帳を閉じると消えます。でもノートに書いておけば、次に開いたときもそのまま残っています。<br>
-        サーバのメモリは「メモ帳」、データベースは「ノート」のようなものです。
+        これまでは「箱に荷物を詰めて送る」ことだけを覚えてきました。今回学ぶのは、その箱の中身を誰が見ても分かる<strong>共通の書き方</strong>――荷札のフォーマット――です。
       </div>
-      <p>これまでのチャットアプリやアバター同期では、サーバのメモリ（変数）にデータを保持していました。</p>
-      <table>
-        <tr><th>保存方法</th><th>特徴</th><th>サーバ再起動時</th></tr>
-        <tr><td><strong>メモリ（変数）</strong></td><td>高速だがプロセス終了で消える</td><td>すべてのデータが<strong>消失</strong></td></tr>
-        <tr><td><strong>データベース</strong></td><td>ファイルに永続保存される</td><td>データが<strong>残る</strong></td></tr>
-      </table>
-
-      <!-- Animated SVG: Memory vs DB on server restart -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 320" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">サーバ再起動時の差 ── メモリ消滅 vs DB 永続化</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="510" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="605" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ① サーバ稼働中（データ蓄積）
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ② Ctrl+C で停止
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ③ 再起動 → 結果が分岐
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-              ④ 比較完了
-            </text>
-          </g>
-
-          <!-- Memory side (top) -->
-          <rect x="40" y="100" width="320" height="80" rx="10" fill="#141414" stroke="#FF5252" stroke-width="2"/>
-          <text x="200" y="125" text-anchor="middle" fill="#FF5252" font-size="13" font-weight="700">メモリ（変数）</text>
-          <text x="200" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            messages = [太郎, 花子, 太郎]（3件）
-          </text>
-          <text x="200" y="148" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            プロセス終了でメモリ解放
-          </text>
-          <text x="200" y="148" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            messages = []（0件 ✗ 消失）
-          </text>
-          <text x="200" y="168" text-anchor="middle" fill="#888" font-size="10">サーバプロセス内</text>
-
-          <!-- DB side (bottom) -->
-          <rect x="40" y="200" width="320" height="80" rx="10" fill="#141414" stroke="#93D500" stroke-width="2"/>
-          <text x="200" y="225" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">データベース（chat.db）</text>
-          <text x="200" y="248" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;1;1;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            messages テーブル（3行）
-          </text>
-          <text x="200" y="248" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            messages テーブル（3行 ✓ 残存）
-          </text>
-          <text x="200" y="268" text-anchor="middle" fill="#888" font-size="10">ディスク上のファイル</text>
-
-          <!-- Highlight ring on memory at step 3 -->
-          <rect x="35" y="95" width="330" height="90" rx="11" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-          </rect>
-          <!-- Highlight ring on DB at step 3 -->
-          <rect x="35" y="195" width="330" height="90" rx="11" fill="none" stroke="#93D500" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Server icon (right) -->
-          <rect x="430" y="120" width="160" height="140" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="510" y="145" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">サーバ Node.js</text>
-          <text x="510" y="170" text-anchor="middle" fill="#888" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            ● 起動中
-          </text>
-          <text x="510" y="170" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            ✗ 停止中
-          </text>
-          <text x="510" y="170" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.20;0.25;0.50;0.55;0.85;0.92;1" dur="14s" repeatCount="indefinite"/>
-            ● 再起動完了
-          </text>
-          <text x="510" y="200" text-anchor="middle" fill="#aaa" font-size="11">PID 12345 → 67890</text>
-          <text x="510" y="222" text-anchor="middle" fill="#888" font-size="10">プロセス番号が変わる</text>
-          <text x="510" y="242" text-anchor="middle" fill="#888" font-size="10">＝ メモリは新品</text>
-
-          <!-- Legend -->
-          <rect x="600" y="120" width="80" height="140" rx="10" fill="#111" stroke="#333"/>
-          <text x="640" y="140" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">揮発性</text>
-          <text x="640" y="160" text-anchor="middle" fill="#888" font-size="9">電源切れ</text>
-          <text x="640" y="172" text-anchor="middle" fill="#888" font-size="9">で消える</text>
-          <line x1="610" y1="190" x2="670" y2="190" stroke="#444"/>
-          <text x="640" y="210" text-anchor="middle" fill="#93D500" font-size="11" font-weight="700">不揮発性</text>
-          <text x="640" y="230" text-anchor="middle" fill="#888" font-size="9">電源切れ</text>
-          <text x="640" y="242" text-anchor="middle" fill="#888" font-size="9">でも残る</text>
-        </svg>
-      </div>
-
-      <p style="margin-top:0.5rem"><strong>具体的な問題:</strong></p>
-      <ul class="point-list">
-        <li>チャットの履歴が再起動で全部消える</li>
-        <li>3Dオブジェクトの位置や色の変更が保存されない</li>
-        <li>新しく接続したユーザに過去のデータを送れない</li>
-      </ul>
-      <p style="margin-top:0.5rem">データベースを使えば、これらの問題をすべて解決できます。</p>
     </div>
 
-    <!-- 1.2 SQLite とは -->
+    <!-- 1.2 JSONとは何か -->
     <div class="concept-box">
-      <h4>1.2 SQLite とは</h4>
-
+      <h4>1.2 JSONとは何か</h4>
       <p style="background:#1a2e0a;border-left:4px solid #76B900;padding:0.6rem 1rem;margin-bottom:1rem;border-radius:6px;font-size:0.95rem">
         <strong style="color:#76B900">読み方:</strong>
-        <code>SQL</code> = <strong>エスキューエル</strong>（または「シークエル」、Structured Query Language の略）。
-        <code>SQLite</code> = <strong>エスキューライト</strong>（"SQL" ＋ "lite"（軽い）。発音は「シークライト」とも）。
-        <code>better-sqlite3</code> = <strong>ベター・エスキューライト・スリー</strong>（Node.js 用パッケージ名）。
-        <code>INSERT</code> = <strong>インサート</strong>、<code>SELECT</code> = <strong>セレクト</strong>、<code>UPDATE</code> = <strong>アップデート</strong>、<code>CREATE TABLE</code> = <strong>クリエイト・テーブル</strong>、<code>AUTOINCREMENT</code> = <strong>オート・インクリメント</strong>（自動加算）、<code>PRIMARY KEY</code> = <strong>プライマリ・キー</strong>（主キー）。
+        <code>JSON</code> = <strong>ジェイソン</strong>（JavaScript Object Notation の略）。
       </p>
+      <p><strong>JSON</strong> は、JavaScriptのオブジェクトの書き方をもとにした、<strong>データをテキスト（文字列）として表す共通フォーマット</strong>です。プログラミング言語を問わず読み書きできるため、ブラウザとサーバのようにJavaScript同士の通信でも、Pythonなど別言語のサーバとやり取りする場合でも使えます。</p>
 
-      <div class="analogy">
-        大きな図書館（MySQL, PostgreSQL）は管理人が常駐し、たくさんの人が同時に使えますが、設置が大変です。<br>
-        <strong>SQLite</strong> は「自分だけの小さな本棚」のようなもので、設置不要ですぐに使えます。
-      </div>
-      <p><strong>SQLite</strong> は、ファイルベースの軽量なリレーショナルデータベースです。</p>
       <table>
-        <tr><th>特徴</th><th>説明</th></tr>
-        <tr><td><strong>サーバ不要</strong></td><td>別途データベースサーバを起動する必要がない（組み込み型）</td></tr>
-        <tr><td><strong>ファイルベース</strong></td><td>データベース全体が1つのファイル（例: <code>chat.db</code>）に保存される</td></tr>
-        <tr><td><strong>軽量</strong></td><td>インストールが簡単で、小〜中規模のアプリに最適</td></tr>
-        <tr><td><strong>SQL対応</strong></td><td>標準的なSQL文でデータを操作できる</td></tr>
+        <tr><th>ルール</th><th>説明</th><th>例</th></tr>
+        <tr><td><strong>キーは二重引用符</strong></td><td>キー名は必ず <code>"</code>（ダブルクォート）で囲む。シングルクォートや無しは不可</td><td><code>{"id": "abc"}</code></td></tr>
+        <tr><td><strong>値の型は限定</strong></td><td>文字列・数値・真偽値・null・配列・オブジェクトのみ</td><td><code>{"score": 10, "on": true}</code></td></tr>
+        <tr><td><strong>ネスト可能</strong></td><td>オブジェクトや配列を値として入れ子にできる</td><td><code>{"position": {"x": 1, "y": 0}}</code></td></tr>
+        <tr><td><strong>関数は書けない</strong></td><td>JSONに関数・undefined・日時オブジェクトはそのまま入れられない</td><td>— </td></tr>
       </table>
+
       <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">SQLite vs MySQL / PostgreSQL</p>
-        <p style="font-size:0.9rem">MySQL や PostgreSQL は大規模なサービス向けですが、この授業で作る規模のアプリなら <strong>SQLite で十分</strong>です。設定もインストールも簡単で、学習コストが低いのが利点です。</p>
-      </div>
-    </div>
-
-    <!-- 1.3 better-sqlite3 パッケージ -->
-    <div class="concept-box">
-      <h4>1.3 better-sqlite3 パッケージ</h4>
-      <p>Node.js から SQLite を操作するには <strong>better-sqlite3</strong> というパッケージを使います。</p>
-      <pre><span class="code-label">Terminal</span>
-npm install better-sqlite3</pre>
-      <p style="margin-top:0.5rem"><strong>基本的な使い方:</strong></p>
-      <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// better-sqlite3 を読み込む</span>
-<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
-
-<span class="cmt">// データベースファイルを開く（なければ自動作成）</span>
-<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'myapp.db'</span>);</pre>
-      <p style="margin-top:0.5rem">これだけで <code>myapp.db</code> というファイルが作成され、データベースとして使えるようになります。</p>
-
-      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:0.75rem 0">
-        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">用語</p>
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">JSのオブジェクトリテラル と JSON の違い</p>
         <table style="margin:0">
-          <tr><td style="width:180px"><strong>永続化（Persistence）</strong></td><td>プロセスが終了してもデータを失わないようにファイルやデータベースに保存すること。</td></tr>
-          <tr><td><strong>SQLite</strong></td><td>サーバプロセス不要で動作する軽量なリレーショナルデータベース。データベース全体が1つのファイルに格納される。</td></tr>
-          <tr><td><strong>better-sqlite3</strong></td><td>Node.js から SQLite を同期的に操作するためのパッケージ。非同期 API より扱いやすい。</td></tr>
-          <tr><td><strong>プリペアドステートメント</strong></td><td>SQL文のテンプレートを事前にコンパイルし、パラメータだけを差し替えて実行する方式。SQLインジェクション対策として有効。</td></tr>
+          <tr><th></th><th>JavaScriptのオブジェクト</th><th>JSON（テキスト）</th></tr>
+          <tr><td>キーの引用符</td><td>省略できる: <code>{id: 'a'}</code></td><td>必須: <code>{"id": "a"}</code></td></tr>
+          <tr><td>文字列の引用符</td><td><code>'</code> でも <code>"</code> でもよい</td><td><code>"</code> のみ</td></tr>
+          <tr><td>実体</td><td>メモリ上のオブジェクト（値）</td><td>ただの<strong>文字列</strong>（テキスト）</td></tr>
+          <tr><td>関数・undefined</td><td>持てる</td><td>持てない</td></tr>
         </table>
       </div>
+      <p style="font-size:0.9rem;color:#999">JSONは「テキストとして書かれたJavaScriptのオブジェクトのようなもの」と捉えると理解しやすいです。</p>
     </div>
 
-    <!-- 1.4 基本SQL -->
+    <!-- 1.3 JSON.stringify / JSON.parse -->
     <div class="concept-box">
-      <h4>1.4 基本的なSQL文</h4>
-      <p><strong>SQL</strong>（Structured Query Language）は、データベースを操作するための言語です。以下の4つが基本です。</p>
+      <h4>1.3 JSON.stringify と JSON.parse</h4>
+      <p>ネットワーク越しにデータを送るとき、実際に流れているのは<strong>テキスト（文字列）</strong>です。JavaScriptのオブジェクトをそのまま送ることはできないため、一度テキストに変換する必要があります。</p>
       <table>
-        <tr><th>SQL文</th><th>意味</th><th>例</th></tr>
-        <tr><td><strong>CREATE TABLE</strong></td><td>テーブル（表）を作成する</td><td><code>CREATE TABLE messages (id INTEGER PRIMARY KEY, text TEXT)</code></td></tr>
-        <tr><td><strong>INSERT INTO</strong></td><td>データを追加する</td><td><code>INSERT INTO messages (text) VALUES ('こんにちは')</code></td></tr>
-        <tr><td><strong>SELECT</strong></td><td>データを取得する</td><td><code>SELECT * FROM messages</code></td></tr>
-        <tr><td><strong>UPDATE</strong></td><td>データを更新する</td><td><code>UPDATE messages SET text = '修正' WHERE id = 1</code></td></tr>
+        <tr><th>関数</th><th>意味</th><th>変換の向き</th></tr>
+        <tr><td><code>JSON.stringify(obj)</code></td><td>オブジェクト → JSON文字列</td><td>送信前</td></tr>
+        <tr><td><code>JSON.parse(text)</code></td><td>JSON文字列 → オブジェクト</td><td>受信後</td></tr>
       </table>
+      <pre><span class="code-label">JavaScript ── stringify-test.js</span>
+<span class="kw">const</span> avatar = { id: <span class="str">'p1'</span>, position: { x: <span class="num">1</span>, y: <span class="num">0</span>, z: <span class="num">2</span> } };
+
+<span class="hl-line"><span class="kw">const</span> text = JSON.<span class="fn">stringify</span>(avatar);</span>
+console.<span class="fn">log</span>(text);
+<span class="cmt">// → '{"id":"p1","position":{"x":1,"y":0,"z":2}}'  ← これは文字列</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> text); <span class="cmt">// → "string"</span>
+
+<span class="hl-line"><span class="kw">const</span> restored = JSON.<span class="fn">parse</span>(text);</span>
+console.<span class="fn">log</span>(restored.position.x); <span class="cmt">// → 1（数値としてアクセスできる）</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> restored); <span class="cmt">// → "object"</span></pre>
+
+      <!-- Diagram: stringify/parse round trip -->
+      <div class="diagram-container">
+        <svg viewBox="0 0 720 220" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">stringify / parse の往復</text>
+
+          <rect x="20" y="60" width="180" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="110" y="85" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">JSオブジェクト</text>
+          <text x="110" y="108" text-anchor="middle" fill="#e0e0e0" font-size="10">{ id: 'p1',</text>
+          <text x="110" y="122" text-anchor="middle" fill="#e0e0e0" font-size="10">position: {x:1,y:0,z:2} }</text>
+
+          <line x1="200" y1="90" x2="270" y2="90" stroke="#76B900" stroke-width="2" marker-end="url(#arrJ1)"/>
+          <text x="235" y="80" text-anchor="middle" fill="#76B900" font-size="10" font-weight="700">stringify</text>
+
+          <rect x="270" y="60" width="180" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="360" y="85" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">JSON文字列</text>
+          <text x="360" y="108" text-anchor="middle" fill="#e0e0e0" font-size="9" font-family="JetBrains Mono,monospace">'{"id":"p1",</text>
+          <text x="360" y="122" text-anchor="middle" fill="#e0e0e0" font-size="9" font-family="JetBrains Mono,monospace">"position":{...}}'</text>
+
+          <line x1="450" y1="100" x2="520" y2="100" stroke="#4FC3F7" stroke-width="2" marker-end="url(#arrJ2)"/>
+          <text x="485" y="90" text-anchor="middle" fill="#4FC3F7" font-size="9">ネットワーク送信</text>
+
+          <rect x="520" y="60" width="180" height="80" rx="10" fill="#141414" stroke="#93D500" stroke-width="2"/>
+          <text x="610" y="85" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700">受信側</text>
+          <text x="610" y="108" text-anchor="middle" fill="#e0e0e0" font-size="10">JSON文字列を受け取る</text>
+
+          <line x1="610" y1="140" x2="610" y2="160" stroke="#93D500" stroke-width="0" />
+          <path d="M 610 140 C 610 175, 360 175, 360 140" fill="none" stroke="#93D500" stroke-width="2" marker-end="url(#arrJ3)"/>
+          <text x="485" y="185" text-anchor="middle" fill="#93D500" font-size="10" font-weight="700">parse でオブジェクトに戻す</text>
+
+          <defs>
+            <marker id="arrJ1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrJ2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="arrJ3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
+          </defs>
+        </svg>
+      </div>
 
       <div style="background:#1A1A1A;border:1px solid #FFB800;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">テーブルとは</p>
-        <p style="font-size:0.9rem">テーブルはExcelのシートのようなものです。<strong>列（カラム）</strong>がデータの種類、<strong>行（レコード）</strong>が個々のデータを表します。</p>
-        <table style="margin-top:0.5rem">
-          <tr><th>id</th><th>name</th><th>text</th><th>created_at</th></tr>
-          <tr><td>1</td><td>太郎</td><td>こんにちは</td><td>2026-07-15 16:30:00</td></tr>
-          <tr><td>2</td><td>花子</td><td>やあ！</td><td>2026-07-15 16:30:15</td></tr>
-          <tr><td>3</td><td>太郎</td><td>元気？</td><td>2026-07-15 16:30:30</td></tr>
-        </table>
+        <p style="color:#FFB800;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">やってみよう（1分）</p>
+        <p style="font-size:0.9rem">上のコードで <code>avatar</code> に <code>greet: function(){}</code> というプロパティを追加してから <code>JSON.stringify</code> したら、結果の文字列はどうなるか予測してみよう。</p>
+        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した結果と、実際に試した結果を書いてください。</div></div>
       </div>
+    </div>
 
-      <p style="margin-top:0.5rem"><strong>better-sqlite3 での書き方:</strong></p>
-      <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// テーブルを作成</span>
-db.<span class="fn">exec</span>(<span class="str">`
-  CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    text TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now', 'localtime'))
-  )
-`</span>);
+    <!-- 1.4 Socket.IOは裏でJSONを使っている -->
+    <div class="concept-box">
+      <h4>1.4 Socket.IOは裏でJSONを使っている</h4>
+      <p>これまで <code>socket.emit('move', {position, rotation})</code> のように、オブジェクトをそのまま渡してきました。実はSocket.IOが内部で自動的に <code>JSON.stringify</code> ／ <code>JSON.parse</code> を行っているため、私たちは意識せずに使えていたのです。</p>
+      <pre><span class="code-label">JavaScript ── public/app.js（送信側 = クライアント）</span>
+<span class="kw">const</span> socket = <span class="fn">io</span>();
 
-<span class="cmt">// データを追加（プリペアドステートメント）</span>
-<span class="kw">const</span> insert = db.<span class="fn">prepare</span>(<span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>);
-insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span class="str">'こんにちは'</span>);
+<span class="hl-line">socket.<span class="fn">emit</span>(<span class="str">'move'</span>, {
+  id: socket.id,
+  position: { x: <span class="num">1.2</span>, y: <span class="num">0</span>, z: <span class="num">-3.4</span> }
+});</span>
+<span class="cmt">// Socket.IOが裏でJSON.stringifyして送信している</span></pre>
+      <pre><span class="code-label">JavaScript ── server.js（受信側 = サーバ）</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app = <span class="fn">express</span>();
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>);
+<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
 
-<span class="cmt">// データを全件取得</span>
-<span class="kw">const</span> rows = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM messages'</span>).<span class="fn">all</span>();
-console.<span class="fn">log</span>(rows);
-<span class="cmt">// → [{ id: 1, name: '太郎', text: 'こんにちは', created_at: '2026-07-15 16:30:00' }]</span></pre>
-
-      <!-- Animated SVG: CREATE → INSERT → SELECT のステップ動作 -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">SQL基本動作 ── CREATE → INSERT → SELECT のステップ</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="510" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ① CREATE TABLE
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ② INSERT 太郎
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.40;0.50;0.65;0.72;1" dur="16s" repeatCount="indefinite"/>
-              ③ INSERT 花子
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.50;0.72;0.80;1" dur="16s" repeatCount="indefinite"/>
-              ④ SELECT * 完了
-            </text>
-          </g>
-
-          <!-- Table frame -->
-          <rect x="40" y="100" width="640" height="180" rx="10" fill="#141414" stroke="#444" stroke-width="1.5"/>
-          <text x="60" y="120" fill="#76B900" font-size="13" font-weight="700">messages テーブル</text>
-
-          <!-- Column headers (appear at step 1) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            <rect x="60" y="135" width="80" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="100" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">id</text>
-            <rect x="150" y="135" width="160" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="230" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">name</text>
-            <rect x="320" y="135" width="220" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="430" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">text</text>
-            <rect x="550" y="135" width="120" height="32" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="610" y="156" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">created_at</text>
-          </g>
-
-          <!-- Row 1: 太郎 (appears at step 2) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            <rect x="60" y="175" width="80" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="100" y="196" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">1</text>
-            <rect x="150" y="175" width="160" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="230" y="196" text-anchor="middle" fill="#e0e0e0" font-size="13">太郎</text>
-            <rect x="320" y="175" width="220" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="430" y="196" text-anchor="middle" fill="#e0e0e0" font-size="13">こんにちは</text>
-            <rect x="550" y="175" width="120" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="610" y="196" text-anchor="middle" fill="#888" font-size="11">16:30:00</text>
-          </g>
-
-          <!-- Row 2: 花子 (appears at step 3) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.40;0.50;0.65;0.72;1" dur="16s" repeatCount="indefinite"/>
-            <rect x="60" y="215" width="80" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="100" y="236" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">2</text>
-            <rect x="150" y="215" width="160" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="230" y="236" text-anchor="middle" fill="#e0e0e0" font-size="13">花子</text>
-            <rect x="320" y="215" width="220" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="430" y="236" text-anchor="middle" fill="#e0e0e0" font-size="13">やあ！</text>
-            <rect x="550" y="215" width="120" height="32" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="610" y="236" text-anchor="middle" fill="#888" font-size="11">16:30:15</text>
-          </g>
-
-          <!-- Highlight ring on SELECT (step 4) -->
-          <rect x="50" y="170" width="640" height="86" rx="10" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0.8;0.8" keyTimes="0;0.10;0.18;0.40;0.50;0.72;0.80;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Legend at bottom -->
-          <rect x="40" y="300" width="640" height="44" rx="8" fill="#111" stroke="#333"/>
-          <circle cx="60" cy="322" r="6" fill="#76B900"/>
-          <text x="74" y="326" fill="#aaa" font-size="11">CREATE: 構造を作る</text>
-          <circle cx="220" cy="322" r="6" fill="#FFB800"/>
-          <text x="234" y="326" fill="#aaa" font-size="11">INSERT: 行を追加</text>
-          <circle cx="370" cy="322" r="6" fill="#4FC3F7"/>
-          <text x="384" y="326" fill="#aaa" font-size="11">SELECT: 行を取得</text>
-          <circle cx="520" cy="322" r="6" fill="#FF5252"/>
-          <text x="534" y="326" fill="#aaa" font-size="11">id は AUTOINCREMENT</text>
-        </svg>
-      </div>
-
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+<span class="hl-line">  socket.<span class="fn">on</span>(<span class="str">'move'</span>, (data) => {
+    console.<span class="fn">log</span>(data);          <span class="cmt">// すでにオブジェクトに戻っている</span>
+    console.<span class="fn">log</span>(<span class="kw">typeof</span> data);   <span class="cmt">// → "object"（文字列ではない）</span>
+    console.<span class="fn">log</span>(data.position.x); <span class="cmt">// → 1.2</span>
+  });</span>
+});</pre>
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
-        <p style="color:#ccc;font-size:0.9rem">上のコードで <code>insert.run</code> を2回実行した後、<code>SELECT * FROM messages</code> は何件返すか予測してみよう。<code>AUTOINCREMENT</code> の id 値はどうなるか。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した件数と各行の id 値を書いてください。</div></div>
-      </div>
-
-      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">プリペアドステートメントとは？</p>
-        <p style="font-size:0.9rem"><code>?</code> をプレースホルダとして使い、後から値を渡す方法です。SQL文に直接値を埋め込むよりも<strong>安全</strong>（SQLインジェクション対策）で<strong>高速</strong>です。</p>
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">なぜこれを知っておく必要があるのか</p>
+        <ul class="point-list" style="margin:0">
+          <li>送れるデータの種類（JSONで表せる型のみ）に制限があることが分かる</li>
+          <li><code>function</code> や <code>undefined</code> を含むオブジェクトを送ろうとすると、その部分が消えて届くことが理解できる</li>
+          <li>受信データを <code>console.log</code> したときに何が起きているか説明できるようになる</li>
+        </ul>
       </div>
     </div>
 
-    <!-- 1.5 オブジェクト状態の永続化 -->
+    <!-- 1.5 複数アバタのデータをまとめる -->
     <div class="concept-box">
-      <h4>1.5 オブジェクト状態の永続化</h4>
-      <p>3D空間内のオブジェクト（位置、色など）をデータベースに保存すれば、サーバを再起動しても状態が維持されます。</p>
+      <h4>1.5 複数アバタのデータをまとめる</h4>
+      <p>サーバは複数人分のアバタ情報を管理する必要があります。JSONはネスト（入れ子）できるため、<code>id</code> をキーにして全員分をひとつのオブジェクトにまとめられます。</p>
       <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// オブジェクト状態テーブル</span>
-db.<span class="fn">exec</span>(<span class="str">`
-  CREATE TABLE IF NOT EXISTS objects (
-    obj_id TEXT PRIMARY KEY,
-    x REAL DEFAULT 0,
-    y REAL DEFAULT 0,
-    z REAL DEFAULT 0,
-    color TEXT DEFAULT '#FFFFFF'
-  )
-`</span>);
+<span class="kw">const</span> players = {
+  <span class="str">"abc123"</span>: { position: { x: <span class="num">1</span>, y: <span class="num">0</span>, z: <span class="num">2</span> }, rotation: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> } },
+  <span class="str">"xyz789"</span>: { position: { x: <span class="num">-3</span>, y: <span class="num">0</span>, z: <span class="num">1</span> }, rotation: { x: <span class="num">0</span>, y: <span class="num">180</span>, z: <span class="num">0</span> } }
+};
 
-<span class="cmt">// オブジェクトの位置を保存（なければ追加、あれば更新）</span>
-<span class="kw">const</span> upsert = db.<span class="fn">prepare</span>(<span class="str">`
-  INSERT INTO objects (obj_id, x, y, z, color)
-  VALUES (?, ?, ?, ?, ?)
-  ON CONFLICT(obj_id) DO UPDATE SET x=?, y=?, z=?, color=?
-`</span>);
-
-<span class="kw">function</span> <span class="fn">saveObject</span>(id, x, y, z, color) {
-  upsert.<span class="fn">run</span>(id, x, y, z, color, x, y, z, color);
+<span class="cmt">// 全員分を1つずつ取り出す</span>
+<span class="kw">for</span> (<span class="kw">const</span> id <span class="kw">in</span> players) {
+  <span class="kw">const</span> data = players[id];
+  console.<span class="fn">log</span>(id, data.position, data.rotation);
 }</pre>
+      <div class="analogy">
+        1人分のデータが「名札」だとすると、<code>players</code> は名札を<strong>id順に並べたロッカー</strong>のようなものです。ロッカー番号（id）が分かれば、誰の名札にもすぐアクセスできます。
+      </div>
+      <p style="margin-top:0.5rem">このように複数人分のデータを1つのJSONオブジェクトにまとめて送ることで、サーバは <code>io.emit('players', players)</code> のように<strong>一度の送信で全員分の最新状態</strong>を配信できます。</p>
+    </div>
 
-      <!-- Animated SVG: UPSERT (ON CONFLICT) のステップ動作 -->
+    <!-- 1.6 JSONファイルに保存する -->
+    <div class="concept-box">
+      <h4>1.6 サーバにデータを保存する（JSONファイル）</h4>
+      <p>これまでは <code>JSON.stringify</code> した文字列をSocket.IOで送るだけでした。同じ文字列を<strong>ファイルに書き込む</strong>ことができれば、サーバを再起動してもデータが残ります。Node.jsの <code>fs</code>（file system）モジュールを使います。</p>
+      <pre><span class="code-label">JavaScript ── save-test.js</span>
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+
+<span class="cmt">// ① ファイルがあれば読み込み、無ければ空オブジェクトから始める</span>
+<span class="hl-line"><span class="kw">let</span> players = {};
+<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
+  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
+}</span>
+
+<span class="cmt">// ② 新しいプレイヤーを1人追加する</span>
+players[<span class="str">'abc123'</span>] = { name: <span class="str">'たろう'</span>, color: <span class="str">'#76B900'</span> };
+
+<span class="cmt">// ③ オブジェクト → JSON文字列 → ファイルに書き込み</span>
+fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
+
+<span class="cmt">// 保存されているデータを確認する</span>
+console.<span class="fn">log</span>(players);</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">① の <code>existsSync</code> チェックが無いと、実行するたびに前回のデータが消えて <code>players</code> が空から始まってしまいます（<code>fs.readFileSync</code> はファイルが無いとエラーで停止する点にも注意）。</p>
+
+      <table>
+        <tr><th>関数</th><th>意味</th></tr>
+        <tr><td><code>fs.writeFileSync(path, text)</code></td><td>文字列 <code>text</code> をファイル <code>path</code> に書き込む（同期的）</td></tr>
+        <tr><td><code>fs.readFileSync(path, 'utf-8')</code></td><td>ファイル <code>path</code> を文字列として読み込む</td></tr>
+        <tr><td><code>fs.existsSync(path)</code></td><td>ファイルが存在するか確認する（初回起動時はまだファイルが無いため）</td></tr>
+      </table>
+
+      <!-- Diagram: object -> file round trip -->
       <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">UPSERT (ON CONFLICT) ── 「なければ追加 / あれば更新」</text>
+        <svg viewBox="0 0 720 220" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">JSONファイルへの保存 ── サーバ再起動をまたいで残る</text>
 
-          <!-- Step badges -->
-          <g>
-            <rect x="510" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="605" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ① 初回 saveObject('cube1')
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ② 行が存在しない → INSERT
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-              ③ 同じ id で再 saveObject
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-              ④ 競合 → UPDATE
-            </text>
-          </g>
+          <rect x="20" y="60" width="160" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="100" y="85" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">JSオブジェクト</text>
+          <text x="100" y="108" text-anchor="middle" fill="#e0e0e0" font-size="10">players = {...}</text>
+          <text x="100" y="122" text-anchor="middle" fill="#888" font-size="9">（メモリ上・揮発性）</text>
 
-          <!-- Left: Application call -->
-          <rect x="40" y="100" width="200" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="140" y="125" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">アプリ</text>
-          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            saveObject('cube1',
-          </text>
-          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            saveObject('cube1',
-          </text>
-          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            1, 2, 3, '#FF0000')
-          </text>
-          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            5, 6, 7, '#00FF00')
-          </text>
+          <line x1="180" y1="90" x2="250" y2="90" stroke="#76B900" stroke-width="2" marker-end="url(#arrF1)"/>
+          <text x="215" y="80" text-anchor="middle" fill="#76B900" font-size="9" font-weight="700">stringify</text>
+          <text x="215" y="105" text-anchor="middle" fill="#76B900" font-size="9">+ writeFileSync</text>
 
-          <!-- Arrow -->
-          <line x1="240" y1="140" x2="290" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#arr12d)"/>
+          <rect x="250" y="60" width="180" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="340" y="85" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">players.json</text>
+          <text x="340" y="108" text-anchor="middle" fill="#e0e0e0" font-size="9" font-family="JetBrains Mono,monospace">ディスク上のファイル</text>
+          <text x="340" y="122" text-anchor="middle" fill="#93D500" font-size="9">サーバを止めても残る</text>
+
+          <rect x="500" y="60" width="200" height="80" rx="10" fill="#141414" stroke="#E040FB" stroke-width="2"/>
+          <text x="600" y="85" text-anchor="middle" fill="#E040FB" font-size="12" font-weight="700">サーバ再起動</text>
+          <text x="600" y="108" text-anchor="middle" fill="#e0e0e0" font-size="10">起動時に readFileSync</text>
+          <text x="600" y="122" text-anchor="middle" fill="#e0e0e0" font-size="10">+ JSON.parse</text>
+
+          <path d="M 430 100 C 460 100, 470 100, 500 100" fill="none" stroke="#E040FB" stroke-width="2" marker-end="url(#arrF2)"/>
+
+          <path d="M 600 140 C 600 175, 100 175, 100 140" fill="none" stroke="#93D500" stroke-width="2" marker-end="url(#arrF3)"/>
+          <text x="350" y="190" text-anchor="middle" fill="#93D500" font-size="10" font-weight="700">元と同じオブジェクトが復元される</text>
+
           <defs>
-            <marker id="arr12d" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrF1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrF2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#E040FB"/></marker>
+            <marker id="arrF3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93D500"/></marker>
           </defs>
-
-          <!-- Middle: Decision diamond -->
-          <polygon points="380,100 470,140 380,180 290,140" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="380" y="135" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">obj_id 競合？</text>
-          <text x="380" y="152" text-anchor="middle" fill="#aaa" font-size="10">ON CONFLICT</text>
-
-          <!-- Right: DB rows -->
-          <rect x="510" y="100" width="180" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <text x="600" y="120" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">objects テーブル</text>
-
-          <!-- Row state: empty -->
-          <text x="600" y="148" text-anchor="middle" fill="#888" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            (空)
-          </text>
-
-          <!-- Row state: after INSERT (red) -->
-          <text x="600" y="148" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            cube1: (1,2,3) #FF0000
-          </text>
-          <text x="600" y="164" text-anchor="middle" fill="#888" font-size="10" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            ← 行が新規作成された
-          </text>
-
-          <!-- Row state: after UPDATE (green) -->
-          <text x="600" y="148" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            cube1: (5,6,7) #00FF00
-          </text>
-          <text x="600" y="164" text-anchor="middle" fill="#aaa" font-size="10" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            ← 既存行を上書き
-          </text>
-
-          <!-- Branches: INSERT path -->
-          <text x="380" y="220" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            ↓ NO → INSERT 実行
-          </text>
-          <!-- UPDATE path -->
-          <text x="380" y="220" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            ↓ YES → UPDATE SET x=?,...
-          </text>
-
-          <!-- Highlight ring on table at step 2 (INSERT) -->
-          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0.9;0.9;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <!-- Highlight ring at step 4 (UPDATE) -->
-          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Legend -->
-          <rect x="40" y="290" width="640" height="56" rx="8" fill="#111" stroke="#333"/>
-          <circle cx="60" cy="312" r="6" fill="#FFB800"/>
-          <text x="74" y="316" fill="#aaa" font-size="11">INSERT: 行が無いときの動作</text>
-          <circle cx="270" cy="312" r="6" fill="#FF5252"/>
-          <text x="284" y="316" fill="#aaa" font-size="11">UPDATE: 主キー競合時に自動切替</text>
-          <text x="60" y="338" fill="#93D500" font-size="11">→ UPSERT (UP-date + in-SERT) は「リアルタイム同期する状態」を保存する定番パターン</text>
         </svg>
       </div>
+
+      <div class="analogy">
+        <code>JSON.stringify</code> は「メモの内容を紙に書き写す」作業、<code>fs.writeFileSync</code> は「その紙をファイルキャビネットにしまう」作業です。しまっておけば、部屋の電気を消しても（サーバを再起動しても）紙は残っています。
+      </div>
+
     </div>
 
-    <!-- 1.6 チャット履歴の保存 -->
+    <!-- 1.7 ログイン画面を作る -->
     <div class="concept-box">
-      <h4>1.6 チャット履歴の保存</h4>
-      <p>チャットメッセージをデータベースに保存すれば、サーバ再起動後もメッセージが残り、新規接続ユーザにも過去のメッセージを表示できます。</p>
+      <h4>1.7 ログイン画面を作る</h4>
+      <p>3D空間に入る前に、<strong>名前を入力する画面</strong>を用意します。入力された名前はサーバに送られ、アバタのデータ（<code>id, name, position, rotation, color</code>）の一部としてJSON形式で扱われます。</p>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000 — ログイン画面</span></div>
+        <img src="images/session12-login-before.png" alt="3D空間に入室するログイン画面。中央に名前入力欄と入室するボタンが表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果:</strong> 名前を入力して「入室する」を押すまでは3D空間は表示されない。<code>login-screen</code> と <code>main-scene</code> の <code>display</code> を切り替えているだけのシンプルな仕組み。</figcaption>
+      </figure>
+
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">以下は <code>public/login.html</code>（クライアント）と <code>server.js</code>（サーバ）の<strong>完成コード</strong>です。そのままコピペして動かせます。</p>
+      <pre><span class="code-label">HTML ── public/login.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>ログイン画面<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+
+  <span class="kw">&lt;div</span> id=<span class="str">"login-screen"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span> id=<span class="str">"name-input"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;button</span> id=<span class="str">"join-btn"</span><span class="kw">&gt;</span>入室する<span class="kw">&lt;/button&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;a-scene</span> id=<span class="str">"main-scene"</span> style=<span class="str">"display:none"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+
+<span class="hl-line">    document.<span class="fn">getElementById</span>(<span class="str">'join-btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
+      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name-input'</span>).value.<span class="fn">trim</span>();
+      <span class="kw">if</span> (!name) <span class="kw">return</span>;
+
+      <span class="cmt">// 名前をサーバに送る（これもJSONとして送信される）</span>
+      socket.<span class="fn">emit</span>(<span class="str">'login'</span>, { name: name });
+
+      <span class="cmt">// ログイン画面を隠して3D空間を表示</span>
+      document.<span class="fn">getElementById</span>(<span class="str">'login-screen'</span>).style.display = <span class="str">'none'</span>;
+      document.<span class="fn">getElementById</span>(<span class="str">'main-scene'</span>).style.display = <span class="str">'block'</span>;
+    });</span>
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
+
+<span class="kw">let</span> players = {};
+<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
+  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
+}
+
+<span class="kw">function</span> <span class="fn">savePlayers</span>() {
+  fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
+}
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+<span class="hl-line">  socket.<span class="fn">on</span>(<span class="str">'login'</span>, (data) => {
+    <span class="cmt">// data は { name: '...' } というJSON由来のオブジェクト</span>
+    players[socket.id] = {
+      name: data.name,
+      color: <span class="str">'#76B900'</span>,
+      position: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> },
+      rotation: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> }
+    };
+    <span class="fn">savePlayers</span>(); <span class="cmt">// 1.6 と同じ書き込み方法で保存</span>
+    io.<span class="fn">emit</span>(<span class="str">'players'</span>, players);
+  });</span>
+});</pre>
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">ログイン画面のポイント</p>
+        <ul class="point-list" style="margin:0">
+          <li>名前が空のときは <code>join-btn</code> を押しても何も起きないようにする（<code>if (!name) return;</code>）</li>
+          <li>送った名前は <code>players[socket.id]</code> というJSONオブジェクトの一部として保存される</li>
+          <li>1.6のfsを組み合わせれば、名前もサーバ再起動後に復元できる</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1.8 ダッシュボードを作る -->
+    <div class="concept-box">
+      <h4>1.8 蓄積したデータを分析するダッシュボードを作る</h4>
+      <p><code>players.json</code> にデータを蓄積するだけでは、中身を見るにはファイルを開くしかありません。<strong>集計して見やすく表示する画面（ダッシュボード）</strong>を作れば、今どんな状態かがひと目で分かります。</p>
+
+      <div class="analogy">
+        <code>players.json</code> は「レジの記録が溜まったノート」、ダッシュボードは「そのノートを集計してグラフにした売上レポート」のようなものです。データそのものは同じでも、集計して見せ方を変えることで初めて意味のある情報になります。
+      </div>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">localhost:3000/dashboard.html</span></div>
+        <img src="images/session12-dashboard.png" alt="ダッシュボード画面。累計ログイン人数2、もっとも人気の色、名前一覧（たろう・はなこ）、アバタの色の分布が棒グラフ風に表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果:</strong> <code>/api/stats</code> が返すJSON（<code>count</code>・<code>names</code>・<code>colorCounts</code>・<code>mostPopularColor</code>）を <code>fetch</code> で取得し、そのままHTMLに描画したもの。色の分布バーは <code>colorCounts</code> の値に応じて横幅を変えているだけ。</figcaption>
+      </figure>
+
+      <p style="margin-top:0.5rem"><strong>集計の例:</strong> <code>players.json</code> から次のような統計を、<strong>for文だけ</strong>で作ります。</p>
+      <table>
+        <tr><th>集計項目</th><th>計算方法</th></tr>
+        <tr><td><strong>接続人数</strong></td><td><code>list.length</code>（配列の長さ）</td></tr>
+        <tr><td><strong>名前一覧</strong></td><td>for文で1人ずつ <code>name</code> を配列に追加していく</td></tr>
+        <tr><td><strong>色の分布</strong></td><td>for文で1人ずつ <code>color</code> を数えていく</td></tr>
+      </table>
+
+      <pre><span class="code-label">JavaScript ── stats-test.js</span>
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+
+<span class="kw">const</span> players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
+<span class="kw">const</span> list = Object.<span class="fn">values</span>(players);
+
+<span class="kw">let</span> names = [];
+<span class="kw">let</span> colorCounts = {};
+
+<span class="hl-line"><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; list.length; i++) {
+  <span class="kw">const</span> p = list[i];
+
+  <span class="cmt">// 名前一覧に追加する</span>
+  names.<span class="fn">push</span>(p.name);
+
+  <span class="cmt">// この色を初めて見たら1、すでにあれば+1する</span>
+  <span class="kw">if</span> (colorCounts[p.color] === <span class="kw">undefined</span>) {
+    colorCounts[p.color] = <span class="num">1</span>;
+  } <span class="kw">else</span> {
+    colorCounts[p.color] = colorCounts[p.color] + <span class="num">1</span>;
+  }
+}</span>
+
+<span class="kw">const</span> stats = {
+  count: list.length,
+  names: names,
+  colorCounts: colorCounts
+};
+
+console.<span class="fn">log</span>(JSON.<span class="fn">stringify</span>(stats, <span class="kw">null</span>, <span class="num">2</span>));
+<span class="cmt">// → { "count": 3, "names": [...], "colorCounts": { "#76B900": 2, "#4FC3F7": 1 } }</span></pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">このファイルは、1.6で作った <code>players.json</code> と同じフォルダで <code>node stats-test.js</code> を実行すると動きます。</p>
+
+      <p style="margin-top:0.5rem">この <code>stats</code> も1つのJSONオブジェクトです。ここまで学んだ知識がそのまま活きます。</p>
       <ul class="point-list">
-        <li>メッセージ送信時に <code>INSERT INTO</code> でデータベースに保存</li>
-        <li>新規接続時に <code>SELECT</code> で過去メッセージを取得して送信</li>
-        <li>メッセージ数が多い場合は <code>ORDER BY ... LIMIT</code> で最新N件だけ取得</li>
+        <li><code>JSON.stringify(stats)</code> でテキストに変換すれば、Webページに送れる</li>
+        <li>ブラウザ側では <code>fetch</code> でこのJSONを取得し、<code>JSON.parse</code>（<code>fetch</code>の場合は <code>response.json()</code> が自動で行う）でオブジェクトに戻して画面に描画する</li>
       </ul>
 
-      <!-- 具体例 box -->
-      <div style="background:#0a1a2e;border-left:4px solid #4FC3F7;border-radius:8px;padding:1rem 1.2rem;margin-top:1rem">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">具体例: 16時30分から16時40分のチャットルームの流れ</p>
-        <table style="margin-top:0.3rem">
-          <tr><th>時刻</th><th>イベント</th><th>messages テーブル</th></tr>
-          <tr><td>16:30</td><td>太郎が「こんにちは」を送信</td><td>1行（太郎/こんにちは）</td></tr>
-          <tr><td>16:31</td><td>花子が「やあ！」を送信</td><td>2行</td></tr>
-          <tr><td>16:32</td><td>サーバが Ctrl+C で停止</td><td>2行のまま（ファイルに残る）</td></tr>
-          <tr><td>16:35</td><td>サーバを再起動</td><td>2行（消えていない）</td></tr>
-          <tr><td>16:36</td><td>花子のブラウザがリロード</td><td>SELECT で 2行取得 → 画面に「過去のメッセージ」として表示</td></tr>
-          <tr><td>16:40</td><td>次郎が初参加で接続</td><td>SELECT で 2行取得 → 次郎の画面にも過去2件が表示される</td></tr>
-        </table>
-        <p style="margin-top:0.6rem;font-size:0.9rem;color:#ccc">メモリだけに保存していた前回までと違い、<strong>サーバ停止 → 再起動</strong> や <strong>新規参加者の途中合流</strong> でも、全員が同じ履歴を見られるのが永続化の威力です。</p>
-      </div>
+      <pre><span class="code-label">HTML ── public/dashboard.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>ダッシュボード<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>接続人数: <span class="kw">&lt;span</span> id=<span class="str">"count"</span><span class="kw">&gt;</span>-<span class="kw">&lt;/span&gt;&lt;/h1&gt;</span>
+  <span class="kw">&lt;p&gt;</span>名前一覧: <span class="kw">&lt;span</span> id=<span class="str">"names"</span><span class="kw">&gt;&lt;/span&gt;&lt;/p&gt;</span>
 
-      <!-- Q&A box -->
-      <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:10px;padding:1rem 1.2rem;margin-top:1rem">
-        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">Q&amp;A よくある質問</p>
-        <table>
-          <tr><th style="width:42%">質問</th><th>答え</th></tr>
-          <tr>
-            <td><strong>Q1.</strong> <code>chat.db</code> はどこに作られる？</td>
-            <td><code>node server.js</code> を実行したカレントディレクトリ（プロジェクトフォルダ直下）に作られる。VS Code の左ペインで確認できる。</td>
-          </tr>
-          <tr>
-            <td><strong>Q2.</strong> <code>chat.db</code> を消すとどうなる？</td>
-            <td>履歴がすべて消える。次回起動時に <code>CREATE TABLE IF NOT EXISTS</code> が再実行され、空のテーブルから始まる。</td>
-          </tr>
-          <tr>
-            <td><strong>Q3.</strong> メモリだけではダメな場面は？</td>
-            <td>サーバを再起動する／クラッシュする／別のマシンに移す ── これらすべてでデータが消える。長期保存したい情報は必ず DB へ。</td>
-          </tr>
-          <tr>
-            <td><strong>Q4.</strong> 10000件たまったら遅くなる？</td>
-            <td>そのまま <code>SELECT *</code> すると遅い。<code>ORDER BY id DESC LIMIT 50</code> で<strong>最新N件だけ</strong>を取れば軽い。 さらに大きくなる場合はインデックスや古い行の削除を検討。</td>
-          </tr>
-          <tr>
-            <td><strong>Q5.</strong> <code>?</code> プレースホルダを使わず <code>'</code> ＋ 値 ＋ <code>'</code> で組み立てたら？</td>
-            <td>SQLインジェクション攻撃の入口になる。ユーザが <code>'); DROP TABLE messages;--</code> を送ると、テーブルごと消える可能性がある。必ず <code>prepare(...)</code> ＋ <code>run(値)</code> を使う。</td>
-          </tr>
-        </table>
-      </div>
-    </div>
+  <span class="kw">&lt;script&gt;</span>
+<span class="hl-line">    <span class="kw">fetch</span>(<span class="str">'/api/stats'</span>).<span class="fn">then</span>(<span class="kw">function</span>(res) {
+      <span class="kw">return</span> res.<span class="fn">json</span>(); <span class="cmt">// JSON文字列 → オブジェクト（内部でJSON.parseしている）</span>
+    }).<span class="fn">then</span>(<span class="kw">function</span>(stats) {
+      document.<span class="fn">getElementById</span>(<span class="str">'count'</span>).textContent = stats.count;
+      document.<span class="fn">getElementById</span>(<span class="str">'names'</span>).textContent = stats.names.<span class="fn">join</span>(<span class="str">', '</span>);
+    });</span>
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">このファイルを <code>public</code> フォルダに置き、対応する <code>/api/stats</code> をサーバに用意すれば、ブラウザで <code>/dashboard.html</code> を開くだけで動きます。</p>
 
-    <!-- 1.7 新規接続時のデータ復元 -->
-    <div class="concept-box">
-      <h4>1.7 新規接続時のデータ復元</h4>
-      <p>新しいユーザが接続したとき、データベースからデータを読み込んで送信します。</p>
-      <pre><span class="code-label">JavaScript</span>
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
-  <span class="cmt">// 1. 保存済みのオブジェクト状態を送信</span>
-  <span class="kw">const</span> objects = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM objects'</span>).<span class="fn">all</span>();
-  socket.<span class="fn">emit</span>(<span class="str">'init-objects'</span>, objects);
-
-  <span class="cmt">// 2. 過去のチャット履歴（最新50件）を送信</span>
-  <span class="kw">const</span> messages = db.<span class="fn">prepare</span>(
-    <span class="str">'SELECT * FROM messages ORDER BY id DESC LIMIT 50'</span>
-  ).<span class="fn">all</span>().<span class="fn">reverse</span>();
-  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, messages);
-});</pre>
-
-      <!-- Animated SVG: 新規接続時のデータ復元フロー -->
+      <!-- Diagram: aggregation -> JSON -> fetch -> render -->
       <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">新規接続時のデータ復元 ── 途中参加でも過去状態を再現</text>
+        <svg viewBox="0 0 720 220" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
+          <text x="360" y="28" text-anchor="middle" fill="#76B900" font-weight="700" font-size="14">ダッシュボードの流れ ── 蓄積 → 集計 → JSON化 → 表示</text>
 
-          <!-- Step badges -->
-          <g>
-            <rect x="500" y="48" width="200" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="600" y="65" text-anchor="middle" fill="#E040FB" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.12;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ① 新規ユーザが接続
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.12;0.18;0.40;0.45;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ② サーバが SELECT 実行
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.18;0.40;0.50;0.70;0.75;1" dur="18s" repeatCount="indefinite"/>
-              ③ DB → 履歴を返却
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.18;0.40;0.50;0.75;0.85;1" dur="18s" repeatCount="indefinite"/>
-              ④ クライアントで描画
-            </text>
-          </g>
+          <rect x="20" y="60" width="150" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
+          <text x="95" y="85" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700">players.json</text>
+          <text x="95" y="108" text-anchor="middle" fill="#e0e0e0" font-size="9">蓄積されたデータ</text>
 
-          <!-- Client box -->
-          <rect x="40" y="100" width="160" height="80" rx="10" fill="#141414" stroke="#E040FB" stroke-width="2"/>
-          <text x="120" y="125" text-anchor="middle" fill="#E040FB" font-size="13" font-weight="700">新規クライアント</text>
-          <text x="120" y="145" text-anchor="middle" fill="#aaa" font-size="11">socket.connect()</text>
-          <text x="120" y="163" text-anchor="middle" fill="#888" font-size="10">画面は空</text>
+          <line x1="170" y1="100" x2="230" y2="100" stroke="#76B900" stroke-width="2" marker-end="url(#arrD1)"/>
+          <text x="200" y="90" text-anchor="middle" fill="#76B900" font-size="9" font-weight="700">集計</text>
 
-          <!-- Server box -->
-          <rect x="280" y="100" width="160" height="80" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="360" y="125" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">サーバ</text>
-          <text x="360" y="145" text-anchor="middle" fill="#aaa" font-size="11">io.on('connection')</text>
-          <text x="360" y="163" text-anchor="middle" fill="#888" font-size="10">SELECT 発行</text>
+          <rect x="230" y="60" width="150" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
+          <text x="305" y="85" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">stats（JSON）</text>
+          <text x="305" y="108" text-anchor="middle" fill="#e0e0e0" font-size="9">人数・名前・色分布</text>
 
-          <!-- DB cylinder -->
-          <ellipse cx="600" cy="108" rx="60" ry="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <rect x="540" y="108" width="120" height="60" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <ellipse cx="600" cy="168" rx="60" ry="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <line x1="540" y1="108" x2="540" y2="168" stroke="#FFB800" stroke-width="2"/>
-          <line x1="660" y1="108" x2="660" y2="168" stroke="#FFB800" stroke-width="2"/>
-          <text x="600" y="140" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">SQLite</text>
-          <text x="600" y="158" text-anchor="middle" fill="#aaa" font-size="10">messages × N</text>
+          <line x1="380" y1="100" x2="440" y2="100" stroke="#FFB800" stroke-width="2" marker-end="url(#arrD2)"/>
+          <text x="410" y="90" text-anchor="middle" fill="#FFB800" font-size="9" font-weight="700">fetch</text>
 
-          <!-- Arrow 1: Client → Server (step 1) -->
-          <line x1="200" y1="140" x2="280" y2="140" stroke="#E040FB" stroke-width="3" opacity="0" marker-end="url(#arr12e)">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.05;0.12;0.30;0.40;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </line>
-          <!-- Arrow 2: Server → DB (step 2) -->
-          <line x1="440" y1="140" x2="535" y2="140" stroke="#76B900" stroke-width="3" opacity="0" marker-end="url(#arr12f)">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.40;0.45;0.65;0.72;1" dur="18s" repeatCount="indefinite"/>
-          </line>
-          <!-- Arrow 3: DB → Server (step 3) -->
-          <line x1="535" y1="165" x2="440" y2="165" stroke="#FFB800" stroke-width="3" opacity="0" marker-end="url(#arr12g)">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.50;0.60;0.65;0.72;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </line>
-          <!-- Arrow 4: Server → Client (step 4) -->
-          <line x1="280" y1="165" x2="200" y2="165" stroke="#4FC3F7" stroke-width="3" opacity="0" marker-end="url(#arr12h)">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </line>
+          <rect x="440" y="60" width="150" height="80" rx="10" fill="#141414" stroke="#E040FB" stroke-width="2"/>
+          <text x="515" y="85" text-anchor="middle" fill="#E040FB" font-size="12" font-weight="700">dashboard.html</text>
+          <text x="515" y="108" text-anchor="middle" fill="#e0e0e0" font-size="9">ブラウザ側</text>
+
+          <line x1="590" y1="100" x2="650" y2="100" stroke="#E040FB" stroke-width="2" marker-end="url(#arrD3)"/>
+
+          <rect x="650" y="60" width="55" height="80" rx="10" fill="#141414" stroke="#93D500" stroke-width="2"/>
+          <text x="677" y="90" text-anchor="middle" fill="#93D500" font-size="18">👁</text>
+          <text x="677" y="115" text-anchor="middle" fill="#93D500" font-size="9">画面表示</text>
+
+          <text x="360" y="180" text-anchor="middle" fill="#93D500" font-size="11" font-weight="600">JSONは「保存」だけでなく「見せる」ためにも使われる</text>
 
           <defs>
-            <marker id="arr12e" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#E040FB"/></marker>
-            <marker id="arr12f" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-            <marker id="arr12g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
-            <marker id="arr12h" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4FC3F7"/></marker>
+            <marker id="arrD1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
+            <marker id="arrD2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
+            <marker id="arrD3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#E040FB"/></marker>
           </defs>
-
-          <!-- Highlight rings -->
-          <rect x="35" y="95" width="170" height="90" rx="11" fill="none" stroke="#E040FB" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.05;0.12;0.30;0.40;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="535" y="100" width="130" height="76" rx="11" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.12;0.30;0.50;0.60;0.65;0.72;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </rect>
-          <rect x="35" y="95" width="170" height="90" rx="11" fill="none" stroke="#4FC3F7" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Result panel at step 4: client shows messages -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.12;0.30;0.50;0.60;0.72;0.85;0.90;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <rect x="100" y="220" width="520" height="60" rx="10" fill="#1a2e0a" stroke="#76B900" stroke-width="2"/>
-            <text x="360" y="245" text-anchor="middle" fill="#76B900" font-size="13" font-weight="700">--- 過去のメッセージ ---</text>
-            <text x="360" y="265" text-anchor="middle" fill="#aaa" font-size="11">太郎: こんにちは | 花子: やあ！ | 太郎: 元気？</text>
-          </g>
-
-          <!-- Legend -->
-          <rect x="40" y="300" width="640" height="44" rx="8" fill="#111" stroke="#333"/>
-          <text x="60" y="320" fill="#93D500" font-size="11" font-weight="600">ポイント:</text>
-          <text x="130" y="320" fill="#aaa" font-size="11">サーバ再起動後の接続でも DB に履歴が残っているため、画面は前回と同じ状態に復元される</text>
-          <text x="60" y="336" fill="#888" font-size="11">→ <tspan fill="#FFB800">ORDER BY id DESC LIMIT 50</tspan> で最新N件だけを取得し、<tspan fill="#4FC3F7">.reverse()</tspan> で時系列に戻す</text>
         </svg>
       </div>
-
-      <p style="margin-top:0.5rem">これにより、途中から参加したユーザも過去の状態を確認できるようになります。</p>
     </div>
 
   </div>
@@ -1181,511 +965,332 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
       <h2>例題とトレース演習</h2>
     </div>
 
-    <p style="margin-bottom:0.8rem">この回の主役は<strong>データの永続化（DB保存）</strong>です。下は実機での検証：① オブジェクトの色を変更（<code>better-sqlite3</code> で app.db に保存）→ ② <strong>サーバを再起動</strong>して別ブラウザで再接続 → <strong>同じ色がそのまま復元</strong>されました。これが第11回（メモリ保持）との決定的な違いです。</p>
+    <p style="margin-bottom:0.8rem">先にこの回で実際に組み上がるアプリの実行結果を見ておきましょう。① 2人がログインしてアバタが同期している状態 → ② 片方が共有オブジェクトをクリックして色・大きさが変化 → ③ もう一方の画面でも同じ結果が同期されていることが確認できます。以下の例題を順番に手を動かして進めれば、標準課題を提出できる状態まで自然にたどり着きます。</p>
     <div class="exec-pair">
       <figure class="exec-shot">
-        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">① 色を変更 → DBに保存</span></div>
-        <img src="images/session12-persist-before.png" alt="共有3D空間で5つのオブジェクトの色を、箱=ティール、球=オレンジ、円柱=濃い赤、円錐=紫、トーラス=黄 に変更した実行画面。" loading="lazy">
-        <figcaption class="exec-caption"><strong>① 変更直後</strong>：クリックで変えた色は <code>UPDATE objects SET color...</code> で app.db に保存される。</figcaption>
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">① 2人がログイン → アバタ同期</span></div>
+        <img src="images/session12-scene-two-avatars.png" alt="たろうとはなこの2人がログインした3D空間。中央に3つの色付きの箱（共有オブジェクト）、右奥にもう一方のアバタ（箱＋球）が表示されている。左上に「接続中: 2人 / 他の入室者: はなこ」と表示。" loading="lazy">
+        <figcaption class="exec-caption"><strong>① ログイン後:</strong> 名前を送るとサーバが色を割り当て、players.jsonに記録される。</figcaption>
       </figure>
       <figure class="exec-shot">
-        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">② サーバ再起動 → 再接続</span></div>
-        <img src="images/session12-persist-after.png" alt="サーバを一度停止して再起動し、新しいブラウザで再接続した実行画面。①と同じ色（箱=ティール、球=オレンジ、円柱=濃い赤、円錐=紫、トーラス=黄）がそのまま復元されている。" loading="lazy">
-        <figcaption class="exec-caption"><strong>② 再起動後も保持</strong>：起動時に <code>SELECT * FROM objects</code> で読み込み、色が完全に復元されている。</figcaption>
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">② 共有オブジェクトをクリック</span></div>
+        <img src="images/session12-object-click.png" alt="左端の箱をクリックした直後の画面。色が赤からティールに変わり、大きさが1.5倍に拡大している。" loading="lazy">
+        <figcaption class="exec-caption"><strong>② クリック直後:</strong> 色が巡回し、大きさが1.5倍に切り替わる。サーバがobjects状態を更新してplayers.jsonに保存。</figcaption>
       </figure>
     </div>
-    <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動し、色変更 → サーバ再起動 → 再接続の順で画面をキャプチャしたものです。app.db の中身も <code>obj-1=#1ABC9C …</code> と保存されていることを確認済み。</p>
+    <div class="exec-pair">
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">③ 別ブラウザ（はなこ側）でも同期</span></div>
+        <img src="images/session12-object-synced-clientB.png" alt="はなこ側のブラウザでも同じ箱が同じ色・大きさで表示されている。視点が異なるため箱の見え方は違うが状態は一致している。" loading="lazy">
+        <figcaption class="exec-caption"><strong>③ 同期確認:</strong> 視点は違っても、サーバが持つ唯一の状態（server-authoritative）がそのまま両方の画面に反映される。</figcaption>
+      </figure>
+    </div>
+    <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動し、2つのブラウザコンテキストでログイン → オブジェクトクリック → 同期確認までを実機で検証したキャプチャです。</p>
 
     <!-- Example -->
     <div class="card example">
       <div class="card-header">
         <span class="tag tag-example">例題</span>
-        <h3>SQLの基本操作を読む</h3>
+        <h3>JSON文字列を読み取る</h3>
       </div>
-      <p>以下のSQL文を順に実行したとき、テーブルの状態がどう変わるかを確認しましょう。</p>
-      <pre><span class="code-label">SQL</span>
-<span class="cmt">-- 1. テーブルを作成</span>
-<span class="kw">CREATE TABLE</span> items (
-  id <span class="op">INTEGER PRIMARY KEY AUTOINCREMENT</span>,
-  name <span class="op">TEXT NOT NULL</span>,
-  color <span class="op">TEXT DEFAULT</span> <span class="str">'white'</span>
-);
-
-<span class="cmt">-- 2. データを3件追加</span>
-<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'box1'</span>, <span class="str">'red'</span>);
-<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'sphere1'</span>, <span class="str">'blue'</span>);
-<span class="kw">INSERT INTO</span> items (name, color) <span class="kw">VALUES</span> (<span class="str">'cylinder1'</span>, <span class="str">'green'</span>);
-
-<span class="cmt">-- 3. 全件取得</span>
-<span class="kw">SELECT</span> * <span class="kw">FROM</span> items;
-
-<span class="cmt">-- 4. box1 の色を yellow に更新</span>
-<span class="kw">UPDATE</span> items <span class="kw">SET</span> color = <span class="str">'yellow'</span> <span class="kw">WHERE</span> name = <span class="str">'box1'</span>;</pre>
-
-      <!-- Animated SVG: CRUD のタイムライン -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">items テーブルの変化 ── 4手順タイムライン</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="510" y="48" width="180" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-              ① CREATE TABLE
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-              ② INSERT × 3
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-              ③ SELECT *
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-              ④ UPDATE box1
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-              ⑤ 完了
-            </text>
-          </g>
-
-          <!-- Table frame -->
-          <rect x="60" y="90" width="600" height="180" rx="10" fill="#141414" stroke="#444" stroke-width="1.5"/>
-          <text x="80" y="110" fill="#76B900" font-size="13" font-weight="700">items テーブル</text>
-
-          <!-- Headers (appear at step 1) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="80" y="125" width="60" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="110" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">id</text>
-            <rect x="150" y="125" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="240" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">name</text>
-            <rect x="340" y="125" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="430" y="145" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700">color</text>
-          </g>
-
-          <!-- Row 1: box1 / red → yellow -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="80" y="160" width="60" height="30" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="110" y="180" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">1</text>
-            <rect x="150" y="160" width="180" height="30" rx="6" fill="#141414" stroke="#FFB800" stroke-width="1.5"/>
-            <text x="240" y="180" text-anchor="middle" fill="#e0e0e0" font-size="12">box1</text>
-          </g>
-          <!-- Color cell: red (steps 2-3) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="340" y="160" width="180" height="30" rx="6" fill="#3a1414" stroke="#FF5252" stroke-width="1.5"/>
-            <text x="430" y="180" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700">red</text>
-          </g>
-          <!-- Color cell: yellow (after UPDATE) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="340" y="160" width="180" height="30" rx="6" fill="#3a2e0a" stroke="#FFB800" stroke-width="2"/>
-            <text x="430" y="180" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700">yellow ← UPDATE</text>
-          </g>
-
-          <!-- Row 2: sphere1 / blue -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="80" y="195" width="60" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
-            <text x="110" y="215" text-anchor="middle" fill="#aaa" font-size="12">2</text>
-            <rect x="150" y="195" width="180" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
-            <text x="240" y="215" text-anchor="middle" fill="#aaa" font-size="12">sphere1</text>
-            <rect x="340" y="195" width="180" height="30" rx="6" fill="#0a1a2e" stroke="#4FC3F7" stroke-width="1.5"/>
-            <text x="430" y="215" text-anchor="middle" fill="#4FC3F7" font-size="12">blue</text>
-          </g>
-
-          <!-- Row 3: cylinder1 / green -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-            <rect x="80" y="230" width="60" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
-            <text x="110" y="250" text-anchor="middle" fill="#aaa" font-size="12">3</text>
-            <rect x="150" y="230" width="180" height="30" rx="6" fill="#141414" stroke="#666" stroke-width="1.5"/>
-            <text x="240" y="250" text-anchor="middle" fill="#aaa" font-size="12">cylinder1</text>
-            <rect x="340" y="230" width="180" height="30" rx="6" fill="#1a2e0a" stroke="#76B900" stroke-width="1.5"/>
-            <text x="430" y="250" text-anchor="middle" fill="#76B900" font-size="12">green</text>
-          </g>
-
-          <!-- Highlight ring on row 1 at UPDATE step -->
-          <rect x="75" y="155" width="450" height="40" rx="8" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9;0;0" keyTimes="0;0.10;0.15;0.30;0.35;0.55;0.60;0.85;0.92;1" dur="20s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Legend -->
-          <rect x="60" y="290" width="600" height="50" rx="8" fill="#111" stroke="#333"/>
-          <text x="80" y="312" fill="#93D500" font-size="11" font-weight="600">CRUD のうち今回扱った3操作:</text>
-          <circle cx="80" cy="328" r="5" fill="#FFB800"/>
-          <text x="92" y="332" fill="#aaa" font-size="11">Create (INSERT)</text>
-          <circle cx="220" cy="328" r="5" fill="#4FC3F7"/>
-          <text x="232" y="332" fill="#aaa" font-size="11">Read (SELECT)</text>
-          <circle cx="340" cy="328" r="5" fill="#FF5252"/>
-          <text x="352" y="332" fill="#aaa" font-size="11">Update (UPDATE)</text>
-          <text x="460" y="332" fill="#888" font-size="11">第4の Delete (DELETE) は次回以降</text>
-        </svg>
-      </div>
-
+      <p>サーバから届いた、あるアバタのJSON文字列です。内容を読み取って表を埋めてみましょう。</p>
+      <pre><span class="code-label">JSON</span>
+{
+  "id": "player-7",
+  "position": { "x": 2.5, "y": 0, "z": -1.8 },
+  "rotation": { "x": 0, "y": 135, "z": 0 },
+  "color": "#4FC3F7"
+}</pre>
       <table>
-        <tr><th>手順</th><th>操作</th><th>テーブルの状態</th></tr>
-        <tr><td>1</td><td>CREATE TABLE</td><td>空のテーブルが作成される（id, name, color の3列）</td></tr>
-        <tr><td>2</td><td>INSERT x 3</td><td>3行のデータが追加される</td></tr>
-        <tr><td>3</td><td>SELECT *</td><td>3行すべてが返る: (1,'box1','red'), (2,'sphere1','blue'), (3,'cylinder1','green')</td></tr>
-        <tr><td>4</td><td>UPDATE</td><td>id=1 の color が 'red' → 'yellow' に変わる</td></tr>
+        <tr><th>読み取る項目</th><th>値</th></tr>
+        <tr><td>id</td><td>player-7</td></tr>
+        <tr><td>position.x</td><td>2.5</td></tr>
+        <tr><td>position.z</td><td>-1.8</td></tr>
+        <tr><td>rotation.y（Y軸まわりの回転）</td><td>135</td></tr>
+        <tr><td>color</td><td>#4FC3F7</td></tr>
       </table>
+      <p style="margin-top:0.6rem;font-size:0.9rem;color:#999">ポイント: <code>position</code> と <code>rotation</code> はそれぞれ x/y/z を持つ<strong>ネストしたオブジェクト</strong>。JavaScript側では <code>data.position.x</code> のようにドットでたどってアクセスする。</p>
+    </div>
+
+    <!-- Example B: save-test.js -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>players.json にデータを保存する</h3>
+      </div>
+      <p><code>Web12</code> フォルダに <code>save-test.js</code> を作り、1.6のコードをそのまま貼り付けて実行してみましょう。</p>
+      <pre><span class="code-label">JavaScript ── save-test.js</span>
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+
+<span class="kw">let</span> players = {};
+<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
+  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
+}
+
+players[<span class="str">'abc123'</span>] = { name: <span class="str">'たろう'</span>, color: <span class="str">'#76B900'</span> };
+
+fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
+console.<span class="fn">log</span>(players);</pre>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li>ターミナルで <code>node save-test.js</code> を実行する</li>
+        <li>作られた <code>players.json</code> をエディタで開いて中身を確認する</li>
+        <li>もう一度 <code>node save-test.js</code> を実行し、結果が変わらないことを確認する（同じ <code>id</code> を上書きしているだけなので蓄積されない）</li>
+      </ol>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この <code>players.json</code> は、次の例題でそのまま使います。</p>
+    </div>
+
+    <!-- Example C: login.html + server.js -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>ログイン画面を作って動かす</h3>
+      </div>
+      <p>同じ <code>Web12</code> フォルダに、次の <code>public/login.html</code> と <code>server.js</code> を作りましょう。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li><code>npm init -y</code> → <code>npm install express socket.io</code> を実行する</li>
+        <li><code>public</code> フォルダを作り、その中に下の <code>login.html</code> を保存する</li>
+      </ol>
+      <pre><span class="code-label">HTML ── public/login.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>ログイン画面<span class="kw">&lt;/title&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+
+  <span class="kw">&lt;div</span> id=<span class="str">"login-screen"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;input</span> id=<span class="str">"name-input"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;button</span> id=<span class="str">"join-btn"</span><span class="kw">&gt;</span>入室する<span class="kw">&lt;/button&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+
+  <span class="kw">&lt;a-scene</span> id=<span class="str">"main-scene"</span> style=<span class="str">"display:none"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
+  <span class="kw">&lt;/a-scene&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+
+    document.<span class="fn">getElementById</span>(<span class="str">'join-btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
+      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name-input'</span>).value.<span class="fn">trim</span>();
+      <span class="kw">if</span> (!name) <span class="kw">return</span>;
+      socket.<span class="fn">emit</span>(<span class="str">'login'</span>, { name: name });
+      document.<span class="fn">getElementById</span>(<span class="str">'login-screen'</span>).style.display = <span class="str">'none'</span>;
+      document.<span class="fn">getElementById</span>(<span class="str">'main-scene'</span>).style.display = <span class="str">'block'</span>;
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <p style="margin-top:0.5rem;font-size:0.95rem">プロジェクト直下（<code>public</code> の外）に下の <code>server.js</code> を保存します。</p>
+      <pre><span class="code-label">JavaScript ── server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
+
+<span class="kw">let</span> players = {};
+<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
+  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
+}
+
+<span class="kw">function</span> <span class="fn">savePlayers</span>() {
+  fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
+}
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  socket.<span class="fn">on</span>(<span class="str">'login'</span>, (data) => {
+    players[socket.id] = {
+      name: data.name,
+      color: <span class="str">'#76B900'</span>,
+      position: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> },
+      rotation: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> }
+    };
+    <span class="fn">savePlayers</span>();
+    io.<span class="fn">emit</span>(<span class="str">'players'</span>, players);
+  });
+});</pre>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li><code>node server.js</code> を実行し、ブラウザで <code>http://localhost:3000/login.html</code> を開く</li>
+        <li>名前を入力して「入室する」を押し、3D空間が表示されることを確認する</li>
+        <li><code>players.json</code> に自分のログイン記録が保存されていることを確認する</li>
+      </ol>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この <code>server.js</code>・<code>login.html</code> が、この回の標準課題の土台になります。</p>
+    </div>
+
+    <!-- Example D: dashboard.html + /api/stats -->
+    <div class="card example">
+      <div class="card-header">
+        <span class="tag tag-example">例題</span>
+        <h3>ダッシュボードを作って動かす</h3>
+      </div>
+      <p>例題Cの <code>server.js</code> の末尾に、次の <code>/api/stats</code> エンドポイントを追記します。</p>
+      <pre><span class="code-label">JavaScript ── server.js に追記する</span>
+app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res) => {
+  <span class="kw">const</span> list = Object.<span class="fn">values</span>(players);
+
+  <span class="kw">let</span> names = [];
+  <span class="kw">let</span> colorCounts = {};
+
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; list.length; i++) {
+    <span class="kw">const</span> p = list[i];
+    names.<span class="fn">push</span>(p.name);
+
+    <span class="kw">if</span> (colorCounts[p.color] === <span class="kw">undefined</span>) {
+      colorCounts[p.color] = <span class="num">1</span>;
+    } <span class="kw">else</span> {
+      colorCounts[p.color] = colorCounts[p.color] + <span class="num">1</span>;
+    }
+  }
+
+  res.<span class="fn">json</span>({ count: list.length, names: names, colorCounts: colorCounts });
+});</pre>
+      <p style="margin-top:0.5rem;font-size:0.95rem">同じ <code>public</code> フォルダに、下の <code>dashboard.html</code> を保存します。</p>
+      <pre><span class="code-label">HTML ── public/dashboard.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>ダッシュボード<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>接続人数: <span class="kw">&lt;span</span> id=<span class="str">"count"</span><span class="kw">&gt;</span>-<span class="kw">&lt;/span&gt;&lt;/h1&gt;</span>
+  <span class="kw">&lt;p&gt;</span>名前一覧: <span class="kw">&lt;span</span> id=<span class="str">"names"</span><span class="kw">&gt;&lt;/span&gt;&lt;/p&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">fetch</span>(<span class="str">'/api/stats'</span>).<span class="fn">then</span>(<span class="kw">function</span>(res) {
+      <span class="kw">return</span> res.<span class="fn">json</span>();
+    }).<span class="fn">then</span>(<span class="kw">function</span>(stats) {
+      document.<span class="fn">getElementById</span>(<span class="str">'count'</span>).textContent = stats.count;
+      document.<span class="fn">getElementById</span>(<span class="str">'names'</span>).textContent = stats.names.<span class="fn">join</span>(<span class="str">', '</span>);
+    });
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
+        <li><code>server.js</code> を再起動し（Ctrl+C → <code>node server.js</code>）、いくつか名前を変えてログインする</li>
+        <li>ブラウザで <code>http://localhost:3000/dashboard.html</code> を開き、接続人数と名前一覧が表示されることを確認する</li>
+      </ol>
+      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">ここまでできれば、標準課題は目の前です</p>
+        <p style="font-size:0.9rem;margin:0">例題B〜Dを順に進めると、<code>server.js</code>（ログイン+保存+集計API）と <code>dashboard.html</code>（表示画面）が手元に揃います。標準課題は、この2つのファイルに<strong>色をランダムにする・interactionを追加する・colorCountsとmostPopularColorを足す</strong>という4つの改造を加えるだけです。</p>
+      </div>
     </div>
 
     <!-- Trace 1 -->
     <div class="card trace">
       <div class="card-header">
         <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 1: SQL文の実行結果を予測する</h3>
+        <h3>トレース演習 1: 壊れたJSONを見つける</h3>
       </div>
-      <p><strong>問題:</strong> 以下のSQL文を順に実行したとき、最後の SELECT の結果を予測しなさい。</p>
-      <pre><span class="code-label">SQL</span>
-<span class="kw">CREATE TABLE</span> users (
-  id <span class="op">INTEGER PRIMARY KEY AUTOINCREMENT</span>,
-  name <span class="op">TEXT NOT NULL</span>,
-  score <span class="op">INTEGER DEFAULT</span> <span class="num">0</span>
-);
-
-<span class="kw">INSERT INTO</span> users (name, score) <span class="kw">VALUES</span> (<span class="str">'Alice'</span>, <span class="num">10</span>);
-<span class="kw">INSERT INTO</span> users (name, score) <span class="kw">VALUES</span> (<span class="str">'Bob'</span>, <span class="num">25</span>);
-<span class="kw">INSERT INTO</span> users (name) <span class="kw">VALUES</span> (<span class="str">'Charlie'</span>);
-<span class="kw">UPDATE</span> users <span class="kw">SET</span> score = <span class="num">30</span> <span class="kw">WHERE</span> name = <span class="str">'Alice'</span>;
-
-<span class="kw">SELECT</span> * <span class="kw">FROM</span> users;</pre>
+      <p><strong>問題:</strong> 以下は「JSONのつもりで書いたが、実は正しいJSONになっていない」文字列です。文法エラーがある箇所をすべて指摘しなさい。</p>
+      <pre><span class="code-label">JSON（誤りを含む）</span>
+{
+  id: 'player-7',
+  position: { x: 2.5, y: 0, z: -1.8 },
+  rotation: { "x": 0, "y": 135, "z": 0, },
+  "color": "#4FC3F7"
+}</pre>
       <table>
-        <tr><th>id</th><th>name</th><th>score</th></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><th>行</th><th>誤りの内容（空欄を埋める）</th></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
+        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
       </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 表を埋めて記入してください。Charlie の score に注目してください。</div></div>
+      <div class="notion-submit"><div><strong>Notionに記録:</strong> 見つけた誤りと、正しく書き直したJSON全体を記入してください。</div></div>
     </div>
 
   </div>
 </section>
 
-<!-- ============ 3. CODE EXPERIENCE ============ -->
-<section id="sec-code-exp">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#93D500">3</div>
-      <h2>コード体験</h2>
-    </div>
-    <p style="margin-bottom:1.5rem">以下のコードを<strong>コピーして実行し、</strong>結果を<strong>観察</strong>してください。</p>
-
-    <!-- Code Exp 1 -->
-    <div class="card code-exp">
-      <div class="card-header">
-        <span class="tag tag-code-exp">コード体験 1</span>
-        <h3>データベースの基本操作 ── テーブル作成・追加・取得・表示</h3>
-      </div>
-      <p><code>S:\Web_Prog\Web12</code> フォルダを作成し、VS Code で開いてください。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>ターミナルで <code>npm init -y</code> を実行</li>
-        <li>ターミナルで <code>npm install better-sqlite3</code> を実行</li>
-        <li>新しいファイル <strong><code>db-test.js</code></strong> を作成し、下のコードを貼り付け</li>
-      </ol>
-      <pre><span class="code-label">JavaScript ── db-test.js</span>
-<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
-<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'test.db'</span>);
-
-<span class="cmt">// テーブルを作成（存在しない場合のみ）</span>
-db.<span class="fn">exec</span>(<span class="str">`
-  CREATE TABLE IF NOT EXISTS fruits (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    color TEXT NOT NULL,
-    price INTEGER DEFAULT 0
-  )
-`</span>);
-
-console.<span class="fn">log</span>(<span class="str">'=== テーブル作成完了 ==='</span>);
-
-<span class="cmt">// データを追加</span>
-<span class="kw">const</span> insert = db.<span class="fn">prepare</span>(
-  <span class="str">'INSERT INTO fruits (name, color, price) VALUES (?, ?, ?)'</span>
-);
-
-insert.<span class="fn">run</span>(<span class="str">'りんご'</span>, <span class="str">'赤'</span>, <span class="num">150</span>);
-insert.<span class="fn">run</span>(<span class="str">'バナナ'</span>, <span class="str">'黄'</span>, <span class="num">100</span>);
-insert.<span class="fn">run</span>(<span class="str">'ぶどう'</span>, <span class="str">'紫'</span>, <span class="num">300</span>);
-
-console.<span class="fn">log</span>(<span class="str">'=== 3件追加完了 ==='</span>);
-
-<span class="cmt">// 全件取得して表示</span>
-<span class="kw">const</span> allFruits = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM fruits'</span>).<span class="fn">all</span>();
-console.<span class="fn">log</span>(<span class="str">'全件:'</span>, allFruits);
-
-<span class="cmt">// 条件付き取得（価格が150以上）</span>
-<span class="kw">const</span> expensive = db.<span class="fn">prepare</span>(
-  <span class="str">'SELECT * FROM fruits WHERE price >= ?'</span>
-).<span class="fn">all</span>(<span class="num">150</span>);
-console.<span class="fn">log</span>(<span class="str">'150円以上:'</span>, expensive);
-
-<span class="cmt">// データを更新</span>
-db.<span class="fn">prepare</span>(<span class="str">'UPDATE fruits SET price = ? WHERE name = ?'</span>).<span class="fn">run</span>(<span class="num">200</span>, <span class="str">'バナナ'</span>);
-
-<span class="cmt">// 更新後の全件を表示</span>
-<span class="kw">const</span> updated = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM fruits'</span>).<span class="fn">all</span>();
-console.<span class="fn">log</span>(<span class="str">'更新後:'</span>, updated);
-
-db.<span class="fn">close</span>();
-console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);</pre>
-
-      <!-- Animated SVG: プリペアドステートメントと安全性 -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 380" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">プリペアドステートメント ── ? に値を差し込んで安全に実行</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="500" y="48" width="200" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="600" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ① prepare() でテンプレ作成
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ② run('りんご', 150)
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ③ ? が値に置換
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#93D500" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ④ DB に行が追加
-            </text>
-            <text x="600" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-              ⑤ SQL注入を防げる
-            </text>
-          </g>
-
-          <!-- Template box -->
-          <rect x="40" y="100" width="640" height="60" rx="10" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="60" y="125" fill="#76B900" font-size="12" font-weight="700">テンプレート (prepare):</text>
-          <text x="60" y="148" fill="#e0e0e0" font-size="13" font-family="JetBrains Mono,monospace">INSERT INTO fruits (name, price) VALUES (?, ?)</text>
-
-          <!-- Highlight on ? placeholders at step 1 -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <circle cx="468" cy="148" r="11" fill="none" stroke="#FFB800" stroke-width="2.5"/>
-            <circle cx="492" cy="148" r="11" fill="none" stroke="#FFB800" stroke-width="2.5"/>
-          </g>
-
-          <!-- Values box (step 2) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0;0;0" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <rect x="180" y="180" width="160" height="40" rx="8" fill="#2e1a0a" stroke="#FFB800" stroke-width="2"/>
-            <text x="260" y="205" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">'りんご', 150</text>
-            <line x1="260" y1="180" x2="260" y2="170" stroke="#FFB800" stroke-width="2" marker-end="url(#arr12i)"/>
-          </g>
-
-          <!-- After substitution -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <rect x="40" y="235" width="640" height="60" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
-            <text x="60" y="260" fill="#4FC3F7" font-size="12" font-weight="700">確定された SQL:</text>
-            <text x="60" y="283" fill="#e0e0e0" font-size="13" font-family="JetBrains Mono,monospace">INSERT INTO fruits (name, price) VALUES (<tspan fill="#FFB800" font-weight="700">'りんご'</tspan>, <tspan fill="#FFB800" font-weight="700">150</tspan>)</text>
-          </g>
-
-          <defs>
-            <marker id="arr12i" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FFB800"/></marker>
-          </defs>
-
-          <!-- Result panel at step 4 (DB row added) -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <rect x="180" y="310" width="360" height="40" rx="8" fill="#1a2e0a" stroke="#93D500" stroke-width="2"/>
-            <text x="360" y="335" text-anchor="middle" fill="#93D500" font-size="13" font-weight="700">fruits テーブルに 1行追加（id=1）</text>
-          </g>
-
-          <!-- Warning panel at step 5 -->
-          <g opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" keyTimes="0;0.10;0.18;0.35;0.40;0.60;0.65;0.85;0.92;1" dur="18s" repeatCount="indefinite"/>
-            <rect x="40" y="310" width="120" height="40" rx="8" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
-            <text x="100" y="328" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">SQL注入</text>
-            <text x="100" y="343" text-anchor="middle" fill="#FF5252" font-size="11">防止 ✓</text>
-            <rect x="560" y="310" width="120" height="40" rx="8" fill="#2e0a0a" stroke="#FF5252" stroke-width="2"/>
-            <text x="620" y="328" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700">再利用で</text>
-            <text x="620" y="343" text-anchor="middle" fill="#FF5252" font-size="11">高速化 ✓</text>
-          </g>
-        </svg>
-      </div>
-
-      <p style="margin-top:0.8rem"><strong>実行手順:</strong></p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
-        <li>ファイルを保存（Ctrl+S / Cmd+S）</li>
-        <li>ターミナルで <code>node db-test.js</code> を実行</li>
-        <li>ターミナルの出力を確認する</li>
-        <li><strong>もう一度</strong> <code>node db-test.js</code> を実行し、データがどうなるか観察する</li>
-      </ol>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を自分のNotionノートに記録してください。<br>
-        Q1. 1回目の実行で表示されたデータを書き出してください<br>
-        Q2. 2回目の実行でデータはどうなりましたか？ なぜそうなったか説明してください<br>
-        Q3. <code>Web12</code> フォルダに <code>test.db</code> というファイルが作られていることを確認してください</div></div>
-
-      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
-        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（2分）</p>
-        <p style="color:#ccc;font-size:0.9rem"><code>test.db</code> ファイルを削除してからもう一度 <code>node db-test.js</code> を実行してみよう。削除しない場合とデータ件数がどう変わるか比較してみよう。</p>
-        <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 削除した場合と削除しなかった場合の件数の違いと、その理由を書いてください。</div></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 4. GROUP ORAL EXAM ============ -->
-<section id="sec-group-exam">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">4</div>
-      <h2>グループ口頭試問</h2>
-    </div>
-    <p style="margin-bottom:1rem">3〜4人のグループを組んで、以下の2フェーズで進めてください。</p>
-
-    <!-- Phase 1 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 1</span>
-        <h3>質問を考える（個人・5分）</h3>
-      </div>
-      <p>今回のコード体験で動かしたプログラムをもとに、<strong>「データベースに関する質問を1つ」</strong>考えてください。</p>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem">以下の質問例を参考に、自分なりの質問を考えましょう。そのまま使ってもOKです。</p>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#4FC3F7;font-weight:700;font-size:0.85rem;margin-bottom:0.5rem">質問の切り口（参考）</p>
-        <table>
-          <tr><th style="width:35%">テーマ</th><th>質問例</th></tr>
-          <tr><td>メモリ vs データベース</td><td>「サーバの変数に保存するのとDBに保存するのでは、何が違う？」</td></tr>
-          <tr><td>SQLの基本</td><td>「SELECT * FROM messages の * は何を意味する？」</td></tr>
-          <tr><td>永続化の意味</td><td>「chat.db ファイルを削除するとどうなる？」</td></tr>
-          <tr><td>新規接続時</td><td>「途中から参加した人に過去のメッセージを見せるには？」</td></tr>
-          <tr><td>テーブル設計</td><td>「もしユーザのプロフィール画像も保存したい場合、テーブルはどう変える？」</td></tr>
-          <tr><td>AUTOINCREMENT</td><td>「id が AUTOINCREMENT だと何が便利？」</td></tr>
-        </table>
-      </div>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> あなたが考えた質問を1つ書いてください。</div></div>
-    </div>
-
-    <!-- Phase 2 -->
-    <div class="card" style="border-left:4px solid #4FC3F7">
-      <div class="card-header">
-        <span class="tag tag-group">Phase 2</span>
-        <h3>口頭試問（グループ・10分）</h3>
-      </div>
-      <p>1人ずつ順番に自分の質問をメンバーに出し、回答を聞いて記録してください。</p>
-      <table style="margin:1rem 0">
-        <tr><th style="width:20%">役割</th><th>やること</th></tr>
-        <tr><td><strong>出題者</strong></td><td>自分で考えた質問を口頭で出す</td></tr>
-        <tr><td><strong>回答者</strong></td><td>コードやノートを見ずに口頭で回答する</td></tr>
-        <tr><td><strong>記録者</strong></td><td>回答の要点と評価を記録する</td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記録してください。</div></div>
-      <div style="background:#1A1A1A;border:1px solid #333;border-radius:10px;padding:1rem;margin:1rem 0">
-        <ul class="point-list">
-          <li><strong>グループメンバー全員の氏名</strong></li>
-          <li>各ラウンド: <strong>誰が</strong>（出題者）→ <strong>誰に</strong>（回答者）→ <strong>何を</strong>質問したか</li>
-          <li>回答の要点</li>
-          <li>評価（A: 正確 / B: おおむね正確 / C: 不十分）</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 5. STANDARD TASK ============ -->
+<!-- ============ 3. STANDARD TASK ============ -->
 <section id="sec-standard">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#76B900">5</div>
+      <div class="section-num" style="background:#76B900">3</div>
       <h2>標準課題</h2>
     </div>
 
-    <!-- 標準課題 1: 知識問題 -->
+    <!-- 標準課題: データ蓄積からダッシュボード表示まで -->
     <div class="card standard">
       <div class="card-header">
-        <span class="tag tag-standard">標準課題 1</span>
-        <h3>データベースとSQLの基礎知識</h3>
+        <span class="tag tag-standard">標準課題</span>
+        <h3>すべてのデータを蓄積し、ダッシュボードで確認する（コード改造）</h3>
       </div>
-      <p>セクション1の内容をもとに、以下の問いに答えなさい。</p>
-
-      <p style="margin-top:1rem"><strong>問1.</strong> 以下の表の空欄を埋めなさい。</p>
-      <table>
-        <tr><th>SQL文</th><th>意味（空欄を埋める）</th><th>使う場面（空欄を埋める）</th></tr>
-        <tr><td><strong>CREATE TABLE</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>INSERT INTO</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>SELECT</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>UPDATE</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <p style="margin-top:1rem"><strong>問2.</strong> サーバのメモリ（変数）にデータを保存する場合と、データベースに保存する場合の<strong>違い</strong>を、以下の観点から説明しなさい。</p>
-      <table>
-        <tr><th>観点</th><th>メモリ（変数）</th><th>データベース</th></tr>
-        <tr><td><strong>サーバ再起動時</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>アクセス速度</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td><strong>データ量の限界</strong></td><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 問1〜問2の回答を記入してください。</div></div>
-    </div>
-
-    <!-- 標準課題 2: コード改造 -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題 2</span>
-        <h3>チャットアプリを改造する（コード改造）</h3>
-      </div>
-      <p>コード体験2の永続チャットアプリを以下の指示どおりに改造しなさい。</p>
+      <p>1.7 で作った <code>server.js</code>・<code>login.html</code> と、1.8 で作った <code>dashboard.html</code> を組み合わせ、蓄積した<strong>全データ（名前・色・インタラクション状態）</strong>をダッシュボードで確認できるようにしなさい。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示（すべて実行すること）</p>
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示 ①: server.js（すべてのデータを取得）</p>
         <table>
           <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td><code>messages</code> テーブルに <strong><code>room TEXT DEFAULT 'general'</code></strong> という列を追加する（CREATE TABLE を変更）</td></tr>
-          <tr><td>2</td><td><code>INSERT</code> 文で <code>room</code> の値も保存するように変更する（固定値 <code>'general'</code> でOK）</td></tr>
-          <tr><td>3</td><td>チャット履歴の取得（SELECT文）で最新 <strong>100件</strong> を取得するように変更する</td></tr>
-          <tr><td>4</td><td>サーバ起動時にコンソールに <strong>「現在のメッセージ数: XX件」</strong> と表示する（SELECT COUNT(*) を使う）</td></tr>
+          <tr><td>1</td><td><code>socket.on('login', ...)</code> の中で、<code>color</code> を固定値 <code>'#76B900'</code> ではなく、<strong>ランダムな色</strong>（例: <code>['#76B900','#4FC3F7','#FFB800'][Math.floor(Math.random()*3)]</code>）にする</td></tr>
+          <tr><td>2</td><td>プレイヤーごとに <strong><code>interaction</code></strong>（例: <code>{ rotation: 0, scale: 1 }</code>）というフィールドを追加する（第11回の共有オブジェクトの回転・拡大に相当）</td></tr>
         </table>
       </div>
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>db.prepare('SELECT COUNT(*) as count FROM messages').get().count</code> でメッセージ数を取得できます。</p>
+
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示 ②: server.js・dashboard.html（ダッシュボードで閲覧）</p>
+        <table>
+          <tr><th style="width:30px">#</th><th>指示</th></tr>
+          <tr><td>3</td><td>サーバに <strong><code>GET /api/stats</code></strong> を追加し、<code>players</code> を集計して <code>count</code>・<code>names</code>・<strong><code>colorCounts</code></strong>（色の分布）・<strong><code>mostPopularColor</code></strong>（もっとも多い色）をJSONで返す（1.8の集計処理を流用）</td></tr>
+          <tr><td>4</td><td><code>dashboard.html</code> に、<code>colorCounts</code> を一覧表示する部分を追加する（表・リストなど見せ方は自由）</td></tr>
+        </table>
+      </div>
+
+      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>colorCounts</code> の集計は 1.8 で書いた for文をそのまま流用できます。<code>mostPopularColor</code> は <code>let mostPopularColor = null; let mostPopularCount = 0;</code> を用意し、<code>for (const color in colorCounts)</code> で1色ずつ確認して、件数が今までの最大より大きければ2つの変数を更新する、という書き方ができます。</p>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">確認手順</p>
+        <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0">
+          <li><code>node server.js</code> でサーバを起動する</li>
+          <li>ブラウザで <code>login.html</code> を開き、名前を変えながら何回かログインする（複数タブでもOK）</li>
+          <li>ブラウザで <code>http://localhost:3000/dashboard.html</code> を開き、人数・名前一覧・色の分布・もっとも多い色が正しく表示されることを確認する</li>
+        </ol>
+      </div>
+
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後の <code>server.js</code> のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「なぜその変更が必要か」を書く</div></div>
+        ① 改造後の <code>server.js</code>・<code>dashboard.html</code> のコード全体を貼り付ける<br>
+        ② 各改造について「どの行を変えたか」と「なぜその変更が必要か」を書く<br>
+        ③ ブラウザで確認した結果のスクリーンショット</div></div>
     </div>
+
   </div>
 </section>
 
-<!-- ============ 6. ADVANCED TASK ============ -->
+<!-- ============ 4. ADVANCED TASK ============ -->
 <section id="sec-advanced">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#FFB800">6</div>
+      <div class="section-num" style="background:#FFB800">4</div>
       <h2>発展課題</h2>
     </div>
 
     <div class="card advanced">
       <div class="card-header">
         <span class="tag tag-advanced">発展課題</span>
-        <h3>3Dシーンにオブジェクト状態の永続化を実装する</h3>
+        <h3>ログイン画面 + データ蓄積 + 分析ダッシュボード</h3>
       </div>
-      <p><code>Web12</code> フォルダに以下のファイルを追加で作成し、3Dオブジェクトの状態（位置・色）をデータベースに保存するアプリを作ってください。</p>
+      <p>第10回・第11回で作成したマルチプレイのA-Frame + Socket.IOアプリに機能を追加し、<strong>ログイン画面から名前を入力して入室し、アバタの色と共有オブジェクトのインタラクション状態をJSONファイルに蓄積、それを分析するダッシュボード画面</strong>まで作ってください。</p>
 
       <div style="background:#1A1A1A;border:2px solid #FFB800;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#FFB800;font-weight:700;font-size:1rem;margin-bottom:0.8rem">必須要件</p>
         <ul class="point-list">
-          <li>A-Frame（1.7.1）で3Dシーンを表示する</li>
-          <li>Socket.IO でサーバと通信する</li>
-          <li>3Dオブジェクトをクリックすると<strong>色が変わる</strong>（ランダムまたは順番）</li>
-          <li>色の変更を<strong>データベースに保存</strong>する</li>
-          <li>ページをリロードしても<strong>変更後の色が復元</strong>される</li>
-          <li>複数ブラウザで開いたとき、色の変更が<strong>リアルタイムに同期</strong>される</li>
+          <li><strong>ログイン画面</strong> ── 3D空間に入る前に名前を入力する画面を表示し、入力後に <code>socket.emit('login', {name})</code> で送信してから3D空間を表示する（1.7参照）</li>
+          <li><strong>アバタの色</strong> ── 各プレイヤーに色（ランダムまたは選択式）を割り当て、3D空間内のアバタに反映する</li>
+          <li><strong>インタラクション状態</strong> ── 第11回で作った共有オブジェクトの回転・拡大の状態を、他ユーザと同期する</li>
+          <li><strong>JSONファイルへの蓄積</strong> ── サーバ側で <code>{ id, name, color, interaction }</code> の形の <code>players</code> オブジェクトを持ち、名前を受け取ったとき・インタラクションが変化したときに <code>fs.writeFileSync</code> で <code>players.json</code> に保存する（1.6参照）。サーバ起動時には <code>players.json</code> を読み込んで復元する</li>
+          <li><strong>ダッシュボードAPI</strong> ── <code>players.json</code> を集計して <code>{ count, names, colorCounts }</code> を返すエンドポイント（例: <code>app.get('/api/stats', ...)</code>）をサーバに追加する（1.8参照）</li>
+          <li><strong>ダッシュボード画面（<code>dashboard.html</code>）</strong> ── <code>fetch('/api/stats')</code> で集計結果を取得し、<strong>接続人数・名前一覧・アバタの色の分布</strong>を画面に表示する。色の分布は表または棒グラフ風の見た目（<code>&lt;div&gt;</code> の横幅を <code>colorCounts</code> の値に応じて変えるなど）で構わない</li>
         </ul>
       </div>
 
@@ -1695,7 +1300,7 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
           <tr><th style="width:30%">提出物</th><th>内容</th></tr>
           <tr>
             <td><strong style="color:#76B900">1. コード</strong></td>
-            <td>サーバ側（<code>server.js</code>）とクライアント側（<code>index.html</code> または <code>scene.html</code>）のコード全体をNotionノートに貼り付ける</td>
+            <td>サーバ側（<code>server.js</code>）とクライアント側（<code>login.html</code> / <code>index.html</code> または <code>scene.html</code> / <code>dashboard.html</code>）のコード全体をNotionノートに貼り付ける</td>
           </tr>
           <tr>
             <td><strong style="color:#76B900">2. 音声説明</strong></td>
@@ -1705,21 +1310,22 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
         </table>
         <p style="margin-top:0.8rem;font-size:0.9rem;color:#E0E0E0"><strong>音声で説明すること:</strong></p>
         <ul class="point-list" style="margin-top:0.3rem">
-          <li>データベースにどのようなテーブルを作成したか</li>
-          <li>クリック時のデータの流れ（クライアント → サーバ → DB → 全クライアント）</li>
-          <li>サーバ再起動後にデータが復元されることの確認結果</li>
+          <li>ログイン画面で入力した名前が、どのようなJSON構造でサーバに送られているか</li>
+          <li><code>players.json</code> にどのようなデータ（name・color・interaction）を蓄積したか</li>
+          <li>ダッシュボードで <code>/api/stats</code> のJSONをどう集計・表示したか（<code>count</code>・<code>names</code>・<code>colorCounts</code> の作り方）</li>
         </ul>
       </div>
 
       <p style="margin-top:0.8rem"><strong>評価チェックリスト:</strong></p>
       <table>
         <tr><th style="width:30px">#</th><th>チェック項目</th></tr>
-        <tr><td>1</td><td>A-Frame で3Dオブジェクトが表示される</td></tr>
-        <tr><td>2</td><td>クリックで色が変わる</td></tr>
-        <tr><td>3</td><td>色の変更がデータベースに保存される</td></tr>
-        <tr><td>4</td><td>ページリロードで色が復元される</td></tr>
-        <tr><td>5</td><td>複数ブラウザで色が同期される</td></tr>
-        <tr><td>6</td><td>音声で仕組みを説明している</td></tr>
+        <tr><td>1</td><td>ログイン画面で名前を入力してから3D空間に入る</td></tr>
+        <tr><td>2</td><td>アバタに色が付いている</td></tr>
+        <tr><td>3</td><td>共有オブジェクトのインタラクション（回転・拡大）が複数ブラウザで同期される</td></tr>
+        <tr><td>4</td><td>名前・色・インタラクション状態が <code>players.json</code> に蓄積される</td></tr>
+        <tr><td>5</td><td><code>dashboard.html</code> で接続人数・名前一覧・色の分布が表示される</td></tr>
+        <tr><td>6</td><td>サーバを再起動しても、蓄積されたデータが復元される</td></tr>
+        <tr><td>7</td><td>音声で仕組みを説明している</td></tr>
       </table>
     </div>
   </div>
@@ -1748,94 +1354,58 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
 
 ---
 
-## 説明 1.4: やってみよう（insert.run を2回実行した場合）
-### 予測した件数
-（SELECT * FROM messages は何件返るか）
+## 説明 1.3: やってみよう（greet を追加してstringify）
+### 予測した結果
 
-### 予測した各行の id 値
-- 1行目 id:
-- 2行目 id:
-- 3行目 id:
-- 4行目 id:
+### 実際の結果
 
 ---
 
-## トレース演習 1: SQL文の実行結果を予測する
-| id | name | score |
-|----|------|-------|
-|    |      |       |
-|    |      |       |
-|    |      |       |
-
-（Charlie の score に注目して記入）
-
----
-
-## コード体験 1: データベースの基本操作（db-test.js）
-### Q1. 1回目の実行で表示されたデータ
-- 全件:
-- 150円以上:
-- 更新後:
-
-### Q2. 2回目の実行でデータはどうなったか（件数と理由）
-
-### Q3. Web12 フォルダに test.db ファイルが作られていたか
-- 確認結果:
-
-### やってみよう（test.db を削除した場合 vs 削除しない場合）
-- 削除した場合の件数:
-- 削除しなかった場合の件数:
-- 違いの理由:
+## 例題: JSON文字列を読み取る
+| 項目 | 値 |
+|------|-----|
+| id | |
+| position.x | |
+| position.z | |
+| rotation.y | |
+| color | |
 
 ---
 
-## グループ口頭試問
-### Phase 1: あなたが考えた質問
+## トレース演習 1: 壊れたJSONを見つける
+| 行 | 誤りの内容 |
+|----|-----------|
+|    |            |
+|    |            |
+|    |            |
 
-### Phase 2: グループメンバー（氏名）:
-
-### 口頭試問の記録
-| ラウンド | 出題者 | 回答者 | 質問（概要） | 回答の要点 | 評価 |
-|---------|--------|--------|-------------|-----------|------|
-| 1       |        |        |             |           | A/B/C |
-| 2       |        |        |             |           | A/B/C |
-| 3       |        |        |             |           | A/B/C |
+### 正しく書き直したJSON全体
 
 ---
 
-## 標準課題 1: データベースとSQLの基礎知識
-### 問1. SQL文の意味と使う場面
-| SQL文 | 意味 | 使う場面 |
-|-------|------|---------|
-| CREATE TABLE |   |   |
-| INSERT INTO  |   |   |
-| SELECT       |   |   |
-| UPDATE       |   |   |
-
-### 問2. メモリ vs データベース
-| 観点 | メモリ（変数） | データベース |
-|------|---------------|-------------|
-| サーバ再起動時     |   |   |
-| アクセス速度       |   |   |
-| データ量の限界     |   |   |
-
----
-
-## 標準課題 2: チャットアプリを改造する
+## 標準課題: すべてのデータを蓄積し、ダッシュボードで確認する
 ### ① 改造後の server.js コード全体
 ```javascript
 （ここに改造後コードを貼り付け）
 ```
 
-### ② 各改造について「変更した行」と「変更理由」
-1. messages テーブルに room TEXT DEFAULT 'general' 列を追加:
-2. INSERT 文で room の値も保存するよう変更:
-3. チャット履歴の取得で最新100件を取得するよう変更:
-4. サーバ起動時に「現在のメッセージ数: XX件」と表示:
+### ② 改造後の dashboard.html コード全体
+```html
+（ここに改造後コードを貼り付け）
+```
+
+### ③ 各改造について「変更した行」と「変更理由」
+1. color をランダムにする:
+2. interaction フィールドを追加:
+3. /api/stats に colorCounts・mostPopularColor を追加:
+4. dashboard.html に色の分布の表示を追加:
+
+### ④ ブラウザで確認した結果のスクリーンショット
+（ここに画像を貼り付け）
 
 ---
 
-## 発展課題: 3Dシーンにオブジェクト状態の永続化を実装する
+## 発展課題: ログイン画面 + データ蓄積 + 分析ダッシュボード
 ### 1. コード
 
 #### server.js
@@ -1848,17 +1418,23 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
 （ここに貼り付け）
 ```
 
+#### dashboard.html
+```html
+（ここに貼り付け）
+```
+
 ### 2. 音声説明（1〜2分の音声ファイルを添付）
-- データベースにどのようなテーブルを作成したか
-- クリック時のデータの流れ（クライアント → サーバ → DB → 全クライアント）
-- サーバ再起動後にデータが復元されることの確認結果
+- ログイン画面で入力した名前がどのようなJSON構造で送られるか
+- players.json にどのようなデータを蓄積したか
+- ダッシュボードで /api/stats のJSONをどう集計・表示したか
 
 ### 3. 評価チェックリスト（自己確認）
-- [ ] A-Frame で3Dオブジェクトが表示される
-- [ ] クリックで色が変わる
-- [ ] 色の変更がデータベースに保存される
-- [ ] ページリロードで色が復元される
-- [ ] 複数ブラウザで色が同期される
+- [ ] ログイン画面で名前を入力してから3D空間に入る
+- [ ] アバタに色が付いている
+- [ ] 共有オブジェクトのインタラクションが複数ブラウザで同期される
+- [ ] 名前・色・インタラクション状態が players.json に蓄積される
+- [ ] dashboard.html で接続人数・名前一覧・色の分布が表示される
+- [ ] サーバを再起動しても、蓄積されたデータが復元される
 - [ ] 音声で仕組みを説明している
 </pre>
 
@@ -1870,73 +1446,63 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
   </div>
 </section>
 
-<!-- ============ 7. ANSWERS ============ -->
+<!-- ============ 5. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-15T16:20">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">7</div>
+      <div class="section-num" style="background:#616161">5</div>
       <h2>解答例</h2>
     </div>
 
     <details>
       <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
       <div class="answer-content">
-        <p>最後の <code>SELECT * FROM users</code> の結果:</p>
+        <p>誤りの箇所:</p>
         <table>
-          <tr><th>id</th><th>name</th><th>score</th></tr>
-          <tr><td>1</td><td>Alice</td><td>30</td></tr>
-          <tr><td>2</td><td>Bob</td><td>25</td></tr>
-          <tr><td>3</td><td>Charlie</td><td>0</td></tr>
+          <tr><th>行</th><th>誤りの内容</th></tr>
+          <tr><td><code>id: 'player-7',</code></td><td>キー <code>id</code> に引用符が無い。値もシングルクォート。正しくは <code>"id": "player-7",</code></td></tr>
+          <tr><td><code>position: { x: 2.5, y: 0, z: -1.8 },</code></td><td>キー <code>position</code> と、内側の <code>x, y, z</code> すべてに引用符が無い</td></tr>
+          <tr><td><code>rotation: { "x": 0, "y": 135, "z": 0, },</code></td><td>キー <code>rotation</code> に引用符が無い。さらに <code>"z": 0,</code> の後ろに<strong>不要なカンマ（末尾カンマ）</strong>があり、JSONではエラーになる</td></tr>
         </table>
-        <ul class="point-list" style="margin-top:0.5rem">
-          <li>Alice の score は最初 10 だったが、UPDATE で 30 に変更された</li>
-          <li>Bob の score は INSERT 時に 25 を指定したのでそのまま</li>
-          <li>Charlie は score を指定しなかったため、DEFAULT 値の <strong>0</strong> が自動的に設定された</li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary><span class="tag tag-code-exp" style="font-size:0.7rem">体験</span> コード体験 1 解答（記録例）</summary>
-      <div class="answer-content">
-        <ul class="point-list">
-          <li><strong>Q1:</strong> 全件として3件が表示された: [{id:1, name:'りんご', color:'赤', price:150}, {id:2, name:'バナナ', color:'黄', price:100}, {id:3, name:'ぶどう', color:'紫', price:300}]。150円以上はりんごとぶどうの2件。更新後はバナナの price が 200 になっていた。</li>
-          <li><strong>Q2:</strong> 2回目の実行ではデータが<strong>6件</strong>になった。同じ INSERT が再実行されるため、りんご・バナナ・ぶどうがもう一度追加された。データベースは永続化されるので、前回のデータがそのまま残っている。</li>
-          <li><strong>Q3:</strong> Web12 フォルダに test.db ファイルが作成されていた。このファイルがデータベースの実体である。</li>
-        </ul>
+        <p style="margin-top:0.6rem"><code>"color": "#4FC3F7"</code> の行は正しいJSONの書き方になっている（キー・値ともに二重引用符、末尾カンマなし）。</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">正しく書き直したJSON:
+{
+  "id": "player-7",
+  "position": { "x": 2.5, "y": 0, "z": -1.8 },
+  "rotation": { "x": 0, "y": 135, "z": 0 },
+  "color": "#4FC3F7"
+}</pre>
       </div>
     </details>
 
     <!-- ── 例題の解答（常に公開） ── -->
     <div id="answers-examples">
     <details>
-      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 SQLの基本操作を読む 解答</summary>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 JSON文字列を読み取る 解答</summary>
       <div class="answer-content">
-        <p>SQL文を順に実行したときのテーブルの状態:</p>
+        <p>与えられたJSON文字列から読み取れる値（表の正答）:</p>
         <table>
-          <tr><th>手順</th><th>テーブル状態</th></tr>
-          <tr><td>1. CREATE TABLE</td><td>空のテーブル <code>items</code>（id, name, color の3列）が作成される</td></tr>
-          <tr><td>2. INSERT × 3</td><td>id=1: (box1, red), id=2: (sphere1, blue), id=3: (cylinder1, green)</td></tr>
-          <tr><td>3. SELECT *</td><td>3行とも取得される。<code>AUTOINCREMENT</code> により id は 1, 2, 3 と自動付与される</td></tr>
-          <tr><td>4. UPDATE</td><td>id=1（box1）の color が <code>red</code> から <code>yellow</code> に変わる。他の行は変更なし</td></tr>
+          <tr><th>項目</th><th>値</th></tr>
+          <tr><td>id</td><td>player-7</td></tr>
+          <tr><td>position.x</td><td>2.5</td></tr>
+          <tr><td>position.z</td><td>-1.8</td></tr>
+          <tr><td>rotation.y</td><td>135</td></tr>
+          <tr><td>color</td><td>#4FC3F7</td></tr>
         </table>
-        <p style="margin-top:0.6rem">ポイント: <code>WHERE</code> 句がない UPDATE は<strong>全行</strong>が更新対象になる。今回は <code>WHERE name = 'box1'</code> があるため1行だけ更新される。<code>DEFAULT 'white'</code> は INSERT で color が省略された場合に使われる値で、今回はすべて指定したため発動しない。</p>
+        <p style="margin-top:0.6rem">ポイント: <code>position</code> と <code>rotation</code> はオブジェクトなので、値を取り出すには <code>data.position.x</code> のようにドットで1段階たどる必要がある。<code>data.x</code> では取得できない。</p>
       </div>
     </details>
 
     <details>
-      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 1.4 やってみよう（insert.run を2回実行）解答</summary>
+      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 1.3 やってみよう（greetを追加してstringify）解答</summary>
       <div class="answer-content">
-        <p><code>insert.run('太郎', 'こんにちは')</code> をコード例の通り実行した後、もう一度同じ <code>insert.run('太郎', 'こんにちは')</code> を実行した場合:</p>
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">SELECT * FROM messages の結果（2件）
-[
-  { id: 1, name: '太郎', text: 'こんにちは', created_at: '...' },
-  { id: 2, name: '太郎', text: 'こんにちは', created_at: '...' }
-]</pre>
+        <p><code>avatar.greet = function(){}</code> を追加してから <code>JSON.stringify(avatar)</code> を実行すると:</p>
+        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">結果の文字列に greet は含まれない
+'{"id":"p1","position":{"x":1,"y":0,"z":2}}'</pre>
         <ul class="point-list" style="margin-top:0.5rem">
-          <li>件数は <strong>2件</strong>（同じ内容でも別行として追加される）</li>
-          <li>id は <code>AUTOINCREMENT</code> により <strong>1, 2</strong> と自動で割り振られる</li>
-          <li>仮にもう1回追加すれば id=3 になる。一度発行された id は<strong>再利用されない</strong>（行を DELETE しても次の INSERT で空き番号は使われない）</li>
+          <li>JSONには<strong>関数を表す書き方が存在しない</strong>ため、<code>JSON.stringify</code> は関数を持つプロパティを<strong>黙って（エラーを出さずに）省略</strong>する</li>
+          <li>同様に <code>undefined</code> を値に持つプロパティも省略される</li>
+          <li>これが「Socket.IOで関数を送っても届かない」理由の正体である</li>
         </ul>
       </div>
     </details>
@@ -1944,7 +1510,7 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
 
     <h3 style="color:#76B900;margin:2rem 0 1rem;font-size:1.1rem">標準課題の解答</h3>
     <p id="answers-locked" style="display:none;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:1.2rem;text-align:center;color:#999;font-size:0.95rem"></p>
-    <div id="answers-encrypted" data-cipher="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"></div>
+    <div id="answers-encrypted" data-cipher="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"></div>
   </div>
 </section>
 

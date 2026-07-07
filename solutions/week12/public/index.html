@@ -1,43 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>第12回: 永続化付き共有3D空間（解答例）</title>
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <title>第12回: マルチユーザ3D空間 + データ蓄積（解答例）</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <style>
-    .info { position: fixed; top: 10px; left: 10px; z-index: 999;
-            background: rgba(0,0,0,0.6); color: #fff; padding: 8px 16px;
-            border-radius: 4px; font-family: sans-serif; font-size: 14px; }
+    body { margin: 0; font-family: sans-serif; }
+    #login-screen {
+      position: fixed; inset: 0; z-index: 1000;
+      background: linear-gradient(135deg, #111, #1a2e0a);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; color: white;
+    }
+    #login-screen h1 { margin-bottom: 1.5rem; font-size: 1.6rem; }
+    #login-screen input {
+      font-size: 1.1rem; padding: 0.6rem 1rem; border-radius: 8px;
+      border: 2px solid #76B900; width: 260px; text-align: center;
+      margin-bottom: 1rem; outline: none;
+    }
+    #login-screen button {
+      font-size: 1.1rem; padding: 0.6rem 2rem; border-radius: 8px;
+      border: none; background: #76B900; color: white; cursor: pointer;
+      font-weight: 700;
+    }
+    #login-screen button:hover { background: #93D500; }
+    .info {
+      position: fixed; top: 10px; left: 10px; z-index: 999;
+      background: rgba(0,0,0,0.65); color: #fff; padding: 8px 16px;
+      border-radius: 6px; font-size: 14px; display: none;
+    }
+    .hint {
+      position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 999;
+      background: rgba(0,0,0,0.65); color: #fff; padding: 8px 16px;
+      border-radius: 6px; font-size: 13px; white-space: nowrap;
+    }
+    .dashboard-link {
+      position: fixed; top: 10px; right: 10px; z-index: 999;
+      background: #76B900; color: #fff; padding: 8px 16px;
+      border-radius: 6px; font-size: 14px; text-decoration: none;
+      font-weight: 700; display: none;
+    }
+    #main-scene { display: none; }
   </style>
 </head>
 <body>
 
-  <div class="info">状態はDBに保存されます（サーバ再起動後も保持）</div>
+  <div id="login-screen">
+    <h1>🌐 3D空間に入室する</h1>
+    <input id="name-input" placeholder="名前を入力" maxlength="20" autofocus>
+    <button id="join-btn">入室する</button>
+  </div>
 
-  <a-scene>
-    <a-light type="ambient" color="#BBB" intensity="0.4"></a-light>
+  <div class="info" id="info-box">接続中: 0人 / あなたの色: <span id="my-color-dot" style="display:inline-block;width:10px;height:10px;border-radius:50%"></span></div>
+  <a href="/dashboard.html" class="dashboard-link" id="dashboard-link">📊 ダッシュボードを見る</a>
+  <div class="hint" id="hint-box" style="display:none">箱をクリックすると回転＋拡大します。名前・色・状態はJSONファイルに蓄積されます。</div>
+
+  <a-scene id="main-scene">
+    <a-light type="ambient" color="#BBB" intensity="0.6"></a-light>
     <a-light type="directional" position="-1 3 1" intensity="0.6"></a-light>
-    <a-light type="point" color="#4488ff" intensity="0.3" position="0 4 -4"></a-light>
 
-    <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20"
-             material="color: #333; roughness: 0.3; metalness: 0.5"></a-plane>
-    <a-sky color="#0d0d1a"></a-sky>
+    <a-camera position="0 1.6 5">
+      <a-cursor color="white" fuse="false" raycaster="objects: .clickable"></a-cursor>
+    </a-camera>
 
-    <a-entity position="0 0 5">
-      <a-camera look-controls wasd-controls="acceleration: 20">
-        <a-cursor color="#FF0" fuse="false"></a-cursor>
-      </a-camera>
-    </a-entity>
+    <!-- 共有インタラクションオブジェクト（第11回コード体験2を継承） -->
+    <a-box id="obj-1" class="clickable" position="-2 1 -3" color="#FF5252"
+           animation__rot="property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"></a-box>
+    <a-box id="obj-2" class="clickable" position="0 1 -3" color="#4FC3F7"
+           animation__rot="property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"></a-box>
+    <a-box id="obj-3" class="clickable" position="2 1 -3" color="#76B900"
+           animation__rot="property: rotation; to: 0 360 0; dur: 2000; startEvents: rotate; easing: easeInOutQuad"></a-box>
 
-    <a-box id="obj-1" position="-4 1 -4" color="#E74C3C" click-handler></a-box>
-    <a-sphere id="obj-2" position="-2 1 -4" radius="0.5" color="#3498DB" click-handler></a-sphere>
-    <a-cylinder id="obj-3" position="0 0.75 -4" radius="0.5" height="1.5" color="#2ECC71" click-handler></a-cylinder>
-    <a-cone id="obj-4" position="2 0.75 -4" radius-bottom="0.5" height="1.5" color="#F39C12" click-handler></a-cone>
-    <a-torus id="obj-5" position="4 1.2 -4" radius="0.4" radius-tubular="0.1" color="#9B59B6" click-handler></a-torus>
+    <!-- 日本語はa-textの既定フォントで正しく描画されないため、案内はHTMLオーバーレイ側に出す -->
 
+    <a-plane position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#333"></a-plane>
+    <a-sky color="#1a1a2e"></a-sky>
   </a-scene>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="interaction.js"></script>
+  <script>
+    const socket = io();
+    let myId = null;
+    let myColor = null;
+
+    document.getElementById('join-btn').addEventListener('click', join);
+    document.getElementById('name-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') join();
+    });
+
+    function join() {
+      const name = document.getElementById('name-input').value.trim();
+      if (!name) return;
+
+      socket.emit('login', { name: name });
+
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-scene').style.display = 'block';
+      document.getElementById('info-box').style.display = 'block';
+      document.getElementById('dashboard-link').style.display = 'block';
+      document.getElementById('hint-box').style.display = 'block';
+    }
+
+    // ── 初期状態の受信 ──
+    socket.on('initState', (data) => {
+      myId = data.id;
+      myColor = data.users[myId] ? data.users[myId].color : null;
+      if (myColor) {
+        document.getElementById('my-color-dot').style.background = myColor;
+      }
+      const otherUsers = Object.values(data.users);
+      for (let i = 0; i < otherUsers.length; i++) {
+        if (otherUsers[i].id !== myId) {
+          createAvatar(otherUsers[i]);
+        }
+      }
+
+      for (const id in data.objects) {
+        const state = data.objects[id];
+        const el = document.getElementById(id);
+        if (el) {
+          el.setAttribute('color', state.color);
+          if (state.big) {
+            el.setAttribute('scale', '1.5 1.5 1.5');
+          } else {
+            el.setAttribute('scale', '1 1 1');
+          }
+        }
+      }
+      updateCount();
+    });
+
+    socket.on('userJoined', (user) => {
+      createAvatar(user);
+      updateCount();
+    });
+    socket.on('userMoved', (data) => updateAvatar(data.id, data.position, data.rotation));
+    socket.on('userLeft', (id) => {
+      removeAvatar(id);
+      updateCount();
+    });
+
+    // ── 共有オブジェクトのインタラクション ──
+    const clickableEls = document.querySelectorAll('.clickable');
+    for (let i = 0; i < clickableEls.length; i++) {
+      const el = clickableEls[i];
+      el.addEventListener('click', function() {
+        socket.emit('objectClick', { id: el.id });
+      });
+    }
+    socket.on('objectUpdated', (data) => {
+      const el = document.getElementById(data.id);
+      if (el) {
+        el.setAttribute('color', data.color);
+        el.setAttribute('scale', data.scale);
+      }
+    });
+    socket.on('playAnimation', (data) => {
+      const el = document.getElementById(data.id);
+      if (el) el.emit('rotate');
+    });
+
+    // ── アバタ描画 ──
+    // 名前は a-text の既定フォントでは日本語が描画できないため、
+    // 3D空間にはアバタ本体のみ表示し、名前一覧はHTMLの info-box に表示する。
+    const liveNames = {};
+
+    function createAvatar(user) {
+      const scene = document.querySelector('a-scene');
+      const avatar = document.createElement('a-entity');
+      avatar.id = `avatar-${user.id}`;
+      avatar.innerHTML = `
+        <a-box width="0.4" height="0.8" depth="0.3" color="${user.color}" position="0 0.4 0"></a-box>
+        <a-sphere radius="0.2" color="${user.color}" position="0 1 0"></a-sphere>
+      `;
+      avatar.setAttribute('position', `${user.position.x} ${user.position.y - 1.6} ${user.position.z}`);
+      scene.appendChild(avatar);
+      liveNames[user.id] = user.name;
+    }
+    function updateAvatar(id, position, rotation) {
+      const el = document.getElementById(`avatar-${id}`);
+      if (el) {
+        el.setAttribute('position', `${position.x} ${position.y - 1.6} ${position.z}`);
+        el.setAttribute('rotation', `0 ${rotation.y} 0`);
+      }
+    }
+    function removeAvatar(id) {
+      const el = document.getElementById(`avatar-${id}`);
+      if (el) el.remove();
+      delete liveNames[id];
+    }
+    function updateCount() {
+      const n = document.querySelectorAll('[id^="avatar-"]').length + 1;
+      const others = Object.values(liveNames).join('、');
+      document.getElementById('info-box').innerHTML =
+        `接続中: ${n}人 / あなたの色: <span id="my-color-dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${myColor}"></span>` +
+        (others ? ` / 他の入室者: ${others}` : '');
+    }
+
+    // ── 自分の位置を定期送信 ──
+    setInterval(() => {
+      if (!myId) return;
+      const camera = document.querySelector('[camera]');
+      if (camera) {
+        socket.emit('move', {
+          position: camera.getAttribute('position'),
+          rotation: camera.getAttribute('rotation')
+        });
+      }
+    }, 100);
+  </script>
 </body>
 </html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ダッシュボード ── 第12回</title>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #111; color: #e0e0e0; margin: 0; padding: 2rem;
+  }
+  h1 { color: #76B900; }
+  .back { color: #4FC3F7; text-decoration: none; font-size: 0.9rem; }
+  .card {
+    background: #1a1a1a; border: 1px solid #333; border-radius: 12px;
+    padding: 1.5rem; margin: 1.5rem 0; max-width: 640px;
+  }
+  .stat-row { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .stat-num { font-size: 2.2rem; font-weight: 800; color: #93D500; }
+  .stat-label { color: #999; }
+  .names { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .name-chip {
+    background: #1a2e0a; color: #76B900; border-radius: 100px;
+    padding: 0.25rem 0.9rem; font-size: 0.9rem;
+  }
+  .bar-row { display: flex; align-items: center; gap: 0.6rem; margin: 0.5rem 0; }
+  .bar-swatch { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; }
+  .bar-track { background: #0a0a0a; border-radius: 6px; flex: 1; overflow: hidden; height: 22px; }
+  .bar-fill { height: 100%; border-radius: 6px; }
+  .bar-count { width: 30px; text-align: right; color: #ccc; font-size: 0.9rem; }
+  .empty { color: #666; font-style: italic; }
+</style>
+</head>
+<body>
+  <a class="back" href="/">← 3D空間に戻る</a>
+  <h1>📊 ダッシュボード</h1>
+  <p style="color:#999">players.json に蓄積されたデータを /api/stats で集計して表示しています。</p>
+
+  <div class="card">
+    <div class="stat-row"><span class="stat-num" id="count">-</span><span class="stat-label">累計ログイン人数</span></div>
+    <div class="stat-row" id="popular-row" style="display:none">
+      <span class="bar-swatch" id="popular-swatch"></span>
+      <span class="stat-label">もっとも人気の色: <span id="popular-color"></span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:#4FC3F7">名前一覧</h3>
+    <div class="names" id="names"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:#FFB800">アバタの色の分布</h3>
+    <div id="colorBars"></div>
+  </div>
+
+  <script>
+    fetch('/api/stats').then(function(res) {
+      return res.json();
+    }).then(function(stats) {
+      document.getElementById('count').textContent = stats.count;
+
+      // ── 名前一覧を表示 ──
+      const namesEl = document.getElementById('names');
+      if (stats.names.length === 0) {
+        namesEl.innerHTML = '<span class="empty">まだ誰もログインしていません</span>';
+      } else {
+        let namesHtml = '';
+        for (let i = 0; i < stats.names.length; i++) {
+          namesHtml = namesHtml + '<span class="name-chip">' + stats.names[i] + '</span>';
+        }
+        namesEl.innerHTML = namesHtml;
+      }
+
+      // ── 色の分布を棒グラフ風に表示 ──
+      const colors = Object.keys(stats.colorCounts);
+      const barsEl = document.getElementById('colorBars');
+      if (colors.length === 0) {
+        barsEl.innerHTML = '<span class="empty">まだデータがありません</span>';
+      } else {
+        // 一番大きい件数を探す（バーの横幅の基準にする）
+        let max = 0;
+        for (let i = 0; i < colors.length; i++) {
+          const count = stats.colorCounts[colors[i]];
+          if (count > max) {
+            max = count;
+          }
+        }
+
+        let barsHtml = '';
+        for (let i = 0; i < colors.length; i++) {
+          const color = colors[i];
+          const count = stats.colorCounts[color];
+          const widthPercent = (count / max) * 100;
+
+          barsHtml = barsHtml +
+            '<div class="bar-row">' +
+              '<div class="bar-swatch" style="background:' + color + '"></div>' +
+              '<div class="bar-track"><div class="bar-fill" style="width:' + widthPercent + '%;background:' + color + '"></div></div>' +
+              '<div class="bar-count">' + count + '</div>' +
+            '</div>';
+        }
+        barsEl.innerHTML = barsHtml;
+      }
+
+      // ── もっとも人気の色 ──
+      if (stats.mostPopularColor) {
+        document.getElementById('popular-row').style.display = 'flex';
+        document.getElementById('popular-swatch').style.background = stats.mostPopularColor;
+        document.getElementById('popular-color').textContent = stats.mostPopularColor;
+      }
+    });
+  </script>
+</body>
+</html>
