@@ -443,7 +443,6 @@ pre { position: relative; }
 <!-- ============ SECTION NAV ============ -->
 <nav class="section-nav"><div style="display:flex;align-items:center;gap:0.1rem;margin-right:0.8rem;border-right:1px solid #333;padding-right:0.8rem"><span style="color:#666;font-size:0.5rem;white-space:nowrap">回:</span><a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session01.html">1</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session02.html">2</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session03.html">3</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session04.html">4</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session05.html">5</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session06.html">6</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session07.html">7</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session08.html">8</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session09.html">9</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session10.html">10</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session11.html">11</a> <a style="color:#76B900;background:rgba(118,185,0,0.15);font-size:0.6rem;padding:0.2rem 0.5rem;border-radius:4px" href="session12.html">12</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session13.html">13</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session14.html">14</a> <a style="color:#666;font-size:0.6rem;padding:0.2rem 0.5rem" href="session15.html">15</a></div>
   <a href="#sec-explanation">説明</a>
-  <a href="#sec-examples">例題</a>
   <a href="#sec-standard" class="nav-assignment">標準</a>
   <a href="#sec-advanced" class="nav-advanced">発展</a>
   <a href="#sec-notion" style="color:#76B900">Notion</a>
@@ -488,11 +487,26 @@ pre { position: relative; }
       今回は、そのデータを<strong>JSON（JavaScript Object Notation）</strong>という共通の形式で整理し、<strong>サーバに蓄積し、最後にそれを分析する「ダッシュボード」を作る</strong>、という流れで進めます。
     </p>
 
+    <!-- 準備: 作業フォルダの準備 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダの準備</h3>
+      </div>
+      <p>この回では説明の途中にも実際に手を動かして試すコードが出てきます。まず、コードを保存する場所を用意しましょう。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web12</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web12</code> を開く</li>
+        <li>VS Code のターミナル（<strong>表示 → ターミナル</strong> または <kbd>Ctrl+`</kbd>）を開いておく</li>
+      </ol>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この後の説明で <code>○○.js</code> というコードが出てきたら、VS Codeで<strong>「ファイル」→「新規テキストファイル」</strong>を作り、コードをコピー＆ペーストして<strong>同じファイル名で保存</strong>し、ターミナルで <code>node ○○.js</code> と入力して実行します（保存し忘れると古い内容のまま実行されるので注意）。<code>.html</code> のコードは <code>public</code> フォルダの中に保存します。</p>
+    </div>
+
     <!-- 1.1 これまでの復習 -->
     <div class="concept-box">
       <h4>1.1 これまでの復習 ── アバタのデータ構造</h4>
-      <p>第10回では、自分の位置や回転が変わるたびに、次のようなオブジェクトをサーバに送信していました。</p>
-      <pre><span class="code-label">JavaScript ── public/app.js（第10回の抜粋、そのまま貼り付けて動く形）</span>
+      <p>第10回では、自分の位置や回転が変わるたびに、次のようなオブジェクトをサーバに送信していました。<strong>これは第10回ですでに作成済みのコードです。今回あらためて作る必要はありません</strong>――内容を思い出すための振り返りとして載せています。</p>
+      <pre><span class="code-label">JavaScript ── public/app.js（第10回で作成済み・振り返り用）</span>
 <span class="kw">const</span> socket = <span class="fn">io</span>();
 
 <span class="cmt">// 0.1秒ごとに、自分の位置と回転をサーバへ送信する</span>
@@ -559,6 +573,13 @@ console.<span class="fn">log</span>(<span class="kw">typeof</span> text); <span 
 <span class="hl-line"><span class="kw">const</span> restored = JSON.<span class="fn">parse</span>(text);</span>
 console.<span class="fn">log</span>(restored.position.x); <span class="cmt">// → 1（数値としてアクセスできる）</span>
 console.<span class="fn">log</span>(<span class="kw">typeof</span> restored); <span class="cmt">// → "object"</span></pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">実際に試してみましょう。準備で開いた <code>Web12</code> フォルダに <code>stringify-test.js</code> という名前で上のコードを保存し、ターミナルで <code>node stringify-test.js</code> を実行すると、コメントに書いた通りの結果がターミナルに表示されます。</p>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code — Web12/stringify-test.js</span></div>
+        <img src="images/session12-stringify-test.png" alt="VS Codeでstringify-test.jsを開き、統合ターミナルでnode stringify-test.jsを実行した画面。ターミナルに『{&quot;id&quot;:&quot;p1&quot;,&quot;position&quot;:{&quot;x&quot;:1,&quot;y&quot;:0,&quot;z&quot;:2}}』『string』『1』『object』の4行が順番に表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果:</strong> 実際にVS Codeのターミナルで実行した結果。JSON文字列・<code>typeof text</code>・<code>restored.position.x</code>・<code>typeof restored</code> の4行が、コードのコメント通りに表示されている。</figcaption>
+      </figure>
 
       <!-- Diagram: stringify/parse round trip -->
       <div class="diagram-container">
@@ -618,9 +639,11 @@ console.<span class="fn">log</span>(<span class="kw">typeof</span> restored); <s
 <span class="cmt">// Socket.IOが裏でJSON.stringifyして送信している</span></pre>
       <pre><span class="code-label">JavaScript ── server.js（受信側 = サーバ）</span>
 <span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+
 <span class="kw">const</span> app = <span class="fn">express</span>();
 <span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>);
-<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
 
 io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
 <span class="hl-line">  socket.<span class="fn">on</span>(<span class="str">'move'</span>, (data) => {
@@ -629,6 +652,14 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
     console.<span class="fn">log</span>(data.position.x); <span class="cmt">// → 1.2</span>
   });</span>
 });</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードは今は作成・実行しません。</strong>クライアントとサーバの両方が必要な例なので、ここでは「送信側と受信側で何が起きているか」の理解が目的です。同じ仕組みは1.7のログイン機能で実際に動かします。</p>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code — Web12/server.js</span></div>
+        <img src="images/session12-move-server.png" alt="VS Codeでserver.jsを実行し、ブラウザからmoveイベントを送信した結果。ターミナルに「{ id: 'p-iIWY5aqq1fi4AAAAB', position: { x: 1.2, y: 0, z: -3.4 } }」「object」「1.2」の3行が表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果（参考）:</strong> 実際に <code>node server.js</code> でサーバを起動し、ブラウザから <code>socket.emit('move', ...)</code> を送信した結果。受信した <code>data</code> がすでにオブジェクトに戻っていること（<code>typeof data</code> → <code>"object"</code>）、<code>data.position.x</code> が <code>1.2</code> として取り出せることが確認できる。</figcaption>
+      </figure>
+
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">なぜこれを知っておく必要があるのか</p>
         <ul class="point-list" style="margin:0">
@@ -654,6 +685,13 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
   <span class="kw">const</span> data = players[id];
   console.<span class="fn">log</span>(id, data.position, data.rotation);
 }</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">これも実際に試してみましょう。<code>Web12</code> フォルダに <code>players-test.js</code> という名前で保存し、VS Codeのターミナルで <code>node players-test.js</code> を実行すると、2人分の <code>id・position・rotation</code> がターミナルに表示されます。</p>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code — Web12/players-test.js</span></div>
+        <img src="images/session12-players-test.png" alt="VS Codeでplayers-test.jsを開き、統合ターミナルでnode players-test.jsを実行した画面。ターミナルに「abc123 { x: 1, y: 0, z: 2 } { x: 0, y: 0, z: 0 }」「xyz789 { x: -3, y: 0, z: 1 } { x: 0, y: 180, z: 0 }」の2行が表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果:</strong> 実際にVS Codeのターミナルで実行した結果。<code>abc123</code>・<code>xyz789</code> それぞれの <code>position</code>・<code>rotation</code> が1行ずつ表示されている。</figcaption>
+      </figure>
       <div class="analogy">
         1人分のデータが「名札」だとすると、<code>players</code> は名札を<strong>id順に並べたロッカー</strong>のようなものです。ロッカー番号（id）が分かれば、誰の名札にもすぐアクセスできます。
       </div>
@@ -682,6 +720,13 @@ fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>
 <span class="cmt">// 保存されているデータを確認する</span>
 console.<span class="fn">log</span>(players);</pre>
       <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">① の <code>existsSync</code> チェックが無いと、実行するたびに前回のデータが消えて <code>players</code> が空から始まってしまいます（<code>fs.readFileSync</code> はファイルが無いとエラーで停止する点にも注意）。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードは今は作成・実行しません。</strong>ここではコードの意味（読み込み→追加→書き込みの流れ）を理解してください。同じ書き込み方法を1.7のログイン処理でそのまま使います。</p>
+
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code — Web12/save-test.js</span></div>
+        <img src="images/session12-save-test.png" alt="VS Codeでsave-test.jsを開き、統合ターミナルでnode save-test.jsを実行した画面。ターミナルに「{ abc123: { name: 'たろう', color: '#76B900' } }」と表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>実行結果（参考）:</strong> 実際にVS Codeのターミナルで実行した結果。<code>players.json</code> に書き込んだのと同じ内容が <code>console.log(players)</code> でも表示される。</figcaption>
+      </figure>
 
       <table>
         <tr><th>関数</th><th>意味</th></tr>
@@ -787,6 +832,7 @@ console.<span class="fn">log</span>(players);</pre>
 
       <pre><span class="code-label">JavaScript ── server.js</span>
 <span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
 <span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
 
 <span class="kw">const</span> app = <span class="fn">express</span>();
@@ -795,7 +841,7 @@ app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span cla
 <span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
   console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
 });
-<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
 
 <span class="kw">let</span> players = {};
 <span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
@@ -819,6 +865,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
     io.<span class="fn">emit</span>(<span class="str">'players'</span>, players);
   });</span>
 });</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードは今は作成・実行しません。</strong>実際に作成して実行するのは標準課題です（<code>npm install</code> が必要なため、そこでまとめて手順を示します）。</p>
       <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
         <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">ログイン画面のポイント</p>
         <ul class="point-list" style="margin:0">
@@ -883,13 +930,36 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
 
 console.<span class="fn">log</span>(JSON.<span class="fn">stringify</span>(stats, <span class="kw">null</span>, <span class="num">2</span>));
 <span class="cmt">// → { "count": 3, "names": [...], "colorCounts": { "#76B900": 2, "#4FC3F7": 1 } }</span></pre>
-      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">このファイルは、1.6で作った <code>players.json</code> と同じフォルダで <code>node stats-test.js</code> を実行すると動きます。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードは今は作成・実行しません。</strong><code>players.json</code> を集計する処理の考え方を確認するための単独スクリプトです。標準課題では、この同じfor文をサーバに組み込んで使います。</p>
 
       <p style="margin-top:0.5rem">この <code>stats</code> も1つのJSONオブジェクトです。ここまで学んだ知識がそのまま活きます。</p>
       <ul class="point-list">
         <li><code>JSON.stringify(stats)</code> でテキストに変換すれば、Webページに送れる</li>
         <li>ブラウザ側では <code>fetch</code> でこのJSONを取得し、<code>JSON.parse</code>（<code>fetch</code>の場合は <code>response.json()</code> が自動で行う）でオブジェクトに戻して画面に描画する</li>
       </ul>
+
+      <p style="margin-top:0.8rem">上の集計をファイルから読み直す代わりに、1.7の <code>server.js</code> がメモリ上に持っている <code>players</code> をそのまま使えば、<strong><code>GET /api/stats</code></strong> というAPIエンドポイントとして提供できます。</p>
+      <pre><span class="code-label">JavaScript ── server.js に追記する（1.7の続き）</span>
+app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res) => {
+<span class="hl-line">  <span class="kw">const</span> list = Object.<span class="fn">values</span>(players);
+
+  <span class="kw">let</span> names = [];
+  <span class="kw">let</span> colorCounts = {};
+
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; list.length; i++) {
+    <span class="kw">const</span> p = list[i];
+    names.<span class="fn">push</span>(p.name);
+
+    <span class="kw">if</span> (colorCounts[p.color] === <span class="kw">undefined</span>) {
+      colorCounts[p.color] = <span class="num">1</span>;
+    } <span class="kw">else</span> {
+      colorCounts[p.color] = colorCounts[p.color] + <span class="num">1</span>;
+    }
+  }</span>
+
+  res.<span class="fn">json</span>({ count: list.length, names: names, colorCounts: colorCounts });
+});</pre>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードは今は作成・実行しません。</strong>1.7の <code>server.js</code> に追記して初めて動くコードです。実際に作成して実行するのは標準課題です。</p>
 
       <pre><span class="code-label">HTML ── public/dashboard.html</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
@@ -912,7 +982,7 @@ console.<span class="fn">log</span>(JSON.<span class="fn">stringify</span>(stats
   <span class="kw">&lt;/script&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></pre>
-      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">このファイルを <code>public</code> フォルダに置き、対応する <code>/api/stats</code> をサーバに用意すれば、ブラウザで <code>/dashboard.html</code> を開くだけで動きます。</p>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999"><strong>このコードも今は作成・実行しません。</strong>上の <code>/api/stats</code> と組み合わせて初めて動きます。実際に作成して実行するのは標準課題です。</p>
 
       <!-- Diagram: aggregation -> JSON -> fetch -> render -->
       <div class="diagram-container">
@@ -957,15 +1027,15 @@ console.<span class="fn">log</span>(JSON.<span class="fn">stringify</span>(stats
   </div>
 </section>
 
-<!-- ============ 2. EXAMPLES & TRACE ============ -->
-<section id="sec-examples">
+<!-- ============ 2. STANDARD TASK ============ -->
+<section id="sec-standard">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#4A7A00">2</div>
-      <h2>例題とトレース演習</h2>
+      <div class="section-num" style="background:#76B900">2</div>
+      <h2>標準課題</h2>
     </div>
 
-    <p style="margin-bottom:0.8rem">先にこの回で実際に組み上がるアプリの実行結果を見ておきましょう。① 2人がログインしてアバタが同期している状態 → ② 片方が共有オブジェクトをクリックして色・大きさが変化 → ③ もう一方の画面でも同じ結果が同期されていることが確認できます。以下の例題を順番に手を動かして進めれば、標準課題を提出できる状態まで自然にたどり着きます。</p>
+    <p style="margin-bottom:0.8rem">先にこの回で実際に組み上がるアプリの実行結果を見ておきましょう。① 2人がログインしてアバタが同期している状態 → ② 片方が共有オブジェクトをクリックして色・大きさが変化 → ③ もう一方の画面でも同じ結果が同期されている → ④ 蓄積したデータをダッシュボードで確認できる、という流れです。この④が標準課題のゴールです。</p>
     <div class="exec-pair">
       <figure class="exec-shot">
         <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">① 2人がログイン → アバタ同期</span></div>
@@ -984,242 +1054,13 @@ console.<span class="fn">log</span>(JSON.<span class="fn">stringify</span>(stats
         <img src="images/session12-object-synced-clientB.png" alt="はなこ側のブラウザでも同じ箱が同じ色・大きさで表示されている。視点が異なるため箱の見え方は違うが状態は一致している。" loading="lazy">
         <figcaption class="exec-caption"><strong>③ 同期確認:</strong> 視点は違っても、サーバが持つ唯一の状態（server-authoritative）がそのまま両方の画面に反映される。</figcaption>
       </figure>
+      <figure class="exec-shot">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">④ ダッシュボードで確認（標準課題のゴール）</span></div>
+        <img src="images/session12-standard-goal-dashboard.png" alt="ダッシュボード画面。累計ログイン人数8、もっとも人気の色#93D500、あおい・けん・さくら・じろう・たろう・はなこ・みなと・ゆいの名前一覧、アバタの色の分布が緑4・青2・オレンジ2の棒グラフで表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><strong>④ 標準課題のゴール:</strong> 8人分ログインした状態で <code>dashboard.html</code> を開いた結果。<code>colorCounts</code>（色ごとの件数）と <code>mostPopularColor</code>（もっとも人気の色）が正しく集計・表示されている。</figcaption>
+      </figure>
     </div>
-    <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動し、2つのブラウザコンテキストでログイン → オブジェクトクリック → 同期確認までを実機で検証したキャプチャです。</p>
-
-    <!-- Example -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>JSON文字列を読み取る</h3>
-      </div>
-      <p>サーバから届いた、あるアバタのJSON文字列です。内容を読み取って表を埋めてみましょう。</p>
-      <pre><span class="code-label">JSON</span>
-{
-  "id": "player-7",
-  "position": { "x": 2.5, "y": 0, "z": -1.8 },
-  "rotation": { "x": 0, "y": 135, "z": 0 },
-  "color": "#4FC3F7"
-}</pre>
-      <table>
-        <tr><th>読み取る項目</th><th>値</th></tr>
-        <tr><td>id</td><td>player-7</td></tr>
-        <tr><td>position.x</td><td>2.5</td></tr>
-        <tr><td>position.z</td><td>-1.8</td></tr>
-        <tr><td>rotation.y（Y軸まわりの回転）</td><td>135</td></tr>
-        <tr><td>color</td><td>#4FC3F7</td></tr>
-      </table>
-      <p style="margin-top:0.6rem;font-size:0.9rem;color:#999">ポイント: <code>position</code> と <code>rotation</code> はそれぞれ x/y/z を持つ<strong>ネストしたオブジェクト</strong>。JavaScript側では <code>data.position.x</code> のようにドットでたどってアクセスする。</p>
-    </div>
-
-    <!-- Example B: save-test.js -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>players.json にデータを保存する</h3>
-      </div>
-      <p><code>Web12</code> フォルダに <code>save-test.js</code> を作り、1.6のコードをそのまま貼り付けて実行してみましょう。</p>
-      <pre><span class="code-label">JavaScript ── save-test.js</span>
-<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
-
-<span class="kw">let</span> players = {};
-<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
-  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
-}
-
-players[<span class="str">'abc123'</span>] = { name: <span class="str">'たろう'</span>, color: <span class="str">'#76B900'</span> };
-
-fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
-console.<span class="fn">log</span>(players);</pre>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li>ターミナルで <code>node save-test.js</code> を実行する</li>
-        <li>作られた <code>players.json</code> をエディタで開いて中身を確認する</li>
-        <li>もう一度 <code>node save-test.js</code> を実行し、結果が変わらないことを確認する（同じ <code>id</code> を上書きしているだけなので蓄積されない）</li>
-      </ol>
-      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この <code>players.json</code> は、次の例題でそのまま使います。</p>
-    </div>
-
-    <!-- Example C: login.html + server.js -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>ログイン画面を作って動かす</h3>
-      </div>
-      <p>同じ <code>Web12</code> フォルダに、次の <code>public/login.html</code> と <code>server.js</code> を作りましょう。</p>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li><code>npm init -y</code> → <code>npm install express socket.io</code> を実行する</li>
-        <li><code>public</code> フォルダを作り、その中に下の <code>login.html</code> を保存する</li>
-      </ol>
-      <pre><span class="code-label">HTML ── public/login.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>ログイン画面<span class="kw">&lt;/title&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-
-  <span class="kw">&lt;div</span> id=<span class="str">"login-screen"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;input</span> id=<span class="str">"name-input"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;button</span> id=<span class="str">"join-btn"</span><span class="kw">&gt;</span>入室する<span class="kw">&lt;/button&gt;</span>
-  <span class="kw">&lt;/div&gt;</span>
-
-  <span class="kw">&lt;a-scene</span> id=<span class="str">"main-scene"</span> style=<span class="str">"display:none"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-plane</span> position=<span class="str">"0 0 0"</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
-    <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
-  <span class="kw">&lt;/a-scene&gt;</span>
-
-  <span class="kw">&lt;script&gt;</span>
-    <span class="kw">const</span> socket = <span class="fn">io</span>();
-
-    document.<span class="fn">getElementById</span>(<span class="str">'join-btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
-      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name-input'</span>).value.<span class="fn">trim</span>();
-      <span class="kw">if</span> (!name) <span class="kw">return</span>;
-      socket.<span class="fn">emit</span>(<span class="str">'login'</span>, { name: name });
-      document.<span class="fn">getElementById</span>(<span class="str">'login-screen'</span>).style.display = <span class="str">'none'</span>;
-      document.<span class="fn">getElementById</span>(<span class="str">'main-scene'</span>).style.display = <span class="str">'block'</span>;
-    });
-  <span class="kw">&lt;/script&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-
-      <p style="margin-top:0.5rem;font-size:0.95rem">プロジェクト直下（<code>public</code> の外）に下の <code>server.js</code> を保存します。</p>
-      <pre><span class="code-label">JavaScript ── server.js</span>
-<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
-
-<span class="kw">const</span> app = <span class="fn">express</span>();
-app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
-
-<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
-  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
-});
-<span class="kw">const</span> io = <span class="fn">require</span>(<span class="str">'socket.io'</span>)(server);
-
-<span class="kw">let</span> players = {};
-<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
-  players = JSON.<span class="fn">parse</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>));
-}
-
-<span class="kw">function</span> <span class="fn">savePlayers</span>() {
-  fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="fn">stringify</span>(players, <span class="kw">null</span>, <span class="num">2</span>));
-}
-
-io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
-  socket.<span class="fn">on</span>(<span class="str">'login'</span>, (data) => {
-    players[socket.id] = {
-      name: data.name,
-      color: <span class="str">'#76B900'</span>,
-      position: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> },
-      rotation: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> }
-    };
-    <span class="fn">savePlayers</span>();
-    io.<span class="fn">emit</span>(<span class="str">'players'</span>, players);
-  });
-});</pre>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li><code>node server.js</code> を実行し、ブラウザで <code>http://localhost:3000/login.html</code> を開く</li>
-        <li>名前を入力して「入室する」を押し、3D空間が表示されることを確認する</li>
-        <li><code>players.json</code> に自分のログイン記録が保存されていることを確認する</li>
-      </ol>
-      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この <code>server.js</code>・<code>login.html</code> が、この回の標準課題の土台になります。</p>
-    </div>
-
-    <!-- Example D: dashboard.html + /api/stats -->
-    <div class="card example">
-      <div class="card-header">
-        <span class="tag tag-example">例題</span>
-        <h3>ダッシュボードを作って動かす</h3>
-      </div>
-      <p>例題Cの <code>server.js</code> の末尾に、次の <code>/api/stats</code> エンドポイントを追記します。</p>
-      <pre><span class="code-label">JavaScript ── server.js に追記する</span>
-app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res) => {
-  <span class="kw">const</span> list = Object.<span class="fn">values</span>(players);
-
-  <span class="kw">let</span> names = [];
-  <span class="kw">let</span> colorCounts = {};
-
-  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; list.length; i++) {
-    <span class="kw">const</span> p = list[i];
-    names.<span class="fn">push</span>(p.name);
-
-    <span class="kw">if</span> (colorCounts[p.color] === <span class="kw">undefined</span>) {
-      colorCounts[p.color] = <span class="num">1</span>;
-    } <span class="kw">else</span> {
-      colorCounts[p.color] = colorCounts[p.color] + <span class="num">1</span>;
-    }
-  }
-
-  res.<span class="fn">json</span>({ count: list.length, names: names, colorCounts: colorCounts });
-});</pre>
-      <p style="margin-top:0.5rem;font-size:0.95rem">同じ <code>public</code> フォルダに、下の <code>dashboard.html</code> を保存します。</p>
-      <pre><span class="code-label">HTML ── public/dashboard.html</span>
-<span class="kw">&lt;!DOCTYPE html&gt;</span>
-<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;title&gt;</span>ダッシュボード<span class="kw">&lt;/title&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-  <span class="kw">&lt;h1&gt;</span>接続人数: <span class="kw">&lt;span</span> id=<span class="str">"count"</span><span class="kw">&gt;</span>-<span class="kw">&lt;/span&gt;&lt;/h1&gt;</span>
-  <span class="kw">&lt;p&gt;</span>名前一覧: <span class="kw">&lt;span</span> id=<span class="str">"names"</span><span class="kw">&gt;&lt;/span&gt;&lt;/p&gt;</span>
-
-  <span class="kw">&lt;script&gt;</span>
-    <span class="kw">fetch</span>(<span class="str">'/api/stats'</span>).<span class="fn">then</span>(<span class="kw">function</span>(res) {
-      <span class="kw">return</span> res.<span class="fn">json</span>();
-    }).<span class="fn">then</span>(<span class="kw">function</span>(stats) {
-      document.<span class="fn">getElementById</span>(<span class="str">'count'</span>).textContent = stats.count;
-      document.<span class="fn">getElementById</span>(<span class="str">'names'</span>).textContent = stats.names.<span class="fn">join</span>(<span class="str">', '</span>);
-    });
-  <span class="kw">&lt;/script&gt;</span>
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></pre>
-      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
-        <li><code>server.js</code> を再起動し（Ctrl+C → <code>node server.js</code>）、いくつか名前を変えてログインする</li>
-        <li>ブラウザで <code>http://localhost:3000/dashboard.html</code> を開き、接続人数と名前一覧が表示されることを確認する</li>
-      </ol>
-      <div style="background:#1A1A1A;border:1px solid #76B900;border-radius:10px;padding:1rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">ここまでできれば、標準課題は目の前です</p>
-        <p style="font-size:0.9rem;margin:0">例題B〜Dを順に進めると、<code>server.js</code>（ログイン+保存+集計API）と <code>dashboard.html</code>（表示画面）が手元に揃います。標準課題は、この2つのファイルに<strong>色をランダムにする・interactionを追加する・colorCountsとmostPopularColorを足す</strong>という4つの改造を加えるだけです。</p>
-      </div>
-    </div>
-
-    <!-- Trace 1 -->
-    <div class="card trace">
-      <div class="card-header">
-        <span class="tag tag-trace">トレース演習</span>
-        <h3>トレース演習 1: 壊れたJSONを見つける</h3>
-      </div>
-      <p><strong>問題:</strong> 以下は「JSONのつもりで書いたが、実は正しいJSONになっていない」文字列です。文法エラーがある箇所をすべて指摘しなさい。</p>
-      <pre><span class="code-label">JSON（誤りを含む）</span>
-{
-  id: 'player-7',
-  position: { x: 2.5, y: 0, z: -1.8 },
-  rotation: { "x": 0, "y": 135, "z": 0, },
-  "color": "#4FC3F7"
-}</pre>
-      <table>
-        <tr><th>行</th><th>誤りの内容（空欄を埋める）</th></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-        <tr><td class="blank-cell"></td><td class="blank-cell"></td></tr>
-      </table>
-      <div class="notion-submit"><div><strong>Notionに記録:</strong> 見つけた誤りと、正しく書き直したJSON全体を記入してください。</div></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ 3. STANDARD TASK ============ -->
-<section id="sec-standard">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-num" style="background:#76B900">3</div>
-      <h2>標準課題</h2>
-    </div>
+    <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動して検証したキャプチャです。①〜③は2つのブラウザコンテキストでログイン→オブジェクトクリック→同期確認、④は8人分ログインした状態でダッシュボードを開いた結果です。</p>
 
     <!-- 標準課題: データ蓄積からダッシュボード表示まで -->
     <div class="card standard">
@@ -1227,7 +1068,7 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
         <span class="tag tag-standard">標準課題</span>
         <h3>すべてのデータを蓄積し、ダッシュボードで確認する（コード改造）</h3>
       </div>
-      <p>1.7 で作った <code>server.js</code>・<code>login.html</code> と、1.8 で作った <code>dashboard.html</code> を組み合わせ、蓄積した<strong>全データ（名前・色・インタラクション状態）</strong>をダッシュボードで確認できるようにしなさい。</p>
+      <p>1.7 で作った <code>server.js</code>・<code>login.html</code> と、1.8 で作った <code>/api/stats</code>・<code>dashboard.html</code> を組み合わせ、蓄積した<strong>全データ（名前・色・インタラクション状態）</strong>をダッシュボードで確認できるようにしなさい。</p>
 
       <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
         <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示 ①: server.js（すべてのデータを取得）</p>
@@ -1267,11 +1108,11 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
   </div>
 </section>
 
-<!-- ============ 4. ADVANCED TASK ============ -->
+<!-- ============ 3. ADVANCED TASK ============ -->
 <section id="sec-advanced">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#FFB800">4</div>
+      <div class="section-num" style="background:#FFB800">3</div>
       <h2>発展課題</h2>
     </div>
 
@@ -1342,101 +1183,15 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
     <div class="card" style="border-left:4px solid #76B900">
       <div class="card-header">
         <span class="tag" style="background:#1a2e0a;color:#76B900">テンプレート</span>
-        <h3>課題ノートのテンプレート</h3>
+        <h3>課題ノートは自分で組み立てる</h3>
       </div>
-      <p>各セクションを埋めていってください。これが提出するPDFの元になります。</p>
+      <p>今回はテンプレートの配布はありません。<strong>この回の提出物（標準課題・発展課題）の内容に応じて、見出しを自分で立てて</strong>Notionノートを作成してください。これまでの回のテンプレートを参考に、「何を書けば採点者に伝わるか」を自分で考えることも今回の課題の一部です。</p>
 
-      <pre><span class="code-label">Notion テンプレート</span>
-# Webプログラミング演習 第12回
-
-名前:
-学籍番号:
-
----
-
-## 説明 1.3: やってみよう（greet を追加してstringify）
-### 予測した結果
-
-### 実際の結果
-
----
-
-## 例題: JSON文字列を読み取る
-| 項目 | 値 |
-|------|-----|
-| id | |
-| position.x | |
-| position.z | |
-| rotation.y | |
-| color | |
-
----
-
-## トレース演習 1: 壊れたJSONを見つける
-| 行 | 誤りの内容 |
-|----|-----------|
-|    |            |
-|    |            |
-|    |            |
-
-### 正しく書き直したJSON全体
-
----
-
-## 標準課題: すべてのデータを蓄積し、ダッシュボードで確認する
-### ① 改造後の server.js コード全体
-```javascript
-（ここに改造後コードを貼り付け）
-```
-
-### ② 改造後の dashboard.html コード全体
-```html
-（ここに改造後コードを貼り付け）
-```
-
-### ③ 各改造について「変更した行」と「変更理由」
-1. color をランダムにする:
-2. interaction フィールドを追加:
-3. /api/stats に colorCounts・mostPopularColor を追加:
-4. dashboard.html に色の分布の表示を追加:
-
-### ④ ブラウザで確認した結果のスクリーンショット
-（ここに画像を貼り付け）
-
----
-
-## 発展課題: ログイン画面 + データ蓄積 + 分析ダッシュボード
-### 1. コード
-
-#### server.js
-```javascript
-（ここに貼り付け）
-```
-
-#### index.html（または scene.html）
-```html
-（ここに貼り付け）
-```
-
-#### dashboard.html
-```html
-（ここに貼り付け）
-```
-
-### 2. 音声説明（1〜2分の音声ファイルを添付）
-- ログイン画面で入力した名前がどのようなJSON構造で送られるか
-- players.json にどのようなデータを蓄積したか
-- ダッシュボードで /api/stats のJSONをどう集計・表示したか
-
-### 3. 評価チェックリスト（自己確認）
-- [ ] ログイン画面で名前を入力してから3D空間に入る
-- [ ] アバタに色が付いている
-- [ ] 共有オブジェクトのインタラクションが複数ブラウザで同期される
-- [ ] 名前・色・インタラクション状態が players.json に蓄積される
-- [ ] dashboard.html で接続人数・名前一覧・色の分布が表示される
-- [ ] サーバを再起動しても、蓄積されたデータが復元される
-- [ ] 音声で仕組みを説明している
-</pre>
+      <ul class="point-list" style="margin-top:0.8rem">
+        <li>名前・学籍番号は必ず先頭に書く</li>
+        <li>標準課題・発展課題それぞれについて、<strong>改造後のコード全体</strong>・<strong>どこをどう変えたか</strong>・<strong>動作確認の証拠（スクリーンショットや音声）</strong>が分かるように見出しを分ける</li>
+        <li>各セクションの提出物の指示（本ページの標準課題・発展課題に書かれている項目）を、そのまま自分のノートの見出しとして使うと漏れにくい</li>
+      </ul>
 
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:0.3rem;padding:0.6rem 0.8rem;margin-top:0.8rem;font-size:0.8rem;color:#93D500">
         <strong>Notionに書いただけでは提出にならない。</strong>必ずPDFにエクスポートし、Manabaに提出すること。
@@ -1446,53 +1201,16 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
   </div>
 </section>
 
-<!-- ============ 5. ANSWERS ============ -->
+<!-- ============ 4. ANSWERS ============ -->
 <section style="background:#0A0A0A" id="answers-section" data-release="2026-07-15T16:20">
   <div class="container">
     <div class="section-header">
-      <div class="section-num" style="background:#616161">5</div>
+      <div class="section-num" style="background:#616161">4</div>
       <h2>解答例</h2>
     </div>
 
-    <details>
-      <summary><span class="tag tag-trace" style="font-size:0.7rem">トレース</span> トレース演習 1 解答</summary>
-      <div class="answer-content">
-        <p>誤りの箇所:</p>
-        <table>
-          <tr><th>行</th><th>誤りの内容</th></tr>
-          <tr><td><code>id: 'player-7',</code></td><td>キー <code>id</code> に引用符が無い。値もシングルクォート。正しくは <code>"id": "player-7",</code></td></tr>
-          <tr><td><code>position: { x: 2.5, y: 0, z: -1.8 },</code></td><td>キー <code>position</code> と、内側の <code>x, y, z</code> すべてに引用符が無い</td></tr>
-          <tr><td><code>rotation: { "x": 0, "y": 135, "z": 0, },</code></td><td>キー <code>rotation</code> に引用符が無い。さらに <code>"z": 0,</code> の後ろに<strong>不要なカンマ（末尾カンマ）</strong>があり、JSONではエラーになる</td></tr>
-        </table>
-        <p style="margin-top:0.6rem"><code>"color": "#4FC3F7"</code> の行は正しいJSONの書き方になっている（キー・値ともに二重引用符、末尾カンマなし）。</p>
-        <pre style="background:#1a1a1a;color:#e0e0e0;border:1px solid #333">正しく書き直したJSON:
-{
-  "id": "player-7",
-  "position": { "x": 2.5, "y": 0, "z": -1.8 },
-  "rotation": { "x": 0, "y": 135, "z": 0 },
-  "color": "#4FC3F7"
-}</pre>
-      </div>
-    </details>
-
-    <!-- ── 例題の解答（常に公開） ── -->
+    <!-- ── 説明中の「やってみよう」の解答（常に公開） ── -->
     <div id="answers-examples">
-    <details>
-      <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 例題 JSON文字列を読み取る 解答</summary>
-      <div class="answer-content">
-        <p>与えられたJSON文字列から読み取れる値（表の正答）:</p>
-        <table>
-          <tr><th>項目</th><th>値</th></tr>
-          <tr><td>id</td><td>player-7</td></tr>
-          <tr><td>position.x</td><td>2.5</td></tr>
-          <tr><td>position.z</td><td>-1.8</td></tr>
-          <tr><td>rotation.y</td><td>135</td></tr>
-          <tr><td>color</td><td>#4FC3F7</td></tr>
-        </table>
-        <p style="margin-top:0.6rem">ポイント: <code>position</code> と <code>rotation</code> はオブジェクトなので、値を取り出すには <code>data.position.x</code> のようにドットで1段階たどる必要がある。<code>data.x</code> では取得できない。</p>
-      </div>
-    </details>
-
     <details>
       <summary><span class="tag tag-example" style="font-size:0.7rem">例題</span> 1.3 やってみよう（greetを追加してstringify）解答</summary>
       <div class="answer-content">
