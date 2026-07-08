@@ -267,6 +267,15 @@ pre .op { color: #4FC3F7; }
   padding-left: 0.5rem;
   margin-left: -0.5rem;
 }
+.blk {
+  background: #3a2e0a;
+  border: 1px dashed #FFB800;
+  color: #FFB800;
+  padding: 0 0.45rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-style: normal;
+}
 
 /* ============ EXPLANATION BLOCKS ============ */
 .concept-box {
@@ -1062,240 +1071,154 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
     </div>
     <p style="color:#888;font-size:0.85em;margin:0 0 1.5rem">※ solutions/week12 を実際に起動して検証したキャプチャです。①〜③は2つのブラウザコンテキストでログイン→オブジェクトクリック→同期確認、④は8人分ログインした状態でダッシュボードを開いた結果です。</p>
 
-    <!-- 全体像: どの授業資料を組み合わせるか -->
-    <div class="concept-box" style="border:1px solid #76B900;margin-bottom:1.5rem">
-      <h4>💡 難しく感じたら ── 「どの授業資料を組み合わせるか」から整理する</h4>
-      <p>このアプリは<strong>ゼロから書くものではありません</strong>。第10回・第11回・第12回で作ったコードを、下の対応表のように<strong>組み合わせるだけ</strong>です。「どの動きが、どの回の、どのファイルから来るのか」を先に整理すると一気に分かりやすくなります。</p>
-      <table>
-        <tr><th>画面の動き</th><th>由来</th><th>おもなファイル</th><th>やること</th></tr>
-        <tr><td>ログイン画面で名前を入力</td><td>第12回 <strong>1.7</strong></td><td>index.html / server.js</td><td>名前を <code>socket.emit('login', {name})</code> で送る</td></tr>
-        <tr><td>① アバタの表示・移動の同期</td><td><strong>第10回</strong></td><td>index.html / server.js</td><td>マルチプレイの完成コードをそのまま流用</td></tr>
-        <tr><td>②③ 共有オブジェクトのクリック同期</td><td><strong>第11回</strong> コード体験2</td><td>index.html / server.js</td><td>クリック→色・拡大→全員に同期を流用</td></tr>
-        <tr><td>④ 名前・色・状態をJSONに蓄積</td><td>第12回 <strong>1.6</strong></td><td>server.js</td><td><code>fs.writeFileSync</code> で <code>players.json</code> に保存</td></tr>
-        <tr><td>④ ダッシュボードで集計表示</td><td>第12回 <strong>1.8</strong></td><td>/api/stats + dashboard.html</td><td>集計してJSONで返し、<code>fetch</code> で表示</td></tr>
-      </table>
-      <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.7rem 1rem;margin-top:0.8rem;font-size:0.9rem">
-        <p style="color:#93D500;font-weight:700;margin-bottom:0.3rem">まずどこから手を付ける？</p>
-        <ul class="point-list" style="margin:0">
-          <li><strong>標準課題</strong>の中心は<strong>④のデータ蓄積とダッシュボード（server.js・dashboard.html）</strong>です。3D同期が無くても、ログイン→<code>players.json</code>に保存→ダッシュボードで集計、まで作れば標準課題は成立します。<strong>ここから始めると迷いません。</strong></li>
-          <li>①②③の<strong>3D同期（アバタ・共有オブジェクト）まで全部つなげる</strong>のは、第10・11回の完成コードを土台にする<strong>発展課題</strong>の中心です。下の「index.htmlの組み立て方」を参考にしてください。</li>
-        </ul>
+    <!-- 標準課題: 穴埋め（server.js と login.html を完成させる） -->
+    <div class="card standard">
+      <div class="card-header">
+        <span class="tag tag-standard">標準課題</span>
+        <h3>穴埋め ── <code>server.js</code> と <code>login.html</code> を完成させる</h3>
       </div>
-    </div>
+      <p>下の <code>login.html</code> と <code>server.js</code> には <span class="blk">【①】</span>〜<span class="blk">【⑨】</span> の<strong>空欄</strong>があります。これまでの授業（<strong>1.3</strong> の <code>JSON.stringify</code>／<code>JSON.parse</code>、<strong>1.6</strong> の <code>fs</code>、<strong>1.7</strong> の <code>socket.emit</code>、<strong>1.8</strong> の集計）を思い出しながら空欄を埋め、<strong>「名前を入力してログイン → <code>players.json</code> に蓄積 → ダッシュボードで集計表示」</strong>までを動くようにしなさい。</p>
+      <p style="font-size:0.9rem;color:#93D500;background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.6rem 1rem;margin-top:0.5rem"><strong>丸写しはしないこと。</strong>空欄はどれも<strong>1〜数語</strong>です。まず自分で考えて埋め、最後に「答え合わせ」を開いて確認する、という順番で進めてください。分からない空欄があっても、その空欄が<strong>どの説明（1.3〜1.8）に対応するか</strong>を先に探すのがコツです。</p>
 
-    <!-- ヒント: index.html の組み立て方（第10・11回のコードをどこに置くか） -->
-    <details style="margin-bottom:1.5rem">
-      <summary><span class="tag tag-advanced" style="font-size:0.7rem">ヒント</span> index.html の組み立て方（骨組み）── 第10・11回のコードをどこに貼るか</summary>
-      <div class="answer-content">
-        <p style="font-size:0.9rem;color:#999;margin-bottom:0.8rem">①②③の3D同期まで作る場合、<strong>1つの <code>index.html</code></strong> の中を下のように<strong>ブロックごと</strong>に考えます。<code>createAvatar</code> などアバタ描画の関数は<strong>第10回のマルチプレイの完成コードをそのまま貼る</strong>だけです。<strong style="color:#FFB800">黄色の行</strong>が第12回で新しく足す「つなぎ」の部分です。</p>
-        <pre><span class="code-label">HTML ── public/index.html（第10・11・12回を1つにまとめる骨組み）</span>
+      <!-- セットアップ -->
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">セットアップ（最初に1回だけ）</p>
+        <ol style="padding-left:1.5rem;font-size:0.92rem;line-height:1.9;margin:0">
+          <li><code>Web12</code> の中に <code>public</code> フォルダを作る</li>
+          <li>ターミナルで <code>npm init -y</code> → <code>npm install express socket.io</code> を実行する</li>
+          <li><code>server.js</code> は <code>Web12</code> 直下、<code>login.html</code> は <code>public</code> の中に保存する</li>
+          <li><strong>ダッシュボード</strong>は <strong>1.8 の <code>dashboard.html</code> の完成コードをそのまま</strong> <code>public/dashboard.html</code> として保存する（こちらは穴埋めなし）</li>
+        </ol>
+      </div>
+
+      <!-- 穴埋め① login.html -->
+      <p style="font-weight:700;color:#76B900;font-size:0.98rem;margin:1.2rem 0 0.3rem">ファイル1: <code>public/login.html</code>（空欄 ①〜③）</p>
+      <pre><span class="code-label">HTML ── public/login.html（穴埋め）</span>
 <span class="kw">&lt;!DOCTYPE html&gt;</span>
 <span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;&lt;head&gt;</span>
-  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;&lt;title&gt;</span>ログイン<span class="kw">&lt;/title&gt;</span>
   <span class="kw">&lt;script</span> src=<span class="str">"https://aframe.io/releases/1.7.1/aframe.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
   <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
 <span class="kw">&lt;/head&gt;&lt;body&gt;</span>
 
-  <span class="cmt">&lt;!-- ① ログイン画面（第12回 1.7）--&gt;</span>
   <span class="kw">&lt;div</span> id=<span class="str">"login-screen"</span><span class="kw">&gt;</span>
     <span class="kw">&lt;input</span> id=<span class="str">"name-input"</span> placeholder=<span class="str">"名前を入力"</span><span class="kw">&gt;</span>
     <span class="kw">&lt;button</span> id=<span class="str">"join-btn"</span><span class="kw">&gt;</span>入室する<span class="kw">&lt;/button&gt;</span>
   <span class="kw">&lt;/div&gt;</span>
-  <span class="kw">&lt;a</span> href=<span class="str">"/dashboard.html"</span><span class="kw">&gt;</span>📊 ダッシュボード<span class="kw">&lt;/a&gt;</span>
+  <span class="kw">&lt;a</span> href=<span class="str">"/dashboard.html"</span><span class="kw">&gt;</span>📊 ダッシュボードを見る<span class="kw">&lt;/a&gt;</span>
 
   <span class="kw">&lt;a-scene</span> id=<span class="str">"main-scene"</span> style=<span class="str">"display:none"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;a-camera</span> position=<span class="str">"0 1.6 5"</span><span class="kw">&gt;&lt;a-cursor</span> raycaster=<span class="str">"objects: .clickable"</span><span class="kw">&gt;&lt;/a-cursor&gt;&lt;/a-camera&gt;</span>
-    <span class="cmt">&lt;!-- ②③ 共有オブジェクト（第11回コード体験2）--&gt;</span>
-    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-1"</span> class=<span class="str">"clickable"</span> position=<span class="str">"-2 1 -3"</span> color=<span class="str">"#FF5252"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-2"</span> class=<span class="str">"clickable"</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#4FC3F7"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-box</span> id=<span class="str">"obj-3"</span> class=<span class="str">"clickable"</span> position=<span class="str">"2 1 -3"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
-    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"20"</span> height=<span class="str">"20"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
+    <span class="kw">&lt;a-box</span> position=<span class="str">"0 1 -3"</span> color=<span class="str">"#76B900"</span><span class="kw">&gt;&lt;/a-box&gt;</span>
+    <span class="kw">&lt;a-plane</span> rotation=<span class="str">"-90 0 0"</span> width=<span class="str">"10"</span> height=<span class="str">"10"</span> color=<span class="str">"#333"</span><span class="kw">&gt;&lt;/a-plane&gt;</span>
     <span class="kw">&lt;a-sky</span> color=<span class="str">"#1a1a2e"</span><span class="kw">&gt;&lt;/a-sky&gt;</span>
   <span class="kw">&lt;/a-scene&gt;</span>
 
   <span class="kw">&lt;script&gt;</span>
-    <span class="kw">const</span> socket = <span class="fn">io</span>();
-    <span class="kw">let</span> myId = <span class="kw">null</span>;
+    <span class="kw">const</span> socket = <span class="blk">【①】</span>;   <span class="cmt">// Socket.IOサーバに接続する</span>
 
-<span class="hl-line">    <span class="cmt">// ── ① ログイン: 名前を送って3D空間を表示（第12回 1.7）──</span>
     document.<span class="fn">getElementById</span>(<span class="str">'join-btn'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
       <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name-input'</span>).value.<span class="fn">trim</span>();
       <span class="kw">if</span> (!name) <span class="kw">return</span>;
-      socket.<span class="fn">emit</span>(<span class="str">'login'</span>, { name: name });
+
+      <span class="cmt">// 入力した名前をJSONにしてサーバへ送る</span>
+      socket.<span class="blk">【②】</span>(<span class="str">'login'</span>, { name: <span class="blk">【③】</span> });
+
       document.<span class="fn">getElementById</span>(<span class="str">'login-screen'</span>).style.display = <span class="str">'none'</span>;
       document.<span class="fn">getElementById</span>(<span class="str">'main-scene'</span>).style.display = <span class="str">'block'</span>;
-    });</span>
-
-    <span class="cmt">// ── ① 初期状態を受信: 既にいる人のアバタと箱の状態を復元（第10・11回）──</span>
-    socket.<span class="fn">on</span>(<span class="str">'initState'</span>, (data) => {
-      myId = data.id;
-      <span class="kw">for</span> (<span class="kw">const</span> id <span class="kw">in</span> data.users) {
-        <span class="kw">if</span> (id !== myId) <span class="fn">createAvatar</span>(data.users[id]); <span class="cmt">// ← 第10回の関数</span>
-      }
-      <span class="kw">for</span> (<span class="kw">const</span> id <span class="kw">in</span> data.objects) {          <span class="cmt">// ← 第11回: 箱の色・大きさを復元</span>
-        <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(id);
-        el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, data.objects[id].color);
-        el.<span class="fn">setAttribute</span>(<span class="str">'scale'</span>, data.objects[id].big ? <span class="str">'1.5 1.5 1.5'</span> : <span class="str">'1 1 1'</span>);
-      }
     });
-
-    <span class="cmt">// ── ① アバタ同期: 第10回のコードをそのまま貼る ──</span>
-    socket.<span class="fn">on</span>(<span class="str">'userJoined'</span>, (user) => <span class="fn">createAvatar</span>(user));
-    socket.<span class="fn">on</span>(<span class="str">'userMoved'</span>, (d) => <span class="fn">updateAvatar</span>(d.id, d.position, d.rotation));
-    socket.<span class="fn">on</span>(<span class="str">'userLeft'</span>, (id) => <span class="fn">removeAvatar</span>(id));
-
-<span class="hl-line">    <span class="cmt">// ── ②③ 共有オブジェクトのクリック同期: 第11回のコードをそのまま貼る ──</span>
-    document.<span class="fn">querySelectorAll</span>(<span class="str">'.clickable'</span>).<span class="fn">forEach</span>((el) => {
-      el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => socket.<span class="fn">emit</span>(<span class="str">'objectClick'</span>, { id: el.id }));
-    });
-    socket.<span class="fn">on</span>(<span class="str">'objectUpdated'</span>, (d) => {
-      <span class="kw">const</span> el = document.<span class="fn">getElementById</span>(d.id);
-      el.<span class="fn">setAttribute</span>(<span class="str">'color'</span>, d.color);
-      el.<span class="fn">setAttribute</span>(<span class="str">'scale'</span>, d.scale);
-    });</span>
-
-    <span class="cmt">// ── ① 自分の位置を0.1秒ごとに送信（第10回）──</span>
-    <span class="fn">setInterval</span>(() => {
-      <span class="kw">if</span> (!myId) <span class="kw">return</span>;
-      <span class="kw">const</span> cam = document.<span class="fn">querySelector</span>(<span class="str">'a-camera'</span>);
-      socket.<span class="fn">emit</span>(<span class="str">'move'</span>, { position: cam.<span class="fn">getAttribute</span>(<span class="str">'position'</span>), rotation: cam.<span class="fn">getAttribute</span>(<span class="str">'rotation'</span>) });
-    }, <span class="num">100</span>);
-
-    <span class="cmt">// createAvatar / updateAvatar / removeAvatar は第10回のマルチプレイの関数をそのまま貼る</span>
   <span class="kw">&lt;/script&gt;</span>
 <span class="kw">&lt;/body&gt;&lt;/html&gt;</span></pre>
-        <p style="font-size:0.85rem;color:#999;margin:0.5rem 0 0">この <code>index.html</code> と組み合わせる <code>server.js</code> は、<strong>第10・11回のマルチプレイのサーバ</strong>（<code>initState</code>・<code>userMoved</code>・<code>objectClick</code> などを扱う版）に、<strong>第12回で足す3つ</strong>――①<code>login</code> で名前を受け取り <code>players[socket.id]</code> に保存（1.7）、②変化のたびに <code>save()</code>（1.6）、③<code>GET /api/stats</code>（1.8）――を追記したものです。上の「標準課題のコード例」で示した <code>login</code>・<code>/api/stats</code> の追記部分がそのまま使えます。</p>
-      </div>
-    </details>
 
-    <!-- 標準課題: データ蓄積からダッシュボード表示まで -->
-    <div class="card standard">
-      <div class="card-header">
-        <span class="tag tag-standard">標準課題</span>
-        <h3>すべてのデータを蓄積し、ダッシュボードで確認する（コード改造）</h3>
-      </div>
-      <p>1.7 で作った <code>server.js</code>・<code>login.html</code> と、1.8 で作った <code>/api/stats</code>・<code>dashboard.html</code> を組み合わせ、蓄積した<strong>全データ（名前・色・インタラクション状態）</strong>をダッシュボードで確認できるようにしなさい。</p>
+      <!-- 穴埋め② server.js -->
+      <p style="font-weight:700;color:#76B900;font-size:0.98rem;margin:1.2rem 0 0.3rem">ファイル2: <code>server.js</code>（空欄 ④〜⑨）</p>
+      <pre><span class="code-label">JavaScript ── server.js（穴埋め）</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="blk">【④】</span>);   <span class="cmt">// ファイル読み書きのモジュール</span>
 
-      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示 ①: server.js（すべてのデータを取得）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>1</td><td><code>socket.on('login', ...)</code> の中で、<code>color</code> を固定値 <code>'#76B900'</code> ではなく、<strong>ランダムな色</strong>（例: <code>['#76B900','#4FC3F7','#FFB800'][Math.floor(Math.random()*3)]</code>）にする</td></tr>
-          <tr><td>2</td><td>プレイヤーごとに <strong><code>interaction</code></strong>（例: <code>{ rotation: 0, scale: 1 }</code>）というフィールドを追加する（第11回の共有オブジェクトの回転・拡大に相当）</td></tr>
-        </table>
-      </div>
+<span class="kw">const</span> app = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => console.<span class="fn">log</span>(<span class="str">'http://localhost:3000'</span>));
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
 
-      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
-        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">改造指示 ②: server.js・dashboard.html（ダッシュボードで閲覧）</p>
-        <table>
-          <tr><th style="width:30px">#</th><th>指示</th></tr>
-          <tr><td>3</td><td>サーバに <strong><code>GET /api/stats</code></strong> を追加し、<code>players</code> を集計して <code>count</code>・<code>names</code>・<strong><code>colorCounts</code></strong>（色の分布）・<strong><code>mostPopularColor</code></strong>（もっとも多い色）をJSONで返す（1.8の集計処理を流用）</td></tr>
-          <tr><td>4</td><td><code>dashboard.html</code> に、<code>colorCounts</code> を一覧表示する部分を追加する（表・リストなど見せ方は自由）</td></tr>
-        </table>
-      </div>
+<span class="cmt">// 起動時: players.json があれば読み込む（無ければ空から始める）── 1.6</span>
+<span class="kw">let</span> players = {};
+<span class="kw">if</span> (fs.<span class="fn">existsSync</span>(<span class="str">'players.json'</span>)) {
+  players = JSON.<span class="blk">【⑤】</span>(fs.<span class="fn">readFileSync</span>(<span class="str">'players.json'</span>, <span class="str">'utf-8'</span>)); <span class="cmt">// 文字列→オブジェクト</span>
+}
 
-      <p style="margin-top:0.5rem;color:#999;font-size:0.9rem"><strong>ヒント:</strong> <code>colorCounts</code> の集計は 1.8 で書いた for文をそのまま流用できます。<code>mostPopularColor</code> は <code>let mostPopularColor = null; let mostPopularCount = 0;</code> を用意し、<code>for (const color in colorCounts)</code> で1色ずつ確認して、件数が今までの最大より大きければ2つの変数を更新する、という書き方ができます。</p>
+<span class="cmt">// 保存: オブジェクト→JSON文字列→ファイルに書き込み ── 1.6</span>
+<span class="kw">function</span> <span class="fn">savePlayers</span>() {
+  fs.<span class="fn">writeFileSync</span>(<span class="str">'players.json'</span>, JSON.<span class="blk">【⑥】</span>(players, <span class="kw">null</span>, <span class="num">2</span>)); <span class="cmt">// オブジェクト→文字列</span>
+}
 
-      <!-- ── 標準課題のヒント（コード例・折りたたみ） ── -->
-      <details style="margin-top:1rem">
-        <summary><span class="tag tag-standard" style="font-size:0.7rem">ヒント</span> 標準課題のコード例 ── 詰まったら開く（改造①〜④）</summary>
-        <div class="answer-content">
-          <p style="font-size:0.9rem;color:#999;margin-bottom:1rem">1.7・1.8 で示したコードに、改造①〜④の差分を書き足したものです。<strong style="color:#FFB800">黄色でハイライトした行</strong>が追加・変更した箇所です。まずは指示だけを見て自分で書いてみて、行き詰まったらここと見比べてください。</p>
+<span class="kw">const</span> colors = [<span class="str">'#76B900'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#FFB800'</span>];
 
-          <p style="font-weight:700;color:#76B900;font-size:0.95rem;margin:0.5rem 0 0.3rem">改造①②: <code>server.js</code> の <code>login</code> ハンドラ（色をランダムに＋<code>interaction</code> を追加）</p>
-          <pre><span class="code-label">JavaScript ── server.js（1.7のloginハンドラを改造）</span>
 io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
   socket.<span class="fn">on</span>(<span class="str">'login'</span>, (data) => {
-
-<span class="hl-line">    <span class="cmt">// ① 色をランダムに選ぶ（固定の '#76B900' をやめる）</span>
-    <span class="kw">const</span> colors = [<span class="str">'#76B900'</span>, <span class="str">'#4FC3F7'</span>, <span class="str">'#FFB800'</span>];
-    <span class="kw">const</span> color = colors[Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>() * colors.length)];</span>
-
+    <span class="cmt">// 受け取った名前と、ランダムな色を1人分のデータにする ── 1.7</span>
     players[socket.id] = {
       name: data.name,
-<span class="hl-line">      color: color,                            <span class="cmt">// ① 固定値 → ランダムな色</span>
-      interaction: { rotation: <span class="num">0</span>, scale: <span class="num">1</span> }, <span class="cmt">// ② 回転・拡大の状態（第11回相当）</span></span>
-      position: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> },
-      rotation: { x: <span class="num">0</span>, y: <span class="num">0</span>, z: <span class="num">0</span> }
+      color: colors[Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>() * colors.length)]
     };
-    <span class="fn">savePlayers</span>();          <span class="cmt">// 1.6と同じ方法で players.json に保存</span>
+    <span class="blk">【⑦】</span>();  <span class="cmt">// players.json に保存する（すぐ上で作った関数）</span>
     io.<span class="fn">emit</span>(<span class="str">'players'</span>, players);
   });
-});</pre>
-          <p style="font-size:0.85rem;color:#999;margin:0.3rem 0 0">ポイント: <code>Math.floor(Math.random() * colors.length)</code> は <code>0〜(件数-1)</code> のランダムな整数になり、配列の添字として使えます。<code>interaction</code> は第11回の共有オブジェクトの回転・拡大に相当する初期状態です。</p>
+});
 
-          <p style="font-weight:700;color:#76B900;font-size:0.95rem;margin:1.2rem 0 0.3rem">改造③: <code>server.js</code> の <code>/api/stats</code>（<code>colorCounts</code> ＋ <code>mostPopularColor</code>）</p>
-          <pre><span class="code-label">JavaScript ── server.js に追記（1.8の /api/stats を拡張）</span>
+<span class="cmt">// ダッシュボード用API: players を集計してJSONで返す ── 1.8</span>
 app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res) => {
   <span class="kw">const</span> list = Object.<span class="fn">values</span>(players);
-
   <span class="kw">let</span> names = [];
   <span class="kw">let</span> colorCounts = {};
 
-  <span class="cmt">// ── 1.8 で書いた for文をそのまま流用（名前一覧と色の分布） ──</span>
   <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; list.length; i++) {
     <span class="kw">const</span> p = list[i];
     names.<span class="fn">push</span>(p.name);
     <span class="kw">if</span> (colorCounts[p.color] === <span class="kw">undefined</span>) {
       colorCounts[p.color] = <span class="num">1</span>;
     } <span class="kw">else</span> {
-      colorCounts[p.color] = colorCounts[p.color] + <span class="num">1</span>;
+      colorCounts[p.color] = colorCounts[p.color] <span class="blk">【⑧】</span> <span class="num">1</span>; <span class="cmt">// この色をもう1件数える</span>
     }
   }
 
-<span class="hl-line">  <span class="cmt">// ③ もっとも多い色を1色ずつ確認して求める</span>
-  <span class="kw">let</span> mostPopularColor = <span class="kw">null</span>;
-  <span class="kw">let</span> mostPopularCount = <span class="num">0</span>;
-  <span class="kw">for</span> (<span class="kw">const</span> color <span class="kw">in</span> colorCounts) {
-    <span class="kw">if</span> (colorCounts[color] &gt; mostPopularCount) {
-      mostPopularCount = colorCounts[color];
-      mostPopularColor = color;
-    }
-  }</span>
-
-  res.<span class="fn">json</span>({
-    count: list.length,
-    names: names,
-    colorCounts: colorCounts,
-    mostPopularColor: mostPopularColor  <span class="cmt">// ③ 追加</span>
-  });
+  res.<span class="blk">【⑨】</span>({ count: list.length, names: names, colorCounts: colorCounts });
 });</pre>
-          <p style="font-size:0.85rem;color:#999;margin:0.3rem 0 0">ポイント: <code>colorCounts</code> は <code>{"#76B900": 2, "#4FC3F7": 1}</code> のように「色 → 件数」のオブジェクトです。<code>for (const color in colorCounts)</code> はそのキー（色）を1つずつ取り出し、件数がこれまでの最大より大きければ <code>mostPopularColor</code>・<code>mostPopularCount</code> を更新します。</p>
 
-          <p style="font-weight:700;color:#76B900;font-size:0.95rem;margin:1.2rem 0 0.3rem">改造④: <code>public/dashboard.html</code>（色の分布を表示）</p>
-          <pre><span class="code-label">HTML ── public/dashboard.html（1.8に色の分布を追加）</span>
-  <span class="kw">&lt;h1&gt;</span>接続人数: <span class="kw">&lt;span</span> id=<span class="str">"count"</span><span class="kw">&gt;</span>-<span class="kw">&lt;/span&gt;&lt;/h1&gt;</span>
-  <span class="kw">&lt;p&gt;</span>名前一覧: <span class="kw">&lt;span</span> id=<span class="str">"names"</span><span class="kw">&gt;&lt;/span&gt;&lt;/p&gt;</span>
-<span class="hl-line">  <span class="kw">&lt;h2&gt;</span>色の分布<span class="kw">&lt;/h2&gt;</span>
-  <span class="kw">&lt;div</span> id=<span class="str">"colorBars"</span><span class="kw">&gt;&lt;/div&gt;</span>
-  <span class="kw">&lt;p&gt;</span>もっとも人気の色: <span class="kw">&lt;span</span> id=<span class="str">"popular"</span><span class="kw">&gt;</span>-<span class="kw">&lt;/span&gt;&lt;/p&gt;</span></span>
+      <!-- 空欄のヒント -->
+      <div style="background:#1A1A1A;border:2px solid #76B900;border-radius:10px;padding:1.2rem;margin:1rem 0">
+        <p style="color:#76B900;font-weight:700;margin-bottom:0.8rem">空欄のヒント（対応する説明つき）</p>
+        <table>
+          <tr><th style="width:44px">空欄</th><th>ヒント</th><th style="width:90px">対応</th></tr>
+          <tr><td><span class="blk">①</span></td><td>Socket.IOサーバに接続する関数。第9〜11回で毎回 <code>const socket = ___;</code> と書いてきた</td><td>1.4</td></tr>
+          <tr><td><span class="blk">②</span></td><td>オブジェクトを「イベント」として<strong>送る</strong>メソッド（受け取るのは <code>on</code>、送るのは？）</td><td>1.7</td></tr>
+          <tr><td><span class="blk">③</span></td><td>送る中身。すぐ上の行で <code>const name = ...</code> として作った変数</td><td>1.7</td></tr>
+          <tr><td><span class="blk">④</span></td><td>ファイル読み書きモジュールの名前（<strong>文字列</strong>で書く）</td><td>1.6</td></tr>
+          <tr><td><span class="blk">⑤</span></td><td>JSON<strong>文字列</strong> → オブジェクト に戻す</td><td>1.3</td></tr>
+          <tr><td><span class="blk">⑥</span></td><td>オブジェクト → JSON<strong>文字列</strong> にする</td><td>1.3</td></tr>
+          <tr><td><span class="blk">⑦</span></td><td>すぐ上で <code>function ___() {...}</code> と定義した保存用の関数名</td><td>1.6</td></tr>
+          <tr><td><span class="blk">⑧</span></td><td>今の件数に1を足す演算子（<code>1</code> 増やす）</td><td>1.8</td></tr>
+          <tr><td><span class="blk">⑨</span></td><td>オブジェクトをJSONにして返すExpressのメソッド（<code>res.___(...)</code>）</td><td>1.8</td></tr>
+        </table>
+      </div>
 
-  <span class="kw">&lt;script&gt;</span>
-    <span class="fn">fetch</span>(<span class="str">'/api/stats'</span>).<span class="fn">then</span>(<span class="kw">function</span>(res) {
-      <span class="kw">return</span> res.<span class="fn">json</span>();
-    }).<span class="fn">then</span>(<span class="kw">function</span>(stats) {
-      document.<span class="fn">getElementById</span>(<span class="str">'count'</span>).textContent = stats.count;
-      document.<span class="fn">getElementById</span>(<span class="str">'names'</span>).textContent = stats.names.<span class="fn">join</span>(<span class="str">', '</span>);
-
-<span class="hl-line">      <span class="cmt">// ④ 色の分布を1色ずつ棒グラフ風に表示する</span>
-      <span class="kw">const</span> colors = Object.<span class="fn">keys</span>(stats.colorCounts);
-      <span class="kw">let</span> html = <span class="str">''</span>;
-      <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; colors.length; i++) {
-        <span class="kw">const</span> color = colors[i];
-        <span class="kw">const</span> count = stats.colorCounts[color];
-        html = html +
-          <span class="str">'&lt;div style="display:flex;align-items:center;gap:8px;margin:4px 0"&gt;'</span> +
-            <span class="str">'&lt;div style="width:'</span> + (count * <span class="num">40</span>) + <span class="str">'px;height:18px;background:'</span> + color + <span class="str">'"&gt;&lt;/div&gt;'</span> +
-            <span class="str">'&lt;span&gt;'</span> + color + <span class="str">'（'</span> + count + <span class="str">'人）&lt;/span&gt;'</span> +
-          <span class="str">'&lt;/div&gt;'</span>;
-      }
-      document.<span class="fn">getElementById</span>(<span class="str">'colorBars'</span>).innerHTML = html;
-
-      <span class="cmt">// もっとも人気の色</span>
-      document.<span class="fn">getElementById</span>(<span class="str">'popular'</span>).textContent = stats.mostPopularColor;</span>
-    });
-  <span class="kw">&lt;/script&gt;</span></pre>
-          <p style="font-size:0.85rem;color:#999;margin:0.3rem 0 0">ポイント: <code>Object.keys(stats.colorCounts)</code> で色の一覧を取り出し、for文で1色ずつ <code>&lt;div&gt;</code> の横幅を <code>件数 × 40px</code> にして棒グラフ風に描いています。見た目（棒・表・リストなど）は自由です。</p>
+      <!-- 答え合わせ -->
+      <details style="margin-top:1rem">
+        <summary><span class="tag tag-standard" style="font-size:0.7rem">答え合わせ</span> 空欄①〜⑨の答え ── 自分で埋めてから開く</summary>
+        <div class="answer-content">
+          <table>
+            <tr><th style="width:44px">空欄</th><th>答え</th><th>なぜそれか</th></tr>
+            <tr><td><span class="blk">①</span></td><td><code>io()</code></td><td>Socket.IOに接続する。読み込んだ <code>socket.io.js</code> が用意する関数</td></tr>
+            <tr><td><span class="blk">②</span></td><td><code>emit</code></td><td>クライアントからサーバへ「送信」する。裏で <code>JSON.stringify</code> される（1.4）</td></tr>
+            <tr><td><span class="blk">③</span></td><td><code>name</code></td><td>直前で作った変数。<code>{ name: name }</code> で送る</td></tr>
+            <tr><td><span class="blk">④</span></td><td><code>'fs'</code></td><td>Node.jsのファイル読み書きモジュール。文字列で指定する</td></tr>
+            <tr><td><span class="blk">⑤</span></td><td><code>parse</code></td><td>ファイルから読んだ文字列をオブジェクトに戻す</td></tr>
+            <tr><td><span class="blk">⑥</span></td><td><code>stringify</code></td><td>オブジェクトを文字列にしてから書き込む</td></tr>
+            <tr><td><span class="blk">⑦</span></td><td><code>savePlayers</code></td><td>上で定義した保存関数を呼ぶ。これで <code>players.json</code> が更新される</td></tr>
+            <tr><td><span class="blk">⑧</span></td><td><code>+</code></td><td><code>colorCounts[p.color] + 1</code> で件数を1増やす</td></tr>
+            <tr><td><span class="blk">⑨</span></td><td><code>json</code></td><td><code>res.json(obj)</code> でオブジェクトをJSONにして返す。<code>fetch</code> 側が <code>res.json()</code> で受け取れる</td></tr>
+          </table>
+          <p style="font-size:0.85rem;color:#999;margin:0.5rem 0 0">埋めたら、コメント（<code>// ...</code>）と空欄の枠は消してかまいません。<code>&lt;a-scene&gt;</code> のタグや <code>public</code> フォルダなど、空欄以外はそのまま使えます。</p>
         </div>
       </details>
 
@@ -1303,15 +1226,16 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">確認手順</p>
         <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0">
           <li><code>node server.js</code> でサーバを起動する</li>
-          <li>ブラウザで <code>login.html</code> を開き、名前を変えながら何回かログインする（複数タブでもOK）</li>
-          <li>ブラウザで <code>http://localhost:3000/dashboard.html</code> を開き、人数・名前一覧・色の分布・もっとも多い色が正しく表示されることを確認する</li>
+          <li>ブラウザで <code>http://localhost:3000/login.html</code> を開き、名前を変えながら何回かログインする（複数タブでもOK）</li>
+          <li><code>Web12</code> フォルダに <code>players.json</code> ができ、ログインした名前・色が蓄積されていることを確認する</li>
+          <li>ブラウザで <code>http://localhost:3000/dashboard.html</code> を開き、人数・名前一覧・色の分布が表示されることを確認する</li>
         </ol>
       </div>
 
       <div class="notion-submit"><div><strong>Notionに記録:</strong> 以下を記入してください。<br>
-        ① 改造後の <code>server.js</code>・<code>dashboard.html</code> のコード全体を貼り付ける<br>
-        ② 各改造について「どの行を変えたか」と「なぜその変更が必要か」を書く<br>
-        ③ ブラウザで確認した結果のスクリーンショット</div></div>
+        ① 空欄を埋めた <code>server.js</code>・<code>login.html</code> のコード全体を貼り付ける<br>
+        ② <strong>①〜⑨の空欄に何を入れたか</strong>を一覧で書き、そのうち<strong>3つ</strong>について「なぜそれで動くのか」を自分の言葉で説明する<br>
+        ③ ダッシュボードで確認した結果のスクリーンショット</div></div>
     </div>
 
   </div>
