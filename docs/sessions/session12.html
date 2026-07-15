@@ -1085,7 +1085,7 @@ app.<span class="fn">get</span>(<span class="str">'/api/stats'</span>, (req, res
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">セットアップ（最初に1回だけ）</p>
         <ol style="padding-left:1.5rem;font-size:0.92rem;line-height:1.9;margin:0">
           <li><code>Web12</code> の中に <code>public</code> フォルダを作る</li>
-          <li>ターミナルで <code>npm init -y</code> → <code>npm install express socket.io</code> を実行する</li>
+          <li>ターミナルで <code>npm init -y</code> → <code>npm install express@4</code> → <code>npm install socket.io@1.7.4</code> を<strong>1つずつ</strong>実行する（まとめて実行すると失敗しやすいので、1行ずつ入力して完了を待つ。第9〜11回と同じ、古いNode.jsでも動くバージョンで固定）</li>
           <li><code>server.js</code> は <code>Web12</code> 直下、<code>login.html</code> は <code>public</code> の中に保存する</li>
           <li><strong>ダッシュボード</strong>は <strong>1.8 の <code>dashboard.html</code> の完成コードをそのまま</strong> <code>public/dashboard.html</code> として保存する（こちらは穴埋めなし）</li>
         </ol>

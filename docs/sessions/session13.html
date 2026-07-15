@@ -96,7 +96,6 @@ section + section { border-top: 1px solid #222; }
   font-size: 0.8rem; font-weight: 700;
 }
 
-
 a.sub-item {
   text-decoration: none;
   color: inherit;
@@ -318,6 +317,18 @@ pre .op { color: #4FC3F7; }
   border: 1px solid #444;
 }
 
+/* ============ EXEC SCREENSHOTS ============ */
+.exec-shot { margin: 1rem auto 1.2rem; max-width: 720px; background: #0a0a0a; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+.exec-shot.small { max-width: 560px; }
+.exec-shot img, .exec-shot video { display: block; width: 100%; height: auto; background: #000; }
+.exec-mock-bar { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 0.4rem 0.7rem; display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #888; }
+.exec-mock-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: #FF5252; }
+.exec-mock-bar .dot.y { background: #FFB800; }
+.exec-mock-bar .dot.g { background: #76B900; }
+.exec-mock-bar .url { margin-left: 0.4rem; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 5px; padding: 0.1rem 0.5rem; flex: 1; color: #93D500; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.exec-caption { font-size: 0.78rem; color: #999; text-align: center; padding: 0.45rem 0.8rem 0.6rem; border-top: 1px solid #2a2a2a; background: #141414; }
+.exec-caption strong { color: #93D500; }
+
 /* ============ ANSWERS (COLLAPSIBLE) ============ */
 details {
   background: #141414;
@@ -481,8 +492,8 @@ pre { position: relative; }
     </div>
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
-      前回はアバタのposition・rotation・idなどのデータを<strong>JSON形式</strong>で整理し、Socket.IOで送受信する方法を学びました。<br>
-      しかし、サーバを再起動すると<strong>すべてのデータが消えてしまう</strong>問題があります。今回は<strong>データベース（SQLite）</strong>を導入し、そのJSONデータを永続化する方法を学びます。
+      前回はアバタのposition・rotation・idなどのデータを<strong>JSON形式</strong>で整理し、Socket.IOで送受信したうえで、<code>fs.writeFileSync</code> で <strong>JSONファイル（<code>players.json</code>）に保存</strong>する方法まで学びました。JSONファイルにしておけば、サーバを再起動してもデータは残ります。<br>
+      ただし JSONファイルには弱点があります。<strong>複数の接続が同時に書き込むとファイルが壊れやすく</strong>、また<strong>「特定の条件で検索する」「一部だけ更新する」「件数を集計する」といった操作が苦手</strong>で、毎回ファイル全体を読み書きするためデータが増えると非効率です。今回は<strong>データベース（SQLite）</strong>を導入し、これらを解決しながらJSONデータを永続化する方法を学びます。
     </p>
 
     <!-- Real-time Architecture Overview SVG -->
@@ -537,6 +548,21 @@ pre { position: relative; }
       </svg>
     </div>
 
+    <!-- 準備: 作業フォルダの準備 -->
+    <div class="card" style="border-left:4px solid #76B900">
+      <div class="card-header">
+        <span class="tag" style="background:#1a2e0a;color:#76B900">準備</span>
+        <h3>作業フォルダの準備</h3>
+      </div>
+      <p>この回では説明の途中にも実際に手を動かして試すコードが出てきます。まず、コードを保存する場所を用意しましょう。</p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li><code>S:\Web_Prog</code> の中に <strong><code>Web13</code></strong> フォルダを作成する</li>
+        <li>VS Code で<strong>「ファイル」→「フォルダーを開く」</strong>から <code>S:\Web_Prog\Web13</code> を開く</li>
+        <li>VS Code のターミナル（<strong>表示 → ターミナル</strong> または <kbd>Ctrl+`</kbd>）を開いておく</li>
+      </ol>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">この後の説明で <code>○○.js</code> というコードが出てきたら、VS Codeで<strong>「ファイル」→「新規テキストファイル」</strong>を作り、コードをコピー＆ペーストして<strong>同じファイル名で保存</strong>し、ターミナルで <code>node ○○.js</code> と入力して実行します（保存し忘れると古い内容のまま実行されるので注意）。今回は <code>better-sqlite3</code> というパッケージも使うので、<strong>1.3 で <code>npm install</code> を1回だけ実行</strong>します（手順はそこで案内します）。</p>
+    </div>
+
     <!-- 1.1 なぜデータベースが必要か -->
     <div class="concept-box">
       <h4>1.1 なぜデータベースが必要か</h4>
@@ -544,12 +570,14 @@ pre { position: relative; }
         メモ帳に書いた内容は、メモ帳を閉じると消えます。でもノートに書いておけば、次に開いたときもそのまま残っています。<br>
         サーバのメモリは「メモ帳」、データベースは「ノート」のようなものです。
       </div>
-      <p>これまでのチャットアプリやアバター同期では、サーバのメモリ（変数）にデータを保持していました。</p>
+      <p>チャットアプリ（第9〜11回）ではデータをサーバのメモリ（変数）だけに持っていたため、再起動で消えていました。第12回のアバター同期では <code>players.json</code> という<strong>JSONファイルに保存</strong>して、再起動後も残せるようにしました。保存方法は3段階で考えると整理しやすくなります。</p>
       <table>
         <tr><th>保存方法</th><th>特徴</th><th>サーバ再起動時</th></tr>
         <tr><td><strong>メモリ（変数）</strong></td><td>高速だがプロセス終了で消える</td><td>すべてのデータが<strong>消失</strong></td></tr>
-        <tr><td><strong>データベース</strong></td><td>ファイルに永続保存される</td><td>データが<strong>残る</strong></td></tr>
+        <tr><td><strong>JSONファイル</strong>（第12回）</td><td>手軽に永続化できるが、同時書き込みで壊れやすく、検索・部分更新・集計が苦手</td><td>データは<strong>残る</strong></td></tr>
+        <tr><td><strong>データベース</strong>（今回）</td><td>ファイルに永続保存され、検索・更新・集計を安全に行える</td><td>データが<strong>残る</strong></td></tr>
       </table>
+      <p style="margin-top:0.5rem;font-size:0.9rem;color:#999">下の図は両端の対比（メモリ＝揮発 / DB＝永続）を示しています。JSONファイルはその中間で、「残せるが規模が大きくなると扱いにくい」ため、今回はデータベースに置き換えます。</p>
 
       <!-- Animated SVG: Memory vs DB on server restart -->
       <div class="diagram-container">
@@ -647,12 +675,54 @@ pre { position: relative; }
         </svg>
       </div>
 
-      <p style="margin-top:0.5rem"><strong>具体的な問題:</strong></p>
+      <p style="margin-top:0.5rem"><strong>メモリ保持・JSONファイルで残る課題:</strong></p>
       <ul class="point-list">
-        <li>チャットの履歴が再起動で全部消える</li>
-        <li>3Dオブジェクトの位置や色の変更が保存されない</li>
-        <li>新しく接続したユーザに過去のデータを送れない</li>
+        <li>メモリだけに持っているチャットの履歴は、再起動で全部消える</li>
+        <li>JSONファイルでも残せるが、複数人が同時に書き込むとファイルが壊れやすい</li>
+        <li>「特定の人の発言だけ探す」「件数を数える」といった検索・集計が手軽にできない</li>
+        <li>データが増えても、毎回ファイル全体を読み書きするので効率が落ちる</li>
       </ul>
+
+      <p style="margin-top:1rem"><strong>そもそもコンピュータは、データを「どこに置くか」で残り方が決まります。</strong>身近な順に並べると、記憶には次の段階があります。<strong>上ほど速いが消えやすく、下ほど確実に残ります。</strong></p>
+      <table>
+        <tr><th>段階</th><th>保存する場所</th><th>この授業での例</th><th>速さ</th><th>電源を切る／再起動すると</th><th>向いている用途</th></tr>
+        <tr>
+          <td><strong>① 変数（メモリ・RAM）</strong></td>
+          <td>CPUのすぐ近くにある高速な作業用メモリ</td>
+          <td><code>let messages = []</code><br><code>let players = {}</code></td>
+          <td>◎ 最速</td>
+          <td style="color:#FF7B7B"><strong>消える</strong>（揮発性）</td>
+          <td>計算中・処理中の一時データ</td>
+        </tr>
+        <tr>
+          <td><strong>② ファイル（ディスク）</strong></td>
+          <td>SSD／ハードディスク上のファイル</td>
+          <td><code>players.json</code>（第12回）</td>
+          <td>△ 遅い</td>
+          <td style="color:#93D500"><strong>残る</strong>（不揮発性）</td>
+          <td>手軽な保存。ただし検索・部分更新・同時書き込みは苦手</td>
+        </tr>
+        <tr>
+          <td><strong>③ データベース（ディスク）</strong></td>
+          <td>ディスク上のデータベース専用ファイル</td>
+          <td><code>app.db</code>（SQLite・今回）</td>
+          <td>○ 速い</td>
+          <td style="color:#93D500"><strong>残る</strong>（不揮発性）</td>
+          <td>検索・更新・集計を安全・効率的に行う</td>
+        </tr>
+        <tr>
+          <td><strong>④ 外部DB・クラウド</strong></td>
+          <td>ネットワーク上の別のサーバ</td>
+          <td>MySQL / PostgreSQL 等（発展・この授業では扱わない）</td>
+          <td>○ 速い</td>
+          <td style="color:#93D500"><strong>残る</strong>（不揮発性）</td>
+          <td>大人数・複数台のサーバでデータを共有する本番サービス</td>
+        </tr>
+      </table>
+      <div class="analogy">
+        <strong>①メモリ（RAM）は「机の上」</strong>──すぐ手が届いて速いけれど、帰るときに片付けられて消えてしまいます。<strong>②③のディスクは「引き出しや本棚」</strong>──しまっておけば明日も残っています。<strong>データベース（③）は、その本棚を「探しやすく・壊れにくく」整理したもの</strong>です。第11回まではデータを机の上（メモリ）に置いていたので再起動で消え、第12回で本棚（JSONファイル）にしまえるようにし、今回はその本棚をデータベースに置き換えます。
+      </div>
+
       <p style="margin-top:0.5rem">データベースを使えば、これらの問題をすべて解決できます。</p>
     </div>
 
@@ -672,7 +742,22 @@ pre { position: relative; }
         大きな図書館（MySQL, PostgreSQL）は管理人が常駐し、たくさんの人が同時に使えますが、設置が大変です。<br>
         <strong>SQLite</strong> は「自分だけの小さな本棚」のようなもので、設置不要ですぐに使えます。
       </div>
-      <p><strong>SQLite</strong> は、ファイルベースの軽量なリレーショナルデータベースです。</p>
+      <p><strong>SQLite</strong> は、ファイルベースの軽量な<strong>リレーショナルデータベース</strong>です。「リレーショナル」とは、データを <strong>Excelのような「表（テーブル）」の形</strong>で管理する方式のこと。まずはデータベースを扱ううえで必ず出てくる<strong>基礎用語</strong>を押さえましょう。</p>
+
+      <p style="margin-top:0.8rem"><strong>データベースの基礎用語</strong></p>
+      <table>
+        <tr><th>用語</th><th>読み方</th><th>意味</th><th>身近なたとえ</th></tr>
+        <tr><td><strong>データベース（DB）</strong></td><td>—</td><td>データを整理して保存し、あとから検索・追加・更新できるようにした仕組み</td><td>資料をしまう本棚全体</td></tr>
+        <tr><td><strong>リレーショナルDB（RDB）</strong></td><td>—</td><td>データを「表（テーブル）」の形で管理するデータベース。SQLite もこの一種</td><td>表計算シートの集まり</td></tr>
+        <tr><td><strong>テーブル</strong></td><td>—</td><td>1種類のデータをまとめた「表」。Excel の1シートに相当</td><td>1冊の名簿</td></tr>
+        <tr><td><strong>カラム（列）</strong></td><td>—</td><td>データの<strong>項目</strong>。表の縦方向。例: <code>id</code> / <code>name</code> / <code>text</code></td><td>名簿の「氏名」「電話番号」欄</td></tr>
+        <tr><td><strong>レコード（行）</strong></td><td>—</td><td><strong>1件分</strong>のデータ。表の横1行。例: 太郎の1つの発言</td><td>名簿の1人分の行</td></tr>
+        <tr><td><strong>主キー（PRIMARY KEY）</strong></td><td>プライマリ・キー</td><td>各レコードを<strong>重複なく区別する</strong>ための列。ふつう <code>id</code> を使う</td><td>出席番号・社員番号</td></tr>
+        <tr><td><strong>SQL</strong></td><td>エスキューエル</td><td>データベースを操作するための<strong>言語</strong>（作る・入れる・取り出すなど）</td><td>本棚係への指示書</td></tr>
+      </table>
+      <p style="margin-top:0.4rem;font-size:0.88rem;color:#999">※ 「テーブル・カラム・レコード」の具体的なイメージは、次の 1.4 で <code>messages</code> テーブルの例を使ってもう一度確認します。</p>
+
+      <p style="margin-top:0.8rem"><strong>SQLite の特徴</strong></p>
       <table>
         <tr><th>特徴</th><th>説明</th></tr>
         <tr><td><strong>サーバ不要</strong></td><td>別途データベースサーバを起動する必要がない（組み込み型）</td></tr>
@@ -689,9 +774,25 @@ pre { position: relative; }
     <!-- 1.3 better-sqlite3 パッケージ -->
     <div class="concept-box">
       <h4>1.3 better-sqlite3 パッケージ</h4>
-      <p>Node.js から SQLite を操作するには <strong>better-sqlite3</strong> というパッケージを使います。</p>
-      <pre><span class="code-label">Terminal</span>
-npm install better-sqlite3</pre>
+      <p>Node.js から SQLite を操作するには <strong>better-sqlite3</strong> というパッケージを使います。<strong>冒頭の「準備」で開いた <code>Web13</code> フォルダ</strong>に、このパッケージを入れましょう。</p>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">パッケージのインストール（最初に1回だけ）</p>
+        <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0">
+          <li>VS Code で <code>S:\Web_Prog\Web13</code> を開いていることを確認する（冒頭の「準備」で開いたフォルダ）</li>
+          <li>VS Code のターミナル（<strong>表示 → ターミナル</strong> または <kbd>Ctrl+`</kbd>）で以下を実行する</li>
+        </ol>
+        <pre style="margin:0.6rem 0"><span class="code-label">Terminal</span>
+npm init -y
+npm install better-sqlite3@12</pre>
+        <p style="margin:0;font-size:0.9rem;color:#ccc"><code>npm init -y</code> で <code>package.json</code> が作られ（このフォルダが1つの Node.js プロジェクトになる）、<code>npm install better-sqlite3@12</code> で <code>node_modules</code> フォルダと <code>package-lock.json</code> が自動で作られます（手で編集する必要はありません）。</p>
+      </div>
+
+      <div class="analogy">
+        <code>npm init -y</code> は「新しい工作用の机を用意する」作業、<code>npm install better-sqlite3@12</code> は「その机に道具箱（部品）を1つ置く」作業です。机（プロジェクト）ごとに、必要な道具（パッケージ）を入れていきます。
+      </div>
+
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> <code>better-sqlite3</code> はネイティブモジュールで、Node.js のバージョンに合ったビルド済みバイナリを使います。この授業の <strong>Node.js 20</strong> で確実に動くよう、必ず <code>@12</code> を付けてバージョンを固定してください（<code>express@4</code> と同じ考え方です）。</p>
       <p style="margin-top:0.5rem"><strong>基本的な使い方:</strong></p>
       <pre><span class="code-label">JavaScript</span>
 <span class="cmt">// better-sqlite3 を読み込む</span>
@@ -699,7 +800,35 @@ npm install better-sqlite3</pre>
 
 <span class="cmt">// データベースファイルを開く（なければ自動作成）</span>
 <span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'myapp.db'</span>);</pre>
-      <p style="margin-top:0.5rem">これだけで <code>myapp.db</code> というファイルが作成され、データベースとして使えるようになります。</p>
+      <p style="margin-top:0.5rem"><code>new Database('myapp.db')</code> は「<code>myapp.db</code> というファイルを<strong>開く</strong>（無ければ新しく<strong>作る</strong>）」という命令です。ただし注意してほしいのは、<strong>この2行をエディタに書いただけでは、ファイルは1つもできません</strong>。次の「どこに書いて、どうやって実行する？」の手順で<strong>実際に実行（<code>node app.js</code>）して初めて</strong>、<code>myapp.db</code> が作られます。</p>
+
+      <div style="background:#111;border:1px solid #4FC3F7;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">このコードはどこに書いて、どうやって実行する？</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.4rem">上のコードは、<strong>冒頭の「準備」で開いた <code>Web13</code> フォルダ</strong>（1.3で <code>npm install</code> 済み）の中に<strong>新しいファイルを1つ作って</strong>書きます。ブラウザではなく、<strong>Node.js（ターミナル）で実行</strong>します。</p>
+        <ol style="padding-left:1.5rem;font-size:0.92rem;line-height:2;color:#ddd;margin:0">
+          <li><strong>ファイルを作る</strong>：VS Code で <code>Web13</code> を開いた状態で、新しいファイル <code>app.js</code> を作成する（左の一覧で「新しいファイル」アイコン、またはメニュー「ファイル」→「新規ファイル」）。</li>
+          <li><strong>コードを貼り付けて保存</strong>：上の2行（<code>require</code> と <code>new Database</code>）を <code>app.js</code> に貼り付け、<kbd>Ctrl</kbd>+<kbd>S</kbd> で保存する。</li>
+          <li><strong>実行する</strong>：ターミナルで次を入力して <kbd>Enter</kbd>。<br>
+            <pre style="margin:0.4rem 0"><span class="code-label">Terminal</span>
+node app.js</pre>
+          </li>
+        </ol>
+        <p style="color:#93D500;font-size:0.88rem;margin-top:0.5rem"><strong>成功の確認：</strong> このコードは画面には<strong>何も表示しません</strong>が、実行後に <code>Web13</code> フォルダの中に <code>myapp.db</code> というファイルが<strong>新しくできていれば成功</strong>です（VS Code 左のファイル一覧に現れます。実行した <code>node</code> の<strong>カレントフォルダ</strong>＝いま開いている <code>Web13</code> の中に作られます）。メッセージで確認したいときは、末尾に <code>console.log('DBを開きました');</code> を足すと、実行時に文字が表示されます。</p>
+        <p style="color:#FFB800;font-size:0.85rem;margin-top:0.4rem"><strong>&#x26A0;</strong> 「<code>Cannot find module 'better-sqlite3'</code>」と出たら、そのフォルダで <code>npm install better-sqlite3@12</code> をまだ実行していないのが原因です（1.3の準備手順を先に）。</p>
+      </div>
+
+      <div style="background:#2A1A00;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">ここで作られた <code>myapp.db</code> は、まだ「空っぽ」です</p>
+        <p style="color:#ddd;font-size:0.9rem;margin-bottom:0.5rem">できあがった <code>myapp.db</code> を確認すると、実は<strong>0バイト（中身ゼロ）のファイル</strong>です。<code>new Database()</code> は「箱（ファイル）を用意した」だけで、まだ<strong>データを入れる「表（テーブル）」が1つもありません</strong>。この状態では、データを保存することはできません。</p>
+        <p style="color:#ddd;font-size:0.9rem;margin-bottom:0.5rem">次の <strong>1.4 でテーブルを作る（<code>CREATE TABLE</code>）</strong>と、そこで初めてファイルに中身が書き込まれ（0バイト → 数KBに増える）、データを保存・検索できる<strong>本当に使えるデータベース</strong>になります。</p>
+        <table style="margin:0">
+          <tr><th>段階</th><th>実行する命令</th><th><code>myapp.db</code> の状態</th></tr>
+          <tr><td>① ファイルを開く</td><td><code>new Database('myapp.db')</code></td><td>0バイトの空ファイルができる（表はまだ無い）</td></tr>
+          <tr><td>② 表を作る（1.4）</td><td><code>db.exec('CREATE TABLE ...')</code></td><td>中身が書き込まれ、データを入れられる状態になる</td></tr>
+          <tr><td>③ データを入れる（1.4）</td><td><code>insert.run(...)</code></td><td>1行ずつデータが保存される</td></tr>
+        </table>
+        <p style="color:#93D500;font-size:0.88rem;margin-top:0.5rem">つまり「<code>new Database</code> だけ」ではなく、<strong>「ファイルを開く → 表を作る → データを入れる」の3段階</strong>そろって、はじめてデータベースとして役立ちます。</p>
+      </div>
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:0.75rem 0">
         <p style="color:#76B900;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem">用語</p>
@@ -755,6 +884,39 @@ insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span clas
 <span class="kw">const</span> rows = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM messages'</span>).<span class="fn">all</span>();
 console.<span class="fn">log</span>(rows);
 <span class="cmt">// → [{ id: 1, name: '太郎', text: 'こんにちは', created_at: '2026-07-15 16:30:00' }]</span></pre>
+
+      <div style="background:#111;border:1px solid #4FC3F7;border-radius:8px;padding:0.8rem 1rem;margin:0.75rem 0">
+        <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">このコードはどのファイルに書いて実行する？</p>
+        <p style="color:#ccc;font-size:0.9rem;margin-bottom:0.5rem">上のコードは<strong>説明用の抜粋</strong>で、そのままでは動きません。<code>db</code>（＝データベース）を使っていますが、その <code>db</code> を用意する <strong>1.3の2行が書かれていない</strong>からです。動かすには、<strong>1.3で作った <code>app.js</code> の続きに、この抜粋を貼り足します</strong>。</p>
+        <p style="color:#93D500;font-weight:700;font-size:0.88rem;margin-bottom:0.3rem">手順</p>
+        <ol style="padding-left:1.5rem;font-size:0.9rem;line-height:1.9;color:#ddd;margin:0 0 0.5rem">
+          <li><code>Web13</code> フォルダの <code>app.js</code>（1.3で作ったファイル）を開く</li>
+          <li><code>const db = new Database('myapp.db');</code> の<strong>次の行</strong>に、上の抜粋（<code>db.exec(...)</code> 以下）を<strong>まるごと貼り付ける</strong></li>
+          <li><kbd>Ctrl</kbd>+<kbd>S</kbd> で保存し、ターミナルで <code>node app.js</code> を実行する</li>
+        </ol>
+        <p style="color:#ccc;font-size:0.88rem;margin-bottom:0.3rem">貼り足すと、<code>app.js</code> の全体は次のようになります（これが「つなげた完成形」です）:</p>
+        <pre style="margin:0.3rem 0"><span class="code-label">JavaScript ── app.js（1.3の2行 ＋ 1.4の抜粋）</span>
+<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
+<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'myapp.db'</span>);
+
+<span class="cmt">// ↓ ここから下が 1.4 の抜粋（db を使う部分）</span>
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  )
+`</span>);
+
+<span class="kw">const</span> insert = db.<span class="fn">prepare</span>(<span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>);
+insert.<span class="fn">run</span>(<span class="str">'太郎'</span>, <span class="str">'こんにちは'</span>);
+
+<span class="kw">const</span> rows = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM messages'</span>).<span class="fn">all</span>();
+console.<span class="fn">log</span>(rows);</pre>
+        <p style="color:#93D500;font-size:0.88rem;margin:0.3rem 0 0"><strong>実行結果:</strong> ターミナルに <code>[{ id: 1, name: '太郎', text: 'こんにちは', created_at: '...' }]</code> のように、追加した1件が表示されます。</p>
+        <p style="color:#999;font-size:0.85rem;margin:0.4rem 0 0">※ <code>app.js</code> に追記するかわりに、上の完成形を <code>try-messages.js</code> など別名で保存して <code>node try-messages.js</code> で実行してもかまいません。</p>
+      </div>
 
       <!-- Animated SVG: CREATE → INSERT → SELECT のステップ動作 -->
       <div class="diagram-container">
@@ -845,7 +1007,7 @@ console.<span class="fn">log</span>(rows);
 
       <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem">
         <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">やってみよう（1分）</p>
-        <p style="color:#ccc;font-size:0.9rem">上のコードで <code>insert.run</code> を2回実行した後、<code>SELECT * FROM messages</code> は何件返すか予測してみよう。<code>AUTOINCREMENT</code> の id 値はどうなるか。</p>
+        <p style="color:#ccc;font-size:0.9rem"><code>insert.run</code> を2回実行した後、<code>SELECT * FROM messages</code> は何件返すか、<code>AUTOINCREMENT</code> の id 値はどうなるか、<strong>まず頭の中で予測</strong>してみよう。予測できたら、上の <code>app.js</code> に <code>insert.run</code> をもう1行足して実行し、答え合わせしよう（答えは後半の【例題】解答にもあります）。</p>
         <div class="notion-submit" style="margin-top:0.8rem"><div><strong>Notionに記録:</strong> 予測した件数と各行の id 値を書いてください。</div></div>
       </div>
 
@@ -855,221 +1017,215 @@ console.<span class="fn">log</span>(rows);
       </div>
     </div>
 
-    <!-- 1.5 オブジェクト状態の永続化 -->
+    <!-- 1.5 データベースの中身を見る（DB Viewer） -->
     <div class="concept-box">
-      <h4>1.5 オブジェクト状態の永続化</h4>
-      <p>3D空間内のオブジェクト（位置、色など）をデータベースに保存すれば、サーバを再起動しても状態が維持されます。</p>
-      <pre><span class="code-label">JavaScript</span>
-<span class="cmt">// オブジェクト状態テーブル</span>
-db.<span class="fn">exec</span>(<span class="str">`
-  CREATE TABLE IF NOT EXISTS objects (
-    obj_id TEXT PRIMARY KEY,
-    x REAL DEFAULT 0,
-    y REAL DEFAULT 0,
-    z REAL DEFAULT 0,
-    color TEXT DEFAULT '#FFFFFF'
-  )
-`</span>);
+      <h4>1.5 データベースの中身を目で見る（DB Viewer 拡張）</h4>
+      <p>ここまでは <code>console.log</code> でデータベースの中身を確認してきましたが、毎回コードを書いて実行するのは大変です。VS Code の拡張機能 <strong>「DB Viewer」</strong> を入れると、<code>.db</code> ファイルをクリックするだけで、<strong>Excelのような表</strong>で中身を見られます。</p>
 
-<span class="cmt">// オブジェクトの位置を保存（なければ追加、あれば更新）</span>
-<span class="kw">const</span> upsert = db.<span class="fn">prepare</span>(<span class="str">`
-  INSERT INTO objects (obj_id, x, y, z, color)
-  VALUES (?, ?, ?, ?, ?)
-  ON CONFLICT(obj_id) DO UPDATE SET x=?, y=?, z=?, color=?
-`</span>);
+      <p style="margin-top:0.8rem"><strong>① 拡張機能をインストールする</strong></p>
+      <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
+        <li>VS Code の左端の<strong>拡張機能アイコン</strong>（四角が4つのマーク）をクリックする</li>
+        <li>検索欄に <code>DB Viewer</code> と入力する</li>
+        <li><strong>「DB Viewer」（作者: MJ Studio）</strong>を選び、<strong>インストール</strong>を押す</li>
+      </ol>
+      <figure class="exec-shot small">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code &mdash; 拡張機能: マーケットプレース</span></div>
+        <img src="images/session13-dbviewer-install.png" alt="VS Codeの拡張機能マーケットプレースで「db」を検索し、MJ Studio作の「DB Viewer」を選んでインストールした画面。" loading="lazy">
+        <figcaption class="exec-caption"><strong>DB Viewer（MJ Studio）</strong>をインストール。<code>.db</code> / <code>.sqlite</code> ファイルを表形式で開ける拡張機能です。</figcaption>
+      </figure>
 
-<span class="kw">function</span> <span class="fn">saveObject</span>(id, x, y, z, color) {
-  upsert.<span class="fn">run</span>(id, x, y, z, color, x, y, z, color);
-}</pre>
+      <p style="margin-top:0.8rem"><strong>② <code>myapp.db</code> を開いて中身を見る</strong></p>
+      <p>1.3〜1.4で作った <code>Web13</code> フォルダの <code>myapp.db</code> を、左のファイル一覧で<strong>クリック</strong>します。<code>messages</code> テーブルを選ぶと、保存されている行が表で表示されます。</p>
+      <figure class="exec-shot small">
+        <div class="exec-mock-bar"><span class="dot"></span><span class="dot y"></span><span class="dot g"></span><span class="url">VS Code &mdash; myapp.db（DB Viewer）</span></div>
+        <img src="images/session13-dbviewer-messages.png" alt="DB Viewerでmyapp.dbを開いた画面。左にmessagesとsqlite_sequenceテーブル、右にmessagesテーブルの中身（id=1, name=太郎, text=こんにちは, created_at=2026-07-15 10:10）が1行表示されている。" loading="lazy">
+        <figcaption class="exec-caption"><code>app.js</code> で <code>insert.run('太郎', 'こんにちは')</code> した1件が、<code>id / name / text / created_at</code> の列とともに表示されている。<code>console.log</code> と同じ内容を、コードを書き換えずに見られる。</figcaption>
+      </figure>
 
-      <!-- Animated SVG: UPSERT (ON CONFLICT) のステップ動作 -->
-      <div class="diagram-container">
-        <svg viewBox="0 0 720 360" width="720" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;background:#0A0A0A;border-radius:14px;border:1px solid #333">
-          <text x="360" y="30" text-anchor="middle" fill="#76B900" font-weight="700" font-size="15">UPSERT (ON CONFLICT) ── 「なければ追加 / あれば更新」</text>
-
-          <!-- Step badges -->
-          <g>
-            <rect x="510" y="48" width="190" height="24" rx="12" fill="#1a2e0a" stroke="#76B900" stroke-width="1"/>
-            <text x="605" y="65" text-anchor="middle" fill="#76B900" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ① 初回 saveObject('cube1')
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FFB800" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-              ② 行が存在しない → INSERT
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#4FC3F7" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-              ③ 同じ id で再 saveObject
-            </text>
-            <text x="605" y="65" text-anchor="middle" fill="#FF5252" font-size="12" font-weight="700" opacity="0">
-              <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-              ④ 競合 → UPDATE
-            </text>
-          </g>
-
-          <!-- Left: Application call -->
-          <rect x="40" y="100" width="200" height="80" rx="10" fill="#141414" stroke="#4FC3F7" stroke-width="2"/>
-          <text x="140" y="125" text-anchor="middle" fill="#4FC3F7" font-size="13" font-weight="700">アプリ</text>
-          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            saveObject('cube1',
-          </text>
-          <text x="140" y="148" text-anchor="middle" fill="#e0e0e0" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            saveObject('cube1',
-          </text>
-          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            1, 2, 3, '#FF0000')
-          </text>
-          <text x="140" y="164" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;1;1;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            5, 6, 7, '#00FF00')
-          </text>
-
-          <!-- Arrow -->
-          <line x1="240" y1="140" x2="290" y2="140" stroke="#76B900" stroke-width="2" marker-end="url(#arr12d)"/>
-          <defs>
-            <marker id="arr12d" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#76B900"/></marker>
-          </defs>
-
-          <!-- Middle: Decision diamond -->
-          <polygon points="380,100 470,140 380,180 290,140" fill="#141414" stroke="#76B900" stroke-width="2"/>
-          <text x="380" y="135" text-anchor="middle" fill="#76B900" font-size="11" font-weight="700">obj_id 競合？</text>
-          <text x="380" y="152" text-anchor="middle" fill="#aaa" font-size="10">ON CONFLICT</text>
-
-          <!-- Right: DB rows -->
-          <rect x="510" y="100" width="180" height="80" rx="10" fill="#141414" stroke="#FFB800" stroke-width="2"/>
-          <text x="600" y="120" text-anchor="middle" fill="#FFB800" font-size="13" font-weight="700">objects テーブル</text>
-
-          <!-- Row state: empty -->
-          <text x="600" y="148" text-anchor="middle" fill="#888" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="1;1;0;0;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.45;0.85;0.92;1" dur="16s" repeatCount="indefinite"/>
-            (空)
-          </text>
-
-          <!-- Row state: after INSERT (red) -->
-          <text x="600" y="148" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            cube1: (1,2,3) #FF0000
-          </text>
-          <text x="600" y="164" text-anchor="middle" fill="#888" font-size="10" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;1;1;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            ← 行が新規作成された
-          </text>
-
-          <!-- Row state: after UPDATE (green) -->
-          <text x="600" y="148" text-anchor="middle" fill="#FF5252" font-size="11" font-weight="700" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            cube1: (5,6,7) #00FF00
-          </text>
-          <text x="600" y="164" text-anchor="middle" fill="#aaa" font-size="10" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            ← 既存行を上書き
-          </text>
-
-          <!-- Branches: INSERT path -->
-          <text x="380" y="220" text-anchor="middle" fill="#FFB800" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;1;1;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-            ↓ NO → INSERT 実行
-          </text>
-          <!-- UPDATE path -->
-          <text x="380" y="220" text-anchor="middle" fill="#FF5252" font-size="11" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;1;1" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-            ↓ YES → UPDATE SET x=?,...
-          </text>
-
-          <!-- Highlight ring on table at step 2 (INSERT) -->
-          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FFB800" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0.9;0.9;0;0;0;0" keyTimes="0;0.15;0.20;0.40;0.50;0.70;0.75;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-          <!-- Highlight ring at step 4 (UPDATE) -->
-          <rect x="505" y="95" width="190" height="90" rx="11" fill="none" stroke="#FF5252" stroke-width="3" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9" keyTimes="0;0.15;0.20;0.40;0.50;0.75;0.80;1" dur="16s" repeatCount="indefinite"/>
-          </rect>
-
-          <!-- Legend -->
-          <rect x="40" y="290" width="640" height="56" rx="8" fill="#111" stroke="#333"/>
-          <circle cx="60" cy="312" r="6" fill="#FFB800"/>
-          <text x="74" y="316" fill="#aaa" font-size="11">INSERT: 行が無いときの動作</text>
-          <circle cx="270" cy="312" r="6" fill="#FF5252"/>
-          <text x="284" y="316" fill="#aaa" font-size="11">UPDATE: 主キー競合時に自動切替</text>
-          <text x="60" y="338" fill="#93D500" font-size="11">→ UPSERT (UP-date + in-SERT) は「リアルタイム同期する状態」を保存する定番パターン</text>
-        </svg>
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.3rem">画面から読み取れること</p>
+        <ul class="point-list" style="margin:0">
+          <li><strong>messages テーブルに1行</strong>：<code>id=1 / 太郎 / こんにちは / 2026-07-15 10:10</code>。<code>id</code> は <code>AUTOINCREMENT</code> で自動採番される。</li>
+          <li><strong>1 total rows / 4 columns</strong>：件数と列数がひと目で分かる（列は id・name・text・created_at の4つ）。</li>
+          <li><strong>sqlite_sequence</strong> というテーブルは、<code>AUTOINCREMENT</code> が「次に使う番号」を覚えておくためにSQLiteが自動で作る管理用テーブル。</li>
+          <li>上部の <strong>SQL Query Editor</strong> を開けば、<code>SELECT * FROM messages</code> などのSQLをその場で試せる。</li>
+        </ul>
       </div>
+      <p style="font-size:0.9rem;color:#999">※ データを追加・変更したあとに表が古いままなら、<strong>Refresh</strong> ボタン（または <code>.db</code> を開き直す）で最新の状態に更新できます。</p>
     </div>
 
     <!-- 1.6 チャット履歴の保存 -->
     <div class="concept-box">
       <h4>1.6 チャット履歴の保存</h4>
-      <p>チャットメッセージをデータベースに保存すれば、サーバ再起動後もメッセージが残り、新規接続ユーザにも過去のメッセージを表示できます。</p>
+      <p>チャットメッセージを<strong>データベースに保存</strong>すれば、サーバを再起動しても消えません。まずこの節では、<strong>「メッセージを受け取ったらDBに保存し、いまつながっている全員に配信する」</strong>ところまでを作ります。</p>
       <ul class="point-list">
-        <li>メッセージ送信時に <code>INSERT INTO</code> でデータベースに保存</li>
-        <li>新規接続時に <code>SELECT</code> で過去メッセージを取得して送信</li>
-        <li>メッセージ数が多い場合は <code>ORDER BY ... LIMIT</code> で最新N件だけ取得</li>
+        <li>あらかじめ <code>messages</code> テーブルを用意しておく（<code>CREATE TABLE IF NOT EXISTS</code>）</li>
+        <li>メッセージを受け取るたびに <code>INSERT INTO messages</code> でDBに保存する</li>
+        <li>保存したメッセージを <code>io.emit</code> で<strong>接続中の全員</strong>に配信する</li>
       </ul>
+
+      <p style="margin-top:0.5rem">チャットは<strong>サーバ側（<code>server.js</code>）とクライアント側（<code>public/index.html</code>）の2つのファイル</strong>で動きます。<code>Web13</code> フォルダの直下に <code>server.js</code>、<code>Web13/public/</code> の中に <code>index.html</code> を置きます。</p>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">先にパッケージを追加する（<code>Web13</code> フォルダで1回だけ）</p>
+        <p style="color:#ddd;font-size:0.9rem;margin:0 0 0.4rem"><code>server.js</code> では <code>express</code> と <code>socket.io</code> も使います。1.3 で入れた <code>better-sqlite3</code> に加えて、次を<strong>1つずつ</strong>実行してください（第9〜11回と同じ、古いNode.jsでも動くバージョンで固定）。<strong>まとめて実行すると失敗しやすい</strong>ので、1行ずつ入力して <kbd>Enter</kbd> → 完了を待ってから次を実行します:</p>
+        <pre style="margin:0.3rem 0"><span class="code-label">Terminal ── ① まず express</span>
+npm install express@4</pre>
+        <pre style="margin:0.3rem 0"><span class="code-label">Terminal ── ② 完了したら socket.io</span>
+npm install socket.io@1.7.4</pre>
+        <p style="color:#999;font-size:0.85rem;margin:0.3rem 0 0">※ 1.3の <code>npm install better-sqlite3@12</code> が済んでいれば、このフォルダには <strong>express@4・socket.io@1.7.4・better-sqlite3@12</strong> の3つが入った状態になります（<code>package.json</code> で確認できます）。</p>
+      </div>
+
+      <p style="margin-top:0.5rem"><strong>① サーバ側 &mdash; <code>server.js</code>（<code>Web13</code> 直下）</strong></p>
+      <pre><span class="code-label">JavaScript &mdash; server.js</span>
+<span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> socketIo = <span class="fn">require</span>(<span class="str">'socket.io'</span>);
+<span class="kw">const</span> Database = <span class="fn">require</span>(<span class="str">'better-sqlite3'</span>);
+
+<span class="kw">const</span> app = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+
+<span class="kw">const</span> server = app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">'http://localhost:3000 でサーバ起動'</span>);
+});
+<span class="kw">const</span> io = <span class="fn">socketIo</span>(server);
+
+<span class="cmt">// データベースを開く（なければ chat.db を作成）</span>
+<span class="kw">const</span> db = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">'chat.db'</span>);
+
+<span class="cmt">// メッセージを保存する messages テーブルを用意</span>
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  )
+`</span>);
+
+<span class="kw">const</span> insertMessage = db.<span class="fn">prepare</span>(<span class="str">'INSERT INTO messages (name, text) VALUES (?, ?)'</span>);
+
+io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
+  <span class="cmt">// メッセージを受け取ったら…</span>
+  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, (data) => {
+    insertMessage.<span class="fn">run</span>(data.name, data.text);  <span class="cmt">// ① DBに保存</span>
+    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, data);                    <span class="cmt">// ② 今つながっている全員に配信</span>
+  });
+});</pre>
+
+      <p style="margin-top:0.5rem"><strong>② クライアント側 &mdash; <code>public/index.html</code>（<code>Web13/public/</code> の中）</strong></p>
+      <pre><span class="code-label">HTML &mdash; public/index.html</span>
+<span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> lang=<span class="str">"ja"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+  <span class="kw">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;title&gt;</span>チャット<span class="kw">&lt;/title&gt;</span>
+  <span class="cmt">&lt;!-- socket.io のクライアントライブラリ（サーバが自動で配信） --&gt;</span>
+  <span class="kw">&lt;script</span> src=<span class="str">"/socket.io/socket.io.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>チャット<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;input</span> id=<span class="str">"name"</span> placeholder=<span class="str">"名前"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;input</span> id=<span class="str">"text"</span> placeholder=<span class="str">"メッセージ"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;button</span> id=<span class="str">"send"</span><span class="kw">&gt;</span>送信<span class="kw">&lt;/button&gt;</span>
+  <span class="kw">&lt;ul</span> id=<span class="str">"messages"</span><span class="kw">&gt;&lt;/ul&gt;</span>
+
+  <span class="kw">&lt;script&gt;</span>
+    <span class="kw">const</span> socket = <span class="fn">io</span>();
+
+    <span class="cmt">// 送信ボタンを押したら、名前とメッセージをサーバへ送る</span>
+    document.<span class="fn">getElementById</span>(<span class="str">'send'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => {
+      <span class="kw">const</span> name = document.<span class="fn">getElementById</span>(<span class="str">'name'</span>).value.<span class="fn">trim</span>();
+      <span class="kw">const</span> text = document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value.<span class="fn">trim</span>();
+      <span class="kw">if</span> (!name || !text) <span class="kw">return</span>;
+      socket.<span class="fn">emit</span>(<span class="str">'chat'</span>, { name: name, text: text });
+      document.<span class="fn">getElementById</span>(<span class="str">'text'</span>).value = <span class="str">''</span>;
+    });
+
+    <span class="cmt">// メッセージを画面（&lt;ul&gt;）に1行追加する関数</span>
+    <span class="kw">function</span> <span class="fn">addMessage</span>(msg) {
+      <span class="kw">const</span> li = document.<span class="fn">createElement</span>(<span class="str">'li'</span>);
+      li.textContent = msg.name + <span class="str">': '</span> + msg.text;
+      document.<span class="fn">getElementById</span>(<span class="str">'messages'</span>).<span class="fn">appendChild</span>(li);
+    }
+
+    <span class="cmt">// サーバから配信されたメッセージを受け取って表示</span>
+    socket.<span class="fn">on</span>(<span class="str">'chat'</span>, (msg) => <span class="fn">addMessage</span>(msg));
+  <span class="kw">&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">動作確認</p>
+        <ol style="padding-left:1.5rem;font-size:0.92rem;line-height:1.9;color:#ddd;margin:0">
+          <li>ターミナルで <code>node server.js</code> を実行し、ブラウザを<strong>2つ</strong>開いて両方で <code>http://localhost:3000</code> にアクセスする</li>
+          <li>片方でメッセージを送る &rarr; <strong>もう片方にもリアルタイムで表示</strong>される（<code>io.emit</code> の効果）</li>
+          <li><strong>1.5 の DB Viewer</strong> で <code>chat.db</code>（<code>server.js</code> が作ったDBファイル）を開くと、<code>messages</code> テーブルに<strong>送った分だけ行が増えている</strong></li>
+          <li>サーバを <kbd>Ctrl</kbd>+<kbd>C</kbd> で止めて <code>node server.js</code> で再起動しても、DB Viewer で見ると<strong>行は残っている</strong>（＝永続化できている）</li>
+        </ol>
+      </div>
+
+      <div style="background:#2A1A00;border:1px solid #FFB800;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.4rem">&#x26A0; でも、あとから来た人には過去のメッセージが見えない</p>
+        <p style="color:#ddd;font-size:0.9rem;margin:0">このコードは <code>io.emit</code> で「<strong>いまつながっている人</strong>」にしか送りません。だから、<strong>あとからページを開いた人・リロードした人・途中参加した人</strong>の画面は<strong>空っぽ</strong>のままです。データは <code>messages</code> テーブルに<strong>ちゃんと残っている</strong>（DB Viewer で見える）のに、<strong>その人に送っていない</strong>から見えないのです。この問題を<strong>次の 1.7</strong> で解決します。</p>
+      </div>
 
       <!-- 具体例 box -->
       <div style="background:#0a1a2e;border-left:4px solid #4FC3F7;border-radius:8px;padding:1rem 1.2rem;margin-top:1rem">
         <p style="color:#4FC3F7;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">具体例: 16時30分から16時40分のチャットルームの流れ</p>
         <table style="margin-top:0.3rem">
-          <tr><th>時刻</th><th>イベント</th><th>messages テーブル</th></tr>
-          <tr><td>16:30</td><td>太郎が「こんにちは」を送信</td><td>1行（太郎/こんにちは）</td></tr>
-          <tr><td>16:31</td><td>花子が「やあ！」を送信</td><td>2行</td></tr>
-          <tr><td>16:32</td><td>サーバが Ctrl+C で停止</td><td>2行のまま（ファイルに残る）</td></tr>
-          <tr><td>16:35</td><td>サーバを再起動</td><td>2行（消えていない）</td></tr>
-          <tr><td>16:36</td><td>花子のブラウザがリロード</td><td>SELECT で 2行取得 → 画面に「過去のメッセージ」として表示</td></tr>
-          <tr><td>16:40</td><td>次郎が初参加で接続</td><td>SELECT で 2行取得 → 次郎の画面にも過去2件が表示される</td></tr>
+          <tr><th>時刻</th><th>イベント</th><th>messages テーブル</th><th>画面の見え方</th></tr>
+          <tr><td>16:30</td><td>太郎が「こんにちは」を送信</td><td>1行</td><td>接続中の全員に表示</td></tr>
+          <tr><td>16:31</td><td>花子が「やあ！」を送信</td><td>2行</td><td>接続中の全員に表示</td></tr>
+          <tr><td>16:32</td><td>サーバが Ctrl+C で停止</td><td>2行のまま（ファイルに残る）</td><td>&mdash;</td></tr>
+          <tr><td>16:35</td><td>サーバを再起動</td><td>2行（消えていない）</td><td>&mdash;</td></tr>
+          <tr><td>16:36</td><td>花子がリロード</td><td>2行（DBにはある）</td><td style="color:#FF9B9B">1.6では空 &rarr; 1.7で2件復元</td></tr>
+          <tr><td>16:40</td><td>次郎が初参加で接続</td><td>2行（DBにはある）</td><td style="color:#FF9B9B">1.6では空 &rarr; 1.7で過去2件が表示</td></tr>
         </table>
-        <p style="margin-top:0.6rem;font-size:0.9rem;color:#ccc">メモリだけに保存していた前回までと違い、<strong>サーバ停止 → 再起動</strong> や <strong>新規参加者の途中合流</strong> でも、全員が同じ履歴を見られるのが永続化の威力です。</p>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#ccc">DBにデータが残ること（＝永続化）と、<strong>それを新しい人に届けること</strong>は別の作業です。<strong>1.6で「保存」、1.7で「新しい人への復元」</strong>を担当します。</p>
       </div>
 
-      <!-- Q&A box -->
-      <div style="background:#1a1a0a;border:1px solid #FFB800;border-radius:10px;padding:1rem 1.2rem;margin-top:1rem">
-        <p style="color:#FFB800;font-weight:700;font-size:0.9rem;margin-bottom:0.5rem">Q&amp;A よくある質問</p>
-        <table>
-          <tr><th style="width:42%">質問</th><th>答え</th></tr>
-          <tr>
-            <td><strong>Q1.</strong> <code>chat.db</code> はどこに作られる？</td>
-            <td><code>node server.js</code> を実行したカレントディレクトリ（プロジェクトフォルダ直下）に作られる。VS Code の左ペインで確認できる。</td>
-          </tr>
-          <tr>
-            <td><strong>Q2.</strong> <code>chat.db</code> を消すとどうなる？</td>
-            <td>履歴がすべて消える。次回起動時に <code>CREATE TABLE IF NOT EXISTS</code> が再実行され、空のテーブルから始まる。</td>
-          </tr>
-          <tr>
-            <td><strong>Q3.</strong> メモリだけではダメな場面は？</td>
-            <td>サーバを再起動する／クラッシュする／別のマシンに移す ── これらすべてでデータが消える。長期保存したい情報は必ず DB へ。</td>
-          </tr>
-          <tr>
-            <td><strong>Q4.</strong> 10000件たまったら遅くなる？</td>
-            <td>そのまま <code>SELECT *</code> すると遅い。<code>ORDER BY id DESC LIMIT 50</code> で<strong>最新N件だけ</strong>を取れば軽い。 さらに大きくなる場合はインデックスや古い行の削除を検討。</td>
-          </tr>
-          <tr>
-            <td><strong>Q5.</strong> <code>?</code> プレースホルダを使わず <code>'</code> ＋ 値 ＋ <code>'</code> で組み立てたら？</td>
-            <td>SQLインジェクション攻撃の入口になる。ユーザが <code>'); DROP TABLE messages;--</code> を送ると、テーブルごと消える可能性がある。必ず <code>prepare(...)</code> ＋ <code>run(値)</code> を使う。</td>
-          </tr>
-        </table>
-      </div>
     </div>
 
     <!-- 1.7 新規接続時のデータ復元 -->
     <div class="concept-box">
       <h4>1.7 新規接続時のデータ復元</h4>
-      <p>新しいユーザが接続したとき、データベースからデータを読み込んで送信します。</p>
-      <pre><span class="code-label">JavaScript</span>
+      <p>1.6の問題を解決します。ユーザが<strong>接続した瞬間</strong>に、サーバがDBから過去メッセージを <code>SELECT</code> して<strong>その人だけに</strong>送れば、途中参加でも過去の履歴が見られます。</p>
+      <pre><span class="code-label">JavaScript &mdash; server.js（1.6に「履歴の送信」を追加）</span>
 io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) => {
-  <span class="cmt">// 1. 保存済みのオブジェクト状態を送信</span>
-  <span class="kw">const</span> objects = db.<span class="fn">prepare</span>(<span class="str">'SELECT * FROM objects'</span>).<span class="fn">all</span>();
-  socket.<span class="fn">emit</span>(<span class="str">'init-objects'</span>, objects);
-
-  <span class="cmt">// 2. 過去のチャット履歴（最新50件）を送信</span>
-  <span class="kw">const</span> messages = db.<span class="fn">prepare</span>(
+  <span class="cmt">// ★ 接続した直後に、過去の履歴（最新50件）をこの人だけに送る</span>
+  <span class="kw">const</span> history = db.<span class="fn">prepare</span>(
     <span class="str">'SELECT * FROM messages ORDER BY id DESC LIMIT 50'</span>
   ).<span class="fn">all</span>().<span class="fn">reverse</span>();
-  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, messages);
+  socket.<span class="fn">emit</span>(<span class="str">'chat-history'</span>, history);
+
+  <span class="cmt">// メッセージを受け取ったら保存して全員に配信（1.6と同じ）</span>
+  socket.<span class="fn">on</span>(<span class="str">'chat'</span>, (data) => {
+    insertMessage.<span class="fn">run</span>(data.name, data.text);
+    io.<span class="fn">emit</span>(<span class="str">'chat'</span>, data);
+  });
 });</pre>
+      <p style="font-size:0.9rem;color:#ccc"><code>socket.emit</code> は「<strong>接続したその人だけ</strong>」に送ります（<code>io.emit</code> は全員）。だから新しく来た人にだけ履歴を届けられます。<code>ORDER BY id DESC LIMIT 50</code> で最新50件を取り、<code>.reverse()</code> で<strong>古い順</strong>に並べ直してから送っています。</p>
+
+      <p style="margin-top:0.5rem;font-size:0.9rem"><strong>クライアント側（<code>index.html</code>）</strong>では、<code>chat-history</code> を受け取って画面に並べます:</p>
+      <pre><span class="code-label">JavaScript &mdash; クライアント側</span>
+<span class="cmt">// 接続直後：過去ログをまとめて受け取り、順番に表示</span>
+socket.<span class="fn">on</span>(<span class="str">'chat-history'</span>, (history) => {
+  history.<span class="fn">forEach</span>(msg =&gt; <span class="fn">addMessage</span>(msg));
+});
+
+<span class="cmt">// 以降：新着メッセージを1件ずつ表示（1.6から変わらず）</span>
+socket.<span class="fn">on</span>(<span class="str">'chat'</span>, (msg) =&gt; <span class="fn">addMessage</span>(msg));</pre>
+
+      <div style="background:#111;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin:1rem 0">
+        <p style="color:#93D500;font-weight:600;font-size:0.9rem;margin-bottom:0.4rem">動作確認（1.6との違い）</p>
+        <ol style="padding-left:1.5rem;font-size:0.92rem;line-height:1.9;color:#ddd;margin:0">
+          <li>サーバを起動し、いくつかメッセージを送る</li>
+          <li>サーバを <kbd>Ctrl</kbd>+<kbd>C</kbd> &rarr; <code>node server.js</code> で<strong>再起動</strong>する</li>
+          <li><strong>新しいタブ</strong>（またはリロード）で接続する &rarr; <strong>過去のメッセージがちゃんと表示される</strong></li>
+        </ol>
+        <p style="color:#93D500;font-size:0.88rem;margin:0.4rem 0 0">1.6では空だった画面が、1.7では <code>chat-history</code> で復元されます。これが「<strong>保存（1.6）＋復元（1.7）</strong>」の完成形です。</p>
+      </div>
 
       <!-- Animated SVG: 新規接続時のデータ復元フロー -->
       <div class="diagram-container">
@@ -1389,7 +1545,7 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, (socket) =>
       <p><code>S:\Web_Prog\Web13</code> フォルダを作成し、VS Code で開いてください。</p>
       <ol style="padding-left:1.5rem;font-size:0.95rem;line-height:2;margin:0.5rem 0">
         <li>ターミナルで <code>npm init -y</code> を実行</li>
-        <li>ターミナルで <code>npm install better-sqlite3</code> を実行</li>
+        <li>ターミナルで <code>npm install better-sqlite3@12</code> を実行</li>
         <li>新しいファイル <strong><code>db-test.js</code></strong> を作成し、下のコードを貼り付け</li>
       </ol>
       <pre><span class="code-label">JavaScript ── db-test.js</span>
@@ -1949,7 +2105,6 @@ console.<span class="fn">log</span>(<span class="str">'=== 完了 ==='</span>);<
     <div id="answers-encrypted" data-cipher="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"></div>
   </div>
 </section>
-
 
 <footer>
   <div class="container">

@@ -1100,8 +1100,9 @@ socket.<span class="fn">on</span>(<span class="str">'moved'</span>, (data) <span
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express@4 socket.io@1.7.4</pre>
-      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく、古い Node.js でも動く <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてインストールしてください。</p>
+npm install express@4
+npm install socket.io@1.7.4</pre>
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく、古い Node.js でも動く <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてインストールしてください。 また、<strong>1つずつ</strong>インストールすると失敗しにくいです（上のように <code>express@4</code> → <code>socket.io@1.7.4</code> の順で1行ずつ実行）。</p>
     </div>
 
     <!-- ============ STEP 1 ============ -->

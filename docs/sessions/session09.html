@@ -959,8 +959,9 @@ io.<span class="fn">on</span>(<span class="str">'connection'</span>, <span class
       </ol>
       <pre><span class="code-label">Terminal</span>
 npm init -y
-npm install express@4 socket.io@1.7.4</pre>
-      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてください。</p>
+npm install express@4
+npm install socket.io@1.7.4</pre>
+      <p style="margin-top:0.5rem;font-size:0.88rem;color:#FFB800"><strong>&#x26A0; 注意:</strong> Express は最新の v5 系ではなく <strong>v4 系</strong>を使うため、必ず <code>express@4</code> と <code>@4</code> を付けてください。 また、<strong>1つずつ</strong>インストールすると失敗しにくいです（上のように <code>express@4</code> → <code>socket.io@1.7.4</code> の順で1行ずつ実行）。</p>
       <ol start="5" style="padding-left:1.5rem;font-size:0.95rem;line-height:2">
         <li><code>node_modules</code> フォルダと <code>package.json</code> ができたことを確認する</li>
         <li><code>Web09</code> の中に <strong><code>public</code></strong> フォルダを作成する（HTMLファイル用）</li>
