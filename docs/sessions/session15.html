@@ -467,8 +467,8 @@ pre { position: relative; }
 <header class="hero">
   <div class="container">
     <div class="hero-badge">Webプログラミング演習 ─ 2026年度前期</div>
-    <h1>第15回: 成果発表・まとめ</h1>
-    <p>3D Webアプリケーションの発表と講評、Webプログラミング技術の整理</p>
+    <h1>第15回: データ取得会・成果発表</h1>
+    <p>クラスメイトを自分の空間に招いて行動データを集め、その結果を発表する</p>
   </div>
 </header>
 
@@ -476,13 +476,80 @@ pre { position: relative; }
 <section style="padding-top:2rem;padding-bottom:0">
   <div class="container">
     <div class="submission-box">
-      <h3>提出ガイド（この回の提出物: 計2項目）</h3>
+      <h3>提出ガイド（この回の提出物: 計3項目）</h3>
       <div class="submission-items">
-        <a class="sub-item" href="#sec-group-exam"><span class="sub-count">1</span><span class="tag tag-group">相互評価</span>評価シート</a>
-        <a class="sub-item" href="#sec-standard"><span class="sub-count">1</span><span class="tag tag-standard">振り返り</span>振り返りエッセイ</a>
+        <a class="sub-item" href="#sec-presentation"><span class="sub-count">1</span><span class="tag tag-standard">制作物</span>プロジェクト一式</a>
+        <a class="sub-item" href="#sec-evaluation"><span class="sub-count">1</span><span class="tag tag-group">相互評価</span>評価シート</a>
+        <a class="sub-item" href="#sec-reflection"><span class="sub-count">1</span><span class="tag tag-standard">振り返り</span>振り返りエッセイ</a>
       </div>
       <div style="background:#0a1a0a;border:1px solid #4A7A00;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#93D500">
-        <strong>提出方法:</strong> 自分のNotionノートに回答を記録 → PDFにエクスポート → ManabaにPDFを提出
+        <strong>提出方法:</strong> ①制作物＝プロジェクト一式（<code>server.js</code>・<code>db.js</code>・<code>public/</code>。<code>node_modules</code>は除く）をZIPにしてManabaに提出。
+        ②③相互評価・振り返りはNotionに記録 → PDFエクスポート → Manabaに提出。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DATA COLLECTION ACTIVITY ============ -->
+<section style="padding-top:1rem">
+  <div class="container">
+    <div class="concept-box" style="border:2px solid #76B900">
+      <h4>🛰️ 今日のメイン活動：データ取得会</h4>
+      <p style="font-size:1.02rem;margin-bottom:1rem">
+        自分の作った空間を起動し、<strong>近くのクラスメイトにIPアドレスを伝えて入ってもらいます</strong>。
+        入った人の行動（移動・クリックなど）は <code>space.db</code> に<strong>自動で記録</strong>されます。
+        集めたデータが、そのまま発表の材料になります。
+        <strong>ダッシュボードを作った人は、集まっていくデータをその場で観察できます</strong>（ダッシュボードは任意なので、無くてもデータは貯まります）。
+      </p>
+
+      <div class="submission-items" style="margin-bottom:1rem">
+        <div class="sub-item"><span class="sub-count">1</span>自分のサーバを起動する</div>
+        <div class="sub-item"><span class="sub-count">2</span>IPアドレスを確認して伝える</div>
+        <div class="sub-item"><span class="sub-count">3</span>クラスメイトに入ってもらう</div>
+        <div class="sub-item"><span class="sub-count">4</span>集めたデータを確認する</div>
+      </div>
+
+      <p style="font-weight:700;color:#93D500;margin:0.5rem 0 0.4rem">① サーバを起動すると「伝えるアドレス」が表示される</p>
+      <p style="font-size:0.92rem;margin-bottom:0.4rem"><code>node server.js</code> を実行すると、同じWi-Fiのクラスメイトに伝えるURLが出ます。</p>
+      <pre><span class="code-label">ターミナル</span>
+$ node server.js
+ マルチプレイ空間 起動しました
+  自分:        http://localhost:3000
+  ダッシュボード: http://localhost:3000/dashboard.html
+
+ クラスメイトに伝えるアドレス（同じWi-Fiのとき）:
+   http://<span class="num">192.168.3.114</span>:3000   <span class="cmt">← これを伝える</span></pre>
+
+      <p style="font-size:0.9rem;margin:0.6rem 0">
+        表示されない/わからない場合は、Mac は「システム設定 → ネットワーク」、
+        Windows は <code>ipconfig</code> で <code>192.168.…</code> で始まるIPv4アドレスを確認できます。
+      </p>
+
+      <p style="font-weight:700;color:#93D500;margin:1rem 0 0.4rem">② クラスメイトは伝えられたURLをブラウザで開く</p>
+      <p style="font-size:0.92rem">
+        <code>http://192.168.3.114:3000</code> のように<strong>「自分のPC」ではなく相手のIP</strong>を入力します。
+        名前を入れて入室すると、ホストの <code>space.db</code> に <span class="tag tag-standard" style="text-transform:none">入室</span>
+        が記録されます。何人か入ってもらい、動き回ってもらいましょう。
+      </p>
+
+      <div style="background:#2a1a1a;border:1px solid #FF9800;border-radius:8px;padding:0.8rem 1rem;margin-top:1rem;font-size:0.9rem;color:#FFB74D">
+        <strong>⚠️ つながらないとき:</strong>
+        ①全員が同じWi-Fiか ②IPアドレスが正しいか（相手のPCのIP） ③ファイアウォールで
+        Node.jsの通信がブロックされていないか、を確認。教室のネットワーク設定で端末間通信が
+        禁止されている場合は、<strong>2〜3人でPCの近くに集まり、1台を全員で使って入室</strong>してもデータは取れます。
+      </div>
+
+      <p style="font-weight:700;color:#93D500;margin:1rem 0 0.4rem">③ 集めたデータを確認する</p>
+      <p style="font-size:0.92rem;margin-bottom:0.5rem"><strong>ダッシュボードを作った人</strong>は <code>/dashboard.html</code> を開いて、次のような点を見てみましょう（発表で使えます）。</p>
+      <ul class="point-list">
+        <li>何人が入って、合計いくつの行動が記録されたか</li>
+        <li>いちばん移動した人は誰か・誰がどんな行動をしたか</li>
+        <li>テーマに合わせた見どころ（迷路なら「経路の違い」「ゴールできた人」など）</li>
+      </ul>
+      <div style="background:#1A1A1A;border:1px solid #4FC3F7;border-radius:8px;padding:0.7rem 1rem;margin-top:0.6rem;font-size:0.9rem">
+        <strong style="color:#4FC3F7">ダッシュボードを作っていなくてもOK。</strong>
+        行動は <code>space.db</code> に保存されているので、<strong>「何件の行動が記録されたか」</strong>を確認できれば
+        データ取得は成功です（例：<code>db.js</code> に件数を数える関数を1つ足す、簡単な <code>SELECT COUNT(*)</code> を実行する など）。
       </div>
     </div>
   </div>
@@ -497,7 +564,9 @@ pre { position: relative; }
     </div>
 
     <p style="font-size:1.05rem;margin-bottom:1.5rem">
-      1人（またはグループ）あたり <strong>3〜5分</strong> で、制作したマルチユーザ3D Webアプリケーションを発表します。
+      1人（またはグループ）あたり <strong>3〜5分</strong> で、制作したマルチプレイ空間を発表します。
+      デモで空間を見せるだけでなく、<strong>データ取得会で集まった行動データ</strong>（ダッシュボードを作った人はその画面／作っていない人は記録件数や気づいたこと）を使って、
+      「どんな空間で、人がどう動いたか」を説明しましょう。
     </p>
 
     <div class="card" style="border-left:4px solid #76B900">
@@ -721,7 +790,7 @@ pre { position: relative; }
       <table>
         <tr><th>評価項目</th><th>説明</th><th style="width:80px">評点(1-5)</th></tr>
         <tr class="rating-row"><td style="text-align:left"><strong>創造性</strong></td><td style="text-align:left">テーマの独自性、3D空間のデザインの面白さ</td><td class="blank-cell"></td></tr>
-        <tr class="rating-row"><td style="text-align:left"><strong>技術的品質</strong></td><td style="text-align:left">必須機能の動作、追加機能の実装度</td><td class="blank-cell"></td></tr>
+        <tr class="rating-row"><td style="text-align:left"><strong>技術的品質</strong></td><td style="text-align:left">必須機能の動作、任意機能の実装度</td><td class="blank-cell"></td></tr>
         <tr class="rating-row"><td style="text-align:left"><strong>完成度</strong></td><td style="text-align:left">全体としてまとまっているか、バグが少ないか</td><td class="blank-cell"></td></tr>
         <tr class="rating-row"><td style="text-align:left"><strong>発表の質</strong></td><td style="text-align:left">説明のわかりやすさ、デモの見せ方</td><td class="blank-cell"></td></tr>
       </table>
@@ -1331,7 +1400,7 @@ pre { position: relative; }
 - [ ] アバター同期
 - [ ] チャット機能
 
-### 実装した追加機能・工夫
+### 実装した任意機能・工夫
 （箇条書きで）
 
 ### 発表で工夫した点・困った点
@@ -1351,7 +1420,7 @@ pre { position: relative; }
 | 評価項目 | 説明 | 評点(1-5) |
 |---------|------|-----------|
 | 創造性 | テーマの独自性、3D空間のデザインの面白さ |   |
-| 技術的品質 | 必須機能の動作、追加機能の実装度 |   |
+| 技術的品質 | 必須機能の動作、任意機能の実装度 |   |
 | 完成度 | 全体のまとまり、バグの少なさ |   |
 | 発表の質 | 説明のわかりやすさ、デモの見せ方 |   |
 

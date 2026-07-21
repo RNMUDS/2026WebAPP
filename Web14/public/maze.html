@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マルチプレイ迷路</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Noto Sans JP', sans-serif; }
+    .a-enter-vr, .a-enter-ar { display: none !important; }
+    #enter {
+      position: fixed; inset: 0; z-index: 100; background: rgba(10,15,25,0.93);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: #fff;
+    }
+    #enter input { font-size: 1.1rem; padding: 0.6rem 1rem; border-radius: 8px; border: 2px solid #76B900; background: #111; color: #fff; text-align: center; }
+    #enter button { font-size: 1.1rem; padding: 0.6rem 2rem; border: none; border-radius: 8px; background: #76B900; color: #fff; font-weight: 700; cursor: pointer; }
+    #hud { position: fixed; left: 10px; top: 10px; z-index: 50; background: rgba(0,0,0,0.55); color: #fff; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.85rem; }
+    #goalMsg { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; pointer-events: none; }
+    #goalMsg span { background: rgba(118,185,0,0.92); color: #fff; font-size: 2rem; font-weight: 900; padding: 1rem 2.5rem; border-radius: 14px; }
+    #chat { position: fixed; left: 0; bottom: 0; z-index: 50; width: 320px; max-width: 90vw; padding: 0.5rem; }
+    #log { height: 110px; overflow-y: auto; margin-bottom: 0.4rem; background: rgba(0,0,0,0.55); color: #fff; border-radius: 8px; padding: 0.5rem; font-size: 0.85rem; }
+    #log b { color: #9BE800; }
+    #chatForm { display: flex; gap: 0.4rem; }
+    #msg { flex: 1; padding: 0.5rem; border-radius: 6px; border: none; }
+    #chatForm button { padding: 0.5rem 1rem; border: none; border-radius: 6px; background: #76B900; color: #fff; font-weight: 700; cursor: pointer; }
+    #dash { position: fixed; right: 10px; top: 10px; z-index: 50; background: rgba(0,0,0,0.6); color: #fff; padding: 0.4rem 0.8rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div id="enter">
+    <h1>迷路に挑戦</h1>
+    <p style="opacity:0.8">スタート（緑）から ゴール（金）を目指そう</p>
+    <input id="name" placeholder="ニックネーム" maxlength="12">
+    <button id="go">入室する</button>
+  </div>
+
+  <div id="hud">🧭 マルチプレイ迷路 ── WASDキーで移動・マウスで見回す</div>
+  <a id="dash" href="/dashboard.html" target="_blank">📊 ダッシュボード</a>
+  <div id="goalMsg"><span>🏁 ゴール！</span></div>
+  <div id="chat">
+    <div id="log"></div>
+    <form id="chatForm"><input id="msg" placeholder="メッセージ" autocomplete="off"><button>送信</button></form>
+  </div>
+
+  <a-scene vr-mode-ui="enabled: false" background="color: #10151f" fog="type: linear; color: #10151f; near: 6; far: 26">
+    <a-light type="ambient" color="#bbb" intensity="0.9"></a-light>
+    <a-light type="directional" color="#fff" intensity="0.5" position="4 10 4"></a-light>
+    <!-- 迷路の床・壁・スタート・ゴールは JS で生成する -->
+    <a-entity id="maze"></a-entity>
+
+    <a-camera id="cam" position="-6 1.2 -6" rotation="0 -90 0" wasd-controls="acceleration: 30" maze-player></a-camera>
+  </a-scene>
+
+  <script>
+    // ===== 迷路の地図（# = 壁, . = 道, S = スタート, G = ゴール）=====
+    const MAZE = [
+      '#########',
+      '#S..#...#',
+      '#.#.#.#.#',
+      '#.#...#.#',
+      '#.#####.#',
+      '#.....#.#',
+      '#.###.#.#',
+      '#...#..G#',
+      '#########',
+    ];
+    const CELL = 2;                 // 1マスの大きさ（メートル）
+    const OFF = 4;                  // 中心合わせ（9マスの中央 = index4）
+    const START = { c: 1, r: 1 };
+    const GOAL  = { c: 7, r: 7 };
+    const cellToWorld = (c, r) => ({ x: (c - OFF) * CELL, z: (r - OFF) * CELL });
+    const worldToCell = (x, z) => ({ c: Math.round(x / CELL) + OFF, r: Math.round(z / CELL) + OFF });
+    const isWall = (c, r) => (MAZE[r] && MAZE[r][c] === '#');
+
+    // ===== 迷路を組み立てる =====
+    const mazeEl = document.querySelector('#maze');
+    // 床
+    const floor = document.createElement('a-plane');
+    floor.setAttribute('rotation', '-90 0 0');
+    floor.setAttribute('width', MAZE[0].length * CELL);
+    floor.setAttribute('height', MAZE.length * CELL);
+    floor.setAttribute('color', '#4a4f5a');
+    mazeEl.appendChild(floor);
+    // 壁
+    for (let r = 0; r < MAZE.length; r++) {
+      for (let c = 0; c < MAZE[r].length; c++) {
+        if (MAZE[r][c] !== '#') continue;
+        const w = cellToWorld(c, r);
+        const box = document.createElement('a-box');
+        box.setAttribute('position', `${w.x} 1.25 ${w.z}`);
+        box.setAttribute('depth', CELL); box.setAttribute('width', CELL); box.setAttribute('height', 2.5);
+        box.setAttribute('color', '#6b7280');
+        mazeEl.appendChild(box);
+      }
+    }
+    // スタート（緑の床）とゴール（金の柱）
+    const s = cellToWorld(START.c, START.r);
+    const startPad = document.createElement('a-plane');
+    startPad.setAttribute('rotation', '-90 0 0'); startPad.setAttribute('position', `${s.x} 0.02 ${s.z}`);
+    startPad.setAttribute('width', CELL * 0.9); startPad.setAttribute('height', CELL * 0.9); startPad.setAttribute('color', '#76B900');
+    mazeEl.appendChild(startPad);
+    const g = cellToWorld(GOAL.c, GOAL.r);
+    const goalPillar = document.createElement('a-cylinder');
+    goalPillar.setAttribute('position', `${g.x} 1 ${g.z}`); goalPillar.setAttribute('radius', '0.5'); goalPillar.setAttribute('height', '2');
+    goalPillar.setAttribute('color', '#FFD166');
+    goalPillar.innerHTML = '<a-animation attribute="rotation" to="0 360 0" dur="4000" repeat="indefinite" easing="linear"></a-animation>';
+    mazeEl.appendChild(goalPillar);
+
+    // ===== プレイヤー：壁との当たり判定＋ゴール判定 =====
+    AFRAME.registerComponent('maze-player', {
+      init() { this.prev = this.el.object3D.position.clone(); this.reached = false; },
+      tick() {
+        const p = this.el.object3D.position;
+        const cell = worldToCell(p.x, p.z);
+        if (isWall(cell.c, cell.r)) { p.x = this.prev.x; p.z = this.prev.z; }   // 壁なら押し戻す
+        else { this.prev.set(p.x, p.y, p.z); }
+        if (!this.reached && cell.c === GOAL.c && cell.r === GOAL.r) {
+          this.reached = true;
+          socket.emit('goal', { position: { x: p.x, y: p.y, z: p.z } });
+          const gm = document.getElementById('goalMsg'); gm.style.display = 'flex';
+          setTimeout(() => { gm.style.display = 'none'; }, 2500);
+        }
+      }
+    });
+
+    // ===== 通信・アバタ同期・チャット（第10回＋第13回と同じ）=====
+    const socket = io();
+    const scene = document.querySelector('a-scene');
+    const camera = document.querySelector('#cam');
+    let myName = '';
+
+    document.getElementById('go').addEventListener('click', enter);
+    document.getElementById('name').addEventListener('keydown', (e) => { if (e.key === 'Enter') enter(); });
+    function enter() {
+      myName = document.getElementById('name').value.trim() || '名無し';
+      socket.emit('join', { name: myName });
+      document.getElementById('enter').style.display = 'none';
+    }
+
+    // 位置を100msごとに全員へ同期
+    setInterval(() => {
+      if (!myName) return;
+      const p = camera.getAttribute('position');
+      socket.emit('move', { position: { x: p.x, y: p.y, z: p.z } });
+    }, 100);
+    // 経路を1秒ごとに記録（あとで軌跡を見比べる）
+    setInterval(() => {
+      if (!myName) return;
+      const p = camera.getAttribute('position');
+      socket.emit('move-sample', { position: { x: p.x, y: p.y, z: p.z } });
+    }, 1000);
+
+    socket.on('moved', (data) => {
+      const id = 'avatar-' + data.id;
+      let avatar = document.getElementById(id);
+      if (!avatar) {
+        avatar = document.createElement('a-sphere');
+        avatar.setAttribute('id', id); avatar.setAttribute('radius', '0.5'); avatar.setAttribute('color', data.color);
+        scene.appendChild(avatar);
+      }
+      avatar.setAttribute('position', data.position);
+    });
+    socket.on('userLeft', (data) => {
+      const a = document.getElementById('avatar-' + data.id);
+      if (a) a.parentNode.removeChild(a);
+    });
+
+    const logEl = document.getElementById('log');
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('msg');
+      const text = input.value.trim(); if (!text) return;
+      socket.emit('chat', { text }); input.value = '';
+    });
+    socket.on('chat', (data) => {
+      const line = document.createElement('div');
+      line.innerHTML = '<b>' + esc(data.name) + '</b>: ' + esc(data.text);
+      logEl.appendChild(line); logEl.scrollTop = logEl.scrollHeight;
+    });
+    function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  </script>
+</body>
+</html>

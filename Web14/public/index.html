@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マルチプレイ空間</title>
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Noto Sans JP', sans-serif; }
+
+    /* 名前を入れる最初の画面 */
+    #enter {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(10, 20, 10, 0.92);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem; color: #fff;
+    }
+    #enter h1 { font-size: 1.6rem; }
+    #enter input {
+      font-size: 1.1rem; padding: 0.6rem 1rem; border-radius: 8px;
+      border: 2px solid #76B900; background: #111; color: #fff; text-align: center;
+    }
+    #enter button {
+      font-size: 1.1rem; padding: 0.6rem 2rem; border: none; border-radius: 8px;
+      background: #76B900; color: #fff; font-weight: 700; cursor: pointer;
+    }
+
+    /* 画面下のチャット欄 */
+    #chat {
+      position: fixed; left: 0; bottom: 0; z-index: 50;
+      width: 320px; max-width: 90vw; padding: 0.5rem;
+    }
+    #log {
+      height: 130px; overflow-y: auto; margin-bottom: 0.4rem;
+      background: rgba(0,0,0,0.55); color: #fff; border-radius: 8px;
+      padding: 0.5rem; font-size: 0.85rem; line-height: 1.5;
+    }
+    #log b { color: #9BE800; }
+    #chatForm { display: flex; gap: 0.4rem; }
+    #msg { flex: 1; padding: 0.5rem; border-radius: 6px; border: none; }
+    #chatForm button {
+      padding: 0.5rem 1rem; border: none; border-radius: 6px;
+      background: #76B900; color: #fff; font-weight: 700; cursor: pointer;
+    }
+    #dash {
+      position: fixed; right: 10px; top: 10px; z-index: 50;
+      background: rgba(0,0,0,0.6); color: #fff; padding: 0.4rem 0.8rem;
+      border-radius: 8px; text-decoration: none; font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- ① 名前入力画面 -->
+  <div id="enter">
+    <h1>この空間に入る</h1>
+    <input id="name" placeholder="ニックネーム" maxlength="12">
+    <button id="go">入室する</button>
+  </div>
+
+  <!-- ② チャット欄・ダッシュボードへのリンク -->
+  <a id="dash" href="/dashboard.html" target="_blank">📊 ダッシュボード</a>
+  <div id="chat">
+    <div id="log"></div>
+    <form id="chatForm">
+      <input id="msg" placeholder="メッセージ" autocomplete="off">
+      <button>送信</button>
+    </form>
+  </div>
+
+  <!-- ③ 3D空間 -->
+  <a-scene>
+    <a-sky color="#87CEEB"></a-sky>
+    <a-plane position="0 0 0" rotation="-90 0 0" width="30" height="30" color="#7BC8A4"></a-plane>
+
+    <!-- クリックできる物（class="clickable" と data-name を付ける） -->
+    <a-box    class="clickable" data-name="赤い箱"    position="-3 0.75 -4" color="#EF2D5E" depth="1.5" height="1.5" width="1.5"></a-box>
+    <a-cylinder class="clickable" data-name="青い柱"  position="3 1 -4"    color="#4CC3D9" radius="0.7" height="2"></a-cylinder>
+    <a-sphere class="clickable" data-name="黄色い玉"  position="0 1.25 -7"  color="#FFC65D" radius="1.25"></a-sphere>
+    <a-cone   class="clickable" data-name="紫コーン"  position="-5 1 -8"   color="#A24CD9" radius-bottom="0.9" height="2"></a-cone>
+    <a-torus  class="clickable" data-name="緑リング"  position="5 1.5 -9"  color="#76B900" radius="1" radius-tubular="0.15"></a-torus>
+
+    <!-- 自分の視点（カメラ）。cursor が視線の先の物をクリックする -->
+    <a-camera position="0 1.6 0" wasd-controls="acceleration: 40">
+      <a-cursor color="#111" fuse="false"></a-cursor>
+    </a-camera>
+  </a-scene>
+
+  <script>
+    const socket = io();
+    const scene = document.querySelector('a-scene');
+    const camera = document.querySelector('a-camera');
+    let myName = '';
+
+    // ---- ① 入室 ----
+    document.getElementById('go').addEventListener('click', enter);
+    document.getElementById('name').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') enter();
+    });
+    function enter() {
+      myName = document.getElementById('name').value.trim() || '名無し';
+      socket.emit('join', { name: myName });
+      document.getElementById('enter').style.display = 'none';
+    }
+
+    // ---- ② 移動の同期: 100msごとに自分の位置を送る ----
+    setInterval(() => {
+      if (!myName) return;
+      const p = camera.getAttribute('position');
+      socket.emit('move', { position: { x: p.x, y: p.y, z: p.z } });
+    }, 100);
+
+    // ---- ③ 移動サンプルの記録: 2秒ごとに位置をサーバへ記録依頼 ----
+    setInterval(() => {
+      if (!myName) return;
+      const p = camera.getAttribute('position');
+      socket.emit('move-sample', { position: { x: p.x, y: p.y, z: p.z } });
+    }, 2000);
+
+    // ---- ④ クリック: clickable な物を見てクリックしたら記録 ----
+    document.querySelectorAll('.clickable').forEach((el) => {
+      el.addEventListener('click', () => {
+        if (!myName) return;
+        const p = camera.getAttribute('position');
+        socket.emit('click', {
+          target: el.dataset.name,
+          position: { x: p.x, y: p.y, z: p.z }
+        });
+        // クリックした合図に一瞬ふくらませる
+        el.setAttribute('scale', '1.2 1.2 1.2');
+        setTimeout(() => el.setAttribute('scale', '1 1 1'), 150);
+      });
+    });
+
+    // ---- ⑤ 他ユーザのアバタを作る・動かす ----
+    socket.on('moved', (data) => {
+      const id = 'avatar-' + data.id;
+      let avatar = document.getElementById(id);
+      if (!avatar) {
+        avatar = document.createElement('a-sphere');
+        avatar.setAttribute('id', id);
+        avatar.setAttribute('radius', '0.5');
+        avatar.setAttribute('color', data.color);
+        // 名前ラベルを頭の上に付ける
+        const label = document.createElement('a-text');
+        label.setAttribute('value', data.name);
+        label.setAttribute('align', 'center');
+        label.setAttribute('position', '0 0.9 0');
+        label.setAttribute('color', '#111');
+        label.setAttribute('scale', '2 2 2');
+        avatar.appendChild(label);
+        scene.appendChild(avatar);
+      }
+      avatar.setAttribute('position', data.position);
+    });
+
+    socket.on('userLeft', (data) => {
+      const avatar = document.getElementById('avatar-' + data.id);
+      if (avatar) avatar.parentNode.removeChild(avatar);
+    });
+
+    // ---- ⑥ チャット ----
+    const log = document.getElementById('log');
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('msg');
+      const text = input.value.trim();
+      if (!text) return;
+      socket.emit('chat', { text });
+      input.value = '';
+    });
+    socket.on('chat', (data) => {
+      const line = document.createElement('div');
+      line.innerHTML = '<b>' + escapeHtml(data.name) + '</b>: ' + escapeHtml(data.text);
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
+    });
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"]/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+  </script>
+</body>
+</html>

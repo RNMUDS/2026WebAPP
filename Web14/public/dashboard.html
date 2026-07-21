@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>行動データ ダッシュボード</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #111; color: #e0e0e0; line-height: 1.7;
+      padding: clamp(1rem, 4vw, 2.5rem);
+    }
+    h1 { color: #9BE800; font-size: 1.5rem; margin-bottom: 0.3rem; }
+    .sub { color: #888; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.1rem; margin: 2rem 0 0.8rem; color: #fff; }
+
+    /* 上部のまとめカード */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+    .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 1rem 1.2rem; }
+    .card .num { font-size: 2rem; font-weight: 900; color: #9BE800; }
+    .card .label { font-size: 0.8rem; color: #999; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid #2a2a2a; }
+    th { color: #9BE800; font-weight: 700; }
+    tbody tr:hover { background: #181818; }
+
+    /* 棒グラフ（クリックされた物ランキング） */
+    .bar-row { display: grid; grid-template-columns: 90px 1fr 40px; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+    .bar { height: 20px; background: linear-gradient(90deg, #4a7a00, #9BE800); border-radius: 4px; min-width: 3px; }
+    .bar-row .n { text-align: right; color: #9BE800; font-weight: 700; }
+
+    .type-tag { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 100px; font-size: 0.72rem; font-weight: 700; }
+    .t-join { background: #1a3a1a; color: #9BE800; }
+    .t-leave { background: #3a1a1a; color: #ff9b9b; }
+    .t-move { background: #1a2a3a; color: #9bd0ff; }
+    .t-click { background: #3a2e1a; color: #ffd69b; }
+    .t-chat { background: #2a1a3a; color: #d99bff; }
+    .t-goal { background: #1a3a2a; color: #9BE800; }
+
+    .wrap { overflow-x: auto; }
+    .muted { color: #666; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>📊 行動データ ダッシュボード</h1>
+  <p class="sub">この空間に入った人の行動を集計しています（5秒ごとに自動更新）</p>
+
+  <!-- ① まとめカード -->
+  <div class="cards" id="cards"></div>
+
+  <!-- ★ 移動の軌跡を見比べる（迷路などのテーマで一番おもしろい） -->
+  <h2>🗺️ 移動の軌跡を見比べる（上から見た地図）</h2>
+  <div id="paths"></div>
+
+  <!-- ② ユーザごとの活動 -->
+  <h2>👥 参加者ごとの活動</h2>
+  <div class="wrap">
+    <table id="users">
+      <thead>
+        <tr><th>名前</th><th>移動距離</th><th>クリック</th><th>チャット</th><th>入室</th><th>最終</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- ③ よくクリックされた物 -->
+  <h2>🎯 よくクリックされた物</h2>
+  <div id="objects"></div>
+
+  <!-- ④ 最近の行動ログ -->
+  <h2>🕑 最近の行動ログ</h2>
+  <div class="wrap">
+    <table id="events">
+      <thead>
+        <tr><th>時刻</th><th>名前</th><th>行動</th><th>詳細 / 座標</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const TYPE_JP = { join: '入室', leave: '退室', move: '移動', click: 'クリック', chat: 'チャット', goal: 'ゴール' };
+
+    const COLORS = ['#EF2D5E', '#4CC3D9', '#FFC65D', '#7BC8A4', '#A24CD9', '#FF9F1C'];
+
+    async function refresh() {
+      const [summary, users, objects, events, paths] = await Promise.all([
+        fetch('/api/summary').then((r) => r.json()),
+        fetch('/api/users').then((r) => r.json()),
+        fetch('/api/objects').then((r) => r.json()),
+        fetch('/api/events').then((r) => r.json()),
+        fetch('/api/paths').then((r) => r.json())
+      ]);
+      drawCards(summary);
+      drawPaths(paths);
+      drawUsers(users);
+      drawObjects(objects);
+      drawEvents(events);
+    }
+
+    // ★ 移動の軌跡を上から見た地図で描く（誰がどの道を通ったか比較）
+    function drawPaths(paths) {
+      const box = document.getElementById('paths');
+      const withPoints = paths.filter((p) => p.points.length >= 2);
+      if (!withPoints.length) {
+        box.innerHTML = '<p class="muted">まだ移動データがありません（迷路などを歩くと軌跡が集まります）</p>';
+        return;
+      }
+      // 全員の点から表示範囲を自動で決める
+      let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+      withPoints.forEach((p) => p.points.forEach((pt) => {
+        minX = Math.min(minX, pt.x); maxX = Math.max(maxX, pt.x);
+        minZ = Math.min(minZ, pt.z); maxZ = Math.max(maxZ, pt.z);
+      }));
+      const pad = 1.5;
+      minX -= pad; maxX += pad; minZ -= pad; maxZ += pad;
+      const S = 300, spanX = maxX - minX || 1, spanZ = maxZ - minZ || 1;
+      const span = Math.max(spanX, spanZ);           // 縦横比を保つ
+      const sx = (x) => ((x - minX) / span) * S + 10;
+      const sy = (z) => ((z - minZ) / span) * S + 10; // z が大きいほど下
+
+      let svg = `<svg viewBox="0 0 ${S + 20} ${S + 20}" style="max-width:360px;width:100%;background:#0d1017;border:1px solid #2a2a2a;border-radius:10px">`;
+      // うっすらグリッド
+      for (let i = 0; i <= 10; i++) {
+        const g = 10 + (i / 10) * S;
+        svg += `<line x1="${g}" y1="10" x2="${g}" y2="${S + 10}" stroke="#1e222c" stroke-width="1"/>`;
+        svg += `<line x1="10" y1="${g}" x2="${S + 10}" y2="${g}" stroke="#1e222c" stroke-width="1"/>`;
+      }
+      // 各ユーザの経路
+      withPoints.forEach((p, i) => {
+        const color = COLORS[i % COLORS.length];
+        const pts = p.points.map((pt) => `${sx(pt.x).toFixed(1)},${sy(pt.z).toFixed(1)}`).join(' ');
+        svg += `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
+        const a = p.points[0], b = p.points[p.points.length - 1];
+        svg += `<circle cx="${sx(a.x)}" cy="${sy(a.z)}" r="5" fill="${color}"/>`;              // スタート地点
+        svg += p.reached_goal
+          ? `<text x="${sx(b.x)}" y="${sy(b.z) + 5}" font-size="16" text-anchor="middle">🏁</text>` // ゴール
+          : `<circle cx="${sx(b.x)}" cy="${sy(b.z)}" r="4" fill="none" stroke="${color}" stroke-width="2"/>`;
+      });
+      svg += '</svg>';
+
+      // 凡例
+      const legend = withPoints.map((p, i) =>
+        `<span style="display:inline-flex;align-items:center;gap:0.35rem;margin-right:1rem;font-size:0.85rem">
+           <span style="width:14px;height:4px;background:${COLORS[i % COLORS.length]};display:inline-block;border-radius:2px"></span>
+           ${esc(p.name)}${p.reached_goal ? ' 🏁' : ''}
+         </span>`).join('');
+
+      box.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start">
+        ${svg}
+        <div style="min-width:180px">
+          <p style="font-size:0.85rem;color:#999;margin-bottom:0.5rem">● スタート地点　🏁 ゴール到達</p>
+          <div>${legend}</div>
+        </div>
+      </div>`;
+    }
+
+    // ① まとめカード
+    function drawCards(s) {
+      const counts = Object.fromEntries(s.byType.map((t) => [t.type, t.n]));
+      const cards = [
+        { num: s.users, label: '参加した人数' },
+        { num: s.total, label: '記録した行動' },
+        { num: counts.click || 0, label: 'クリック' },
+        { num: counts.chat || 0, label: 'チャット' }
+      ];
+      document.getElementById('cards').innerHTML = cards.map((c) =>
+        `<div class="card"><div class="num">${c.num}</div><div class="label">${c.label}</div></div>`
+      ).join('');
+    }
+
+    // ② ユーザ表
+    function drawUsers(users) {
+      const tbody = document.querySelector('#users tbody');
+      if (!users.length) { tbody.innerHTML = row('まだ誰もいません'); return; }
+      tbody.innerHTML = users.map((u) => `
+        <tr>
+          <td>${esc(u.name)}</td>
+          <td>${u.distance} m</td>
+          <td>${u.clicks}</td>
+          <td>${u.chats}</td>
+          <td class="muted">${time(u.first_seen)}</td>
+          <td class="muted">${time(u.last_seen)}</td>
+        </tr>`).join('');
+    }
+
+    // ③ クリックランキング（棒グラフ）
+    function drawObjects(objects) {
+      const box = document.getElementById('objects');
+      if (!objects.length) { box.innerHTML = '<p class="muted">まだクリックされていません</p>'; return; }
+      const max = objects[0].n;
+      box.innerHTML = objects.map((o) => `
+        <div class="bar-row">
+          <span>${esc(o.name)}</span>
+          <span class="bar" style="width:${(o.n / max * 100).toFixed(0)}%"></span>
+          <span class="n">${o.n}</span>
+        </div>`).join('');
+    }
+
+    // ④ 最近のログ
+    function drawEvents(events) {
+      const tbody = document.querySelector('#events tbody');
+      if (!events.length) { tbody.innerHTML = row('まだ行動がありません'); return; }
+      tbody.innerHTML = events.map((e) => {
+        let detail = e.detail ? esc(e.detail) : '';
+        if (!detail && e.x != null) detail = `(${e.x.toFixed(1)}, ${e.z.toFixed(1)})`;
+        return `<tr>
+          <td class="muted">${time(e.created_at)}</td>
+          <td>${esc(e.name)}</td>
+          <td><span class="type-tag t-${e.type}">${TYPE_JP[e.type] || e.type}</span></td>
+          <td>${detail}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function row(msg) { return `<tr><td colspan="6" class="muted">${msg}</td></tr>`; }
+    function time(s) { return s ? s.split(' ')[1] || s : ''; }
+    function esc(s) {
+      return String(s).replace(/[&<>"]/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    refresh();
+    setInterval(refresh, 5000);
+  </script>
+</body>
+</html>

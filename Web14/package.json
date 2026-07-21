@@ -1,0 +1,17 @@
+{
+  "name": "web14",
+  "version": "1.0.0",
+  "description": "マルチプレイ3D空間＋行動データ記録＋ダッシュボード",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "express": "^4.22.2",
+    "socket.io": "^1.7.4"
+  }
+}
